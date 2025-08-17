@@ -1,0 +1,62 @@
+.form-group {
+    margin-bottom: 1rem;
+    position: relative;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.5rem 0;
+    border: none;
+    border-bottom: 1px solid #ccc; /* mais fino como na primeira imagem */
+    outline: none;
+    background-color: transparent; /* sem azul */
+    font-size: 1rem;
+    color: #333;
+    transition: border-color 0.3s;
+    line-height: 1.5rem;
+}
+
+.form-group input:focus {
+    border-bottom: 1px solid #0c381d; 
+    background-color: transparent; /* mantém branco quando selecionado */
+}
+
+.password-group {
+    position: relative;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+.forms-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    font-size: 0.85rem;
+    font-family: 'Zen Kaku Gothic Antique', sans-serif;
+    color: #555;
+}
+
+.button-cad {
+    background: none;
+    border: none;
+    color: #000000; 
+    font-weight: normal;
+    margin-left: 0.2rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: color 0.2s ease;
+}
+
+.button-cad:hover {
+    color: #000000;
+    text-decoration: underline;
+}
