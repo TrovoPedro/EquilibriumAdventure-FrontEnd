@@ -1,6 +1,6 @@
 import { Routes, Route } from "react-router-dom"
 import routeUrls from "./routeUrls"
-import Login from "../pages/login"
+import Login from "../pages/login/login"
 
 export default function AppRoutes() {
   return (
