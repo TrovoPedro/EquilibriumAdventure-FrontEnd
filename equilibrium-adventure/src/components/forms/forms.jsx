@@ -109,7 +109,7 @@ const Forms = ({ title, handleSubmit }) => {
                         className="toggle-password"
                         onClick={() => setShowPassword(!showPassword)}
                     >
-                        {showPassword ? "👁️" : "👁️"}
+                        {showPassword ? "👁️" : "👁️‍🗨️"}
                     </button>
                 </div>
             </>

@@ -1,7 +1,7 @@
 const routeUrls = {
     HOME: '/',
     LOGIN: '/login',
-    REGISTER: '/register',
+    CADASTRO: '/cadastro',
     DASHBOARD: '/dashboard'
 };
 
