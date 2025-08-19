@@ -1,0 +1,37 @@
+.main-footer {
+    background: #0e2321;
+    color: #fff;
+    padding: 48px 40px;
+    margin-top: 64px;
+}
+
+.footer-content {
+    display: flex;
+    gap: 64px;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+}
+
+.footer-content h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    margin-bottom: 12px;
+}
+
+.footer-content h4 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.footer-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-content li {
+    font-size: 0.95rem;
+    margin-bottom: 6px;
+    color: #b6d7a8;
+}

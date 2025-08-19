@@ -1,0 +1,126 @@
+.eventos-container {
+    padding-top: 5%;
+    display: flex;
+    justify-content: center;
+}
+
+.eventos {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 48px;
+    padding: 64px 40px;
+    flex-wrap: wrap;
+}
+
+.evento-card {
+    display: flex;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08);
+    padding: 24px;
+    width: 650px; /* largura aumentada */
+    min-height: 650px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: transform 0.2s;
+}
+
+.evento-card img {
+    width: 100%;
+    height: 240px; /* altura da imagem aumentada */
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.evento-card:hover {
+    transform: translateY(-8px) scale(1.03);
+}
+
+.evento-card h3 {
+    font-size: 1.8rem;
+    color: #23423a;
+    font-weight: 700;
+}
+
+.evento-card p,
+.evento-card span {
+    font-size: 1.2rem;
+    color: #5a7c6e;
+}
+
+.evento-icons {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+    font-size: 1rem;
+    color: #23423a;
+}
+
+.evento-tipos {
+    flex: 1;
+    max-width: 50%;
+}
+
+.evento-tipos h4 {
+    color: #7bbf7f;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+    margin-left: 15px;
+}
+
+.evento-tipos h2 {
+    font-size: 1.6rem;
+    color: #23423a;
+    margin-left: 15px;
+    font-weight: 400;
+}
+
+.evento-tipos ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.evento-tipos li {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    font-size: large;
+}
+
+.evento-tipos p{
+    font-size: 2.5rem;
+    color: #5a7c6e;
+    margin: 0;
+}
+
+.tipo {
+    display: inline-block;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    margin-top: 4px;
+}
+
+.tipo.explorador {
+    background: #7bbf7f;
+}
+
+.tipo.aventureiro {
+    background: #b6d7a8;
+}
+
+.tipo.desbravador {
+    background: #23423a;
+}
+
+.evento-tipos p {
+    color: #5a7c6e;
+    font-size: 1rem;
+    margin-top: 2px;
+}
