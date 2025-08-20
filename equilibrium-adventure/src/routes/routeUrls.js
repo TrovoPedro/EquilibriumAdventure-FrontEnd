@@ -2,7 +2,7 @@ const routeUrls = {
     HOME: '/',
     LOGIN: '/login',
     CRIAR_EVENTO: '/criar-evento',
-    REGISTER: '/register',
+    CADASTRO: '/cadastro',
     DASHBOARD: '/dashboard'
 };
 

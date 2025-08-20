@@ -1,13 +1,13 @@
 import React from 'react';
 import Forms from '../../components/forms/forms';
-import './login.css';
+import './cadastro.css';
 import routeUrls from "../../routes/routeUrls"
 import { useNavigate } from 'react-router-dom';
 
-const Login = () => {
+const Cadastro = () => {
     const navigate = useNavigate();
-    const title = "LOG IN";
-    const text = "Cadastre-se";
+    const title = "CADASTRAR";
+    const text = "Entre aqui";
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Submit de login', {
@@ -17,7 +17,7 @@ const Login = () => {
     };
 
     const handleNavigate = () => {
-        navigate(routeUrls.CADASTRO);
+        navigate(routeUrls.LOGIN);
     }
 
     return (
@@ -26,7 +26,7 @@ const Login = () => {
                 <div className="login-left-content">
                     <div className="text-wrap">
                         <h2>A Equilibrium Adventure está pronta para te ajudar</h2>
-                        <p>Escreva as suas credenciais para acessar suas próximas aventuras</p>
+                        <p>Escolha a melhor forma para cadastro e encontre sua próxima aventura</p>
                     </div>
                 </div>
             </div>
@@ -41,11 +41,11 @@ const Login = () => {
                 </button>
                 <div className="auth-card">
                     <div className="login-header">
-                        <span className="welcome-text">Bem-vindo de volta à</span>
-                        <h1>Equilibrium Adventure</h1>
+                        <h1>Junte-se e conecte-se à </h1>
+                        <h1>comunidade online</h1>
                     </div>
 
-                    <Forms title={title} handleSubmit={handleSubmit} handleNavigate={handleNavigate} text={text} className="forms-custom" />
+                    <Forms title={title} handleSubmit={handleSubmit} text={text} handleNavigate={handleNavigate} className="forms-custom" />
                 </div>
             </div>
 
@@ -54,4 +54,4 @@ const Login = () => {
     );
 };
 
-export default Login;
+export default Cadastro;
