@@ -3,23 +3,24 @@ import './forms.css';
 import ButtonAuth from '../button-auth/button-auth';
 import { useLocation } from 'react-router-dom';
 
-const Forms = ({ title, handleSubmit }) => {
+const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
     const location = useLocation();
     const path = location.pathname;
     const [formData, setFormData] = useState({
         username: '',
         email: '',
         telefone: '',
-        senha: ''
+        senha: '',
+        rememberMe: false
     });
 
     const [showPassword, setShowPassword] = useState(false);
 
     const handleChange = (e) => {
-        const { name, value } = e.target;
+        const { name, type, checked, value } = e.target;
         setFormData(prevState => ({
             ...prevState,
-            [name]: value
+            [name]: type === 'checkbox' ? checked : value
         }));
     };
 
@@ -112,6 +113,16 @@ const Forms = ({ title, handleSubmit }) => {
                         {showPassword ? "👁️" : "👁️‍🗨️"}
                     </button>
                 </div>
+                <label className="checkbox-container">
+                    <input
+                        type="checkbox"
+                        name="rememberMe"
+                        checked={formData.rememberMe}
+                        onChange={handleChange}
+                        required
+                    />
+                    <span className="checkbox-text">Concordo com os Termos e Condições</span>
+                </label>
             </>
         );
     };
@@ -121,8 +132,8 @@ const Forms = ({ title, handleSubmit }) => {
             {renderFormFields()}
             <div className='forms-footer'>
                 <span>
-                    Ainda não tem conta?
-                    <button type="button" className='button-cad'>Cadastre-se</button>
+                    {path === '/login' ? 'Ainda não tem uma conta?' : 'Já tem uma conta?'}
+                    <button type="button" className='button-cad' onClick={handleNavigate}>{text}</button>
                 </span>
                 <ButtonAuth onClick={handleSubmit} title={title} />
             </div>

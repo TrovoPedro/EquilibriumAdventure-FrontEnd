@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const Cadastro = () => {
     const navigate = useNavigate();
     const title = "CADASTRAR";
+    const text = "Entre aqui";
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Submit de login', {
@@ -14,6 +15,10 @@ const Cadastro = () => {
             senha: e.target.senha.value
         });
     };
+
+    const handleNavigate = () => {
+        navigate(routeUrls.LOGIN);
+    }
 
     return (
         <div className="login-page">
@@ -40,7 +45,7 @@ const Cadastro = () => {
                         <h1>comunidade online</h1>
                     </div>
 
-                    <Forms title={title} handleSubmit={handleSubmit} className="forms-custom" />
+                    <Forms title={title} handleSubmit={handleSubmit} text={text} handleNavigate={handleNavigate} className="forms-custom" />
                 </div>
             </div>
 

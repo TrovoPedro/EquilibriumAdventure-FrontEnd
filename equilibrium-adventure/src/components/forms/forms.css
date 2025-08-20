@@ -60,3 +60,21 @@
     color: #000000;
     text-decoration: underline;
 }
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.checkbox-text {
+    font-size: 14px;
+    color: #666;
+}
+
+input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}

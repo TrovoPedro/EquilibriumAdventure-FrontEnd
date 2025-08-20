@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const Login = () => {
     const navigate = useNavigate();
     const title = "LOG IN";
+    const text = "Cadastre-se";
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Submit de login', {
@@ -14,6 +15,10 @@ const Login = () => {
             senha: e.target.senha.value
         });
     };
+
+    const handleNavigate = () => {
+        navigate(routeUrls.CADASTRO);
+    }
 
     return (
         <div className="login-page">
@@ -27,20 +32,20 @@ const Login = () => {
             </div>
 
             <div className="login-right">
-                 <button
-                        className="close-btn"
-                        aria-label="Fechar"
-                        onClick={() => navigate(routeUrls.HOME)}
-                    >
-                        ✕
-                    </button>
+                <button
+                    className="close-btn"
+                    aria-label="Fechar"
+                    onClick={() => navigate(routeUrls.HOME)}
+                >
+                    ✕
+                </button>
                 <div className="auth-card">
                     <div className="login-header">
                         <span className="welcome-text">Bem-vindo de volta à</span>
                         <h1>Equilibrium Adventure</h1>
                     </div>
 
-                    <Forms title={title} handleSubmit={handleSubmit} className="forms-custom" />
+                    <Forms title={title} handleSubmit={handleSubmit} handleNavigate={handleNavigate} text={text} className="forms-custom" />
                 </div>
             </div>
 
