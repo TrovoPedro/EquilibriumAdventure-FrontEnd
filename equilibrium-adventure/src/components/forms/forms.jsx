@@ -25,7 +25,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
     };
 
     const renderFormFields = () => {
-        if (path === '/login') {
+        if (path === '/login' || path === '/Login') {
             return (
                 <>
                     <div className="form-group">

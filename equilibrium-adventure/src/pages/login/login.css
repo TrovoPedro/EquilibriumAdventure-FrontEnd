@@ -24,7 +24,6 @@ body,
     background-size: cover;
     position: relative;
     color: #fff;
-    text-align: center;
     display: flex;
     align-items: center;
     padding: 50px;
@@ -59,7 +58,7 @@ body,
     opacity: 0.95;
     max-width: 420px;
     font-weight: 10;
-    padding: 0 0 0 90px;
+    padding: 0 0 0 0px;
 }
 
 .login-right {

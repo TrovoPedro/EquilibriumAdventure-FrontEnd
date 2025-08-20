@@ -1,0 +1,72 @@
+.feedbacks {
+    padding: 64px 40px 0 40px;
+}
+
+.feedbacks h2 {
+    font-size: 2rem;
+    color: #23423a;
+    margin-bottom: 32px;
+    font-weight: 400;
+    text-align: center;
+}
+
+/* Feedbacks no estilo "mural espalhado" */
+.feedback-cards {
+    display: flex;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* colunas automáticas */
+    gap: 28px; /* espaço entre cards */
+    justify-items: center; /* centraliza cada card na coluna */
+    padding: 20px;
+}
+
+.feedback-card {
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    padding: 20px;
+    width: 100%;
+    height: 150px;
+    max-width: 300px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    transition: transform 0.3s ease;
+}
+
+.feedback-card:hover {
+    transform: scale(1.05);
+}
+
+
+.feedback-card img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.feedback-card strong {
+    color: #23423a;
+    font-size: 1rem;
+    font-weight: 700;
+}
+
+.feedback-card span {
+    color: #7bbf7f;
+    font-size: 0.95rem;
+}
+
+.feedback-card p {
+    color: #5a7c6e;
+    font-size: 0.95rem;
+    margin-top: 4px;
+}
+
+.feedbacks h4 {
+    color: #7bbf7f;
+    font-size: 1rem;
+    font-weight: 400;
+    margin-bottom: 20px;
+    text-align: center;
+}

@@ -1,0 +1,76 @@
+.header {
+  width: 100%;
+  height: 70px;
+  background-color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 40px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.4);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  font-family: 'Arial', sans-serif;
+}
+
+/* Logo à esquerda */
+.header-left {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.header-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Links centralizados */
+.header-center ul {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 30px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.header-center li {
+  cursor: pointer;
+  font-size: 14px;
+  color: #004d40;
+  transition: all 0.3s ease;
+}
+
+.header-center li:hover {
+  text-decoration: underline;
+}
+
+/* Botões à direita */
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.agendar {
+  background-color: #004d40;
+  color: #ffffff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+}
+
+.sair {
+  background: none;
+  border: none;
+  color: #004d40;
+  cursor: pointer;
+  font-weight: 500;
+}
