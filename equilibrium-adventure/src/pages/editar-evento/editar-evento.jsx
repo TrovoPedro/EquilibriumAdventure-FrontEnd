@@ -3,9 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import routeUrls from "../../routes/routeUrls";
 import Header from "../../components/header/header";
-import "./criar-evento.css";
+import "./editar-evento.css";
 
-const CriarEvento = () => {
+const EditarEvento = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         titulo: "",
@@ -206,10 +206,10 @@ const CriarEvento = () => {
 
                     <div className="botoes">
                         <button type="button" className="btn-excluir">
-                            Cancelar Evento
+                            Excluir Evento
                         </button>
                         <button type="submit" className="btn-salvar">
-                            Criar Evento
+                            Salvar Alterações
                         </button>
                     </div>
                 </form>
@@ -218,4 +218,4 @@ const CriarEvento = () => {
     );
 };
 
-export default CriarEvento;
+export default EditarEvento;

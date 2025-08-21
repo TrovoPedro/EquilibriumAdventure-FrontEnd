@@ -1,0 +1,173 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+    background-image: url('../../assets/foto-aerea-de-um-caminho-no-meio-de-uma-floresta-com-arvores-verdes.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+/* Container principal */
+
+.criar-evento-container {
+    width: 50%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    min-height: 100vh;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+    margin-top: 6%;
+}
+
+
+/* Título */
+
+.titulo-pagina {
+    margin-top: 7%;
+    font-size: 24px;
+    color: #00695c;
+    margin-bottom: 20px;
+}
+
+
+/* Formulário */
+
+.evento-form {
+    background: #ffff;
+    padding: 30px;
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+
+/* Labels e inputs */
+
+.evento-form label {
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+    color: #0C513F;
+}
+
+.evento-form input,
+.evento-form textarea,
+.evento-form select {
+    width: 100%;
+    margin-top: 5px;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #0C513F;
+    font-size: 14px;
+}
+
+
+/* Upload box */
+
+.upload-box {
+    border: 2px dashed #bbb;
+    border-radius: 8px;
+    padding: 30px;
+    text-align: center;
+    background: #f5f5f5;
+    color: #666;
+}
+
+
+/* Agrupamentos de inputs */
+
+.linha-dupla {
+    display: flex;
+    gap: 20px;
+}
+
+.linha-dupla label {
+    flex: 1;
+}
+
+.linha-tripla {
+    display: flex;
+    gap: 20px;
+}
+
+.linha-tripla label {
+    flex: 1;
+}
+
+
+/* Botões */
+
+.botoes {
+    display: flex;
+    justify-content: space-evenly;
+    margin-top: 20px;
+}
+
+.btn-excluir {
+    background: #a93226;
+    color: white;
+    border: none;
+    padding: 12px 50px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-excluir:hover {
+    transition: 1000ms;
+    background: #922b21;
+}
+
+.btn-salvar {
+    background: #1e8449;
+    color: white;
+    border: none;
+    padding: 12px 50px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-salvar:hover {
+    transition: 1000ms;
+    background: #196f3d;
+}
+
+.upload-box {
+    border: 2px dashed #bbb;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    background: #f5f5f5;
+    color: #666;
+    cursor: pointer;
+    transition: border 0.3s ease;
+}
+
+.upload-box:hover {
+    border-color: #0C513F;
+    background: #f0f0f0;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #0C513F;
+}
+
+.preview-img {
+    max-width: 100%;
+    max-height: 250px;
+    border-radius: 6px;
+}
