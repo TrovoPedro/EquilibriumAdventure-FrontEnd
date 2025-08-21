@@ -3,7 +3,8 @@ const routeUrls = {
     LOGIN: '/login',
     CRIAR_EVENTO: '/criar-evento',
     CADASTRO: '/cadastro',
-    DASHBOARD: '/dashboard'
+    DASHBOARD: '/dashboard',
+    QUESTIONARIO: '/questionario',
 };
 
 export default routeUrls;
