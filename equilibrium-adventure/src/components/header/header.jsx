@@ -1,4 +1,3 @@
-// src/components/Header.jsx
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
