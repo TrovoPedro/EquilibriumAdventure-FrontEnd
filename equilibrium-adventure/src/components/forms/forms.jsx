@@ -68,7 +68,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                         name="username"
                         value={formData.username}
                         onChange={handleChange}
-                        placeholder="Username"
+                        placeholder="Nome"
                         required
                     />
                 </div>
