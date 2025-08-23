@@ -74,3 +74,123 @@
   cursor: pointer;
   font-weight: 500;
 }
+
+.hamburger-menu {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 38px;
+  height: 38px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 1100;
+}
+
+.hamburger-bar {
+  width: 28px;
+  height: 4px;
+  background: #004d40;
+  margin: 4px 0;
+  border-radius: 2px;
+  transition: 0.3s;
+}
+
+/* Esconde o menu lateral em telas grandes */
+.header-side-menu {
+  display: none;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .header {
+    flex-direction: row;
+    padding: 0 16px;
+    height: 60px;
+  }
+
+  .header-center {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100vw;
+    background: #fff;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    transform: translateY(-120%);
+    transition: transform 0.3s;
+    z-index: 1001;
+  }
+
+  .header-center.open {
+    transform: translateY(0);
+  }
+
+  .header-center ul {
+    flex-direction: column;
+    gap: 24px;
+    padding: 32px 0;
+    align-items: flex-start;
+  }
+
+  .header-right {
+    display: none;
+  }
+
+  .hamburger-menu {
+    display: flex;
+    margin-left: auto;
+  }
+
+  .header-side-menu {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 70vw;
+    max-width: 320px;
+    height: 100vh;
+    background: #fff;
+    box-shadow: -2px 0 16px rgba(0,0,0,0.12);
+    transform: translateX(100%);
+    transition: transform 0.3s;
+    z-index: 1200;
+    padding: 32px 24px 24px 24px;
+  }
+
+  .header-side-menu.open {
+    transform: translateX(0);
+  }
+
+  .header-side-menu ul {
+    flex-direction: column;
+    gap: 32px;
+    margin-top: 48px;
+    padding: 0;
+    list-style: none;
+  }
+
+  .header-side-menu li {
+    font-size: 1.2rem;
+    color: #004d40;
+    cursor: pointer;
+    padding: 8px 0;
+    border-bottom: 1px solid #eee;
+  }
+
+  .close-menu {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #004d40;
+    position: absolute;
+    top: 18px;
+    right: 18px;
+    cursor: pointer;
+  }
+
+  .header-center {
+    display: none !important;
+  }
+}

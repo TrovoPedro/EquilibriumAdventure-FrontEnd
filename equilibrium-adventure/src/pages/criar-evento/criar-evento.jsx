@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import routeUrls from "../../routes/routeUrls";
 import Header from "../../components/header/header";
+import { maskCep, maskDistancia } from "../../utils/masks";
+import { cadastrarEvento, buscarCep } from "../../api/chamadasAPIEvento";
 import "./criar-evento.css";
 
 const CriarEvento = () => {
-    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         titulo: "",
         distancia: "",
@@ -23,23 +24,75 @@ const CriarEvento = () => {
         trilha: null
     });
 
+    const navigate = useNavigate();
+
     const handleChange = (e) => {
         const { name, value, files } = e.target;
+        let newValue = value;
+
+        if (name === "cep") newValue = maskCep(value);
+        if (name === "distancia") newValue = maskDistancia(value);
+
         setFormData({
             ...formData,
-            [name]: files ? files[0] : value,
+            [name]: files ? files[0] : newValue,
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleCepBlur = async (e) => {
+        const cep = formData.cep.replace(/\D/g, "");
+        if (cep.length === 8) {
+            try {
+                const data = await buscarCep(cep);
+                setFormData((prev) => ({
+                    ...prev,
+                    rua: data.logradouro || "",
+                    bairro: data.bairro || "",
+                    cidade: data.localidade || "",
+                    estado: data.uf || ""
+                }));
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Evento criado:", formData);
-        navigate(routeUrls.HOME);
+
+        const evento = {
+            nome: formData.titulo,
+            descricao: formData.descricao,
+            nivel_dificuldade: formData.dificuldade,
+            distancia_km: parseFloat(formData.distancia),
+            responsavel: 1,
+            endereco: 1,
+            caminho_arquivo_evento: formData.trilha ? formData.trilha.name : null
+        };
+
+        const form = new FormData();
+        form.append("evento", JSON.stringify(evento));
+        if (formData.imagem) {
+            form.append("imagem", formData.imagem);
+        }
+
+        try {
+            const response = await cadastrarEvento(form);
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Evento criado:", data);
+                navigate(routeUrls.HOME);
+            } else {
+                const error = await response.text();
+                alert("Erro ao criar evento: " + error);
+            }
+        } catch (err) {
+            alert("Erro de conexão: " + err.message);
+        }
     };
 
     return (
-        <body>
-
+        <div className="criar-evento-page">
             <div className="criar-evento-container">
                 <Header></Header>
                 <form className="evento-form" onSubmit={handleSubmit}>
@@ -98,13 +151,17 @@ const CriarEvento = () => {
 
                         <label>
                             Dificuldade:
-                            <input
-                                type="text"
+                            <select
                                 name="dificuldade"
                                 value={formData.dificuldade}
                                 onChange={handleChange}
-                                placeholder="Ex: Explorador"
-                            />
+                                required
+                            >
+                                <option value="">Selecione...</option>
+                                <option value="EXPLORADOR">EXPLORADOR</option>
+                                <option value="AVENTUREIRO">AVENTUREIRO</option>
+                                <option value="DESBRAVADOR">DESBRAVADOR</option>
+                            </select>
                         </label>
                     </div>
 
@@ -135,7 +192,7 @@ const CriarEvento = () => {
                                 name="cep"
                                 value={formData.cep}
                                 onChange={handleChange}
-                                placeholder="Ex: 12345-678"
+                                onBlur={handleCepBlur}
                             />
                         </label>
 
@@ -214,7 +271,7 @@ const CriarEvento = () => {
                     </div>
                 </form>
             </div>
-        </body>
+        </div>
     );
 };
 

@@ -3,21 +3,22 @@
     margin: 0;
 }
 
-body {
+.criar-evento-page {
+    width: 100%;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    min-width: 100%;
-    /* background-image: url('../../assets/foto-aerea-de-um-caminho-no-meio-de-uma-floresta-com-arvores-verdes.jpg'); */
     background-size: cover;
-    background-repeat: no-repeat;
+    background-position: center;
+    background-image: url('../../assets/foto-aerea-de-um-caminho-no-meio-de-uma-floresta-com-arvores-verdes.jpg');
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-x: hidden;
 }
-
 
 /* Container principal */
 
 .criar-evento-container {
-    width: 50%;
+    width: 100%;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0;
@@ -77,10 +78,32 @@ body {
 .upload-box {
     border: 2px dashed #bbb;
     border-radius: 8px;
-    padding: 30px;
+    padding: 40px;
     text-align: center;
     background: #f5f5f5;
     color: #666;
+    cursor: pointer;
+    transition: border 0.3s ease;
+}
+
+.upload-box:hover {
+    border-color: #0C513F;
+    background: #f0f0f0;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #0C513F;
+}
+
+.preview-img {
+    max-width: 100%;
+    max-height: 250px;
+    border-radius: 6px;
 }
 
 
@@ -124,7 +147,7 @@ body {
 
 .btn-excluir:hover {
     transition: 1000ms;
-    background: #922b21;
+    background: #240c0a;
 }
 
 .btn-salvar {
@@ -139,35 +162,4 @@ body {
 .btn-salvar:hover {
     transition: 1000ms;
     background: #196f3d;
-}
-
-.upload-box {
-    border: 2px dashed #bbb;
-    border-radius: 8px;
-    padding: 40px;
-    text-align: center;
-    background: #f5f5f5;
-    color: #666;
-    cursor: pointer;
-    transition: border 0.3s ease;
-}
-
-.upload-box:hover {
-    border-color: #0C513F;
-    background: #f0f0f0;
-}
-
-.upload-placeholder {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    color: #0C513F;
-}
-
-.preview-img {
-    max-width: 100%;
-    max-height: 250px;
-    border-radius: 6px;
 }
