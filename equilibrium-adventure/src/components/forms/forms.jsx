@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './forms.css';
 import ButtonAuth from '../button-auth/button-auth';
 import { useLocation } from 'react-router-dom';
+import olhoAberto from '../../assets/olho-aberto.png';
+import olhoFechado from '../../assets/olho-fechado.png';
 
 const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
     const location = useLocation();
@@ -53,7 +55,11 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                             className="toggle-password"
                             onClick={() => setShowPassword(!showPassword)}
                         >
-                            {showPassword ? "👁️" : "👁️‍🗨️"}
+                            <img
+                                src={showPassword ? olhoAberto : olhoFechado}
+                                alt={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                                className="eye-icon"
+                            />
                         </button>
                     </div>
                 </>
@@ -110,7 +116,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                         className="toggle-password"
                         onClick={() => setShowPassword(!showPassword)}
                     >
-                        {showPassword ? "👁️" : "👁️‍🗨️"}
+                        {showPassword ? olhoAberto : olhoFechado}
                     </button>
                 </div>
                 <label className="checkbox-container">

@@ -7,6 +7,7 @@ const routeUrls = {
     DASHBOARD: '/dashboard',
     ESCOLHER_GUIA: '/escolher-guia',
     CATALOGO_TRILHA: '/catalogo-trilhas',
+    QUESTIONARIO: '/questionario',
 };
 
 export default routeUrls;
