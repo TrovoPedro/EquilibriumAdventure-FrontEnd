@@ -6,6 +6,7 @@ import EditarEvento from "../pages/editar-evento/editar-evento"
 import Home from "../pages/home/Home"
 import Cadastro from "../pages/cadastro/cadastro"
 import EscolhaGuia from "../pages/escolher-guia/EscolherGuia"
+import CatalogoTrilha from "../pages/catalogo-trilhas/CatalogoTrilhas"
 
 export default function AppRoutes() {
   return (
@@ -16,6 +17,7 @@ export default function AppRoutes() {
       <Route path={routeUrls.HOME} element={<Home/>}></Route>
       <Route path={routeUrls.CADASTRO} element={<Cadastro/>}></Route>
       <Route path={routeUrls.ESCOLHER_GUIA} element={<EscolhaGuia/>}></Route>
+      <Route path={routeUrls.CATALOGO_TRILHA} element={<CatalogoTrilha/>}></Route>
     </Routes>
   )
 }

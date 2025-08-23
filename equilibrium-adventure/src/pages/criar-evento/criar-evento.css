@@ -8,7 +8,7 @@ body {
     display: flex;
     flex-direction: column;
     min-width: 100%;
-    background-image: url('../../assets/foto-aerea-de-um-caminho-no-meio-de-uma-floresta-com-arvores-verdes.jpg');
+    /* background-image: url('../../assets/foto-aerea-de-um-caminho-no-meio-de-uma-floresta-com-arvores-verdes.jpg'); */
     background-size: cover;
     background-repeat: no-repeat;
 }
