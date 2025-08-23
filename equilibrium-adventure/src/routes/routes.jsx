@@ -5,6 +5,7 @@ import CriarEvento from "../pages/criar-evento/criar-evento"
 import Home from "../pages/home/Home"
 import Cadastro from "../pages/cadastro/cadastro"
 import Questionario from "../pages/questionario/questionario"
+import EscolhaGuia from "../pages/escolher-guia/EscolherGuia"
 
 export default function AppRoutes() {
   return (
@@ -14,6 +15,7 @@ export default function AppRoutes() {
       <Route path={routeUrls.HOME} element={<Home/>}></Route>
       <Route path={routeUrls.CADASTRO} element={<Cadastro/>}></Route>
       <Route path={routeUrls.QUESTIONARIO} element={<Questionario/>}></Route>
+      <Route path={routeUrls.ESCOLHER_GUIA} element={<EscolhaGuia/>}></Route>
     </Routes>
   )
 }

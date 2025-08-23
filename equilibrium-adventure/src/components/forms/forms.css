@@ -78,3 +78,18 @@ input[type="checkbox"] {
     height: 16px;
     cursor: pointer;
 }
+
+.eye-icon {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+}
+
+.toggle-password {
+    background: none;
+    border: none;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

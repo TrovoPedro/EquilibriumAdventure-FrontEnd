@@ -5,6 +5,7 @@ const routeUrls = {
     CADASTRO: '/cadastro',
     DASHBOARD: '/dashboard',
     QUESTIONARIO: '/questionario',
+    ESCOLHER_GUIA: '/escolher-guia'
 };
 
 export default routeUrls;
