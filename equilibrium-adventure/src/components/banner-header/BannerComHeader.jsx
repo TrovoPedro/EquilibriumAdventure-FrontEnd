@@ -19,9 +19,9 @@ export default function BannerComHeader() {
           </nav>
       </header>
 
-      <img src={bannerImg} alt="Banner trilha" className="banner-img" />
+  <img src={bannerImg} alt="Banner trilha" className="banner-img" />
       <div className="banner-text">
-        <h1>Faça as malas, vamos para algum lugar incrível!</h1>
+        <h1 className="text-wrap">Faça as malas, vamos para algum lugar incrível!</h1>
       </div>
     </div>
   );
