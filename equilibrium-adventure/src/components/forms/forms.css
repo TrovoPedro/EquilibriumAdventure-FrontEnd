@@ -7,9 +7,9 @@
     width: 100%;
     padding: 0.5rem 0;
     border: none;
-    border-bottom: 1px solid #ccc; /* mais fino como na primeira imagem */
+    border-bottom: 1px solid #ccc;
     outline: none;
-    background-color: transparent; /* sem azul */
+    background-color: transparent;
     font-size: 1rem;
     color: #333;
     transition: border-color 0.3s;
@@ -18,7 +18,7 @@
 
 .form-group input:focus {
     border-bottom: 1px solid #0c381d; 
-    background-color: transparent; /* mantém branco quando selecionado */
+    background-color: transparent;
 }
 
 .password-group {
