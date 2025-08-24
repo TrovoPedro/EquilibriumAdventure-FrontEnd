@@ -8,6 +8,9 @@ const routeUrls = {
     ESCOLHER_GUIA: '/escolher-guia',
     CATALOGO_TRILHA: '/catalogo-trilhas',
     QUESTIONARIO: '/questionario',
+    EDITAR_DADOS_AVENTUREIRO: '/editar-dados-aventureiro',
+    DADOS_CLIENTE: '/dados-cliente',
+    ATIVAR_EVENTO: '/ativar-evento'
 };
 
 export default routeUrls;

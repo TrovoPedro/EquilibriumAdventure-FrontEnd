@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 import "./header.css";
+import img from "../../assets/mulher4.jpeg";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -11,7 +12,7 @@ const Header = () => {
     <header className="header">
       <div className="header-left" onClick={() => navigate(routeUrls.HOME)}>
         <img 
-          src="/path/para/foto.jpg" 
+          src={img} 
           alt="Usuário" 
           className="header-avatar" 
         />

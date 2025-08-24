@@ -8,6 +8,9 @@ import Cadastro from "../pages/cadastro/cadastro"
 import Questionario from "../pages/questionario/questionario"
 import EscolhaGuia from "../pages/escolher-guia/EscolherGuia"
 import CatalogoTrilha from "../pages/catalogo-trilhas/CatalogoTrilhas"
+import EditarDadosAventureiro from "../pages/editar-dados-aventureiro/editar-dados-aventureiro"
+import DadosCliente from "../pages/dados-cliente/dados-cliente"
+import AtivarEvento from "../pages/ativar-evento/ativar-evento"
 
 export default function AppRoutes() {
   return (
@@ -20,6 +23,9 @@ export default function AppRoutes() {
       <Route path={routeUrls.QUESTIONARIO} element={<Questionario/>}></Route>
       <Route path={routeUrls.ESCOLHER_GUIA} element={<EscolhaGuia/>}></Route>
       <Route path={routeUrls.CATALOGO_TRILHA} element={<CatalogoTrilha/>}></Route>
+      <Route path={routeUrls.EDITAR_DADOS_AVENTUREIRO} element={<EditarDadosAventureiro/>}></Route>
+  <Route path={routeUrls.DADOS_CLIENTE} element={<DadosCliente/>}></Route>
+  <Route path={routeUrls.ATIVAR_EVENTO} element={<AtivarEvento/>}></Route>
     </Routes>
   )
 }

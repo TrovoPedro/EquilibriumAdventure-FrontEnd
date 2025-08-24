@@ -1,0 +1,134 @@
+.form-section input[readonly] {
+	background: #ededed;
+	color: #333;
+	cursor: default;
+	user-select: none;
+	pointer-events: none;
+}
+.input-msg {
+	font-size: 0.95rem;
+	color: #489465;
+	margin-top: 2px;
+	margin-left: 2px;
+	font-style: italic;
+	display: block;
+}
+.input-msg {
+	font-size: 0.95rem;
+	color: #489465;
+	margin-top: 2px;
+	margin-left: 2px;
+	font-style: italic;
+}
+.dados-card-display {
+	padding: 8px 10px;
+	border: 1.5px solid #b2b2b2;
+	border-radius: 6px;
+	font-size: 1rem;
+	background: #ededed;
+	color: #333;
+	min-height: 36px;
+	display: flex;
+	align-items: center;
+	font-family: inherit;
+}
+
+.dados-cliente-container {
+	min-height: 100vh;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	background: url('../../assets/vertical-shot-branches-green-tree-perfect-background.jpg') no-repeat center center fixed;
+	background-size: cover;
+	background-blend-mode: darken;
+	box-sizing: border-box;
+	padding-bottom: 40px;
+	overflow-x: hidden;
+	overflow-y: auto;
+	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.titulo-dados-cliente {
+	color: #fff;
+	font-size: 2.2rem;
+	font-weight: 600;
+	margin-top: 48px;
+	margin-bottom: 32px;
+	text-align: center;
+	text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.dados-card {
+	background: #fff;
+	border-radius: 18px;
+	box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+	padding: 32px 32px 24px 32px;
+	margin-bottom: 32px;
+	width: 90%;
+	max-width: 800px;
+	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.dados-card-title {
+	font-size: 1.2rem;
+	font-weight: 600;
+	color: #2e4d2e;
+	margin-bottom: 18px;
+	font-family: inherit;
+}
+
+.dados-card-grid {
+	display: flex;
+	gap: 32px;
+	flex-wrap: wrap;
+}
+
+.dados-card-group {
+	display: flex;
+	flex-direction: column;
+	min-width: 180px;
+	flex: 1;
+}
+
+.dados-card-group label {
+	font-size: 1rem;
+	color: #333;
+	margin-bottom: 6px;
+	font-weight: 500;
+}
+
+.dados-card-input {
+	padding: 8px 10px;
+	border: 1.5px solid #b2b2b2;
+	border-radius: 6px;
+	font-size: 1rem;
+	background: #ededed;
+	transition: border 0.2s;
+	font-family: inherit;
+}
+
+.dados-card-input:focus {
+	border: 1.5px solid #2e4d2e;
+	outline: none;
+}
+
+.dados-card-textarea {
+	width: 100%;
+	min-height: 80px;
+	padding: 10px;
+	border: 1.5px solid #b2b2b2;
+	border-radius: 6px;
+	font-size: 1rem;
+	background: #ededed;
+	resize: vertical;
+	font-family: inherit;
+	margin-top: 12px;
+}
+
+.dados-card-textarea:focus {
+	border: 1.5px solid #2e4d2e;
+	outline: none;
+}
