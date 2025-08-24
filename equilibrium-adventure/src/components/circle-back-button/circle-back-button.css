@@ -1,0 +1,31 @@
+
+.circle-back-btn {
+  position: absolute;
+  top: 24px;
+  left: 24px;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.8);
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  cursor: pointer;
+  z-index: 2;
+  transition: background 0.3s;
+  outline: none;
+  padding: 0;
+}
+
+
+.circle-back-btn:hover {
+  background: #f9f9f9;
+}
+
+
+.circle-back-arrow {
+  width: 18px;
+  height: 18px;
+}

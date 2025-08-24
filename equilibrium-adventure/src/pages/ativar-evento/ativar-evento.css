@@ -1,0 +1,144 @@
+/* Container principal */
+.ativar-evento-container {
+	background: #f6f7f8;
+	min-height: 100vh;
+	padding-top: 110px;
+}
+
+/* Header com seta e título */
+.ativar-evento-header {
+	display: flex;
+	align-items: center;
+	gap: 18px;
+	justify-content: flex-start;
+	margin-left: 0;
+	margin-bottom: 18px;
+	padding-left: 40px;
+}
+
+.back-arrow-circle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	border: 2.5px solid #226144;
+	border-radius: 50%;
+	background: #f6f7f8;
+	box-sizing: border-box;
+	transition: border-color 0.2s;
+}
+
+.back-arrow-circle:hover {
+	border-color: #4ec97b;
+	background: #f6f7f8;
+	box-shadow: none;
+}
+
+.back-arrow {
+	width: 65%;
+	height: 65%;
+	object-fit: contain;
+	display: block;
+	cursor: pointer;
+	transition: filter 0.2s;
+}
+
+/* Corrige bug de sobreposição do título */
+.ativar-evento-container h1,
+.ativar-evento-container .ativar-evento-title {
+	position: static;
+	z-index: 2;
+	background: none;
+}
+
+/* Wrapper do formulário */
+.ativar-evento-form-wrapper {
+	background: #ededed;
+	border-radius: 16px;
+	margin: 32px auto;
+	padding: 32px 24px 48px 24px;
+	box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+	max-width: 88vw;
+}
+
+/* Formulário em grid */
+.ativar-evento-form {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+
+.form-row {
+	display: flex;
+	gap: 32px;
+	margin-bottom: 0;
+}
+
+.form-group {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-width: 0;
+}
+
+.form-group-full {
+	flex: 3;
+}
+
+.ativar-evento-form label {
+	font-size: 1.3rem;
+	color: #226144;
+	margin-bottom: 6px;
+	font-weight: 600;
+}
+
+.ativar-evento-form input {
+	border: 1.5px solid #226144;
+	border-radius: 10px;
+	padding: 8px 12px;
+	font-size: 1.1rem;
+	outline: none;
+	background: #fff;
+	margin-bottom: 0;
+	box-shadow: none;
+	transition: border 0.2s;
+}
+
+.ativar-evento-form input:focus {
+	background: #fff;
+	border: 1.5px solid #226144;
+	box-shadow: none;
+}
+
+.form-row-end {
+	justify-content: flex-end;
+}
+
+.ativar-evento-btn {
+	background: #226144;
+	color: #fff;
+	font-size: 1.6rem;
+	font-weight: 600;
+	border: none;
+	border-radius: 8px;
+	padding: 12px 36px;
+	margin-top: 24px;
+	cursor: pointer;
+	box-shadow: 0 2px 6px rgba(34,97,68,0.08);
+	transition: background 0.2s;
+}
+
+.ativar-evento-btn:focus,
+.ativar-evento-btn:hover {
+	background: #1a4d36;
+}
+
+.ativar-evento-title {
+	font-size: 2.7rem;
+	color: #226144;
+	font-weight: 700;
+	margin-left: 0;
+	letter-spacing: 0.5px;
+	line-height: 1.1;
+}
