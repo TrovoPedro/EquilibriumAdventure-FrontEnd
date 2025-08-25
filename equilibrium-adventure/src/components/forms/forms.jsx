@@ -116,7 +116,11 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                         className="toggle-password"
                         onClick={() => setShowPassword(!showPassword)}
                     >
-                        {showPassword ? olhoAberto : olhoFechado}
+                        <img
+                            src={showPassword ? olhoAberto : olhoFechado}
+                            alt={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                            className="eye-icon"
+                        />
                     </button>
                 </div>
                 <label className="checkbox-container">
@@ -134,17 +138,21 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
     };
 
     return (
-        <form className='forms'>
-            {renderFormFields()}
-            <div className='forms-footer'>
-                <span>
-                    {path === '/login' ? 'Ainda não tem uma conta?' : 'Já tem uma conta?'}
-                    <button type="button" className='button-cad' onClick={handleNavigate}>{text}</button>
-                </span>
-                <ButtonAuth onClick={handleSubmit} title={title} />
-            </div>
-        </form>
-    );
+    <form className='forms' onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit(formData);
+    }}>
+        {renderFormFields()}
+        <div className='forms-footer'>
+            <span>
+                {path === '/login' ? 'Ainda não tem uma conta?' : 'Já tem uma conta?'}
+                <button type="button" className='button-cad' onClick={handleNavigate}>{text}</button>
+            </span>
+            <ButtonAuth type="submit" title={title} />
+        </div>
+    </form>
+);
+
 };
 
 export default Forms;
