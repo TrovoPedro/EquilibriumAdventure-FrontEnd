@@ -12,3 +12,11 @@ export const cadastrarUsuario = async (userData) => {
         throw error.response?.data || error.message;
     }
 };
+export const getUsuario = async (id) => {
+  try {
+    const response = await axios.get(`/usuarios/buscar/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || "Erro ao buscar usuário";
+  }
+};
