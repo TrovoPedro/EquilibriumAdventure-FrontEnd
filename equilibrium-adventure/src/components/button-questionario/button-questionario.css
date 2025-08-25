@@ -1,0 +1,16 @@
+.button-questionario {
+    background-color: #2d6b43;
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    padding: 0.8rem 2rem;
+    font-size: 1.1rem;
+    font-family: 'Zen Kaku Gothic Antique', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-weight: 500;
+}
+
+.button-questionario:hover {
+     background-color: #245535;
+}

@@ -18,7 +18,6 @@ export default function BannerComHeader() {
             </ul>
           </nav>
       </header>
-
     <div className="imagem-pai">
       <img src={bannerImg} alt="Banner trilha" className="banner-img" />
       <div className="banner-text">

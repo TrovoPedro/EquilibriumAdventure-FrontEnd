@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import './forms.css';
 import ButtonAuth from '../button-auth/button-auth';
 import { useLocation } from 'react-router-dom';
+import olhoAberto from '../../assets/olho-aberto.png';
+import olhoFechado from '../../assets/olho-fechado.png';
 
 const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
     const location = useLocation();
@@ -53,7 +55,11 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                             className="toggle-password"
                             onClick={() => setShowPassword(!showPassword)}
                         >
-                            {showPassword ? "👁️" : "👁️‍🗨️"}
+                            <img
+                                src={showPassword ? olhoAberto : olhoFechado}
+                                alt={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                                className="eye-icon"
+                            />
                         </button>
                     </div>
                 </>
@@ -110,7 +116,11 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                         className="toggle-password"
                         onClick={() => setShowPassword(!showPassword)}
                     >
-                        {showPassword ? "👁️" : "👁️‍🗨️"}
+                        <img
+                            src={showPassword ? olhoAberto : olhoFechado}
+                            alt={showPassword ? "Ocultar senha" : "Mostrar senha"}
+                            className="eye-icon"
+                        />
                     </button>
                 </div>
                 <label className="checkbox-container">
@@ -128,17 +138,21 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
     };
 
     return (
-        <form className='forms'>
-            {renderFormFields()}
-            <div className='forms-footer'>
-                <span>
-                    {path === '/login' ? 'Ainda não tem uma conta?' : 'Já tem uma conta?'}
-                    <button type="button" className='button-cad' onClick={handleNavigate}>{text}</button>
-                </span>
-                <ButtonAuth onClick={handleSubmit} title={title} />
-            </div>
-        </form>
-    );
+    <form className='forms' onSubmit={(e) => {
+        e.preventDefault();
+        handleSubmit(formData);
+    }}>
+        {renderFormFields()}
+        <div className='forms-footer'>
+            <span>
+                {path === '/login' ? 'Ainda não tem uma conta?' : 'Já tem uma conta?'}
+                <button type="button" className='button-cad' onClick={handleNavigate}>{text}</button>
+            </span>
+            <ButtonAuth type="submit" title={title} />
+        </div>
+    </form>
+);
+
 };
 
 export default Forms;

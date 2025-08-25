@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { FaCloudUploadAlt } from "react-icons/fa";
 import routeUrls from "../../routes/routeUrls";
 import Header from "../../components/header/header";
+import { maskCep, maskDistancia } from "../../utils/masks";
+import { cadastrarEvento, buscarCep } from "../../api/chamadasAPIEvento";
 import "./criar-evento.css";
 
 const CriarEvento = () => {
-    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         titulo: "",
         distancia: "",
@@ -22,175 +24,253 @@ const CriarEvento = () => {
         trilha: null
     });
 
+    const navigate = useNavigate();
+
     const handleChange = (e) => {
         const { name, value, files } = e.target;
+        let newValue = value;
+
+        if (name === "cep") newValue = maskCep(value);
+        if (name === "distancia") newValue = maskDistancia(value);
+
         setFormData({
             ...formData,
-            [name]: files ? files[0] : value,
+            [name]: files ? files[0] : newValue,
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleCepBlur = async (e) => {
+        const cep = formData.cep.replace(/\D/g, "");
+        if (cep.length === 8) {
+            try {
+                const data = await buscarCep(cep);
+                setFormData((prev) => ({
+                    ...prev,
+                    rua: data.logradouro || "",
+                    bairro: data.bairro || "",
+                    cidade: data.localidade || "",
+                    estado: data.uf || ""
+                }));
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Evento criado:", formData);
-        navigate(routeUrls.HOME);
+
+        const evento = {
+            nome: formData.titulo,
+            descricao: formData.descricao,
+            nivel_dificuldade: formData.dificuldade,
+            distancia_km: parseFloat(formData.distancia),
+            responsavel: 1,
+            endereco: 1,
+            caminho_arquivo_evento: formData.trilha ? formData.trilha.name : null
+        };
+
+        const form = new FormData();
+        form.append("evento", JSON.stringify(evento));
+        if (formData.imagem) {
+            form.append("imagem", formData.imagem);
+        }
+
+        try {
+            const response = await cadastrarEvento(form);
+            if (response.ok) {
+                const data = await response.json();
+                console.log("Evento criado:", data);
+                navigate(routeUrls.HOME);
+            } else {
+                const error = await response.text();
+                alert("Erro ao criar evento: " + error);
+            }
+        } catch (err) {
+            alert("Erro de conexão: " + err.message);
+        }
     };
 
     return (
-        <div className="criar-evento-container">
-            <Header></Header>
-            <h2 className="titulo-pagina">Criação de Evento</h2>
+        <div className="criar-evento-page">
+            <div className="criar-evento-container">
+                <Header></Header>
+                <form className="evento-form" onSubmit={handleSubmit}>
+                    <label>
+                        Título do Evento:
+                        <input
+                            type="text"
+                            name="titulo"
+                            value={formData.titulo}
+                            onChange={handleChange}
+                            required
+                            placeholder="Digite o título do evento"
+                        />
+                    </label>
 
-            <form className="evento-form" onSubmit={handleSubmit}>
-                <label>
-                    Título do Evento:
-                    <input
-                        type="text"
-                        name="titulo"
-                        value={formData.titulo}
-                        onChange={handleChange}
-                        required
-                    />
-                </label>
-
-                <label>
-                    Imagem do Evento:
-                    <div className="upload-box">
+                    <label>
+                        Imagem do Evento:
+                        <div
+                            className="upload-box"
+                            onClick={() => document.getElementById("upload-input").click()}
+                        >
+                            {formData.imagem ? (
+                                <img
+                                    src={URL.createObjectURL(formData.imagem)}
+                                    alt="Pré-visualização"
+                                    className="preview-img"
+                                />
+                            ) : (
+                                <div className="upload-placeholder">
+                                    <FaCloudUploadAlt size={50} color="#0C513F" />
+                                    <p>Clique ou arraste uma imagem aqui</p>
+                                </div>
+                            )}
+                        </div>
                         <input
                             type="file"
+                            id="upload-input"
                             name="imagem"
                             onChange={handleChange}
                             accept="image/*"
+                            style={{ display: "none" }}
                         />
+                    </label>
+
+                    <div className="linha-dupla">
+                        <label>
+                            Distância:
+                            <input
+                                type="text"
+                                name="distancia"
+                                value={formData.distancia}
+                                onChange={handleChange}
+                                placeholder="Ex: 10 km"
+                            />
+                        </label>
+
+                        <label>
+                            Dificuldade:
+                            <select
+                                name="dificuldade"
+                                value={formData.dificuldade}
+                                onChange={handleChange}
+                                required
+                            >
+                                <option value="">Selecione...</option>
+                                <option value="EXPLORADOR">EXPLORADOR</option>
+                                <option value="AVENTUREIRO">AVENTUREIRO</option>
+                                <option value="DESBRAVADOR">DESBRAVADOR</option>
+                            </select>
+                        </label>
                     </div>
-                </label>
 
-                <div className="linha-dupla">
                     <label>
-                        Distância:
+                        Mapa da Trilha (.gpx)
                         <input
-                            type="text"
-                            name="distancia"
-                            value={formData.distancia}
+                            type="file"
+                            name="trilha"
                             onChange={handleChange}
+                            accept=".gpx"
                         />
                     </label>
 
                     <label>
-                        Dificuldade:
-                        <input
-                            type="text"
-                            name="dificuldade"
-                            value={formData.dificuldade}
-                            onChange={handleChange}
-                        />
-                    </label>
-                </div>
-
-                <label>
-                    Mapa da Trilha (.gpx)
-                    <input
-                        type="file"
-                        name="trilha"
-                        onChange={handleChange}
-                        accept=".gpx"
-                    />
-                </label>
-
-                <label>
-                    Descrição do Evento:
-                    <textarea
-                        name="descricao"
-                        value={formData.descricao}
-                        onChange={handleChange}
-                    />
-                </label>
-
-                <div className="linha-dupla">
-                    <label>
-                        CEP:
-                        <input
-                            type="text"
-                            name="cep"
-                            value={formData.cep}
+                        Descrição do Evento:
+                        <textarea
+                            name="descricao"
+                            value={formData.descricao}
                             onChange={handleChange}
                         />
                     </label>
 
-                    <label>
-                        Avenida/Rua:
-                        <input
-                            type="text"
-                            name="rua"
-                            value={formData.rua}
-                            onChange={handleChange}
-                        />
-                    </label>
-                </div>
+                    <div className="linha-dupla">
+                        <label>
+                            CEP:
+                            <input
+                                type="text"
+                                name="cep"
+                                value={formData.cep}
+                                onChange={handleChange}
+                                onBlur={handleCepBlur}
+                            />
+                        </label>
 
-                <div className="linha-dupla">
-                    <label>
-                        Número:
-                        <input
-                            type="text"
-                            name="numero"
-                            value={formData.numero}
-                            onChange={handleChange}
-                        />
-                    </label>
+                        <label>
+                            Avenida/Rua:
+                            <input
+                                type="text"
+                                name="rua"
+                                value={formData.rua}
+                                onChange={handleChange}
+                            />
+                        </label>
+                    </div>
 
-                    <label>
-                        Complemento:
-                        <input
-                            type="text"
-                            name="complemento"
-                            value={formData.complemento}
-                            onChange={handleChange}
-                        />
-                    </label>
-                </div>
+                    <div className="linha-dupla">
+                        <label>
+                            Número:
+                            <input
+                                type="text"
+                                name="numero"
+                                value={formData.numero}
+                                onChange={handleChange}
+                            />
+                        </label>
 
-                <div className="linha-tripla">
-                    <label>
-                        Bairro:
-                        <input
-                            type="text"
-                            name="bairro"
-                            value={formData.bairro}
-                            onChange={handleChange}
-                        />
-                    </label>
+                        <label>
+                            Complemento:
+                            <input
+                                type="text"
+                                name="complemento"
+                                value={formData.complemento}
+                                onChange={handleChange}
+                            />
+                        </label>
+                    </div>
 
-                    <label>
-                        Cidade:
-                        <input
-                            type="text"
-                            name="cidade"
-                            value={formData.cidade}
-                            onChange={handleChange}
-                        />
-                    </label>
+                    <div className="linha-tripla">
+                        <label>
+                            Bairro:
+                            <input
+                                type="text"
+                                name="bairro"
+                                value={formData.bairro}
+                                onChange={handleChange}
+                            />
+                        </label>
 
-                    <label>
-                        Estado:
-                        <input
-                            type="text"
-                            name="estado"
-                            value={formData.estado}
-                            onChange={handleChange}
-                        />
-                    </label>
-                </div>
+                        <label>
+                            Cidade:
+                            <input
+                                type="text"
+                                name="cidade"
+                                value={formData.cidade}
+                                onChange={handleChange}
+                            />
+                        </label>
 
-                <div className="botoes">
-                    <button type="button" className="btn-excluir">
-                        Excluir Evento
-                    </button>
-                    <button type="submit" className="btn-salvar">
-                        Salvar Alterações
-                    </button>
-                </div>
-            </form>
+                        <label>
+                            Estado:
+                            <input
+                                type="text"
+                                name="estado"
+                                value={formData.estado}
+                                onChange={handleChange}
+                            />
+                        </label>
+                    </div>
+
+                    <div className="botoes">
+                        <button type="button" className="btn-excluir">
+                            Cancelar Evento
+                        </button>
+                        <button type="submit" className="btn-salvar">
+                            Criar Evento
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };
