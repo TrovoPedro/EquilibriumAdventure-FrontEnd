@@ -1,19 +1,42 @@
-import React from 'react';
 import Forms from '../../components/forms/forms';
 import './cadastro.css';
 import routeUrls from "../../routes/routeUrls"
 import { useNavigate } from 'react-router-dom';
+import React, { useState } from 'react';
+import { cadastrarUsuario } from '../../services/api';
+import { validateUserData } from '../../utils/validators';
 
 const Cadastro = () => {
     const navigate = useNavigate();
     const title = "CADASTRAR";
     const text = "Entre aqui";
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log('Submit de login', {
-            email: e.target.email.value,
-            senha: e.target.senha.value
-        });
+    const [error, setError] = useState(null);
+
+    const handleSubmit = async (formData) => {
+        const errors = validateUserData(formData);
+
+        if (Object.keys(errors).length > 0) {
+            alert(Object.values(errors).join("\n"));
+            return;
+        }
+        
+        const userData = {
+            nome: formData.username,
+            email: formData.email,
+            telefone_contato: formData.telefone,
+            senha: formData.senha,
+            descricao_guia: null,
+            tipo_usuario: "AVENTUREIRO"
+        };
+
+        try {
+            await cadastrarUsuario(userData);
+            alert('Cadastro realizado com sucesso!');
+            navigate(routeUrls.LOGIN);
+        } catch (error) {
+            setError(error.erro || 'Erro ao realizar cadastro');
+            alert(error.erro || 'Erro ao realizar cadastro');
+        }
     };
 
     const handleNavigate = () => {
