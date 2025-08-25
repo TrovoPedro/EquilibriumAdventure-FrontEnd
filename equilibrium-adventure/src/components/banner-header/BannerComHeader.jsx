@@ -18,11 +18,13 @@ export default function BannerComHeader() {
             </ul>
           </nav>
       </header>
-
-  <img src={bannerImg} alt="Banner trilha" className="banner-img" />
+    <div className="imagem-pai">
+      <img src={bannerImg} alt="Banner trilha" className="banner-img" />
       <div className="banner-text">
-        <h1 className="text-wrap">Faça as malas, vamos para algum lugar incrível!</h1>
+        <h1>FAÇA AS MALAS,</h1>
+        <h2>Vamos para algum lugar incrível!</h2>
       </div>
+    </div>
     </div>
   );
 }

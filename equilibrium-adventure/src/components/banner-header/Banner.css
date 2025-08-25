@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap');
+
 .main-header {
   background: #fff;
 }
@@ -53,7 +55,7 @@
     height: 700px;
     overflow: hidden;
     display: flex;
-    align-items: center;
+    align-items: end;
     justify-content: center;
 }
 
@@ -66,28 +68,47 @@
 
 }
 
-.banner-img {
-    width: 99%;
-    height: 98%;
-    object-fit: cover;
+.imagem-pai {
+    width: 99.5%;
+    height: 99%;
     display: block;
+    background-color: transparent;
+}
+
+.banner-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 16px 16px 4px 4px;
+    box-sizing: border-box;
 }
 
 .banner-text {
-    position: absolute;
-    top: 65%;
-    left: 10%;
+    width: 100%;
+    height: 80%;
     transform: translate(0, -50%);
     color: #fff;
     text-align: left;
-    z-index: 2;
-    text-shadow: 0 2px 8px rgba(0, 0, 0, 0.7);
-    font-size: 1.5rem;
-    line-height: 1.4;
-    max-width: 600px;
-    white-space: normal;
     font-family: 'Raleway', sans-serif;
-    font-weight: 300;
+    padding-left: 180px;
+    z-index: 2;
+    font-family: "Fustat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+.banner-text h1 {
+    color: #58e66d;
+    font-size: 6.1rem;
+    margin: 0;
+    font-weight: 600;
+}
+
+.banner-text h2 {
+    color: #fff;
+    font-size: 3rem;
+    margin: 0;
+    font-weight: 100;
 }
 
 .banner nav {
