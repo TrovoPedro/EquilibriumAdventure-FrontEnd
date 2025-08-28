@@ -30,7 +30,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
         if (path === '/login' || path === '/Login') {
             return (
                 <>
-                    <div className="form-group">
+                    <div className="forms">
                         <input
                             type="email"
                             name="email"
@@ -41,7 +41,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                         />
                     </div>
 
-                    <div className="form-group password-group">
+                    <div className="forms password-group">
                         <input
                             type={showPassword ? "text" : "password"}
                             name="senha"
@@ -68,7 +68,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
 
         return (
             <>
-                <div className="form-group">
+                <div className="forms">
                     <input
                         type="text"
                         name="username"
@@ -79,7 +79,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                     />
                 </div>
 
-                <div className="form-group">
+                <div className="forms">
                     <input
                         type="email"
                         name="email"
@@ -90,7 +90,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                     />
                 </div>
 
-                <div className="form-group">
+                <div className="forms">
                     <input
                         type="tel"
                         name="telefone"
@@ -102,7 +102,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                     />
                 </div>
 
-                <div className="form-group password-group">
+                <div className="form password-group">
                     <input
                         type={showPassword ? "text" : "password"}
                         name="senha"

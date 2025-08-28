@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080' // ajuste conforme sua URL base
+    baseURL: 'http://localhost:8080' 
 });
 
 export const cadastrarUsuario = async (userData) => {
@@ -18,5 +18,5 @@ export const getUsuario = async (id) => {
     return response.data;
   } catch (error) {
     throw error.response?.data || "Erro ao buscar usuário";
-  }
+  } 
 };
