@@ -3,17 +3,40 @@ import Forms from '../../components/forms/forms';
 import './login.css';
 import routeUrls from "../../routes/routeUrls"
 import { useNavigate } from 'react-router-dom';
+import { loginUsuario } from '../../services/api';
+import { useAuth } from '../../context/AuthContext';
 
 const Login = () => {
     const navigate = useNavigate();
     const title = "LOG IN";
     const text = "Cadastre-se";
-    const handleSubmit = (e) => {
+    const { login } = useAuth();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log('Submit de login', {
+
+        const credentials = {
             email: e.target.email.value,
             senha: e.target.senha.value
-        });
+        };
+
+        try {
+            const usuario = await loginUsuario(credentials);
+
+            login(usuario);
+
+            if (usuario.tipoUsuario === "ADMIN") {
+                navigate(routeUrls.CRIAR_EVENTO);
+            } else if (usuario.tipoUsuario === "AVENTUREIRO") {
+                navigate(routeUrls.ESCOLHER_GUIA);
+            } else {
+                navigate("/");
+            }
+
+        } catch (error) {
+            alert("Credenciais inválidas ou erro no servidor!");
+            console.error(error);
+        }
     };
 
     const handleNavigate = () => {
