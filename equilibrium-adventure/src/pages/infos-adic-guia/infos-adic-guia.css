@@ -1,0 +1,145 @@
+.home-container {
+  font-family: "Arial", sans-serif;
+  color: #00331f;
+  padding-left: 70px;
+  padding-right: 70px;
+  margin-top: 70px;
+}
+
+.card-guia {
+    width: 100%;
+    height: 270px;
+    display: flex;
+    justify-content: start;
+    align-items: end;
+    gap: 50px;
+}   
+
+.foto-guia {
+    height: 85%;
+    width: 220px;
+    border-radius: 90px;
+    border: none;
+}
+
+.foto-guia img {
+    width: 100%;
+    height: 100%;
+    border-radius: 95px;
+    border: none;
+    object-fit: cover;
+}
+
+.info-guia {
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    gap: 20px;
+}
+
+.info-guia p:nth-child(1) {
+    font-size: 42px;
+    color: #0C513F;
+    font-weight: lighter;
+}
+
+.info-guia p:nth-child(2) {
+    font-size: 42px;
+    color: #0C513F;
+    font-weight: bold;
+}
+
+.cards-father {
+    width: 100%;
+    height: 530px;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+}
+
+.card-imagem {
+    height: 86%;
+    width: 42%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: end;
+    transition: 0.4s ease;
+}
+
+.card-imagem:hover {
+    transform: translateY(-2px) scale(1.02);
+}
+
+.card-imagem p {
+    font-size: 42px;
+    color: #0C513F;
+    font-weight: lighter;
+}
+
+.card-info-guia {
+    height: 86%;
+    width: 42%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: end;
+}
+
+.card-info-guia p {
+    font-size: 42px;
+    color: #0C513F;
+    font-weight: lighter;
+}
+
+.dados-guia {
+    background-color: #E9E9E9;
+    height: 90%;
+    width: 100%;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+}
+
+.dados-guia img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    border-radius: 20px;
+    cursor: pointer;
+}
+
+.padding-dados {
+    height: 100%;
+    width: 100%;
+    padding: 30px 40px 30px 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.padding-dados ul {
+    text-decoration: none;
+    height: 85%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-evenly;
+}
+
+.padding-dados li {
+    text-decoration: none;
+}
+
+.padding-dados p {
+    font-size: 34px;
+    color: #0C513F;
+    font-weight: lighter;
+}
+
