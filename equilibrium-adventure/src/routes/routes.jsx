@@ -12,6 +12,7 @@ import EditarDadosAventureiro from "../pages/editar-dados-aventureiro/editar-dad
 import DadosCliente from "../pages/dados-cliente/dados-cliente"
 import AtivarEvento from "../pages/ativar-evento/ativar-evento"
 import AdicionarGuia from "../pages/adicionar-guia/adicionar-guia"
+import Listaconvites from "../pages/lista-convites/lista-convites"
 
 export default function AppRoutes() {
   return (
@@ -28,6 +29,7 @@ export default function AppRoutes() {
   <Route path={routeUrls.DADOS_CLIENTE} element={<DadosCliente/>}></Route>
   <Route path={routeUrls.ATIVAR_EVENTO} element={<AtivarEvento/>}></Route>
   <Route path={routeUrls.ADICIONAR_GUIA} element={<AdicionarGuia/>}></Route>
+  <Route path={routeUrls.LISTA_CONVITES} element={<Listaconvites/>}></Route>
     </Routes>
   )
 }
