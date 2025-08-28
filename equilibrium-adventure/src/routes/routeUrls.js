@@ -11,7 +11,10 @@ const routeUrls = {
     EDITAR_DADOS_AVENTUREIRO: '/editar-dados-aventureiro',
     DADOS_CLIENTE: '/dados-cliente',
     ATIVAR_EVENTO: '/ativar-evento',
-    CRIAR_INFOS_ADIC_GUIA: '/infos-adic-guia'
+    CRIAR_INFOS_ADIC_GUIA: '/infos-adic-guia',
+    CATALOGO_TRILHAS_ADM: '/catalogo-trilhas-adm',
+    INSCRICAO_TRILHAS: '/inscricao-trilhas',
+    INSCRICAO_TRILHAS_LIMITADO: '/inscricao-trilhas-limitado' 
 };
 
 export default routeUrls;

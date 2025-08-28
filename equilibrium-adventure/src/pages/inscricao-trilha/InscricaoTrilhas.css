@@ -1,0 +1,175 @@
+/* Estilos para a tela de inscrição de trilhas, baseada na imagem fornecida */
+.inscricao-trilha-container {
+  max-width: 1100px;
+  margin: 32px auto;
+  background: #fff;
+  border-radius: 20px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  padding: 40px 48px 48px 48px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+  margin-top: 7%;
+}
+
+.inscricao-trilha-header-separator {
+  height: 40px;
+  width: 100%;
+  display: block;
+}
+
+.inscricao-trilha-header {
+  display: flex;
+  gap: 40px;
+  padding: 0;
+  align-items: flex-start;
+  margin-bottom: 48px;
+}
+
+.inscricao-trilha-header img {
+  width: 380px;
+  height: 380px;
+  object-fit: cover;
+  border-radius: 14px;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+}
+
+.inscricao-trilha-info {
+  flex: 1;
+  background: #f5f5f5;
+  border-radius: 14px;
+  padding: 32px 32px 32px 32px;
+  font-size: 22px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-height: 380px;
+  height: 380px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.inscricao-trilha-info b {
+  color: #2d4636;
+}
+
+.inscricao-trilha-dados {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 60px;
+  background: #f5f5f5;
+  border-radius: 14px;
+  margin: 0 0 48px 0;
+  padding: 32px 32px 16px 32px;
+  font-size: 20px;
+  justify-content: flex-start;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+
+.inscricao-trilha-dados span {
+  min-width: 180px;
+  display: block;
+}
+
+.inscricao-trilha-btn {
+  width: 100%;
+  margin: 0 0 48px 0;
+  background: #2d4636;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  padding: 20px 0;
+  font-size: 26px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.2s;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+.inscricao-trilha-btn:active {
+  background: #1b2c1e;
+}
+
+.inscricao-trilha-comentarios {
+  background: #f5f5f5;
+  border-radius: 14px;
+  margin: 0 0 48px 0;
+  padding: 32px 32px 16px 32px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+
+.inscricao-trilha-comentario {
+  margin-bottom: 16px;
+  font-size: 18px;
+}
+.inscricao-trilha-comentario b {
+  color: #2d4636;
+}
+
+.inscricao-trilha-form {
+  display: flex;
+  gap: 16px;
+  margin-top: 18px;
+}
+.inscricao-trilha-form input {
+  flex: 1;
+  border: 1px solid #bdbdbd;
+  border-radius: 8px;
+  padding: 14px 18px;
+  font-size: 18px;
+}
+.inscricao-trilha-form button {
+  background: #2d4636;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 32px;
+  font-size: 18px;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.inscricao-trilha-mapa {
+  margin: 0 0 48px 0;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #eaeaea;
+  padding: 32px 32px 32px 32px;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+}
+
+.inscricao-trilha-mapa h3 {
+  font-size: 22px;
+  color: #2d4636;
+  margin-bottom: 16px;
+}
+
+@media (max-width: 900px) {
+  .inscricao-trilha-container {
+    max-width: 98vw;
+    padding: 8px 2vw 24px 2vw;
+  }
+  .inscricao-trilha-header {
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+  .inscricao-trilha-header img {
+    width: 100%;
+    max-width: 350px;
+    height: 180px;
+  }
+  .inscricao-trilha-info {
+    width: 100%;
+    min-height: unset;
+    padding: 18px 12px;
+    font-size: 16px;
+  }
+  .inscricao-trilha-dados {
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px 12px 10px 12px;
+    font-size: 15px;
+  }
+  .inscricao-trilha-comentarios, .inscricao-trilha-mapa {
+    padding: 18px 12px;
+  }
+}
