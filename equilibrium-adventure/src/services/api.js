@@ -1,9 +1,9 @@
 import axios from 'axios';
 
 const api = axios.create({
-    baseURL: 'http://localhost:8080' // ajuste conforme sua URL base
+    baseURL: 'http://localhost:8080' 
 });
-
+// cadastrar usuario
 export const cadastrarUsuario = async (userData) => {
     try {
         const response = await api.post('/usuarios/cadastrar', userData);
@@ -12,11 +12,12 @@ export const cadastrarUsuario = async (userData) => {
         throw error.response?.data || error.message;
     }
 };
-export const getUsuario = async (id) => {
+// login usuario
+export const loginUsuario = async (credentials) => {
   try {
-    const response = await axios.get(`/usuarios/buscar/${id}`);
+    const response = await api.post("/usuarios/login", credentials);
     return response.data;
   } catch (error) {
-    throw error.response?.data || "Erro ao buscar usuário";
+    throw error.response?.data || error.message;
   }
 };

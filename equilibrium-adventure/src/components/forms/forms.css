@@ -1,9 +1,9 @@
-.form-group {
+.forms {
     margin-bottom: 1rem;
     position: relative;
 }
 
-.form-group input {
+.forms input {
     width: 100%;
     padding: 0.5rem 0;
     border: none;
@@ -16,7 +16,7 @@
     line-height: 1.5rem;
 }
 
-.form-group input:focus {
+.forms input:focus {
     border-bottom: 1px solid #0c381d; 
     background-color: transparent;
 }
@@ -66,6 +66,7 @@
     align-items: center;
     gap: 8px;
     cursor: pointer;
+    padding-top: 20px;
 }
 
 .checkbox-text {
