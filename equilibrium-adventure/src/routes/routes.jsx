@@ -12,22 +12,24 @@ import EditarDadosAventureiro from "../pages/editar-dados-aventureiro/editar-dad
 import DadosCliente from "../pages/dados-cliente/dados-cliente"
 import AtivarEvento from "../pages/ativar-evento/ativar-evento"
 import AdicionarGuia from "../pages/adicionar-guia/adicionar-guia"
+import EscolhaDataCard from "../pages/escolher-data/escolher-data"
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path={routeUrls.LOGIN} element={<Login />} />
-      <Route path={routeUrls.CRIAR_EVENTO} element={<CriarEvento/>}/>
-      <Route path={routeUrls.EDITAR_EVENTO} element={<EditarEvento/>}/>
-      <Route path={routeUrls.HOME} element={<Home/>}></Route>
-      <Route path={routeUrls.CADASTRO} element={<Cadastro/>}></Route>
-      <Route path={routeUrls.QUESTIONARIO} element={<Questionario/>}></Route>
-      <Route path={routeUrls.ESCOLHER_GUIA} element={<EscolhaGuia/>}></Route>
-      <Route path={routeUrls.CATALOGO_TRILHA} element={<CatalogoTrilha/>}></Route>
-      <Route path={routeUrls.EDITAR_DADOS_AVENTUREIRO} element={<EditarDadosAventureiro/>}></Route>
-  <Route path={routeUrls.DADOS_CLIENTE} element={<DadosCliente/>}></Route>
-  <Route path={routeUrls.ATIVAR_EVENTO} element={<AtivarEvento/>}></Route>
-  <Route path={routeUrls.ADICIONAR_GUIA} element={<AdicionarGuia/>}></Route>
+      <Route path={routeUrls.CRIAR_EVENTO} element={<CriarEvento />} />
+      <Route path={routeUrls.EDITAR_EVENTO} element={<EditarEvento />} />
+      <Route path={routeUrls.HOME} element={<Home />}></Route>
+      <Route path={routeUrls.CADASTRO} element={<Cadastro />}></Route>
+      <Route path={routeUrls.QUESTIONARIO} element={<Questionario />}></Route>
+      <Route path={routeUrls.ESCOLHER_GUIA} element={<EscolhaGuia />}></Route>
+      <Route path={routeUrls.CATALOGO_TRILHA} element={<CatalogoTrilha />}></Route>
+      <Route path={routeUrls.EDITAR_DADOS_AVENTUREIRO} element={<EditarDadosAventureiro />}></Route>
+      <Route path={routeUrls.DADOS_CLIENTE} element={<DadosCliente />}></Route>
+      <Route path={routeUrls.ATIVAR_EVENTO} element={<AtivarEvento />}></Route>
+      <Route path={routeUrls.ADICIONAR_GUIA} element={<AdicionarGuia />}></Route>
+      <Route path={routeUrls.ESCOLHER_DATA} element={<EscolhaDataCard />}></Route>
     </Routes>
   )
 }
