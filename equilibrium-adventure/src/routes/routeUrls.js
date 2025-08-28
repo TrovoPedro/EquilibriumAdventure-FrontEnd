@@ -10,7 +10,8 @@ const routeUrls = {
     QUESTIONARIO: '/questionario',
     EDITAR_DADOS_AVENTUREIRO: '/editar-dados-aventureiro',
     DADOS_CLIENTE: '/dados-cliente',
-    ATIVAR_EVENTO: '/ativar-evento'
+    ATIVAR_EVENTO: '/ativar-evento',
+    ADICIONAR_GUIA: '/adicionar-guia'
 };
 
 export default routeUrls;
