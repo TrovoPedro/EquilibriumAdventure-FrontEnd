@@ -21,7 +21,7 @@ const Header = () => {
 
       <nav className="header-center">
         <ul>
-          <li onClick={() => navigate(routeUrls.HOME)}>HOME</li>
+          <li onClick={() => navigate(routeUrls.CATALOGO_TRILHA)}>HOME</li>
           <li>MAIS PESQUISADOS</li>
           <li>TRILHAS</li>
         </ul>
@@ -29,7 +29,7 @@ const Header = () => {
 
       <div className="header-right">
         <button className="agendar" onClick={() => navigate(routeUrls.AGENDA)}>AGENDA</button>
-        <button className="sair" onClick={() => navigate(routeUrls.CONTATO)}>SAIR</button>
+        <button className="sair" onClick={() => navigate(routeUrls.HOME)}>SAIR</button>
       </div>
     </header>
   );
