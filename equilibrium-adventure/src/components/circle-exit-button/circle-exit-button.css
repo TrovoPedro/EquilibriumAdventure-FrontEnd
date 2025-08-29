@@ -1,0 +1,33 @@
+.circle-exit-button {
+    height: 45px;
+    width: 45px;
+    border-radius: 100%;
+    border: 3px solid #336948;
+    background: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background-color 0.35s ease;
+}
+
+.exit-icon {
+    color: #336948;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+    transition: color 0.35s ease;
+}
+
+.circle-exit-button:hover {
+    background-color: #336948;
+    border: none;
+    transition: background-color 0.35s ease;
+}
+
+.exit-icon:hover {
+    color: #e9ebea;
+    transition: color 0.35s ease;
+}

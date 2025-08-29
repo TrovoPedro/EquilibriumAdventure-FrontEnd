@@ -1,0 +1,13 @@
+.btn-excluir {
+    background: #a93226;
+    color: white;
+    border: none;
+    padding: 12px 50px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.btn-excluir:hover {
+    transition: 1000ms;
+    background: #240c0a;
+}

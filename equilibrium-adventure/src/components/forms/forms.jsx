@@ -4,6 +4,7 @@ import ButtonAuth from '../button-auth/button-auth';
 import { useLocation } from 'react-router-dom';
 import olhoAberto from '../../assets/olho-aberto.png';
 import olhoFechado from '../../assets/olho-fechado.png';
+import { maskTelefone } from '../../utils/maskTelefone';
 
 const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
     const location = useLocation();
@@ -18,19 +19,26 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
 
     const [showPassword, setShowPassword] = useState(false);
 
-    const handleChange = (e) => {
-        const { name, type, checked, value } = e.target;
-        setFormData(prevState => ({
-            ...prevState,
-            [name]: type === 'checkbox' ? checked : value
-        }));
-    };
+const handleChange = (e) => {
+    const { name, type, checked, value } = e.target;
+
+    let newValue = value;
+
+    if (name === "telefone") {
+        newValue = maskTelefone(value);
+    }
+
+    setFormData(prevState => ({
+        ...prevState,
+        [name]: type === 'checkbox' ? checked : newValue
+    }));
+};
 
     const renderFormFields = () => {
         if (path === '/login' || path === '/Login') {
             return (
                 <>
-                    <div className="form-group">
+                    <div className="forms">
                         <input
                             type="email"
                             name="email"
@@ -41,7 +49,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                         />
                     </div>
 
-                    <div className="form-group password-group">
+                    <div className="forms password-group">
                         <input
                             type={showPassword ? "text" : "password"}
                             name="senha"
@@ -68,7 +76,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
 
         return (
             <>
-                <div className="form-group">
+                <div className="forms">
                     <input
                         type="text"
                         name="username"
@@ -79,7 +87,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                     />
                 </div>
 
-                <div className="form-group">
+                <div className="forms">
                     <input
                         type="email"
                         name="email"
@@ -90,7 +98,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                     />
                 </div>
 
-                <div className="form-group">
+                <div className="forms">
                     <input
                         type="tel"
                         name="telefone"
@@ -102,7 +110,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                     />
                 </div>
 
-                <div className="form-group password-group">
+                <div className="form password-group">
                     <input
                         type={showPassword ? "text" : "password"}
                         name="senha"
@@ -138,10 +146,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
     };
 
     return (
-    <form className='forms' onSubmit={(e) => {
-        e.preventDefault();
-        handleSubmit(formData);
-    }}>
+    <form className='forms' onSubmit={handleSubmit}>
         {renderFormFields()}
         <div className='forms-footer'>
             <span>
