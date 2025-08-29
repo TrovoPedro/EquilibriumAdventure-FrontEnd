@@ -2,8 +2,11 @@ import "./infos-adic-guia.css";
 import Header from "../../components/header/header";
 import Mulher from "../../assets/mulher4.jpeg";
 import Trilha from "../../assets/img10-catalogo.jpg";
+import ButtonAlterar from "../../components/button-padrao/button-alterar"
 
-const CriarInformacoesAdicionaisGuia = () => {
+const CriarInformacoesAdicionaisGuia = (title, onClick) => {
+    const titulo = "Salvar Alterações";
+
     return (
     <>
       <Header />
@@ -27,7 +30,8 @@ const CriarInformacoesAdicionaisGuia = () => {
                             <li><p><b>Senha:</b> ********</p></li>
                             <li><p><b>Descrição:</b> Guia há 5 anos...</p></li>
                         </ul>
-                        <button>Salvar Alterações</button>
+                        {/* <ButtonAlterar title={titulo} onClick={onClick}/> */}
+                        <button className="button-dados">Salvar Alterações</button>
                     </div>
                 </div>
             </div>
@@ -36,6 +40,72 @@ const CriarInformacoesAdicionaisGuia = () => {
                 <div className="dados-guia">
                     <img src={Trilha} alt="EVENTO"/>
                 </div>
+            </div>
+        </div>
+        <div className="cards-eventos">
+            <div className="eventos-anamnese-ativos">
+                <div className="filtro-button-data">
+                    <button className="button-add-data"> Adicionar Datas Para Anamnese</button>
+                    <select name="" id="" className="filtro-data">
+                        <option value="0" disabled selected>Filtrar Data</option>
+                    </select>
+                </div>
+
+                <div className="father-card1">
+                    <p>Aventureiros para Anamnese:</p>
+                    <div className="card-eventos1">
+                        <div className="inicial-data">
+                            <div className="cubo-inicial" style={{ backgroundColor: "blue" }}>J</div>
+
+                            <p>Jan 2, 14:30</p>
+                        </div>
+                    
+                        <div className="nome-button">
+                            <p>João Ribeiro</p>
+
+                            <button>Relatório</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="card-eventos">
+                    <div className="inicial-data">
+                        <div className="cubo-inicial" style={{ backgroundColor: "#ea96cf" }}>C</div>
+
+                        <p>Fev 24, 11:30</p>
+                    </div>
+                    
+                    <div className="nome-button">
+                        <p>Carolina Andrade</p>
+
+                        <button>Relatório</button>
+                    </div>
+                </div>
+
+                <div className="card-eventos">
+                    <div className="inicial-data">
+                        <div className="cubo-inicial" style={{ backgroundColor: "#b11c1cff" }}>L</div>
+
+                        <p>Abr 15, 10:00</p>
+                    </div>
+                    
+                    <div className="nome-button">
+                        <p>Leandro Alves</p>
+
+                        <button>Relatório</button>
+                    </div>
+                </div>
+            </div>
+
+            <div className="eventos-anamnese-ativos">
+                <div className="father-card1">
+                    <p>Eventos Ativos:</p>
+                    <div className="card-eventos1"></div>
+                </div>
+
+                <div className="card-eventos"></div>
+
+                <div className="card-eventos"></div>
             </div>
         </div>
       </div>
