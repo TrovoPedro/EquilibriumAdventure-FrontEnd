@@ -12,32 +12,29 @@ const Login = () => {
     const text = "Cadastre-se";
     const { login } = useAuth();
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        const credentials = {
-            email: e.target.email.value,
-            senha: e.target.senha.value
-        };
-
-        try {
-            const usuario = await loginUsuario(credentials);
-
-            login(usuario);
-
-            if (usuario.tipoUsuario === "ADMIN") {
-                navigate(routeUrls.CRIAR_EVENTO);
-            } else if (usuario.tipoUsuario === "AVENTUREIRO") {
-                navigate(routeUrls.ESCOLHER_GUIA);
-            } else {
-                navigate("/");
-            }
-
-        } catch (error) {
-            alert("Credenciais inválidas ou erro no servidor!");
-            console.error(error);
-        }
+   const handleSubmit = async (formData) => {
+    const credentials = {
+        email: formData.email,
+        senha: formData.senha
     };
+
+    try {
+        const usuario = await loginUsuario(credentials);
+        login(usuario);
+
+        if (usuario.tipoUsuario === "ADMIN") {
+            navigate(routeUrls.CRIAR_EVENTO);
+        } else if (usuario.tipoUsuario === "AVENTUREIRO") {
+            navigate(routeUrls.ESCOLHER_GUIA);
+        } else {
+            navigate("/");
+        }
+
+    } catch (error) {
+        alert("Credenciais inválidas ou erro no servidor!");
+        console.error(error);
+    }
+};
 
     const handleNavigate = () => {
         navigate(routeUrls.CADASTRO);
