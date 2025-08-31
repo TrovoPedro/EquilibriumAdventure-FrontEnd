@@ -6,6 +6,8 @@ import Header from "../../components/header/header";
 import { maskCep, maskDistancia } from "../../utils/masks";
 import { cadastrarEvento, buscarCep } from "../../api/chamadasAPIEvento";
 import "./criar-evento.css";
+import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
+import ButtonCriarEvento from "../../components/button-eventos/button-criar-evento";
 
 const CriarEvento = () => {
     const [formData, setFormData] = useState({
@@ -39,7 +41,7 @@ const CriarEvento = () => {
         });
     };
 
-    const handleCepBlur = async (e) => {
+    const handleCepBlur = async () => {
         const cep = formData.cep.replace(/\D/g, "");
         if (cep.length === 8) {
             try {
@@ -76,25 +78,13 @@ const CriarEvento = () => {
             form.append("imagem", formData.imagem);
         }
 
-        try {
-            const response = await cadastrarEvento(form);
-            if (response.ok) {
-                const data = await response.json();
-                console.log("Evento criado:", data);
-                navigate(routeUrls.HOME);
-            } else {
-                const error = await response.text();
-                alert("Erro ao criar evento: " + error);
-            }
-        } catch (err) {
-            alert("Erro de conexão: " + err.message);
-        }
+        await cadastrarEvento(form, navigate);
     };
 
     return (
         <div className="criar-evento-page">
             <div className="criar-evento-container">
-                <Header></Header>
+                <Header />
                 <form className="evento-form" onSubmit={handleSubmit}>
                     <label>
                         Título do Evento:
@@ -166,12 +156,29 @@ const CriarEvento = () => {
                     </div>
 
                     <label>
-                        Mapa da Trilha (.gpx)
+                        Mapa da Trilha (.gpx):
+                        <div
+                            className="upload-box"
+                            onClick={() => document.getElementById("upload-trilha-input").click()}
+                        >
+                            {formData.trilha ? (
+                                <div className="trilha-preview">
+                                    <p>{formData.trilha.name}</p>
+                                </div>
+                            ) : (
+                                <div className="upload-placeholder">
+                                    <FaCloudUploadAlt size={30} color="#0C513F" />
+                                    <p>Clique ou arraste o arquivo .gpx aqui</p>
+                                </div>
+                            )}
+                        </div>
                         <input
                             type="file"
+                            id="upload-trilha-input"
                             name="trilha"
                             onChange={handleChange}
                             accept=".gpx"
+                            style={{ display: "none" }}
                         />
                     </label>
 
@@ -262,12 +269,8 @@ const CriarEvento = () => {
                     </div>
 
                     <div className="botoes">
-                        <button type="button" className="btn-excluir">
-                            Cancelar Evento
-                        </button>
-                        <button type="submit" className="btn-salvar">
-                            Criar Evento
-                        </button>
+                        <ButtonCancelarEvento title={"Cancelar criação"}></ButtonCancelarEvento>
+                        <ButtonCriarEvento title={"Salvar evento"}></ButtonCriarEvento>
                     </div>
                 </form>
             </div>
