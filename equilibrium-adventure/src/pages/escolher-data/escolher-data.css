@@ -1,0 +1,99 @@
+/* Tela de fundo escura */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000;
+}
+
+
+/* Card central */
+.card-escolha {
+    width: 380px;
+    border-radius: 12px !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
+    padding: 10px;
+    background-color: #fff;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Animação de entrada */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Botão fechar */
+
+.btn-fechar {
+    color: #555 !important;
+}
+
+
+/* Títulos */
+
+.titulo {
+    margin: 12px 0;
+    font-size: 16px !important;
+    font-weight: 500 !important;
+    color: #2e5e46 !important;
+}
+
+
+/* Select de horários */
+
+.select-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+}
+
+.select-horario {
+    min-width: 220px !important;
+}
+
+
+/* Botões */
+
+.botoes {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.btn-salvar,
+.btn-calendario {
+    background-color: #2e5e46 !important;
+    text-transform: none !important;
+    font-weight: 500 !important;
+    border-radius: 8px !important;
+    padding: 6px 16px !important;
+}
+
+.select-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 15px 0;
+    z-index: 2200;
+}
+
+.select-horario {
+    min-width: 220px !important;
+    text-align: center;
+    color: #2e5e46 !important;
+    font-weight: 500 !important;
+}
