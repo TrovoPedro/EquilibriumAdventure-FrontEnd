@@ -19,20 +19,20 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
 
     const [showPassword, setShowPassword] = useState(false);
 
-const handleChange = (e) => {
-    const { name, type, checked, value } = e.target;
+    const handleChange = (e) => {
+        const { name, type, checked, value } = e.target;
 
-    let newValue = value;
+        let newValue = value;
 
-    if (name === "telefone") {
-        newValue = maskTelefone(value);
-    }
+        if (name === "telefone") {
+            newValue = maskTelefone(value);
+        }
 
-    setFormData(prevState => ({
-        ...prevState,
-        [name]: type === 'checkbox' ? checked : newValue
-    }));
-};
+        setFormData(prevState => ({
+            ...prevState,
+            [name]: type === 'checkbox' ? checked : newValue
+        }));
+    };
 
     const renderFormFields = () => {
         if (path === '/login' || path === '/Login') {
@@ -146,17 +146,20 @@ const handleChange = (e) => {
     };
 
     return (
-    <form className='forms' onSubmit={handleSubmit}>
-        {renderFormFields()}
-        <div className='forms-footer'>
-            <span>
-                {path === '/login' ? 'Ainda não tem uma conta?' : 'Já tem uma conta?'}
-                <button type="button" className='button-cad' onClick={handleNavigate}>{text}</button>
-            </span>
-            <ButtonAuth type="submit" title={title} />
-        </div>
-    </form>
-);
+        <form className='forms' onSubmit={(e) => {
+            e.preventDefault();
+            handleSubmit(formData);
+        }}>
+            {renderFormFields()}
+            <div className='forms-footer'>
+                <span>
+                    {path === '/login' ? 'Ainda não tem uma conta?' : 'Já tem uma conta?'}
+                    <button type="button" className='button-cad' onClick={handleNavigate}>{text}</button>
+                </span>
+                <ButtonAuth type="submit" title={title} />
+            </div>
+        </form>
+    );
 
 };
 
