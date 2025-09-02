@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 import "./header.css";
-import img from "../../assets/mulher4.jpeg";
+import img from "../../assets/beneficiario.png";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -20,7 +20,7 @@ const Header = () => {
 
       <nav className={`header-center ${menuOpen ? "open" : ""}`}>
         <ul>
-          <li onClick={() => navigate(routeUrls.HOME)}>HOME</li>
+          <li onClick={() => navigate(routeUrls.CATALOGO_TRILHAS_ADM)}>HOME</li>
           <li onClick={() => navigate(routeUrls.CRIAR_EVENTO)}>CRIAR EVENTO</li>
           <li onClick={() => navigate(routeUrls.SOBRE)}>DASHBOARD</li>
           <li onClick={() => navigate(routeUrls.CONTATO)}>NOVO GUIA</li>
@@ -43,7 +43,7 @@ const Header = () => {
 
       <div className="header-right">
         <button className="agendar" onClick={() => navigate(routeUrls.AGENDA)}>AGENDA</button>
-        <button className="sair" onClick={() => navigate(routeUrls.CONTATO)}>SAIR</button>
+        <button className="sair" onClick={() => navigate(routeUrls.HOME)}>SAIR</button>
       </div>
 
       <button

@@ -35,9 +35,9 @@
     border-radius: 12px;
 }
 
-.evento-card:hover {
+/* .evento-card:hover {
     transform: translateY(-8px) scale(1.03);
-}
+} */
 
 .evento-card h3 {
     font-size: 1.8rem;

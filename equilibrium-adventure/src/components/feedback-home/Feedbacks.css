@@ -1,72 +1,169 @@
+
 .feedbacks {
-    padding: 64px 40px 0 40px;
+    padding: 64px 0 0 0;
 }
 
 .feedbacks h2 {
-    font-size: 2rem;
-    color: #23423a;
-    margin-bottom: 32px;
+    font-size: 2.2rem;
+    color: #295c44;
+    margin-bottom: 40px;
     font-weight: 400;
     text-align: center;
+    letter-spacing: 0.01em;
 }
 
-/* Feedbacks no estilo "mural espalhado" */
-.feedback-cards {
-    display: flex;
-    justify-content: center;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); /* colunas automáticas */
-    gap: 28px; /* espaço entre cards */
-    justify-items: center; /* centraliza cada card na coluna */
-    padding: 20px;
+
+.feedback-cards-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 38px 36px;
+    justify-items: center;
+    align-items: stretch;
+    padding: 0 24px 60px 24px;
+    position: relative;
 }
 
-.feedback-card {
-    background: #fff;
-    border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
-    padding: 20px;
+/* Cards do meio ocupam 2 colunas, pontas ocupam 1 coluna */
+.feedback-card-middle {
+    min-height: 260px;
+    max-width: 320px;
     width: 100%;
-    height: 150px;
-    max-width: 300px;
+    font-size: 1.08em;
+    padding: 38px 32px 28px 32px;
+}
+
+.feedback-card-edge {
+    grid-column: span 1;
+    max-width: 260px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1em;
+    padding: 22px 16px 16px 16px;
+}
+
+
+/* Espalhar os cards como um gráfico de ideias */
+.feedback-cards-grid .feedback-card-modern {
+    transition: box-shadow 0.2s, transform 0.2s;
+    z-index: 1;
+}
+
+
+/* Cards wide continuam ocupando 2 colunas */
+
+.feedback-card-modern {
+    background: #fff;
+    border-radius: 18px;
+    box-shadow: 0 2px 16px 0 rgba(44, 62, 80, 0.08);
+    border: 1.5px solid #e6e6e6;
+    padding: 28px 24px 20px 24px;
+    min-height: 120px;
     display: flex;
+    flex-direction: column;
+    gap: 16px;
+    transition: box-shadow 0.2s, transform 0.2s;
+    position: relative;
+    width: 100%;
+    max-width: 320px;
+}
+
+
+
+.feedback-card-edge {
+    max-width: 260px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1em;
+    padding: 22px 16px 16px 16px;
+}
+
+.feedback-card-wide {
+    grid-column: span 2;
+}
+
+.feedback-card-modern:hover {
+    box-shadow: 0 4px 24px 0 rgba(44, 62, 80, 0.13);
+    transform: translateY(-4px) scale(1.03);
+}
+
+.feedback-card-header {
+    display: flex;
+    align-items: center;
     gap: 12px;
-    align-items: flex-start;
-    transition: transform 0.3s ease;
+    margin-bottom: 2px;
 }
 
-.feedback-card:hover {
-    transform: scale(1.05);
-}
-
-
-.feedback-card img {
-    width: 40px;
-    height: 40px;
+.feedback-avatar {
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     object-fit: cover;
+    border: 2px solid #e8f5fd;
 }
 
-.feedback-card strong {
+.feedback-user-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.feedback-nome {
     color: #23423a;
-    font-size: 1rem;
-    font-weight: 700;
+    font-size: 1.08rem;
+    font-weight: 600;
+    line-height: 1.1;
 }
 
-.feedback-card span {
+.feedback-user {
     color: #7bbf7f;
-    font-size: 0.95rem;
-}
-
-.feedback-card p {
-    color: #5a7c6e;
-    font-size: 0.95rem;
-    margin-top: 4px;
-}
-
-.feedbacks h4 {
-    color: #7bbf7f;
-    font-size: 1rem;
+    font-size: 0.97rem;
     font-weight: 400;
-    margin-bottom: 20px;
-    text-align: center;
+}
+
+.feedback-twitter-icon {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+}
+
+.feedback-texto {
+    color: #3d5c4c;
+    font-size: 1.04rem;
+    margin: 0;
+    line-height: 1.5;
+}
+
+@media (max-width: 1200px) {
+    .feedback-cards-grid {
+        grid-template-columns: 1fr 1fr;
+    }
+    .feedback-card-middle {
+        grid-column: span 2;
+        max-width: 98vw;
+        padding: 28px 18px 20px 18px;
+    }
+    .feedback-card-edge {
+        grid-column: span 1;
+        max-width: 98vw;
+        padding: 18px 8px 14px 8px;
+    }
+}
+
+@media (max-width: 700px) {
+    .feedback-cards-grid {
+        grid-template-columns: 1fr;
+        padding: 0 8px 32px 8px;
+    }
+    .feedback-card-middle,
+    .feedback-card-edge {
+        grid-column: span 1;
+        max-width: 98vw;
+        padding: 14px 4px 10px 4px;
+        font-size: 1em;
+    }
+    .feedbacks h2 {
+        font-size: 1.3rem;
+    }
 }
