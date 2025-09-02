@@ -22,12 +22,12 @@ const Login = () => {
         const usuario = await loginUsuario(credentials);
         login(usuario);
 
-        if (usuario.tipoUsuario === "ADMIN") {
+        if (usuario.tipoUsuario === "ADMINISTRADOR" || usuario.tipoUsuario === "GUIA") {
             navigate(routeUrls.CRIAR_EVENTO);
-        } else if (usuario.tipoUsuario === "AVENTUREIRO") {
+        } else if (usuario.tipoUsuario === "AVENTUREIRO" && usuario.primeiraVez) {
+            navigate(routeUrls.QUESTIONARIO);
+        } else if (usuario.tipoUsuario === "AVENTUREIRO" && !usuario.primeiraVez) {
             navigate(routeUrls.ESCOLHER_GUIA);
-        } else {
-            navigate("/");
         }
 
     } catch (error) {
