@@ -12,7 +12,8 @@ const routeUrls = {
     DADOS_CLIENTE: '/dados-cliente',
     ATIVAR_EVENTO: '/ativar-evento',
     ADICIONAR_GUIA: '/adicionar-guia',
-    LISTA_CONVITES: '/lista-convites'
+    LISTA_CONVITES: '/lista-convites',
+    VER_GUIAS:'/ver-guias'
 };
 
 export default routeUrls;
