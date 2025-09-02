@@ -18,7 +18,8 @@ const routeUrls = {
     ADICIONAR_GUIA: '/adicionar-guia',
     LISTA_CONVITES: '/lista-convites',
     INFOS_ADICIONAIS_GUIA: '/infos-adic-guia',
-    ESCOLHER_DATA: '/escolher-data'
+    ESCOLHER_DATA: '/escolher-data',
+    DADOS_GUIA: '/dados-guia'
 };
 
 export default routeUrls;
