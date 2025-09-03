@@ -15,7 +15,7 @@ const Questionario = () => {
   const [titleButton, setTitleButton] = useState("Próxima Questão");
   const [loading, setLoading] = useState(true);
   const [nivel, setNivel] = useState(null);
-  const { score } = useScore();
+  const { salvarPontuacao } = useScore();
 
   // Buscar perguntas no backend
   useEffect(() => {
@@ -64,7 +64,7 @@ const Questionario = () => {
         `Respostas enviadas! Parabéns você é um ${resultado.nivelamento}`
       );
 
-      score(resultado.total, resultado.nivelamento);
+      salvarPontuacao(resultado.total, resultado.nivelamento);
 
       navigate(routeUrls.ESCOLHER_GUIA, { state: { nivel: resultado.nivelamento } });
       
