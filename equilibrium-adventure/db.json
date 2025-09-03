@@ -1,0 +1,376 @@
+{
+  "perguntas": [
+    {
+      "id": 1,
+      "title": "Questão 1",
+      "question": "Com que frequência você participa de atividades ao ar livre (trilhas, acampamentos, escaladas, etc.)?",
+      "options": [
+        {
+          "texto": "Nunca participei",
+          "valor": 0
+        },
+        {
+          "texto": "Raramente (1–2 vezes por ano)",
+          "valor": 1
+        },
+        {
+          "texto": "Frequentemente (mensalmente)",
+          "valor": 2
+        },
+        {
+          "texto": "Sempre que posso (semanalmente)",
+          "valor": 3
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "title": "Questão 2",
+      "question": "Você já fez alguma atividade em ambiente de risco controlado (rapel, rafting, escalada, etc.)?",
+      "options": [
+        {
+          "texto": "Nunca",
+          "valor": 0
+        },
+        {
+          "texto": "Sim, uma ou duas vezes",
+          "valor": 1
+        },
+        {
+          "texto": "Sim, com frequência",
+          "valor": 2
+        },
+        {
+          "texto": "Sim, e costumo liderar ou orientar outros",
+          "valor": 3
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "title": "Questão 3",
+      "question": "Como você se sente em relação a imprevistos durante uma aventura?",
+      "options": [
+        {
+          "texto": "Me deixo abalar facilmente",
+          "valor": 0
+        },
+        {
+          "texto": "Fico nervoso, mas tento resolver",
+          "valor": 1
+        },
+        {
+          "texto": "Consigo manter a calma e pensar em soluções",
+          "valor": 2
+        },
+        {
+          "texto": "Adoro desafios e sei como agir",
+          "valor": 3
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "title": "Questão 4",
+      "question": "Você possui alguma condição de saúde que possa impactar sua participação em atividades físicas intensas?",
+      "options": [
+        {
+          "texto": "Sim, e preciso de acompanhamento constante",
+          "valor": 0
+        },
+        {
+          "texto": "Sim, mas está sob controle com medicação ou cuidados",
+          "valor": 1
+        },
+        {
+          "texto": "Tive no passado, mas atualmente estou liberado",
+          "valor": 2
+        },
+        {
+          "texto": "Não tenho nenhum problema de saúde relevante",
+          "valor": 3
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "title": "Questão 5",
+      "question": "Como você avalia sua resistência física para trilhas com mais de 3 horas de duração?",
+      "options": [
+        {
+          "texto": "Nunca fiz",
+          "valor": 0
+        },
+        {
+          "texto": "Fico muito cansado",
+          "valor": 1
+        },
+        {
+          "texto": "Aguento bem",
+          "valor": 2
+        },
+        {
+          "texto": "Me sinto energizado mesmo depois",
+          "valor": 3
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "title": "Questão 6",
+      "question": "Você já se perdeu em uma trilha ou se afastou do grupo? Como reagiu?",
+      "options": [
+        {
+          "texto": "Nunca vivi isso e não saberia como agir",
+          "valor": 0
+        },
+        {
+          "texto": "Já aconteceu e fiquei desesperado",
+          "valor": 1
+        },
+        {
+          "texto": "Já aconteceu, mas consegui me orientar",
+          "valor": 2
+        },
+        {
+          "texto": "Costumo orientar os outros quando isso ocorre",
+          "valor": 3
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "title": "Questão 7",
+      "question": "Você já acampou em locais sem estrutura (sem banheiro, energia, etc.)?",
+      "options": [
+        {
+          "texto": "Nunca",
+          "valor": 0
+        },
+        {
+          "texto": "Sim, mas passei perrengue",
+          "valor": 1
+        },
+        {
+          "texto": "Sim, e me saí bem",
+          "valor": 2
+        },
+        {
+          "texto": "Sim, e gosto desse tipo de experiência",
+          "valor": 3
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "title": "Questão 8",
+      "question": "Você costuma pesquisar a previsão do tempo, rotas e equipamentos antes de uma aventura?",
+      "options": [
+        {
+          "texto": "Não costumo me preparar",
+          "valor": 0
+        },
+        {
+          "texto": "Às vezes vejo a previsão",
+          "valor": 1
+        },
+        {
+          "texto": "Faço pesquisas básicas",
+          "valor": 2
+        },
+        {
+          "texto": "Planejo tudo com cuidado",
+          "valor": 3
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "title": "Questão 9",
+      "question": "Você sente mais empolgação ou medo ao encarar algo desconhecido em uma aventura?",
+      "options": [
+        {
+          "texto": "Medo",
+          "valor": 0
+        },
+        {
+          "texto": "Um pouco dos dois",
+          "valor": 1
+        },
+        {
+          "texto": "Mais empolgação do que medo",
+          "valor": 2
+        },
+        {
+          "texto": "Pura empolgação",
+          "valor": 3
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "title": "Questão 10",
+      "question": "Quando você participa de uma aventura em grupo com um guia, qual é o seu comportamento?",
+      "options": [
+        {
+          "texto": "Me sinto seguro ao guia e fico sempre perto dele",
+          "valor": 0
+        },
+        {
+          "texto": "Gosto de seguir as instruções, mas fico atento a tudo",
+          "valor": 1
+        },
+        {
+          "texto": "Ajudo o grupo quando posso e me oriento bem",
+          "valor": 2
+        },
+        {
+          "texto": "Sou proativo, observo, oriento outros e tomo iniciativa",
+          "valor": 3
+        }
+      ]
+    }
+  ],
+  "respostas": [
+    {
+      "respostas": {
+        "respostas": {
+          "1": 1,
+          "2": 2,
+          "3": 1,
+          "4": 1,
+          "5": 2,
+          "6": 3,
+          "7": 3,
+          "8": 3,
+          "9": 3
+        },
+        "total": 19,
+        "nivel": "Intermediário",
+        "data": "2025-09-01T12:42:46.114Z"
+      },
+      "data": "2025-09-01T12:42:46.115Z",
+      "id": 1
+    },
+    {
+      "respostas": {
+        "respostas": {
+          "1": 1,
+          "2": 2,
+          "3": 2,
+          "4": 2,
+          "5": 3,
+          "6": 2,
+          "7": 2,
+          "8": 2,
+          "9": 1
+        },
+        "total": 17,
+        "nivel": "Intermediário",
+        "data": "2025-09-01T12:45:43.942Z"
+      },
+      "data": "2025-09-01T12:45:43.942Z",
+      "id": 2
+    },
+    {
+      "respostas": {
+        "respostas": {
+          "1": 0,
+          "2": 1,
+          "3": 1,
+          "4": 2,
+          "5": 1,
+          "6": 2,
+          "7": 0,
+          "8": 1,
+          "9": 2
+        },
+        "total": 10,
+        "nivel": "Explorador",
+        "data": "2025-09-01T12:51:57.563Z"
+      },
+      "data": "2025-09-01T12:51:57.563Z",
+      "id": 3
+    },
+    {
+      "respostas": {
+        "respostas": {
+          "1": 0,
+          "2": 1,
+          "3": 2,
+          "4": 1,
+          "5": 1,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1
+        },
+        "total": 9,
+        "nivel": "Explorador",
+        "data": "2025-09-01T23:36:09.120Z"
+      },
+      "data": "2025-09-01T23:36:09.120Z",
+      "id": 4
+    },
+    {
+      "respostas": {
+        "respostas": {
+          "1": 0,
+          "2": 1,
+          "3": 1,
+          "4": 1,
+          "5": 2,
+          "6": 1,
+          "7": 1,
+          "8": 2,
+          "9": 2
+        },
+        "total": 11,
+        "nivel": "Aventureiro",
+        "data": "2025-09-02T00:48:59.166Z"
+      },
+      "data": "2025-09-02T00:48:59.188Z",
+      "id": 5
+    },
+    {
+      "respostas": {
+        "respostas": {
+          "1": 1,
+          "2": 1,
+          "3": 1,
+          "4": 0,
+          "5": 1,
+          "6": 1,
+          "7": 2,
+          "8": 0,
+          "9": 1
+        },
+        "total": 8,
+        "nivel": "Explorador",
+        "data": "2025-09-03T00:59:49.302Z"
+      },
+      "data": "2025-09-03T00:59:49.304Z",
+      "id": 6
+    },
+    {
+      "respostas": {
+        "respostas": {
+          "1": 0,
+          "2": 0,
+          "3": 1,
+          "4": 1,
+          "5": 1,
+          "6": 1,
+          "7": 1,
+          "8": 1,
+          "9": 1
+        },
+        "total": 7,
+        "nivel": "Explorador",
+        "data": "2025-09-03T01:06:33.347Z"
+      },
+      "data": "2025-09-03T01:06:33.347Z",
+      "id": 7
+    }
+  ]
+}
