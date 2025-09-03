@@ -17,8 +17,9 @@ import InscricaoTrilhas from "../pages/inscricao-trilha/InscricaoTrilhas"
 import InscricaoTrilhasLimitado from "../pages/inscricao-trilha/InscricaoTrilhaLimitado"
 import AdicionarGuia from "../pages/adicionar-guia/adicionar-guia"
 import Listaconvites from "../pages/lista-convites/lista-convites"
-import InfosAdicionaisGuia from "../pages/infos-adic-guia/infos-adic-guia"
 import EscolhaDataCard from "../pages/escolher-data/escolher-data"
+import InfosAdicionaisGuia from "../pages/infos-adic-guia/infos-adic-guia"
+import AgendaAventureiro from "../pages/agenda-aventureiro/agenda-aventureiro"
 
 export default function AppRoutes() {
   return (
@@ -56,6 +57,8 @@ export default function AppRoutes() {
       <Route path={routeUrls.ADICIONAR_GUIA} element={<AdicionarGuia />}></Route>
       <Route path={routeUrls.LISTA_CONVITES} element={<Listaconvites />}></Route>
       <Route path={routeUrls.ESCOLHER_DATA} element={<EscolhaDataCard />}></Route>
+      <Route path={routeUrls.INFOS_ADICIONAIS_GUIA} element={<InfosAdicionaisGuia/>}></Route>
+      <Route path={routeUrls.AGENDA_AVENTUREIRO} element={<AgendaAventureiro/>}></Route>
     </Routes>
   )
 }

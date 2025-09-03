@@ -1,8 +1,7 @@
 .home-container {
   font-family: "Arial", sans-serif;
   color: #00331f;
-  padding-left: 160px;
-  padding-right: 160px;
+  padding: 0 160px 80px 160px;
   margin-top: 70px;
 }
 
@@ -168,7 +167,7 @@
 }
 
 .cards-eventos {
-    height: 1200px;
+    height: auto;
     margin-top: 15px;
     border-radius: 15px;
     display: flex;
@@ -186,6 +185,8 @@
     justify-content: space-between;
     align-items: center;
     padding: 45px 0 45px 0;
+    gap: 40px;
+    min-height: 1200px;
 }
 
 .filtro-button-data {
@@ -228,11 +229,11 @@
 
 .father-card1 {
     width: 70%;
-    height: 300px;
+    height: auto;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    align-items: center;
+    align-items: start;
 }
 
 .father-card1 p {
@@ -315,4 +316,17 @@
 .nome-button button:hover {
     background-color: #0c682f;
     color: white;
+}
+
+.imagem-cubo {
+    width: 130px;
+    height: 110px;
+}
+
+.imagem-cubo img {
+    width: 100%;
+    height: 100%;
+    border: none;
+    object-fit: cover;
+    border-radius: 10px;
 }
