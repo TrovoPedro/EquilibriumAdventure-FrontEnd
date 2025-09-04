@@ -20,6 +20,7 @@ import Listaconvites from "../pages/lista-convites/lista-convites"
 import EscolhaDataCard from "../pages/escolher-data/escolher-data"
 import InfosAdicionaisGuia from "../pages/infos-adic-guia/infos-adic-guia"
 import AgendaAventureiro from "../pages/agenda-aventureiro/agenda-aventureiro"
+import VisualizarGuias from "../pages/visualizar-guias/visualizar-guias"
 
 export default function AppRoutes() {
   return (
@@ -59,6 +60,7 @@ export default function AppRoutes() {
       <Route path={routeUrls.ESCOLHER_DATA} element={<EscolhaDataCard />}></Route>
       <Route path={routeUrls.INFOS_ADICIONAIS_GUIA} element={<InfosAdicionaisGuia/>}></Route>
       <Route path={routeUrls.AGENDA_AVENTUREIRO} element={<AgendaAventureiro/>}></Route>
+      <Route path={routeUrls.VISUALIZAR_GUIAS} element={<VisualizarGuias/>}></Route>
     </Routes>
   )
 }
