@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./questionario.css";
 import ButtonQuest from "../../components/button-questionario/button-questionario";
 import { getPerguntas, postRespostas } from "../../services/apiAventureiro";
-import { Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls"
 import { useScore } from "../../context/ScoreContext";
 
@@ -154,11 +154,11 @@ const Questionario = () => {
         <div className="question-navigator">
           <h3>Navegador de Perguntas</h3>
           <div className="navigator-grid">
-            {questions.map((_, index) => (
+            {questions.map((question, index) => (
               <button
                 key={index}
                 className={`navigator-button ${
-                  answers[questions[index].id] ? "answered" : ""
+                  answers[question.id] !== undefined ? "answered" : ""
                 } ${currentQuestionIndex === index ? "active" : ""}`}
                 onClick={() => handleNavigatorClick(index)}
               >
