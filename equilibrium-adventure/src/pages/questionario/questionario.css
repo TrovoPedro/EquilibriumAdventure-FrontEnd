@@ -114,9 +114,9 @@
 }
 
 .navigator-button.answered {
-    background-color: #2d6b43;
-    color: white;
-    border-color: #2d6b43;
+  background-color: #2d6b43;
+  color: white;
+  border-color: #2d6b43;
 }
 
 .navigator-button.active {
