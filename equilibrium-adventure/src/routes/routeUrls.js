@@ -19,7 +19,8 @@ const routeUrls = {
     LISTA_CONVITES: '/lista-convites',
     ESCOLHER_DATA: '/escolher-data',
     INFOS_ADICIONAIS_GUIA: '/infos-adic-guia',
-    AGENDA_AVENTUREIRO: '/agenda-aventureiro'
+    AGENDA_AVENTUREIRO: '/agenda-aventureiro',
+    VISUALIZAR_GUIAS: '/visualizar-guias'
 };
 
 export default routeUrls;
