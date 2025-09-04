@@ -28,7 +28,6 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                 <div className="dados-guia">
                     <div className="padding-dados">
                         <ul>
-                            <li><p><b>Idade:</b> 28 anos</p></li>
                             <li><p><b>E-mail:</b> julianaL@gmail.com</p></li>
                             <li><p><b>Senha:</b> ********</p></li>
                             <li><p><b>Descrição:</b> Guia há 5 anos...</p></li>
