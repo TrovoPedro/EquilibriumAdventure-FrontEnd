@@ -1,0 +1,27 @@
+.back-arrow-circle {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;
+	border: 2.5px solid #226144;
+	border-radius: 50%;
+	background: #f6f7f8;
+	box-sizing: border-box;
+	transition: border-color 0.3s ease;
+}
+
+.back-arrow-circle:hover {
+	border-color: #22a051;
+	background: #f6f7f8;
+	box-shadow: none;
+}
+
+.back-arrow {
+	width: 65%;
+	height: 65%;
+	object-fit: contain;
+	display: block;
+	cursor: pointer;
+	transition: filter 0.2s;
+}
