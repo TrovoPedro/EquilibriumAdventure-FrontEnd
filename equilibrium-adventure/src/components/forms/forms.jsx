@@ -5,9 +5,11 @@ import { useLocation } from 'react-router-dom';
 import olhoAberto from '../../assets/olho-aberto.png';
 import olhoFechado from '../../assets/olho-fechado.png';
 import { maskTelefone } from '../../utils/maskTelefone';
+import { validatePhone } from '../../utils/validatePhone';
 
 const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
     const location = useLocation();
+    const [phoneError, setPhoneError] = useState('');
     const path = location.pathname;
     const [formData, setFormData] = useState({
         username: '',
@@ -24,8 +26,17 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
 
         let newValue = value;
 
+
         if (name === "telefone") {
-            newValue = maskTelefone(value);
+            const validation = validatePhone(value);
+            if (!validation.isValid) {
+                setPhoneError(validation.error);
+                // Usa o valor truncado retornado pela validação
+                newValue = validation.value;
+            } else {
+                setPhoneError('');
+                newValue = maskTelefone(value);
+            }
         }
 
         setFormData(prevState => ({
@@ -106,8 +117,10 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                         onChange={handleChange}
                         placeholder="(xx) xxxxx-xxxx"
                         pattern="\(\d{2}\)\s\d{5}-\d{4}"
+                        className={phoneError ? 'error' : ''}
                         required
                     />
+                    {phoneError && <span className="error-message">{phoneError}</span>}
                 </div>
 
                 <div className="form password-group">
