@@ -1,6 +1,15 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
 * {
     padding: 0;
     margin: 0;
+}
+
+.h1-title {
+    font-family: "Raleway", sans-serif;
+    color: #0C513F;
+    font-size: 32px;
+    margin-bottom: 20px;
 }
 
 .criar-evento-page {
@@ -8,11 +17,11 @@
     min-height: 100vh;
     background-size: cover;
     background-position: center;
-    background-image: url('../../assets/foto-aerea-de-um-caminho-no-meio-de-uma-floresta-com-arvores-verdes.jpg');
     display: flex;
     justify-content: center;
     align-items: flex-start;
     overflow-x: hidden;
+    padding-bottom: 70px;
 }
 
 /* Container principal */
@@ -25,7 +34,6 @@
     background: transparent;
     min-height: 100vh;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
     margin-top: 6%;
 }
 
@@ -34,15 +42,15 @@
 .titulo-pagina {
     margin-top: 7%;
     font-size: 24px;
-    color: #00695c;
+    color: #b8220e;
     margin-bottom: 20px;
 }
 
 /* Formulário */
 
-.evento-form {
-    background: #ffff;
-    padding: 30px;
+.criar-evento-container form {
+    background-color: #E9E9E9;
+    padding: 20px;
     border-radius: 10px;
     display: flex;
     flex-direction: column;
@@ -69,18 +77,22 @@
     font-size: 14px;
 }
 
-
 /* Upload box */
 
 .upload-box {
     border: 2px dashed #bbb;
     border-radius: 8px;
-    padding: 40px;
+    padding: 60px;
+    min-height: 320px;
+    min-width: 320px;
     text-align: center;
     background: #f5f5f5;
     color: #666;
     cursor: pointer;
     transition: border 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .upload-box:hover {
@@ -92,9 +104,30 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    font-size: 14px;
+    gap: 16px;
+    font-size: 16px;
     color: #0C513F;
+}
+
+.upload-box-trilha {
+    border: 2px dashed #bbb;
+    border-radius: 8px;
+    padding: 60px;
+    min-height: 220;
+    min-width: 220px;
+    text-align: center;
+    background: #f5f5f5;
+    color: #666;
+    cursor: pointer;
+    transition: border 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-box-trilha:hover {
+    border-color: #0C513F;
+    background: #f0f0f0;
 }
 
 .preview-img {
@@ -102,7 +135,6 @@
     max-height: 250px;
     border-radius: 6px;
 }
-
 
 /* Agrupamentos de inputs */
 
