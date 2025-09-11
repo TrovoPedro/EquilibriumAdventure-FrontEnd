@@ -21,6 +21,7 @@ import EscolhaDataCard from "../pages/escolher-data/escolher-data"
 import InfosAdicionaisGuia from "../pages/infos-adic-guia/infos-adic-guia"
 import AgendaAventureiro from "../pages/agenda-aventureiro/agenda-aventureiro"
 import VisualizarGuias from "../pages/visualizar-guias/visualizar-guias"
+import RelatorioAnamnese from "../pages/relatorio-anamnese/relatorio-anamnese"
 
 export default function AppRoutes() {
   return (
@@ -61,6 +62,7 @@ export default function AppRoutes() {
       <Route path={routeUrls.INFOS_ADICIONAIS_GUIA} element={<InfosAdicionaisGuia/>}></Route>
       <Route path={routeUrls.AGENDA_AVENTUREIRO} element={<AgendaAventureiro/>}></Route>
       <Route path={routeUrls.VISUALIZAR_GUIAS} element={<VisualizarGuias/>}></Route>
+      <Route path={routeUrls.RELATORIO_ANAMNESE} element={<RelatorioAnamnese/>}></Route>
     </Routes>
   )
 }

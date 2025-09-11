@@ -20,7 +20,8 @@ const routeUrls = {
     ESCOLHER_DATA: '/escolher-data',
     INFOS_ADICIONAIS_GUIA: '/infos-adic-guia',
     AGENDA_AVENTUREIRO: '/agenda-aventureiro',
-    VISUALIZAR_GUIAS: '/visualizar-guias'
+    VISUALIZAR_GUIAS: '/visualizar-guias',
+    RELATORIO_ANAMNESE: '/relatorio-anamnese'
 };
 
 export default routeUrls;
