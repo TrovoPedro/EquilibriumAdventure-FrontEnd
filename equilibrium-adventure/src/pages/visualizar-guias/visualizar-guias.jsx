@@ -20,43 +20,43 @@ const VisualizarGuias = () => {
                         <div class="item">
                             <span>Ana Clara</span>
                             <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista" style={{ backgroundColor: "#8b1e0b" }}>Excluir</button>
+                            <button class="button-lista2">Excluir</button>
                         </div>
 
                         <div class="item">
                             <span>Roberto</span>
                             <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista" style={{ backgroundColor: "#8b1e0b" }}>Excluir</button>
+                            <button class="button-lista2">Excluir</button>
                         </div>
 
                         <div class="item">
                             <span>Júlia</span>
                             <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista" style={{ backgroundColor: "#8b1e0b" }}>Excluir</button>
+                            <button class="button-lista2">Excluir</button>
                         </div>
 
                         <div class="item">
                             <span>Alberto</span>
                             <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista" style={{ backgroundColor: "#8b1e0b" }}>Excluir</button>
+                            <button class="button-lista2">Excluir</button>
                         </div>
 
                         <div class="item">
                             <span>Eduardo</span>
                             <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista" style={{ backgroundColor: "#8b1e0b" }}>Excluir</button>
+                            <button class="button-lista2">Excluir</button>
                         </div>
 
                         <div class="item">
                             <span>Vitória</span>
                             <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista" style={{ backgroundColor: "#8b1e0b" }}>Excluir</button>
+                            <button class="button-lista2">Excluir</button>
                         </div>
 
                         <div class="item">
                             <span>Gabriel</span>
                             <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista" style={{ backgroundColor: "#8b1e0b" }}>Excluir</button>
+                            <button class="button-lista2">Excluir</button>
                         </div>
                     </div>
                 </div>

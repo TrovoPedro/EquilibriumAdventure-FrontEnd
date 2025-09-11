@@ -54,11 +54,31 @@
 }
 
 .button-lista {
-    background-color: #0c473a;
+    background-color: #336948;
     color: white;
     padding: 8px 48px;
     border: none;
     border-radius: 12px;
     cursor: pointer;
     font-size: 20px;
+    transition: 0.4s ease;
+}
+
+.button-lista:hover {
+    background-color: #0c473a;
+}
+
+.button-lista2 {
+    background-color: #8b1e0b;
+    color: white;
+    padding: 8px 48px;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    font-size: 20px;
+    transition: 0.4s ease;
+}
+
+.button-lista2:hover {
+    background-color: #FF3D00;
 }
