@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import "./infos-adic-guia.css";
 import Header from "../../components/header/header";
 import Mulher from "../../assets/mulher4.jpeg";
@@ -6,8 +7,10 @@ import ButtonAlterar from "../../components/button-padrao/button-alterar"
 import Evento1 from "../../assets/img10-catalogo.jpg";
 import Evento2 from "../../assets/img11-catalogo.jpg";
 import Evento3 from "../../assets/img12-catalogo.jpg";
+import EscolhaDataCard from "../escolher-data/escolher-data";
 
 const CriarInformacoesAdicionaisGuia = (title, onClick) => {
+    const [showEscolherData, setShowEscolherData] = useState(false);
     const titulo = "Salvar Alterações";
 
     return (
@@ -47,7 +50,12 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
         <div className="cards-eventos">
             <div className="eventos-anamnese-ativos">
                 <div className="filtro-button-data">
-                    <button className="button-add-data"> Adicionar Datas Para Anamnese</button>
+                    <button
+                        className="button-add-data"
+                        onClick={() => setShowEscolherData(true)}
+                    >
+                        Adicionar Datas Para Anamnese
+                    </button>
                     <select name="" id="" className="filtro-data">
                         <option value="0" disabled selected>Filtrar Data</option>
                     </select>
@@ -149,6 +157,12 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                 </div>
             </div>
         </div>
+        {showEscolherData && (
+            <EscolhaDataCard
+                onClose={() => setShowEscolherData(false)}
+                fkAventureiro={null}
+            />
+        )}
       </div>
     </>
     )
