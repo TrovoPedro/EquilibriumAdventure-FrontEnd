@@ -84,7 +84,10 @@ const CriarEvento = () => {
     return (
         <div className="criar-evento-page">
             <div className="criar-evento-container">
-                <Header />
+                <Header/>
+                <div className="div-title">
+                    <h1 className="h1-title">Criação de Evento</h1>
+                </div>
                 <form className="evento-form" onSubmit={handleSubmit}>
                     <label>
                         Título do Evento:
@@ -158,7 +161,7 @@ const CriarEvento = () => {
                     <label>
                         Mapa da Trilha (.gpx):
                         <div
-                            className="upload-box"
+                            className="upload-box-trilha"
                             onClick={() => document.getElementById("upload-trilha-input").click()}
                         >
                             {formData.trilha ? (
@@ -270,7 +273,7 @@ const CriarEvento = () => {
 
                     <div className="botoes">
                         <ButtonCancelarEvento title={"Cancelar criação"}></ButtonCancelarEvento>
-                        <ButtonCriarEvento title={"Salvar evento"}></ButtonCriarEvento>
+                        <ButtonCriarEvento title={"Criar evento"}></ButtonCriarEvento>
                     </div>
                 </form>
             </div>
