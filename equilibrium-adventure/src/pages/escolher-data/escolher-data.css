@@ -25,6 +25,10 @@
     z-index: 2100;
 }
 
+.card-escolha .MuiBox-root {
+  gap: 16px;
+}
+
 /* Animação de entrada */
 @keyframes fadeIn {
     from {

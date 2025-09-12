@@ -18,7 +18,7 @@ import {
 import CloseIcon from "@mui/icons-material/Close";
 
 import "../escolher-data/escolher-data.css";
-import { buscarDatasDisponiveis, agendarAnamnese } from "../../api/chamadasAPIAgenda";
+import { buscarDatasDisponiveis, agendarAnamnese } from "../../services/chamadasAPIAgenda";
 
 dayjs.extend(updateLocale);
 dayjs.updateLocale("pt-br", { weekStart: 1 });
@@ -97,7 +97,7 @@ export default function EscolhaDataCard({ onClose, fkAventureiro }) {
             </IconButton>
           </Box>
 
-          <Typography variant="h6" align="center">
+          <Typography variant="h6" align="center" style={{ marginBottom: 8, color: "#0C513F" }}>
             Adicione uma data que você esteja disponível:
           </Typography>
 
@@ -119,7 +119,7 @@ export default function EscolhaDataCard({ onClose, fkAventureiro }) {
             />
           </LocalizationProvider>
 
-          <Typography variant="h6" align="center" style={{ marginTop: 16 }}>
+          <Typography variant="h6" align="center" style={{ marginTop: 16, marginBottom: 8, color: "#0C513F" }}>
             Adicione um horário que você esteja disponível:
           </Typography>
 
@@ -147,14 +147,14 @@ export default function EscolhaDataCard({ onClose, fkAventureiro }) {
             </Select>
           </Box>
 
-          <Box display="flex" justifyContent="center" mt={2}>
+          <Box display="flex" justifyContent="center" mt={2} gap={2}>
             <Button
               variant="contained"
               sx={{
                 backgroundColor: "#2e5e46",
                 color: "#fff",
-                fontWeight: 600,
-                fontSize: "1.1rem",
+                fontWeight: 300,
+                fontSize: "0.8rem",
                 borderRadius: "8px",
                 padding: "10px 32px",
                 boxShadow: "0 2px 8px rgba(46,94,70,0.13)",
@@ -165,6 +165,24 @@ export default function EscolhaDataCard({ onClose, fkAventureiro }) {
               onClick={handleSave}
             >
               Salvar Data
+            </Button>
+            <Button
+              variant="contained"
+              sx={{
+                backgroundColor: "#2e5e46",
+                color: "#fff",
+                fontWeight: 300,
+                fontSize: "0.8rem",
+                borderRadius: "8px",
+                padding: "5px 10px",
+                boxShadow: "0 2px 8px rgba(46,94,70,0.13)",
+                "&:hover": {
+                  backgroundColor: "#244c38"
+                }
+              }}
+              onClick={handleSave}
+            >
+              Ver calendário
             </Button>
           </Box>
         </CardContent>

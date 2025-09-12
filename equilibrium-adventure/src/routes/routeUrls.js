@@ -18,6 +18,7 @@ const routeUrls = {
     ADICIONAR_GUIA: '/adicionar-guia',
     LISTA_CONVITES: '/lista-convites',
     ESCOLHER_DATA: '/escolher-data',
+    AGENDA_GUIA: '/agenda-guia',
     INFOS_ADICIONAIS_GUIA: '/infos-adic-guia',
     AGENDA_AVENTUREIRO: '/agenda-aventureiro',
     VISUALIZAR_GUIAS: '/visualizar-guias',

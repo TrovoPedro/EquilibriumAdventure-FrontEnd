@@ -4,7 +4,7 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import routeUrls from "../../routes/routeUrls";
 import Header from "../../components/header/header";
 import { maskCep, maskDistancia } from "../../utils/masks";
-import { cadastrarEvento, buscarCep } from "../../api/chamadasAPIEvento";
+import { cadastrarEvento, buscarCep } from "../../services/chamadasAPIEvento";
 import "./criar-evento.css";
 import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
 import ButtonCriarEvento from "../../components/button-eventos/button-criar-evento";

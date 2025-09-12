@@ -1,10 +1,5 @@
 import axios from "axios";
 
-/**
- * Cadastra um evento e, se for bem-sucedido, redireciona para '/ativar-evento'
- * @param {FormData} formData - Dados do formulário incluindo imagem/trilha
- * @param {Function} navigate - Função do React Router para redirecionamento
- */
 export async function cadastrarEvento(formData, navigate) {
   try {
     const response = await axios.post(
@@ -18,7 +13,8 @@ export async function cadastrarEvento(formData, navigate) {
     );
 
     if (response.data.success) {
-      navigate("/ativar-evento");
+      alert("Evento cadastrado com sucesso!");
+      navigate("/catalogfo-trilhas-adm");
       return true;
     } else {
       throw new Error(response.data.message || "Erro ao cadastrar evento.");
@@ -28,7 +24,6 @@ export async function cadastrarEvento(formData, navigate) {
     return false;
   }
 }
-
 
 export async function buscarCep(cep) {
   const response = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
