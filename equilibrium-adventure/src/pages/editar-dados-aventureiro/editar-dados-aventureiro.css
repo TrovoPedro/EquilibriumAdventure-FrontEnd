@@ -42,11 +42,11 @@ body {
 	padding: 12px 0;
 	background: #489465;
 	color: #fff;
-	border-radius: 24px;
+	border-radius: 10px;
 	font-size: 1.1rem;
 	font-weight: 600;
 	cursor: pointer;
-	box-shadow: 0 2px 8px rgba(0,0,0,0.13);
+	box-shadow: 0 2px 8px rgba(237, 237, 237, 0.13);
 	transition: background 0.3s;
 	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }

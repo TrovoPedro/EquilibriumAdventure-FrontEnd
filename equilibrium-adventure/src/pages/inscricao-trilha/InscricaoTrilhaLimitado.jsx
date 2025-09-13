@@ -1,7 +1,7 @@
 import "./InscricaoTrilhas.css";
 import Header from "../../components/header/header-usuario";
-import trilhaImg from "../../assets/img10-catalogo.jpg";
-import imagemTeste from "../../assets/img10-catalogo.jpg"
+import trilhaImg from "../../assets/cachoeiralago.jpg";
+import imagemTeste from "../../assets/cachoeiralago.jpg";
 import React, { useState } from "react";
 
 const comentariosIniciais = [
