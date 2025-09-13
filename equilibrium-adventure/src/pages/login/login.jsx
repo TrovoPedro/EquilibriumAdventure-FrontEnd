@@ -23,7 +23,7 @@ const Login = () => {
         login(usuario);
 
         if (usuario.tipoUsuario === "ADMINISTRADOR" || usuario.tipoUsuario === "GUIA") {
-            navigate(routeUrls.CRIAR_EVENTO);
+            navigate(routeUrls.CATALOGO_TRILHAS_ADM);
         } else if (usuario.tipoUsuario === "AVENTUREIRO" && usuario.primeiraVez) {
             navigate(routeUrls.QUESTIONARIO);
         } else if (usuario.tipoUsuario === "AVENTUREIRO" && !usuario.primeiraVez) {

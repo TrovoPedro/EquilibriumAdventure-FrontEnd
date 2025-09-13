@@ -2,10 +2,10 @@ import React, { useState } from "react";
 import "./infos-adic-guia.css";
 import Header from "../../components/header/header";
 import Mulher from "../../assets/mulher4.jpeg";
-import Trilha from "../../assets/img10-catalogo.jpg";
+import Trilha from "../../assets/cachoeiralago.jpg";
 import ButtonAlterar from "../../components/button-padrao/button-alterar"
-import Evento1 from "../../assets/img10-catalogo.jpg";
-import Evento2 from "../../assets/img11-catalogo.jpg";
+import Evento1 from "../../assets/cachoeiralago.jpg";
+import Evento2 from "../../assets/chile.jpg";
 import Evento3 from "../../assets/img12-catalogo.jpg";
 import EscolhaDataCard from "../escolher-data/escolher-data";
 

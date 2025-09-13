@@ -1,6 +1,6 @@
 import "./agenda-aventureiro.css"
 import Homem from "../../assets/homem2.jpeg";
-import Trilha from "../../assets/img10-catalogo.jpg";
+import Trilha from "../../assets/cachoeiralago.jpg";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 
 const CriarAgendaAventureiro = () => {

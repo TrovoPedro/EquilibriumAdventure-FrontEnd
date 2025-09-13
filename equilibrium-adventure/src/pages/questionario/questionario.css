@@ -29,7 +29,8 @@
     display: flex;
     gap: 2rem;
     padding: 2rem;
-    max-width: 1200px;
+    max-width: 900px; /* Reduzindo a largura máxima */
+    width: 90%; /* Garante responsividade */
     margin: 0 auto;
     background-color: white;
     border-radius: 16px;
@@ -40,11 +41,18 @@
     background: white;
     padding: 2rem;
     border-radius: 12px;
+    min-height: 200px;  /* Reduzindo a altura mínima */
+    max-height: 450px; /* Reduzindo a altura máxima */
+    width: 100%; /* Controla a largura */
+    max-width: 550px; /* Limita a largura máxima */
+    display: flex;
+    flex-direction: column;
 }
 
 .question-text {
     color: #333;
     margin-bottom: 2rem;
+    flex: 0 0 auto; /* Impede que o texto expanda a div */
 }
 
 .options-container {
@@ -52,7 +60,7 @@
     flex-direction: column;
     gap: 1rem;
     margin-bottom: 2rem;
-}
+    flex: 1;  /* Permite que as opções ocupem o espaço restante */}
 
 .option-label {
     display: flex;
@@ -73,11 +81,12 @@
 }
 
 .question-navigator {
-    width: 300px;
+    width: 250px; /* Reduzindo um pouco a largura do navegador */
     background: white;
     padding: 1.5rem;
     border-radius: 12px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+    height: 100% /* Ajusta a altura ao conteúdo */
 }
 
 .navigator-grid {
