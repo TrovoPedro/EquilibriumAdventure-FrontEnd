@@ -94,3 +94,27 @@ input[type="checkbox"] {
     align-items: center;
     justify-content: center;
 }
+
+.error-message {
+    color: #dc3545;
+    font-size: 0.875rem;
+    margin-top: 4px;
+    display: block;
+    font-weight: 500;
+    animation: fadeIn 0.3s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.forms input.error {
+    border-bottom: 1px solid #dc3545;
+}

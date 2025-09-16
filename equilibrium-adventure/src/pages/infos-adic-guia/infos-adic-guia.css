@@ -1,8 +1,7 @@
 .home-container {
   font-family: "Arial", sans-serif;
   color: #00331f;
-  padding-left: 160px;
-  padding-right: 160px;
+  padding: 0 160px 80px 160px;
   margin-top: 70px;
 }
 
@@ -16,8 +15,8 @@
 }   
 
 .foto-guia {
-    height: 85%;
-    width: 220px;
+    height: 75%;
+    width: 15%;
     border-radius: 95px;
     border: none;
 }
@@ -60,7 +59,7 @@
 }
 
 .card-imagem {
-    height: 86%;
+    height: 85%;
     width: 48.5%;
     display: flex;
     flex-direction: column;
@@ -168,46 +167,68 @@
 }
 
 .cards-eventos {
-    height: 1200px;
-    margin-top: 15px;
-    border-radius: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 30px;
+    width: 100%;
+    margin-top: 30px;
+    min-height: 600px;
 }
 
 .eventos-anamnese-ativos {
     background-color: #E9E9E9;
-    height: 100%;
-    width: 48.5%;
     border-radius: 15px;
+    padding: 30px;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
+    gap: 25px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     align-items: center;
-    padding: 45px 0 45px 0;
+}
+
+.card-eventos:hover {
+    transform: translateY(-4px);
+}
+
+.eventos-anamnese-ativos .cards-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    width: 100%;
+    align-items: stretch;
+}
+
+.eventos-anamnese-ativos > p {
+    font-size: 24px;
+    font-weight: 600;
+    color: #0C513F;
+    margin: 0 0 20px 0;
+    text-align: center;
 }
 
 .filtro-button-data {
-    width: 100%;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-direction: column;
-    gap: 25px;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-bottom: 20px;
 }
 
 .button-add-data {
-    width: 85%;
-    padding: 10px 0 10px 0;
-    font-size: 30px;
-    font-weight: bold;
+    width: 100%;
+    max-width: 280px;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
     color: white;
     background-color: #336948;
-    cursor: pointer;
     border: none;
-    border-radius: 15px;
-    transition: 0.4s ease;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 .button-add-data:hover {
@@ -215,61 +236,51 @@
 }
 
 .filtro-data {
-    width: 70%;
-    font-size: 30px;
+    width: 100%;
+    max-width: 280px;
+    font-size: 18px;
+    padding: 8px;
+    border-radius: 12px;
+    border: none;
     background-color: #d1d1d1;
     color: #0C513F;
     font-weight: lighter;
     text-align: center;
-    border: none;
-    border-radius: 15px;
-    padding: 8px 0 8px 0;
-}
-
-.father-card1 {
-    width: 70%;
-    height: 300px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.father-card1 p {
-    font-size: 30px;
-    color: #333;
-    font-weight: lighter;
-}
-
-.card-eventos1 {
-    width: 100%;
-    height: 84.5%;
-    background-color: white;
-    border-radius: 20px;
-    padding: 20px;
-    
 }
 
 .card-eventos {
-    width: 70%;
-    height: 260px;
+    width: 100%;
     background-color: white;
-    border-radius: 20px;
+    border-radius: 12px;
     padding: 20px;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease;
+    align-items: flex-start;
+    align-items: center;
+}
+
+.card-eventos:hover {
+    transform: translateY(-4px);
 }
 
 .inicial-data {
-    height: 58%;
     width: 100%;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 10px 20px 10px 20px;
+    gap: 15px;
+    padding: 0;
+    margin-bottom: 10px;
 }
 
 .inicial-data p {
-    color: #bdbdbd;
-    font-size: 22px;
+    color: #757575;
+    font-size: 16px;
+    font-weight: 500;
 }
 
 .cubo-inicial {
@@ -301,18 +312,39 @@
 }
 
 .nome-button button {
-    width: 42%;
-    padding: 2px 0 2px 0;
+    width: auto;
+    min-width: 120px;
+    padding: 8px 16px;
+    margin-top: 10px;
     cursor: pointer;
     background-color: #CFEADA;
     border: #336948 solid 1px;
     color: #336948;
     font-size: 14px;
-    font-weight: 400;
-    transition: 0.4s ease;
+    font-weight: 500;
+    border-radius: 6px;
+    transition: all 0.3s ease;
 }
 
 .nome-button button:hover {
     background-color: #0c682f;
     color: white;
+}
+
+.imagem-cubo {
+    width: 120px;
+    height: 100px;
+    flex-shrink: 0;
+    border-radius: 10px;
+    overflow: hidden;
+    padding: 0px;
+    margin-left: 10px;
+}
+
+.imagem-cubo img {
+    width: 100%;
+    height: 100%;
+    border: none;
+    object-fit: cover;
+    border-radius: 10px;
 }

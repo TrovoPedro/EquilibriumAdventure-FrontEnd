@@ -1,12 +1,14 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import routeUrls from "../../routes/routeUrls";
 import Header from "../../components/header/header";
+import { maskCep, maskDistancia } from "../../utils/masks";
+import { cadastrarEvento, buscarCep } from "../../services/chamadasAPIEvento";
 import "./editar-evento.css";
+import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
+import ButtonCriarEvento from "../../components/button-eventos/button-criar-evento";
 
-const EditarEvento = () => {
-    const navigate = useNavigate();
+const CriarEvento = () => {
     const [formData, setFormData] = useState({
         titulo: "",
         distancia: "",
@@ -23,25 +25,68 @@ const EditarEvento = () => {
         trilha: null
     });
 
+    const navigate = useNavigate();
+
     const handleChange = (e) => {
         const { name, value, files } = e.target;
+        let newValue = value;
+
+        if (name === "cep") newValue = maskCep(value);
+        if (name === "distancia") newValue = maskDistancia(value);
+
         setFormData({
             ...formData,
-            [name]: files ? files[0] : value,
+            [name]: files ? files[0] : newValue,
         });
     };
 
-    const handleSubmit = (e) => {
+    const handleCepBlur = async () => {
+        const cep = formData.cep.replace(/\D/g, "");
+        if (cep.length === 8) {
+            try {
+                const data = await buscarCep(cep);
+                setFormData((prev) => ({
+                    ...prev,
+                    rua: data.logradouro || "",
+                    bairro: data.bairro || "",
+                    cidade: data.localidade || "",
+                    estado: data.uf || ""
+                }));
+            } catch (err) {
+                alert(err.message);
+            }
+        }
+    };
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("Evento criado:", formData);
-        navigate(routeUrls.HOME);
+
+        const evento = {
+            nome: formData.titulo,
+            descricao: formData.descricao,
+            nivel_dificuldade: formData.dificuldade,
+            distancia_km: parseFloat(formData.distancia),
+            responsavel: 1,
+            endereco: 1,
+            caminho_arquivo_evento: formData.trilha ? formData.trilha.name : null
+        };
+
+        const form = new FormData();
+        form.append("evento", JSON.stringify(evento));
+        if (formData.imagem) {
+            form.append("imagem", formData.imagem);
+        }
+
+        await cadastrarEvento(form, navigate);
     };
 
     return (
-        <body>
-
+        <div className="criar-evento-page">
             <div className="criar-evento-container">
-                <Header></Header>
+                <Header/>
+                <div className="div-title">
+                    <h1 className="h1-title">Editar de Evento</h1>
+                </div>
                 <form className="evento-form" onSubmit={handleSubmit}>
                     <label>
                         Título do Evento:
@@ -98,23 +143,44 @@ const EditarEvento = () => {
 
                         <label>
                             Dificuldade:
-                            <input
-                                type="text"
+                            <select
                                 name="dificuldade"
                                 value={formData.dificuldade}
                                 onChange={handleChange}
-                                placeholder="Ex: Explorador"
-                            />
+                                required
+                            >
+                                <option value="">Selecione...</option>
+                                <option value="EXPLORADOR">EXPLORADOR</option>
+                                <option value="AVENTUREIRO">AVENTUREIRO</option>
+                                <option value="DESBRAVADOR">DESBRAVADOR</option>
+                            </select>
                         </label>
                     </div>
 
                     <label>
-                        Mapa da Trilha (.gpx)
+                        Mapa da Trilha (.gpx):
+                        <div
+                            className="upload-box-trilha"
+                            onClick={() => document.getElementById("upload-trilha-input").click()}
+                        >
+                            {formData.trilha ? (
+                                <div className="trilha-preview">
+                                    <p>{formData.trilha.name}</p>
+                                </div>
+                            ) : (
+                                <div className="upload-placeholder">
+                                    <FaCloudUploadAlt size={30} color="#0C513F" />
+                                    <p>Clique ou arraste o arquivo .gpx aqui</p>
+                                </div>
+                            )}
+                        </div>
                         <input
                             type="file"
+                            id="upload-trilha-input"
                             name="trilha"
                             onChange={handleChange}
                             accept=".gpx"
+                            style={{ display: "none" }}
                         />
                     </label>
 
@@ -135,7 +201,7 @@ const EditarEvento = () => {
                                 name="cep"
                                 value={formData.cep}
                                 onChange={handleChange}
-                                placeholder="Ex: 12345-678"
+                                onBlur={handleCepBlur}
                             />
                         </label>
 
@@ -205,17 +271,13 @@ const EditarEvento = () => {
                     </div>
 
                     <div className="botoes">
-                        <button type="button" className="btn-excluir">
-                            Excluir Evento
-                        </button>
-                        <button type="submit" className="btn-salvar">
-                            Salvar Alterações
-                        </button>
+                        <ButtonCancelarEvento title={"Cancelar criação"}></ButtonCancelarEvento>
+                        <ButtonCriarEvento title={"Criar evento"}></ButtonCriarEvento>
                     </div>
                 </form>
             </div>
-        </body>
+        </div>
     );
 };
 
-export default EditarEvento;
+export default CriarEvento;

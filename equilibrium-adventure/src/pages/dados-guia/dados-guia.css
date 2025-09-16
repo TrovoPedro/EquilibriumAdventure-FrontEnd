@@ -1,0 +1,145 @@
+.dados-guia-wrapper {
+    background-image: url('../../assets/background-questionario.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    width: 100%;
+    row-gap: 6vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(5px);
+}
+
+.dados-guia-wrapper::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: -1;
+}
+
+.dados-guia-container {
+    background-color: #ffffff;
+    border-radius: 8px;
+    height: 80vh;
+    width: 90vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    padding: 3vh 2vw 6vh;
+    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+    z-index: 2;
+    row-gap: 5vh;
+    column-gap: 4vw;
+}
+
+.dados-guia-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    font-weight: 500;
+    color: #ffffff;
+
+    height: 4vh;
+    width: 100%;
+    text-align: center;
+    /* margin-bottom: 2vh; */
+}
+
+.dados-guia-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+.adicionar-guia-imagem {
+    width: 100%;
+    height: 100%;
+}
+
+.upload-box {
+    border: 2px dashed #838383;
+    border-radius: 8px;
+    padding: 40px;
+    text-align: center;
+    background: #CACACA;
+    color: #666;
+    cursor: pointer;
+    transition: border 0.3s ease;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.upload-box:hover {
+    border-color: #0C513F;
+    background: #c0c0c0;
+}
+
+.upload-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    color: #0C513F;
+}
+
+.preview-img {
+    max-width: 44%;
+    border-radius: 6px;
+}
+
+.dados-guia-container input {
+    width: 100%;
+    padding: 4px 16px;
+    background-color: #CACACA;
+    border: 1px inset #000000;
+    outline: none;
+    border-radius: 8px;
+}
+.dados-guia-container textarea {
+    width: 100%;
+    height: 100%;
+    resize: none;
+    background-color: #CACACA;
+    padding: 12px 16px;
+    outline: none;
+    border: 1px inset #000000;
+    border-radius: 8px;
+}
+.dados-guia-container label {
+    gap: 0.7vh;
+    width: 45%;
+    color: #0C513F;
+    display: flex;
+    font-size: 1.15rem;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.dados-guia-container label #text {
+    font-size: 2rem;
+}
+
+.dados-guia-container #descricao-label {
+    width: 45%;
+    height: 70%;
+}
+
+.dados-guia-container #imagem-label {
+    width: 45%;
+    height: 70%;
+}

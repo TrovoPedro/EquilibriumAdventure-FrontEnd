@@ -3,14 +3,14 @@ import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 import "./CatalogoTrilhas.css";
 import Header from "../../components/header/header-usuario";
-import catalogo1 from "../../assets/img1-catalogo.jpg";
-import catalogo2 from "../../assets/img2-catalogo.jpg";
-import catalogo3 from "../../assets/img3-catalogo.jpg";
-import catalogo4 from "../../assets/img4-catalogo.jpg";
-import catalogo5 from "../../assets/img5-catalogo.jpg";
-import catalogo6 from "../../assets/img6-catalogo.jpg";
-import catalogo7 from "../../assets/img7-catalogo.jpg";
-import catalogo8 from "../../assets/img8-catalogo.jpg";
+import catalogo1 from "../../assets/chile.jpg";
+import catalogo2 from "../../assets/amazonia.jpg";
+import catalogo3 from "../../assets/montanha.jpg";
+import catalogo4 from "../../assets/pordosol.jpg";
+import catalogo5 from "../../assets/cachoeira.jpg";
+import catalogo6 from "../../assets/pedra.jpg";
+import catalogo7 from "../../assets/caminhoarvores.jpg";
+import catalogo8 from "../../assets/cachoeiralago.jpg";
 
 const trilhas = [
   { img: catalogo1, alt: "Trilha montanha" },
