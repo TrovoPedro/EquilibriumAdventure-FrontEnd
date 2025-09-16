@@ -14,7 +14,7 @@ const Header = () => {
 
   return (
     <header className="header">
-      <div className="header-left" onClick={() => navigate(routeUrls.HOME)}>
+      <div className="header-left" onClick={() => navigate(routeUrls.INFOS_ADICIONAIS_GUIA)}>
         <img 
           src={img} 
           alt="Usuário" 
@@ -30,7 +30,7 @@ const Header = () => {
 
           {/* Só aparece se for ADMINISTRADOR */}
           {tipoUsuario === "ADMINISTRADOR" && (
-            <li onClick={() => navigate(routeUrls.CONTATO)}>NOVO GUIA</li>
+            <li onClick={() => navigate(routeUrls.ADICIONAR_GUIA)}>NOVO GUIA</li>
           )}
         </ul>
       </nav>
@@ -48,13 +48,13 @@ const Header = () => {
 
           {/* Só aparece se for ADMINISTRADOR */}
           {tipoUsuario === "ADMINISTRADOR" && (
-            <li onClick={() => { setMenuOpen(false); navigate(routeUrls.CONTATO); }}>NOVO GUIA</li>
+            <li onClick={() => { setMenuOpen(false); navigate(routeUrls.ADICIONAR_GUIA); }}>NOVO GUIA</li>
           )}
         </ul>
       </nav>
 
       <div className="header-right">
-        <button className="agendar" onClick={() => navigate(routeUrls.AGENDA)}>AGENDA</button>
+        <button className="agendar" onClick={() => navigate(routeUrls.INFOS_ADICIONAIS_GUIA)}>AGENDA</button>
         <button 
           className="sair" 
           onClick={() => {

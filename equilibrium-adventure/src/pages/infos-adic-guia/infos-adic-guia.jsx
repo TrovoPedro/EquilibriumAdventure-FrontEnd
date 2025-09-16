@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "./infos-adic-guia.css";
 import Header from "../../components/header/header";
-import Mulher from "../../assets/mulher4.jpeg";
+import Beneficiario from "../../assets/beneficiario.png";
 import Trilha from "../../assets/cachoeiralago.jpg";
 import ButtonAlterar from "../../components/button-padrao/button-alterar"
 import Evento1 from "../../assets/cachoeiralago.jpg";
@@ -18,9 +18,9 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
       <Header />
       <div className="home-container">
         <div className="card-guia">
-            <div className="foto-guia"><img src={Mulher} alt="GUIA"/></div>
+            <div className="foto-guia"><img src={Beneficiario} alt="GUIA"/></div>
             <div className="info-guia">
-                <p>Juliana Lopes Oliveira</p>
+                <p>Edgar Oliveira</p>
                 <p>Guia</p>
             </div>
         </div>
@@ -31,9 +31,9 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                 <div className="dados-guia">
                     <div className="padding-dados">
                         <ul>
-                            <li><p><b>E-mail:</b> julianaL@gmail.com</p></li>
+                            <li><p><b>E-mail:</b> edgarmoliveira@gmail.com</p></li>
                             <li><p><b>Senha:</b> ********</p></li>
-                            <li><p><b>Descrição:</b> Guia há 5 anos...</p></li>
+                            <li><p><b>Descrição:</b> Guia há 10 anos...</p></li>
                         </ul>
                         {/* <ButtonAlterar title={titulo} onClick={onClick}/> */}
                         <button className="button-dados">Salvar Alterações</button>
@@ -61,9 +61,9 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                     </select>
                 </div>
 
-                <div className="father-card1">
+               
                     <p>Aventureiros para Anamnese:</p>
-                    <div className="card-eventos1">
+                    <div className="card-eventos">
                         <div className="inicial-data">
                             <div className="cubo-inicial" style={{ backgroundColor: "blue" }}>J</div>
 
@@ -76,7 +76,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                             <button>Relatório</button>
                         </div>
                     </div>
-                </div>
+               
 
                 <div className="card-eventos">
                     <div className="inicial-data">
@@ -111,9 +111,8 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                 <select name="" id="" className="filtro-data">
                         <option value="0" disabled selected>Filtrar Data</option>
                 </select>
-                <div className="father-card1">
                     <p>Eventos Ativos:</p>
-                    <div className="card-eventos1">
+                    <div className="card-eventos">
                         <div className="inicial-data">
                             <div className="imagem-cubo"><img src={Evento1} alt="EVENTO"/></div>
 
@@ -126,7 +125,6 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                             <button>Mais Informações</button>
                         </div> 
                     </div>
-                </div>
 
                 <div className="card-eventos">
                     <div className="inicial-data">
