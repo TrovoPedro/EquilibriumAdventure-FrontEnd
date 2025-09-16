@@ -9,7 +9,7 @@ import catalogo5 from "../../assets/cachoeira.jpg";
 import catalogo6 from "../../assets/pedra.jpg";
 import catalogo7 from "../../assets/caminhoarvores.jpg";
 import catalogo8 from "../../assets/cachoeiralago.jpg";
-import { Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 
 const trilhas = [
