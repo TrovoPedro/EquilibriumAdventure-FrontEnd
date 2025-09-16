@@ -17,9 +17,13 @@ import InscricaoTrilhas from "../pages/inscricao-trilha/InscricaoTrilhas"
 import InscricaoTrilhasLimitado from "../pages/inscricao-trilha/InscricaoTrilhaLimitado"
 import AdicionarGuia from "../pages/adicionar-guia/adicionar-guia"
 import Listaconvites from "../pages/lista-convites/lista-convites"
-import InfosAdicionaisGuia from "../pages/infos-adic-guia/infos-adic-guia"
 import EscolhaDataCard from "../pages/escolher-data/escolher-data"
 import DadosGuia from "../pages/dados-guia/dados-guia"
+import InfosAdicionaisGuia from "../pages/infos-adic-guia/infos-adic-guia"
+import AgendaAventureiro from "../pages/agenda-aventureiro/agenda-aventureiro"
+import VisualizarGuias from "../pages/visualizar-guias/visualizar-guias"
+import RelatorioAnamnese from "../pages/relatorio-anamnese/relatorio-anamnese"
+import AgendaGuia from "../pages/agenda-guia/agenda-guia"
 
 export default function AppRoutes() {
   return (
@@ -58,6 +62,11 @@ export default function AppRoutes() {
       <Route path={routeUrls.LISTA_CONVITES} element={<Listaconvites />}></Route>
       <Route path={routeUrls.ESCOLHER_DATA} element={<EscolhaDataCard />}></Route>
       <Route path={routeUrls.DADOS_GUIA} element={<DadosGuia />}></Route>
+      <Route path={routeUrls.AGENDA_GUIA} element={<AgendaGuia />}></Route>
+      <Route path={routeUrls.INFOS_ADICIONAIS_GUIA} element={<InfosAdicionaisGuia/>}></Route>
+      <Route path={routeUrls.AGENDA_AVENTUREIRO} element={<AgendaAventureiro/>}></Route>
+      <Route path={routeUrls.VISUALIZAR_GUIAS} element={<VisualizarGuias/>}></Route>
+      <Route path={routeUrls.RELATORIO_ANAMNESE} element={<RelatorioAnamnese/>}></Route>
     </Routes>
   )
 }

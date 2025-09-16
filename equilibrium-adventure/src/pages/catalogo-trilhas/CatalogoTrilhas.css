@@ -366,6 +366,31 @@ h2, .destinos h2 {
   text-align: center;      /* garante centralização do texto */
 }
 
+.anuncio-ativar-btn {
+  background: #ffffff00;
+  color: #00695c;
+  border: solid 2px #00695c;
+  border-radius: 6px;
+  padding: 7px 14px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  white-space: nowrap;
+  min-width: 0;
+  max-width: 100%;
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* centraliza o texto horizontalmente */
+  text-align: center;      /* garante centralização do texto */
+}
+
+.anuncio-btn-group {
+  display: flex;
+  gap: 8px;
+}
+
 .anuncio-btn:hover {
   background: #00695c;
 }

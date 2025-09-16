@@ -1,5 +1,4 @@
 /* Tela de fundo escura */
-
 .overlay {
     position: fixed;
     top: 0;
@@ -11,8 +10,8 @@
     justify-content: center;
     align-items: center;
     z-index: 2000;
+    overflow: visible;
 }
-
 
 /* Card central */
 .card-escolha {
@@ -22,6 +21,12 @@
     padding: 10px;
     background-color: #fff;
     animation: fadeIn 0.3s ease;
+    position: relative;
+    z-index: 2100;
+}
+
+.card-escolha .MuiBox-root {
+  gap: 16px;
 }
 
 /* Animação de entrada */
@@ -30,7 +35,6 @@
         opacity: 0;
         transform: translateY(-10px);
     }
-
     to {
         opacity: 1;
         transform: translateY(0);
@@ -38,14 +42,11 @@
 }
 
 /* Botão fechar */
-
 .btn-fechar {
     color: #555 !important;
 }
 
-
 /* Títulos */
-
 .titulo {
     margin: 12px 0;
     font-size: 16px !important;
@@ -53,22 +54,22 @@
     color: #2e5e46 !important;
 }
 
-
 /* Select de horários */
-
 .select-wrapper {
     display: flex;
     justify-content: center;
     margin: 15px 0;
+    z-index: 2200;
 }
 
 .select-horario {
     min-width: 220px !important;
+    text-align: center;
+    color: #2e5e46 !important;
+    font-weight: 500 !important;
 }
 
-
 /* Botões */
-
 .botoes {
     display: flex;
     justify-content: space-between;
@@ -82,18 +83,4 @@
     font-weight: 500 !important;
     border-radius: 8px !important;
     padding: 6px 16px !important;
-}
-
-.select-wrapper {
-    display: flex;
-    justify-content: center;
-    margin: 15px 0;
-    z-index: 2200;
-}
-
-.select-horario {
-    min-width: 220px !important;
-    text-align: center;
-    color: #2e5e46 !important;
-    font-weight: 500 !important;
 }

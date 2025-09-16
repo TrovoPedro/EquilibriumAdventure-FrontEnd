@@ -2,6 +2,7 @@ import React from "react";
 import Header from "../../components/header/header";
 import "./ativar-evento.css";
 import leftArrow from "../../assets/left-arrow-green.png";
+import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 
 export default function AtivarEvento() {
   return (
@@ -9,9 +10,7 @@ export default function AtivarEvento() {
       <Header />
       <div className="ativar-evento-container">
         <div className="ativar-evento-header">
-          <span className="back-arrow-circle">
-            <img className="back-arrow" src={leftArrow} alt="Voltar" />
-          </span>
+          <ButtonBack />
           <span className="ativar-evento-title">Ativar Evento (Nome do evento)</span>
         </div>
         <div className="ativar-evento-form-wrapper">

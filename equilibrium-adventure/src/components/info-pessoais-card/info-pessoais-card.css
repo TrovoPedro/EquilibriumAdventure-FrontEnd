@@ -23,20 +23,20 @@
   gap: 18px 32px;
 }
 
-.form-group {
+.info-pessoais__form-group {
   display: flex;
   flex-direction: column;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-.form-group label {
+.info-pessoais__form-group label {
   font-size: 1rem;
   color: #333;
   margin-bottom: 6px;
   font-weight: 500;
 }
 
-.form-group input {
+.info-pessoais__form-group input {
   padding: 8px 10px;
   border: 1.5px solid #b2b2b2;
   border-radius: 6px;
@@ -46,7 +46,7 @@
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-.form-group input:focus {
+.info-pessoais__form-group input:focus {
   border: 1.5px solid #2e4d2e;
   outline: none;
 }
