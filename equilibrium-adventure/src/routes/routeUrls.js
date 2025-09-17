@@ -17,6 +17,7 @@ const routeUrls = {
     INSCRICAO_TRILHAS_LIMITADO: '/inscricao-trilhas-limitado',
     ADICIONAR_GUIA: '/adicionar-guia',
     LISTA_CONVITES: '/lista-convites',
+    VER_GUIAS:'/ver-guias',
     ESCOLHER_DATA: '/escolher-data',
     AGENDA_GUIA: '/agenda-guia',
     INFOS_ADICIONAIS_GUIA: '/infos-adic-guia',
