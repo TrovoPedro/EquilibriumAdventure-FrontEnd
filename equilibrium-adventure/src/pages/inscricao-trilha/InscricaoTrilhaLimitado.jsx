@@ -1,7 +1,7 @@
 import "./InscricaoTrilhas.css";
 import Header from "../../components/header/header-usuario";
 import trilhaImg from "../../assets/cachoeiralago.jpg";
-import imagemTeste from "../../assets/cachoeiralago.jpg";
+import MapaTrilha from "../../components/mapa-trilha/MapaTrilha";
 import React, { useState } from "react";
 
 const comentariosIniciais = [
@@ -83,13 +83,10 @@ const InscricaoTrilhasLimitado = () => {
 					   O que esperar da sua próxima trilha:
 				   </b>
 			   </div>
-			   <div className="inscricao-trilha-mapa">
-				   <img
-					   src={imagemTeste}
-					   alt="Mapa da trilha"
-					   style={{ width: "100%", borderRadius: 8, border: '1px solid #bdbdbd' }}
-				   />
-			   </div>
+			   <MapaTrilha 
+				   gpxFile="/assets/gpx-files/trilha-cachoeira-dos-grampos-fumaca.gpx"
+				   altura="450px"
+			   />
 		</div>
 	);
 };

@@ -1,0 +1,85 @@
+.mapa-trilha-container {
+    position: relative;
+    width: 100%;
+}
+
+.mapa-trilha {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid #bdbdbd;
+    background-color: #f5f5f5;
+}
+
+.mapa-trilha-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    padding: 12px;
+    border: 1px solid #f5c6cb;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.mapa-trilha-loading {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    padding: 12px;
+    border: 1px solid #bee5eb;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-size: 14px;
+    text-align: center;
+}
+
+/* Estilos específicos para o Leaflet */
+.mapa-trilha .leaflet-container {
+    border-radius: 8px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.mapa-trilha .leaflet-popup-content-wrapper {
+    border-radius: 6px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+}
+
+.mapa-trilha .leaflet-popup-content {
+    font-size: 13px;
+    color: #333;
+}
+
+.mapa-trilha .leaflet-control-zoom {
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.mapa-trilha .leaflet-control-zoom a {
+    border-radius: 0;
+    color: #444;
+}
+
+.mapa-trilha .leaflet-control-zoom a:first-child {
+    border-top-left-radius: 6px;
+    border-top-right-radius: 6px;
+}
+
+.mapa-trilha .leaflet-control-zoom a:last-child {
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+}
+
+.mapa-trilha .leaflet-control-zoom a:hover {
+    background-color: #f0f0f0;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .mapa-trilha-container {
+        margin: 0 -10px;
+    }
+    
+    .mapa-trilha {
+        border-radius: 0;
+        border-left: none;
+        border-right: none;
+    }
+}
