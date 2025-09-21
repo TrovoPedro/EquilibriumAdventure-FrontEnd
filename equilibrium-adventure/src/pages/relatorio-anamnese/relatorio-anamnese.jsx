@@ -12,7 +12,7 @@ const RelatorioAnamnese = () => {
                         <div className="form-container">
                             <div className="form-group">
                                 <div className="label-col">
-                                    <label>CPF:</label>
+                                    <label>Nome:</label>
                                 </div>
                                 <input type="text" className="input1" />
                             </div>
@@ -28,8 +28,8 @@ const RelatorioAnamnese = () => {
                 </div>
 
                 <div className="space-buttons">
-                    <button class="button-salvar">Salvar Relatório</button>
-                    <button class="button-voltar">Voltar</button>
+                    <button className="button-salvar">Salvar Relatório</button>
+                    <button className="button-voltar">Voltar</button>
                 </div>
             </div>
         </>

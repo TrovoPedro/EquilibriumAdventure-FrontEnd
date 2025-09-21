@@ -16,47 +16,47 @@ const VisualizarGuias = () => {
                 </div>
 
                 <div className="card-father-guias">
-                    <div class="lista">
-                        <div class="item">
+                    <div className="lista">
+                        <div className="item">
                             <span>Ana Clara</span>
-                            <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista2">Excluir</button>
+                            <button className="button-lista">Mais Informações</button>
+                            <button className="button-lista2">Excluir</button>
                         </div>
 
-                        <div class="item">
+                        <div className="item">
                             <span>Roberto</span>
-                            <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista2">Excluir</button>
+                            <button className="button-lista">Mais Informações</button>
+                            <button className="button-lista2">Excluir</button>
                         </div>
 
-                        <div class="item">
+                        <div className="item">
                             <span>Júlia</span>
-                            <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista2">Excluir</button>
+                            <button className="button-lista">Mais Informações</button>
+                            <button className="button-lista2">Excluir</button>
                         </div>
 
-                        <div class="item">
+                        <div className="item">
                             <span>Alberto</span>
-                            <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista2">Excluir</button>
+                            <button className="button-lista">Mais Informações</button>
+                            <button className="button-lista2">Excluir</button>
                         </div>
 
-                        <div class="item">
+                        <div className="item">
                             <span>Eduardo</span>
-                            <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista2">Excluir</button>
+                            <button className="button-lista">Mais Informações</button>
+                            <button className="button-lista2">Excluir</button>
                         </div>
 
-                        <div class="item">
+                        <div className="item">
                             <span>Vitória</span>
-                            <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista2">Excluir</button>
+                            <button className="button-lista">Mais Informações</button>
+                            <button className="button-lista2">Excluir</button>
                         </div>
 
-                        <div class="item">
+                        <div className="item">
                             <span>Gabriel</span>
-                            <button class="button-lista">Mais Informações</button>
-                            <button class="button-lista2">Excluir</button>
+                            <button className="button-lista">Mais Informações</button>
+                            <button className="button-lista2">Excluir</button>
                         </div>
                     </div>
                 </div>

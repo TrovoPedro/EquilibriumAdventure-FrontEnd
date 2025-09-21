@@ -11,3 +11,4 @@ export const validateUserData = ({ username, senha }) => {
 
   return errors;
 };
+    

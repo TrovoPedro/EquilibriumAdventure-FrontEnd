@@ -67,13 +67,21 @@ const CriarEvento = () => {
             descricao: formData.descricao,
             nivel_dificuldade: formData.dificuldade,
             distancia_km: parseFloat(formData.distancia),
-            responsavel: 1,
-            endereco: 1,
+            responsavel_id: 1,
+            endereco: {
+                cep: formData.cep,
+                rua: formData.rua,
+                numero: formData.numero,
+                complemento: formData.complemento,
+                bairro: formData.bairro,
+                cidade: formData.cidade,
+                estado: formData.estado
+            },
             caminho_arquivo_evento: formData.trilha ? formData.trilha.name : null
         };
 
         const form = new FormData();
-        form.append("evento", JSON.stringify(evento));
+        form.append("evento", JSON.stringify(evento)); // importante: stringificar
         if (formData.imagem) {
             form.append("imagem", formData.imagem);
         }
@@ -84,7 +92,7 @@ const CriarEvento = () => {
     return (
         <div className="criar-evento-page">
             <div className="criar-evento-container">
-                <Header/>
+                <Header />
                 <div className="div-title">
                     <h1 className="h1-title">Criação de Evento</h1>
                 </div>
