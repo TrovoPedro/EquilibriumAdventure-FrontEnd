@@ -1,0 +1,38 @@
+{
+  "name": "hitlnext",
+  "fullName": "HITL-next",
+  "version": "1.0.0",
+  "status": "stable",
+  "description": "Simple system to handoff tricky user conversations to your team of agents",
+  "private": true,
+  "main": "dist/backend/index.js",
+  "scripts": {
+    "build": "node ../../build/module-builder/bin/entry build",
+    "watch": "node ../../build/module-builder/bin/entry watch",
+    "package": "node ../../build/module-builder/bin/entry package"
+  },
+  "author": "Botpress, Inc.",
+  "license": "AGPL-3.0-only",
+  "dependencies": {
+    "@blueprintjs/core": "^3.36.0",
+    "@webscopeio/react-textarea-autocomplete": "^4.7.2",
+    "axios": "^0.21.1",
+    "bluebird": "^3.5",
+    "classnames": "^2.2.6",
+    "exponential-backoff": "^3.1.0",
+    "flat": "^5.0.2",
+    "haikunator": "^2.1.2",
+    "immer": "^9.0.12",
+    "joi": "^17",
+    "lodash": ">=4.17",
+    "lru-cache": "^6.0.0",
+    "moment": "^2.24",
+    "react-avatar": "^3.10.0",
+    "yn": "^4.0.0"
+  },
+  "devDependencies": {},
+  "resolutions": {
+    "fstream": ">=1.0.12",
+    "lodash": ">=4.17.21"
+  }
+}

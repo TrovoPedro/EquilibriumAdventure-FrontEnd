@@ -1,0 +1,18 @@
+{
+  "$schema": "../../assets/modules/nlu/config.schema.json",
+  "nluServer": {
+    "autoStart": true
+  },
+  "ducklingURL": "https://duckling.botpress.io",
+  "ducklingEnabled": true,
+  "preloadModels": true,
+  "languageSources": [
+    {
+      "endpoint": "https://lang-01.botpress.io"
+    }
+  ],
+  "modelCacheSize": "850mb",
+  "maxTrainingPerInstance": 1,
+  "queueTrainingOnBotMount": false,
+  "legacyElection": false
+}

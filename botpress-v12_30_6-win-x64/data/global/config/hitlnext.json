@@ -1,0 +1,24 @@
+{
+  "$schema": "../../assets/modules/hitlnext/config.schema.json",
+  "agentSessionTimeout": "10m",
+  "autoComplete": {
+    "trigger": ":",
+    "shortcuts": []
+  },
+  "messageCount": 10,
+  "handoffAlert": 5,
+  "defaultUsername": false,
+  "tags": [],
+  "enableConversationDeletion": false,
+  "transferMessage": {
+    "en": "You are being transferred to an agent.",
+    "fr": "Vous êtes transféré à un agent.",
+    "es": "Se le está transfiriendo a un agente."
+  },
+  "assignMessage": {
+    "en": "You have been assigned to our agent {{agentName}}.",
+    "fr": "Vous avez été assigné à notre agent(e) {{agentName}}.",
+    "es": "Ha sido asignado al agente {{agentName}}."
+  },
+  "eventsWebHook": {}
+}

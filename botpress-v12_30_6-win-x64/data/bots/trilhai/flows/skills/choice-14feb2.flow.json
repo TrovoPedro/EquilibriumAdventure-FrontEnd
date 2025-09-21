@@ -1,0 +1,120 @@
+{
+  "version": "0.0.1",
+  "catchAll": {
+    "next": []
+  },
+  "startNode": "entry",
+  "skillData": {
+    "randomId": "0d8sg5ijqt",
+    "contentId": "builtin_single-choice-MKRoUD",
+    "invalidContentId": "",
+    "keywords": {
+      "opção4": [
+        "opção4",
+        "Como funciona a plataforma?"
+      ],
+      "opção2": [
+        "opção2",
+        "Dicas para trilhas seguras"
+      ],
+      "opção5": [
+        "opção5",
+        "Regras e condutas nas trilhas"
+      ],
+      "opção1": [
+        "opção1",
+        "Informações sobre níveis de aventureiro"
+      ],
+      "opção3": [
+        "opção3",
+        "Informações sobre anamnese e participação"
+      ],
+      "opção6": [
+        "opção6",
+        "Política de cancelamento"
+      ],
+      "opção7": [
+        "opção7",
+        "Formação e experiência dos nossos guias"
+      ]
+    },
+    "config": {
+      "nbMaxRetries": 3,
+      "repeatChoicesOnInvalid": false,
+      "variableName": ""
+    }
+  },
+  "nodes": [
+    {
+      "name": "entry",
+      "onEnter": [
+        "builtin/setVariable {\"type\":\"temp\",\"name\":\"skill-choice-invalid-count-0d8sg5ijqt\",\"value\": 0}",
+        "builtin/setVariable {\"type\":\"temp\",\"name\":\"skill-choice-valid-0d8sg5ijqt\",\"value\": null}",
+        "builtin/setVariable {\"type\":\"temp\",\"name\":\"skill-choice-ret-0d8sg5ijqt\",\"value\": null}",
+        "say #!builtin_single-choice-MKRoUD {\"skill\":\"choice\"}"
+      ],
+      "next": [
+        {
+          "condition": "true",
+          "node": "parse"
+        }
+      ],
+      "id": "301443"
+    },
+    {
+      "name": "parse",
+      "onReceive": [
+        "basic-skills/choice_parse_answer {\"randomId\":\"0d8sg5ijqt\",\"contentId\":\"builtin_single-choice-MKRoUD\",\"invalidContentId\":\"\",\"keywords\":{\"opção4\":[\"opção4\",\"Como funciona a plataforma?\"],\"opção2\":[\"opção2\",\"Dicas para trilhas seguras\"],\"opção5\":[\"opção5\",\"Regras e condutas nas trilhas\"],\"opção1\":[\"opção1\",\"Informações sobre níveis de aventureiro\"],\"opção3\":[\"opção3\",\"Informações sobre anamnese e participação\"],\"opção6\":[\"opção6\",\"Política de cancelamento\"],\"opção7\":[\"opção7\",\"Formação e experiência dos nossos guias\"]},\"config\":{\"nbMaxRetries\":3,\"repeatChoicesOnInvalid\":false,\"variableName\":\"\"}}"
+      ],
+      "next": [
+        {
+          "condition": "temp['skill-choice-valid-0d8sg5ijqt'] === true",
+          "node": "#"
+        },
+        {
+          "condition": "true",
+          "node": "invalid"
+        }
+      ],
+      "triggers": [
+        {
+          "conditions": [
+            {
+              "id": "always"
+            }
+          ]
+        }
+      ],
+      "onEnter": [],
+      "id": "459967"
+    },
+    {
+      "name": "invalid",
+      "onEnter": [
+        "basic-skills/choice_invalid_answer {\"randomId\":\"0d8sg5ijqt\"}"
+      ],
+      "next": [
+        {
+          "condition": "Number(temp['skill-choice-invalid-count-0d8sg5ijqt']) > Number(3)",
+          "node": "#"
+        },
+        {
+          "condition": "true",
+          "node": "sorry"
+        }
+      ],
+      "id": "981406"
+    },
+    {
+      "name": "sorry",
+      "onEnter": [],
+      "next": [
+        {
+          "condition": "true",
+          "node": "parse"
+        }
+      ],
+      "id": "718280"
+    }
+  ]
+}

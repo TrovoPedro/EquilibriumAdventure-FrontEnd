@@ -1,0 +1,172 @@
+[
+  {
+    "id": "builtin_text-IGkIdP",
+    "formData": {
+      "text$en": "Olá! Bem-vindo a Confeitaria do seu João! Eu serei seu assistente virtual para te auxiliar no pedido.",
+      "markdown$en": true,
+      "typing$en": true,
+      "variations$en": []
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-20T20:24:10.857Z",
+    "modifiedOn": "2025-05-27T20:14:03.384Z"
+  },
+  {
+    "id": "builtin_text-MPzGlb",
+    "formData": {
+      "text$en": "Antes de começarmos, como posso te chamar?",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-20T20:26:19.947Z",
+    "modifiedOn": "2025-05-27T20:32:13.458Z"
+  },
+  {
+    "id": "builtin_text-A4vRKk",
+    "formData": {
+      "text$en": "Muito Prazer {{user.Nome}}! Escolha uma das opções para prosseguir:",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-20T20:33:26.888Z",
+    "modifiedOn": "2025-05-27T20:19:19.375Z"
+  },
+  {
+    "id": "builtin_text-4-1Vzz",
+    "formData": {
+      "text$en": "Preencha seu nome.",
+      "markdown$en": true,
+      "typing$en": true,
+      "variations$en": [
+        "Por favor preencha seu nome.",
+        "Tente inserir seu nome novamente"
+      ]
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-20T20:53:51.337Z",
+    "modifiedOn": "2025-05-20T21:10:13.226Z"
+  },
+  {
+    "id": "builtin_text-pBEyp_",
+    "formData": {
+      "text$en": "Atendimento finalizado.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-20T21:20:18.787Z",
+    "modifiedOn": "2025-05-20T21:20:18.787Z"
+  },
+  {
+    "id": "builtin_text-CGPi-f",
+    "formData": {
+      "text$en": "Escolha uma das opções para pedir:",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T20:23:42.190Z",
+    "modifiedOn": "2025-05-27T20:23:42.190Z"
+  },
+  {
+    "id": "builtin_text-tKWtsV",
+    "formData": {
+      "text$en": "🍰 Confeitaria do seu João Olá! 😊 Aqui está o status do seu pedido:  🔸 Número do Pedido: #1234 🔸 Status: A Caminho 🔸 Descrição: Bolo de Chocolate com recheio de Brigadeiro  🔸 Previsão de Entrega: 20:45  Obs.: Caso precise de algo ou tenha dúvidas, é só nos chamar por aqui! Estamos à disposição.  🍭 Obrigado por escolher a Confeitaria do seu João! 💖",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T20:31:21.739Z",
+    "modifiedOn": "2025-05-27T20:31:21.739Z"
+  },
+  {
+    "id": "builtin_text-ZQTsHi",
+    "formData": {
+      "text$en": "🍰 Confeitaria do Seu João  \n</br>\nOlá! 😊 Aqui está o status do seu pedido:  \n</br>\n🔸 Número do Pedido: #1234  \n🔸 Status: A Caminho  \n🔸 Descrição: Bolo de Chocolate com recheio de Brigadeiro  \n🔸 Previsão de Entrega: 20:45  \n</br>\nObs.: Caso precise de algo ou tenha dúvidas, é só nos chamar por aqui! Estamos à disposição.  \n</br>\n🍭 Obrigado por escolher a Confeitaria do Seu João! 💖\n",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T20:34:40.294Z",
+    "modifiedOn": "2025-05-27T20:37:47.301Z"
+  },
+  {
+    "id": "builtin_text-KhJVJC",
+    "formData": {
+      "text$en": "🍰 **Confeitaria do Seu João**  \n\n<br>  \n\n🎂 **Bolos**  \n- **Bolo de Chocolate**  \n  _Recheio de brigadeiro e cobertura de ganache._  \n  🏷️ R$ 45,00 (1kg)  \n\n- **Bolo de Morango com Chantilly**  \n  _Massa leve, recheio de morango e chantilly fresco._  \n  🏷️ R$ 50,00 (1kg)  \n\n- **Bolo Red Velvet**  \n  _Recheio de cream cheese e cobertura de buttercream._  \n  🏷️ R$ 55,00 (1kg)  \n\n- **Bolo de Cenoura com Chocolate**  \n  _Massa de cenoura fofinha e cobertura de brigadeiro cremoso._  \n  🏷️ R$ 40,00 (1kg)  \n\n- **Bolo Prestígio**  \n  _Recheio de coco com cobertura de chocolate._  \n  🏷️ R$ 50,00 (1kg)  \n\n<br>  \n\n🍭 **Doces**  \n- **Brigadeiros Gourmet**  \n  _Sabores: Tradicional, Beijinho e Ninho com Nutella._  \n  🏷️ R$ 2,50 (unidade)  \n\n- **Mini Tarteletes**  \n  _Sabores: Limão, Maracujá e Chocolate._  \n  🏷️ R$ 3,00 (unidade)  \n\n- **Brownies**  \n  _Brownie de chocolate com pedaços de nozes._  \n  🏷️ R$ 4,50 (unidade)  \n\n- **Mini Churros Recheados**  \n  _Recheios: Doce de leite e Nutella._  \n  🏷️ R$ 3,00 (unidade)  \n\n- **Trufas Artesanais**  \n  _Sabores: Chocolate Meio Amargo, Coco e Avelã._  \n  🏷️ R$ 5,00 (unidade)  \n\n- **Palha Italiana**  \n  _Tradicional doce de brigadeiro com biscoito._  \n  🏷️ R$ 4,00 (unidade)  \n\n<br>  \n \n🍭 Obrigado por escolher a Confeitaria do Seu João! 💖  \n",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T20:40:25.719Z",
+    "modifiedOn": "2025-05-27T20:40:25.719Z"
+  },
+  {
+    "id": "builtin_text-yJnIt7",
+    "formData": {
+      "text$en": "🍰 **Confeitaria do Seu João**  \n\n<br>  \n\n📍 **Endereço**:  \nRua das Flores, 123 - Centro, São Bernardo do Campo - SP  \n\n<br>  \n\n🕒 **Horários de Funcionamento**:  \n- Segunda a Sexta: 08:00 às 18:00  \n- Sábados: 08:00 às 14:00  \n- Domingos e feriados: Fechado  \n\n\n📞 **Contato**:  \n(11) 98765-4321  \n\n<br>  \n\n🍭 Venha nos visitar ou faça seu pedido pelo WhatsApp! 💖  \n",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T20:42:40.146Z",
+    "modifiedOn": "2025-05-27T20:44:29.949Z"
+  },
+  {
+    "id": "builtin_text-8k6qkY",
+    "formData": {
+      "text$en": "Por favor, escreva qual bolo você gostaria de pedir! ",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T20:45:59.239Z",
+    "modifiedOn": "2025-05-27T20:45:59.239Z"
+  },
+  {
+    "id": "builtin_text-eZzPgI",
+    "formData": {
+      "text$en": "Por favor, escreva qual doce você gostaria de pedir! ",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T20:46:38.309Z",
+    "modifiedOn": "2025-05-27T20:46:38.309Z"
+  },
+  {
+    "id": "builtin_text-sjuleE",
+    "formData": {
+      "text$en": "🎉 **Pedido Finalizado com Sucesso!**  \n\nObrigado, {{user.Nome}}, pelo seu pedido!  \n\n📋 **Resumo do Pedido:**  \n{{user.doce}}  \n\n📞 **Telefone:** {{user.numero2}}  \n🏠 **Endereço:** {{user.endereco2}}  \n\nEm breve entraremos em contato para confirmar os detalhes e a entrega.  \nAgradecemos por escolher a Confeitaria do Seu João! 🍰💖  \n\n",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T20:51:20.967Z",
+    "modifiedOn": "2025-05-27T21:27:11.818Z"
+  },
+  {
+    "id": "builtin_text-5tLQ54",
+    "formData": {
+      "text$en": "🏠 Obrigado! Agora, por favor, informe o endereço para entrega.\n",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T21:06:45.020Z",
+    "modifiedOn": "2025-05-27T21:06:45.020Z"
+  },
+  {
+    "id": "builtin_text-lP0acC",
+    "formData": {
+      "text$en": "📞 Para continuar com o seu pedido, por favor, informe o seu número de telefone. Assim, podemos entrar em contato caso necessário. 😊  ",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T21:10:50.956Z",
+    "modifiedOn": "2025-05-27T21:10:50.956Z"
+  }
+]

@@ -1,0 +1,273 @@
+{
+  "description": "ONLY FOR SCHEMA BUILDING - ALSO EDIT IN BOTPRESS.D.TS",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "category": {
+      "type": "string"
+    },
+    "details": {
+      "$ref": "#/definitions/BotDetails"
+    },
+    "author": {
+      "type": "string"
+    },
+    "disabled": {
+      "type": "boolean"
+    },
+    "private": {
+      "type": "boolean"
+    },
+    "version": {
+      "type": "string"
+    },
+    "imports": {
+      "type": "object",
+      "properties": {
+        "contentTypes": {
+          "description": "Defines the list of content types supported by the bot",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "contentTypes"
+      ]
+    },
+    "messaging": {
+      "$ref": "#/definitions/MessagingConfig"
+    },
+    "converse": {
+      "$ref": "#/definitions/ConverseConfig"
+    },
+    "dialog": {
+      "$ref": "#/definitions/BotDialogConfig"
+    },
+    "logs": {
+      "$ref": "#/definitions/BotLogsConfig"
+    },
+    "defaultLanguage": {
+      "type": "string"
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "locked": {
+      "type": "boolean"
+    },
+    "pipeline_status": {
+      "$ref": "#/definitions/BotPipelineStatus"
+    },
+    "oneflow": {
+      "type": "boolean"
+    },
+    "qna": {
+      "type": "object",
+      "properties": {
+        "disabled": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "disabled"
+      ]
+    }
+  },
+  "required": [
+    "defaultLanguage",
+    "details",
+    "id",
+    "imports",
+    "languages",
+    "locked",
+    "name",
+    "pipeline_status",
+    "qna",
+    "version"
+  ],
+  "definitions": {
+    "BotDetails": {
+      "type": "object",
+      "properties": {
+        "website": {
+          "type": "string"
+        },
+        "phoneNumber": {
+          "type": "string"
+        },
+        "termsConditions": {
+          "type": "string"
+        },
+        "privacyPolicy": {
+          "type": "string"
+        },
+        "emailAddress": {
+          "type": "string"
+        }
+      }
+    },
+    "MessagingConfig": {
+      "type": "object",
+      "properties": {
+        "channels": {
+          "description": "Configurations of channels to be sent to the messaging server\nYou can find more about channel configurations here : https://botpress.com/docs/channels/faq",
+          "type": "object",
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "channels"
+      ]
+    },
+    "ConverseConfig": {
+      "type": "object",
+      "properties": {
+        "timeout": {
+          "description": "The timeout of the converse API requests",
+          "default": "5s",
+          "type": "string"
+        },
+        "maxMessageLength": {
+          "description": "The text limitation of the converse API requests",
+          "default": 360,
+          "type": "number"
+        },
+        "bufferDelayMs": {
+          "description": "Number of milliseconds that the converse API will wait to buffer responses",
+          "default": 250,
+          "type": "number"
+        },
+        "enableUnsecuredEndpoint": {
+          "description": "Whether or not you want to expose public converse API. See docs here https://botpress.com/docs/channels/converse#public-api",
+          "default": true,
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "bufferDelayMs",
+        "enableUnsecuredEndpoint",
+        "maxMessageLength",
+        "timeout"
+      ]
+    },
+    "BotDialogConfig": {
+      "type": "object",
+      "properties": {
+        "timeoutInterval": {
+          "description": "The interval until the context of the session expires.\nThis clears the position of the user in the flow and triggers the before_session_timeout hook",
+          "default": "25m",
+          "type": "string"
+        },
+        "sessionTimeoutInterval": {
+          "description": "The interval until the session timeout. The default value is 30m. This deletes the session from the database.",
+          "type": "string"
+        }
+      },
+      "required": [
+        "timeoutInterval"
+      ]
+    },
+    "BotLogsConfig": {
+      "type": "object",
+      "properties": {
+        "expiration": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "expiration"
+      ]
+    },
+    "BotPipelineStatus": {
+      "type": "object",
+      "properties": {
+        "current_stage": {
+          "type": "object",
+          "properties": {
+            "promoted_by": {
+              "type": "string"
+            },
+            "promoted_on": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "id": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "id",
+            "promoted_by",
+            "promoted_on"
+          ]
+        },
+        "stage_request": {
+          "type": "object",
+          "properties": {
+            "requested_on": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "expires_on": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "requested_by": {
+              "type": "string"
+            },
+            "id": {
+              "type": "string"
+            },
+            "approvals": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/StageRequestApprovers"
+              }
+            }
+          },
+          "required": [
+            "id",
+            "requested_by",
+            "requested_on"
+          ]
+        }
+      },
+      "required": [
+        "current_stage"
+      ]
+    },
+    "StageRequestApprovers": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "strategy": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "email",
+        "strategy"
+      ]
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
+

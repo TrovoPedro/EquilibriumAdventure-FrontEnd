@@ -1,0 +1,142 @@
+{
+  "type": "object",
+  "properties": {
+    "agentSessionTimeout": {
+      "default": "10m",
+      "type": "string"
+    },
+    "autoComplete": {
+      "$ref": "#/definitions/IAutoComplete"
+    },
+    "messageCount": {
+      "default": 10,
+      "type": "number"
+    },
+    "handoffAlert": {
+      "default": 5,
+      "type": "number"
+    },
+    "defaultUsername": {
+      "default": false,
+      "type": "boolean"
+    },
+    "botAvatarUrl": {
+      "type": "string"
+    },
+    "tags": {
+      "default": [],
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "enableConversationDeletion": {
+      "default": false,
+      "type": "boolean"
+    },
+    "transferMessage": {
+      "default": {
+        "en": "You are being transferred to an agent.",
+        "fr": "Vous êtes transféré à un agent.",
+        "es": "Se le está transfiriendo a un agente."
+      },
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "assignMessage": {
+      "default": {
+        "en": "You have been assigned to our agent {{agentName}}.",
+        "fr": "Vous avez été assigné à notre agent(e) {{agentName}}.",
+        "es": "Ha sido asignado al agente {{agentName}}."
+      },
+      "type": "object",
+      "additionalProperties": {
+        "type": "string"
+      }
+    },
+    "eventsWebHook": {
+      "$ref": "#/definitions/Webhook",
+      "default": {}
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "agentSessionTimeout",
+    "assignMessage",
+    "defaultUsername",
+    "enableConversationDeletion",
+    "messageCount",
+    "transferMessage"
+  ],
+  "definitions": {
+    "IAutoComplete": {
+      "type": "object",
+      "properties": {
+        "trigger": {
+          "default": ":",
+          "type": "string"
+        },
+        "shortcuts": {
+          "default": [],
+          "example": [
+            {
+              "name": "hello",
+              "value": "Hello friend!"
+            }
+          ],
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IShortcut"
+          }
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "shortcuts",
+        "trigger"
+      ]
+    },
+    "IShortcut": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "value"
+      ]
+    },
+    "Webhook": {
+      "type": "object",
+      "properties": {
+        "url": {
+          "example": "https://myapplicationserver.com/webhook-handler",
+          "type": "string"
+        },
+        "headers": {
+          "example": {
+            "authorization": "Baerer ..."
+          },
+          "type": "object",
+          "additionalProperties": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
+

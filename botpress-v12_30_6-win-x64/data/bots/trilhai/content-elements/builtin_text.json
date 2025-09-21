@@ -1,0 +1,317 @@
+[
+  {
+    "id": "builtin_text-bSqMW0",
+    "formData": {
+      "text$en": "Olá! Bem-vindo ao Equilibrium Adventure\nEu sou o Trilheirinho e serei seu assistente virtual nesta jornada.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-17T21:33:46.528Z",
+    "modifiedOn": "2025-05-24T21:29:37.082Z"
+  },
+  {
+    "id": "builtin_text-8GYxGL",
+    "formData": {
+      "text$en": "Agora, escolha outra opção para continuar:",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-17T22:00:33.207Z",
+    "modifiedOn": "2025-05-21T22:43:14.014Z"
+  },
+  {
+    "id": "builtin_text-dI7eXd",
+    "formData": {
+      "text$en": "O nível de aventureiro é uma classificação baseada no seu perfil e nas suas experiências em trilhas, ajudando a sugerir atividades adequadas para você",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-17T22:16:52.374Z",
+    "modifiedOn": "2025-05-17T22:16:52.374Z"
+  },
+  {
+    "id": "builtin_text-Q8kb2g",
+    "formData": {
+      "text$en": "O nível é calculado com base em suas respostas a um questionário inicial e sua participação em eventos. Ele pode ser ajustado conforme você ganha mais experiência.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-17T22:17:34.723Z",
+    "modifiedOn": "2025-05-18T21:49:47.267Z"
+  },
+  {
+    "id": "builtin_text-KTslZC",
+    "formData": {
+      "text$en": "O nível ajuda a identificar trilhas que combinam com sua experiência e condição física, garantindo sua segurança e diversão.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-17T22:18:19.706Z",
+    "modifiedOn": "2025-05-17T22:18:19.706Z"
+  },
+  {
+    "id": "builtin_text-szen4B",
+    "formData": {
+      "text$en": "Itens essenciais para uma trilha:\n\n- Água para hidratação\n- Lanche leve e nutritivo\n- Protetor solar\n- Repelente de insetos\n- Roupas confortáveis\n- Calçados adequados para trilha\n- Mochila pequena e prática\n\nOutros materiais podem ser necessários dependendo do tipo e dificuldade da trilha, por isso é importante sempre conferir a descrição do percurso ou perguntar ao guia antes de sair.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-18T16:51:51.270Z",
+    "modifiedOn": "2025-05-21T23:24:17.143Z"
+  },
+  {
+    "id": "builtin_text-Jhi_ma",
+    "formData": {
+      "text$en": "Seguir algumas recomendações ajuda a garantir que sua trilha seja tranquila e segura. Veja algumas dicas importantes:\n\n- Siga sempre as orientações do guia e fique perto do grupo.\n- Hidrate-se regularmente durante o percurso.\n- Respeite a natureza e preste atenção ao ambiente, pois pode ter flores com espinhos, animais e outros elementos que exigem cuidado.\n- Se sentir qualquer mal-estar, cansaço ou desconforto, avise o guia imediatamente.\n- Nunca se afaste do grupo sem avisar para evitar preocupações e garantir a segurança de todos.\n",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-18T16:52:58.469Z",
+    "modifiedOn": "2025-05-21T23:16:50.338Z"
+  },
+  {
+    "id": "builtin_text-zgXThJ",
+    "formData": {
+      "text$en": "Uma boa preparação física faz toda a diferença para que você curta a trilha com conforto e segurança. Não é necessário ser um atleta, mas seguir algumas dicas pode ajudar bastante:\n\n- Pratique atividades físicas regularmente, como caminhadas, corridas leves ou subir escadas, para fortalecer as pernas e melhorar o condicionamento.\n- Treine com mochilas leves para se acostumar ao peso que levará na trilha.\n- Fortaleça os músculos com exercícios como agachamentos e alongamentos para prevenir lesões.\n- Inclua atividades aeróbicas, como ciclismo ou natação, para melhorar a resistência.\n- Trabalhe o equilíbrio com práticas como ioga ou pilates, ajudando em terrenos irregulares.\n- Aumente o ritmo das atividades aos poucos, conforme seu corpo se adapta.\n- Durma bem e hidrate-se antes da trilha para melhorar o desempenho e evitar cansaço excessivo.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-18T16:53:46.039Z",
+    "modifiedOn": "2025-05-23T21:02:02.618Z"
+  },
+  {
+    "id": "builtin_text-ZNyACZ",
+    "formData": {
+      "text$en": "A anamnese é uma avaliação de saúde feita por meio de um questionário. Ela ajuda a entender se você está apto a participar das trilhas com segurança.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-18T16:59:54.392Z",
+    "modifiedOn": "2025-05-18T16:59:54.392Z"
+  },
+  {
+    "id": "builtin_text-2JSo9r",
+    "formData": {
+      "text$en": "Logo após o cadastro, você responde um questionário de nivelamento com perguntas sobre sua saúde e experiência em trilhas. Ele serve para definir seu nível de aventureiro e identificar possíveis restrições.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-18T17:00:29.038Z",
+    "modifiedOn": "2025-05-18T17:00:29.038Z"
+  },
+  {
+    "id": "builtin_text-Jt_IuC",
+    "formData": {
+      "text$en": "Se você indicar algum problema de saúde mais sério no questionário, será necessário agendar uma conversa com o guia. Ele vai avaliar se você pode realizar a trilha com segurança ou se será necessário algum preparo especial.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-18T17:01:05.293Z",
+    "modifiedOn": "2025-05-18T17:01:05.293Z"
+  },
+  {
+    "id": "builtin_text-yMu7-s",
+    "formData": {
+      "text$en": "Acesse a aba de eventos, clique em sua trilha favorita, role a tela para baixo e clique no botão de realizar inscrição.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-18T17:04:17.049Z",
+    "modifiedOn": "2025-05-23T20:57:32.352Z"
+  },
+  {
+    "id": "builtin_text-vYVFV2",
+    "formData": {
+      "text$en": "Na aba 'Agenda', você encontrará todas as trilhas agendadas e o status da sua inscrição.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-18T17:04:53.720Z",
+    "modifiedOn": "2025-05-18T17:04:53.720Z"
+  },
+  {
+    "id": "builtin_text-dZtmey",
+    "formData": {
+      "text$en": "Após se inscrever em uma trilha, o guia irá criar um grupo no whatsapp com todos os inscritos para passar mais informações.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-18T17:07:23.099Z",
+    "modifiedOn": "2025-05-18T17:11:31.049Z"
+  },
+  {
+    "id": "builtin_text-m5WxkA",
+    "formData": {
+      "text$en": "Para garantir a segurança e uma experiência agradável para todos, siga estas regras gerais:\n\n- **Siga as orientações do guia:** O guia é responsável pela segurança e organização do grupo. Escute e respeite as instruções dele.\n- **Respeite o meio ambiente:** Evite deixar lixo, não danifique plantas e mantenha uma interação respeitosa com a fauna local.\n- **Seja pontual:** Chegue no horário combinado para evitar atrasos que possam prejudicar o grupo.\n- **Use equipamentos adequados:** Siga a lista de itens recomendados ou obrigatórios para cada trilha. Isso garante sua segurança e conforto.\n- **Mantenha-se com o grupo:** Evite se distanciar sem avisar para prevenir acidentes ou extravios.\n- **Informe qualquer problema:** Caso sinta mal-estar ou encontre algo que precise de atenção, avise o guia imediatamente.",
+      "markdown$en": true,
+      "typing$en": true,
+      "variations$en": [
+        ""
+      ]
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-18T17:12:22.976Z",
+    "modifiedOn": "2025-05-23T21:04:53.321Z"
+  },
+  {
+    "id": "builtin_text-Vr8DfV",
+    "formData": {
+      "text$en": "Para garantir a segurança do grupo e preservar o meio ambiente, evite as seguintes atitudes durante a trilha:\n\n- **Deixar lixo na natureza:** Sempre leve seu lixo de volta ou descarte-o nos locais apropriados.\n- **Desobedecer às orientações do guia:** O guia é responsável pela segurança de todos, então é importante seguir suas instruções.\n- **Afastar-se do grupo sem autorização:** Isso pode colocar você e o grupo em risco.\n- **Danos ao ambiente:** Não arranque plantas, não interaja de forma invasiva com a fauna e respeite o espaço natural.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-18T17:13:14.445Z",
+    "modifiedOn": "2025-05-23T21:07:04.493Z"
+  },
+  {
+    "id": "builtin_text-rO10Hy",
+    "formData": {
+      "text$en": "A permissão para animais depende da trilha. Verifique na descrição do evento ou consulte o guia responsável.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-18T17:13:51.179Z",
+    "modifiedOn": "2025-05-18T17:13:51.179Z"
+  },
+  {
+    "id": "builtin_text-oVzlpB",
+    "formData": {
+      "text$en": "🍰 Confeitaria do seu João\nOlá! 😊 Aqui está o status do seu pedido:\n\n🔸 Número do Pedido: #1234\n🔸 Status: A Caminho\n🔸 Descrição: Bolo de Chocolate com recheio de Brigadeiro \n🔸 Previsão de Entrega: 20:45\n\nObs.: Caso precise de algo ou tenha dúvidas, é só nos chamar por aqui! Estamos à disposição.\n\n🍭 Obrigado por escolher a Confeitaria do seu João! 💖",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-21T20:49:17.801Z",
+    "modifiedOn": "2025-05-27T20:30:14.210Z"
+  },
+  {
+    "id": "builtin_text-y8FLbU",
+    "formData": {
+      "text$en": "Preencha o seu nome.",
+      "markdown$en": true,
+      "typing$en": true,
+      "variations$en": [
+        "Por favor preencha o seu nome.",
+        "Tente iserir seu nome novamente."
+      ]
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-21T21:26:48.638Z",
+    "modifiedOn": "2025-05-21T21:26:48.638Z"
+  },
+  {
+    "id": "builtin_text-gBoKb4",
+    "formData": {
+      "text$en": "Dê uma olhada nas opções abaixo e escolha aquela que melhor descreve sua dúvida.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-21T21:42:42.914Z",
+    "modifiedOn": "2025-05-21T22:35:25.571Z"
+  },
+  {
+    "id": "builtin_text-4lxroc",
+    "formData": {
+      "text$en": "Atendimento finalizado. Caso queira iniciar um novo atendimento, envie uma nova mensagem. Se a sua dúvida não estiver presente na minha base de conhecimento, entre em contato com o guia para obter suporte personalizado.\n",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-21T21:48:22.059Z",
+    "modifiedOn": "2025-06-06T22:20:04.516Z"
+  },
+  {
+    "id": "builtin_text-zd9Eze",
+    "formData": {
+      "text$en": "Eu sou um assistente virtual e vou te ajudar hoje.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-21T21:50:51.556Z",
+    "modifiedOn": "2025-05-21T21:50:51.556Z"
+  },
+  {
+    "id": "builtin_text-CF2t6I",
+    "formData": {
+      "text$en": "É um prazer te conhecer, {{user.nome}}! Vamos garantir que você encontre exatamente o que precisa.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-21T22:33:36.829Z",
+    "modifiedOn": "2025-05-21T22:34:13.744Z"
+  },
+  {
+    "id": "builtin_text-amVLpm",
+    "formData": {
+      "text$en": "\nO clima pode mudar sua experiência na trilha, mas com algumas dicas simples você pode aproveitar cada momento com segurança e conforto. Veja como se preparar:\n\n- Verifique a previsão do tempo antes de sair e planeje seu passeio.\n- Use roupas leves em dias quentes e camadas extras em dias frios.\n- Leve capa de chuva ou poncho para se proteger em caso de chuva.\n- Use protetor solar mesmo em dias nublados.\n- Hidrate-se com frequência, especialmente nos dias quentes.\n- Tenha cuidado com terrenos escorregadios após a chuva.\n- Se o clima piorar, converse com o grupo e o guia para decidir o melhor a fazer.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-23T03:06:36.087Z",
+    "modifiedOn": "2025-05-23T03:06:36.087Z"
+  },
+  {
+    "id": "builtin_text-GPLFgR",
+    "formData": {
+      "text$en": "Você pode cancelar sua inscrição a qualquer momento antes do pagamento, sem custos. Caso já tenha efetuado o pagamento, aplicamos a política de reembolso conforme a deliberação normativa EMBRATUR n° 161 de 09 de Agosto de 1985:\n\n- Reembolso de 90% do valor pago para cancelamentos realizados até 31 dias antes do evento.\n- Reembolso de 80% do valor pago para cancelamentos realizados entre 21 e 30 dias antes do evento.\n- Reembolso de 60% do valor pago para cancelamentos realizados entre 10 e 20 dias antes do evento.\n- Reembolso de 50% do valor pago para cancelamentos realizados entre 1 e 9 dias antes do evento.\n\nVocê também pode transferir o valor para outro roteiro, dependendo da disponibilidade, dentro de até 30 dias após a data original do evento. Essa transferência pode ser feita apenas uma vez.\n\nPara mais informações ou para reagendar, entre em contato com o guia.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-23T03:25:33.499Z",
+    "modifiedOn": "2025-05-26T00:11:32.319Z"
+  },
+  {
+    "id": "builtin_text-hakLEa",
+    "formData": {
+      "text$en": "Nossos guias possuem formação acadêmica, como faculdade na área de turismo ou educação física, ou cursos técnicos especializados em atividades de aventura e ecoturismo. Além disso, têm experiência prática em conduzir grupos com segurança, conhecimentos em primeiros socorros e cuidados ambientais. Tudo isso para garantir uma trilha segura, divertida e respeitosa com a natureza.",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-23T03:32:30.944Z",
+    "modifiedOn": "2025-05-23T03:32:30.944Z"
+  },
+  {
+    "id": "builtin_text-T2uCgf",
+    "formData": {
+      "text$en": "Clique no botão de agenda no canto superior direito presente na Home, após isso irá conseguir visualizar o botão ver convites, clicando nele você vê todos os convites recebidos, podendo aceita-lo ou recusa-lo. ",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-24T21:27:20.982Z",
+    "modifiedOn": "2025-05-24T21:27:20.982Z"
+  },
+  {
+    "id": "builtin_text-Z87jg5",
+    "formData": {
+      "text$en": "Antes de começarmos, como posso te chamar?",
+      "markdown$en": true,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T20:31:51.990Z",
+    "modifiedOn": "2025-05-27T20:31:51.990Z"
+  }
+]

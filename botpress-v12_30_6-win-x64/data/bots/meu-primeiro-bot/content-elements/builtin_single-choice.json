@@ -1,0 +1,75 @@
+[
+  {
+    "id": "builtin_single-choice-JTFtOm",
+    "formData": {
+      "dropdownPlaceholder$en": "Select...",
+      "choices$en": [
+        {
+          "title": "Fazer Pedido",
+          "value": "opção1"
+        },
+        {
+          "title": "Ver status do pedido",
+          "value": "opção2"
+        },
+        {
+          "title": "Ver cardápio",
+          "value": "opção3"
+        },
+        {
+          "value": "opção4",
+          "title": "Ver horário e Endereço"
+        }
+      ],
+      "markdown$en": true,
+      "disableFreeText$en": false,
+      "displayInMessage$en": false,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T20:17:45.186Z",
+    "modifiedOn": "2025-05-27T20:17:45.186Z"
+  },
+  {
+    "id": "builtin_single-choice-ZdNpoe",
+    "formData": {
+      "dropdownPlaceholder$en": "Select...",
+      "choices$en": [
+        {
+          "title": "Bolo",
+          "value": "opção1"
+        },
+        {
+          "title": "Doce",
+          "value": "opção2"
+        }
+      ],
+      "markdown$en": true,
+      "disableFreeText$en": false,
+      "displayInMessage$en": false,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T20:24:37.020Z",
+    "modifiedOn": "2025-05-27T20:24:37.020Z"
+  },
+  {
+    "id": "builtin_single-choice-ty9vU1",
+    "formData": {
+      "dropdownPlaceholder$en": "Select...",
+      "choices$en": [
+        {
+          "title": "Voltar ao Menu Inicial",
+          "value": "opção1"
+        }
+      ],
+      "markdown$en": true,
+      "disableFreeText$en": false,
+      "displayInMessage$en": false,
+      "typing$en": true
+    },
+    "createdBy": "admin",
+    "createdOn": "2025-05-27T21:00:07.046Z",
+    "modifiedOn": "2025-05-27T21:00:07.046Z"
+  }
+]

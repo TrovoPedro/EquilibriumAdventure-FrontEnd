@@ -1,0 +1,108 @@
+{
+  "version": "0.0.1",
+  "catchAll": {
+    "next": []
+  },
+  "startNode": "entry",
+  "skillData": {
+    "randomId": "cy7aeze1n7",
+    "contentId": "builtin_single-choice-JTFtOm",
+    "invalidContentId": "",
+    "keywords": {
+      "opção1": [
+        "opção1",
+        "Fazer Pedido"
+      ],
+      "opção2": [
+        "opção2",
+        "Ver status do pedido"
+      ],
+      "opção3": [
+        "opção3",
+        "Ver cardápio"
+      ],
+      "opção4": [
+        "opção4",
+        "Ver horário e Endereço"
+      ]
+    },
+    "config": {
+      "nbMaxRetries": 3,
+      "repeatChoicesOnInvalid": false,
+      "variableName": ""
+    }
+  },
+  "nodes": [
+    {
+      "name": "entry",
+      "onEnter": [
+        "builtin/setVariable {\"type\":\"temp\",\"name\":\"skill-choice-invalid-count-cy7aeze1n7\",\"value\": 0}",
+        "builtin/setVariable {\"type\":\"temp\",\"name\":\"skill-choice-valid-cy7aeze1n7\",\"value\": null}",
+        "builtin/setVariable {\"type\":\"temp\",\"name\":\"skill-choice-ret-cy7aeze1n7\",\"value\": null}",
+        "say #!builtin_single-choice-JTFtOm {\"skill\":\"choice\"}"
+      ],
+      "next": [
+        {
+          "condition": "true",
+          "node": "parse"
+        }
+      ],
+      "id": "447020"
+    },
+    {
+      "name": "parse",
+      "onReceive": [
+        "basic-skills/choice_parse_answer {\"randomId\":\"cy7aeze1n7\",\"contentId\":\"builtin_single-choice-JTFtOm\",\"invalidContentId\":\"\",\"keywords\":{\"opção1\":[\"opção1\",\"Fazer Pedido\"],\"opção2\":[\"opção2\",\"Ver status do pedido\"],\"opção3\":[\"opção3\",\"Ver cardápio\"],\"opção4\":[\"opção4\",\"Ver horário e Endereço\"]},\"config\":{\"nbMaxRetries\":3,\"repeatChoicesOnInvalid\":false,\"variableName\":\"\"}}"
+      ],
+      "next": [
+        {
+          "condition": "temp['skill-choice-valid-cy7aeze1n7'] === true",
+          "node": "#"
+        },
+        {
+          "condition": "true",
+          "node": "invalid"
+        }
+      ],
+      "triggers": [
+        {
+          "conditions": [
+            {
+              "id": "always"
+            }
+          ]
+        }
+      ],
+      "onEnter": [],
+      "id": "924192"
+    },
+    {
+      "name": "invalid",
+      "onEnter": [
+        "basic-skills/choice_invalid_answer {\"randomId\":\"cy7aeze1n7\"}"
+      ],
+      "next": [
+        {
+          "condition": "Number(temp['skill-choice-invalid-count-cy7aeze1n7']) > Number(3)",
+          "node": "#"
+        },
+        {
+          "condition": "true",
+          "node": "sorry"
+        }
+      ],
+      "id": "497165"
+    },
+    {
+      "name": "sorry",
+      "onEnter": [],
+      "next": [
+        {
+          "condition": "true",
+          "node": "parse"
+        }
+      ],
+      "id": "394313"
+    }
+  ]
+}

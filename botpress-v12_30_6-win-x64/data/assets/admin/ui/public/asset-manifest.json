@@ -1,0 +1,42 @@
+{
+  "files": {
+    "main.css": "admin/static/css/main.1862636c.chunk.css",
+    "main.js": "admin/static/js/main.22a138c4.chunk.js",
+    "runtime-main.js": "admin/static/js/runtime-main.bf701c29.js",
+    "static/css/2.560f8d28.chunk.css": "admin/static/css/2.560f8d28.chunk.css",
+    "static/js/2.d0431968.chunk.js": "admin/static/js/2.d0431968.chunk.js",
+    "static/js/3.31c9838e.chunk.js": "admin/static/js/3.31c9838e.chunk.js",
+    "static/js/4.e5883504.chunk.js": "admin/static/js/4.e5883504.chunk.js",
+    "index.html": "admin/index.html",
+    "static/css/2.560f8d28.chunk.css.map": "admin/static/css/2.560f8d28.chunk.css.map",
+    "static/css/main.1862636c.chunk.css.map": "admin/static/css/main.1862636c.chunk.css.map",
+    "static/js/2.d0431968.chunk.js.LICENSE.txt": "admin/static/js/2.d0431968.chunk.js.LICENSE.txt",
+    "static/js/main.22a138c4.chunk.js.LICENSE.txt": "admin/static/js/main.22a138c4.chunk.js.LICENSE.txt",
+    "static/media/ar.svg": "admin/static/media/ar.64188f1f.svg",
+    "static/media/de.svg": "admin/static/media/de.7e82f4c7.svg",
+    "static/media/en.svg": "admin/static/media/en.a3e6d90f.svg",
+    "static/media/es.svg": "admin/static/media/es.039cad8d.svg",
+    "static/media/fr.svg": "admin/static/media/fr.81d43a15.svg",
+    "static/media/he.svg": "admin/static/media/he.c8a44024.svg",
+    "static/media/hi.svg": "admin/static/media/hi.e5926cb7.svg",
+    "static/media/it.svg": "admin/static/media/it.290f2fec.svg",
+    "static/media/ja.svg": "admin/static/media/ja.1ca5a40c.svg",
+    "static/media/ko.svg": "admin/static/media/ko.e3fda633.svg",
+    "static/media/linux.09fc32f1.png": "admin/static/media/linux.09fc32f1.png",
+    "static/media/loading-circle.cbac0c6a.svg": "admin/static/media/loading-circle.cbac0c6a.svg",
+    "static/media/logo-icon.ef699423.svg": "admin/static/media/logo-icon.ef699423.svg",
+    "static/media/missing.svg": "admin/static/media/missing.bb1790e0.svg",
+    "static/media/nl.svg": "admin/static/media/nl.62f69d3c.svg",
+    "static/media/pl.svg": "admin/static/media/pl.0882b3e3.svg",
+    "static/media/pt.svg": "admin/static/media/pt.5995e84f.svg",
+    "static/media/ru.svg": "admin/static/media/ru.b4132869.svg",
+    "static/media/zh.svg": "admin/static/media/zh.7977e12a.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.bf701c29.js",
+    "static/css/2.560f8d28.chunk.css",
+    "static/js/2.d0431968.chunk.js",
+    "static/css/main.1862636c.chunk.css",
+    "static/js/main.22a138c4.chunk.js"
+  ]
+}

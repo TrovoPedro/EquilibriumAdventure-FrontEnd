@@ -1,0 +1,4 @@
+{
+  "$schema": "../../assets/modules/code-editor/config.schema.json",
+  "includeBuiltin": false
+}

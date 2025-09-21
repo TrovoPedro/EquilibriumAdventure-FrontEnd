@@ -1,0 +1,108 @@
+{
+  "version": "0.0.1",
+  "catchAll": {
+    "next": []
+  },
+  "startNode": "entry",
+  "skillData": {
+    "randomId": "55trc6ucsl",
+    "contentId": "builtin_single-choice-pg0PFU",
+    "invalidContentId": "",
+    "keywords": {
+      "opção1": [
+        "opção1",
+        "O que é a anamnese?"
+      ],
+      "opção2": [
+        "opção2",
+        "Como funciona o questionário inicial?"
+      ],
+      "opção3": [
+        "opção3",
+        "O que acontece se eu tiver um problema de saúde?"
+      ],
+      "opção4": [
+        "opção4",
+        "Voltar ao menu principal"
+      ]
+    },
+    "config": {
+      "nbMaxRetries": 3,
+      "repeatChoicesOnInvalid": false,
+      "variableName": ""
+    }
+  },
+  "nodes": [
+    {
+      "name": "entry",
+      "onEnter": [
+        "builtin/setVariable {\"type\":\"temp\",\"name\":\"skill-choice-invalid-count-55trc6ucsl\",\"value\": 0}",
+        "builtin/setVariable {\"type\":\"temp\",\"name\":\"skill-choice-valid-55trc6ucsl\",\"value\": null}",
+        "builtin/setVariable {\"type\":\"temp\",\"name\":\"skill-choice-ret-55trc6ucsl\",\"value\": null}",
+        "say #!builtin_single-choice-pg0PFU {\"skill\":\"choice\"}"
+      ],
+      "next": [
+        {
+          "condition": "true",
+          "node": "parse"
+        }
+      ],
+      "id": "631430"
+    },
+    {
+      "name": "parse",
+      "onReceive": [
+        "basic-skills/choice_parse_answer {\"randomId\":\"55trc6ucsl\",\"contentId\":\"builtin_single-choice-pg0PFU\",\"invalidContentId\":\"\",\"keywords\":{\"opção1\":[\"opção1\",\"O que é a anamnese?\"],\"opção2\":[\"opção2\",\"Como funciona o questionário inicial?\"],\"opção3\":[\"opção3\",\"O que acontece se eu tiver um problema de saúde?\"],\"opção4\":[\"opção4\",\"Voltar ao menu principal\"]},\"config\":{\"nbMaxRetries\":3,\"repeatChoicesOnInvalid\":false,\"variableName\":\"\"}}"
+      ],
+      "next": [
+        {
+          "condition": "temp['skill-choice-valid-55trc6ucsl'] === true",
+          "node": "#"
+        },
+        {
+          "condition": "true",
+          "node": "invalid"
+        }
+      ],
+      "triggers": [
+        {
+          "conditions": [
+            {
+              "id": "always"
+            }
+          ]
+        }
+      ],
+      "onEnter": [],
+      "id": "225038"
+    },
+    {
+      "name": "invalid",
+      "onEnter": [
+        "basic-skills/choice_invalid_answer {\"randomId\":\"55trc6ucsl\"}"
+      ],
+      "next": [
+        {
+          "condition": "Number(temp['skill-choice-invalid-count-55trc6ucsl']) > Number(3)",
+          "node": "#"
+        },
+        {
+          "condition": "true",
+          "node": "sorry"
+        }
+      ],
+      "id": "587334"
+    },
+    {
+      "name": "sorry",
+      "onEnter": [],
+      "next": [
+        {
+          "condition": "true",
+          "node": "parse"
+        }
+      ],
+      "id": "620494"
+    }
+  ]
+}

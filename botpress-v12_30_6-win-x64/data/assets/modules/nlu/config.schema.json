@@ -1,0 +1,122 @@
+{
+  "type": "object",
+  "properties": {
+    "nluServer": {
+      "description": "If you want to manually start standalone NLU, set autoStart to false and specify endpoint and auth token.",
+      "default": {
+        "autoStart": true
+      },
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "autoStart": {
+              "type": "boolean",
+              "enum": [
+                true
+              ]
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "autoStart"
+          ]
+        },
+        {
+          "type": "object",
+          "properties": {
+            "autoStart": {
+              "type": "boolean",
+              "enum": [
+                false
+              ]
+            },
+            "endpoint": {
+              "type": "string"
+            }
+          },
+          "additionalProperties": false,
+          "required": [
+            "autoStart",
+            "endpoint"
+          ]
+        }
+      ]
+    },
+    "ducklingURL": {
+      "description": "If you want a fully on-prem installation, you can host\nFacebook's Duckling on your own infrastructure and change this URL\nOnly relevant if @see ducklingEnabled is true",
+      "default": "https://duckling.botpress.io",
+      "type": "string"
+    },
+    "ducklingEnabled": {
+      "default": true,
+      "type": "boolean"
+    },
+    "preloadModels": {
+      "description": "Whether or not you want your models to be trained and loaded on bot mounts",
+      "default": true,
+      "type": "boolean"
+    },
+    "languageSources": {
+      "description": "The list of sources to load languages from",
+      "default": [
+        {
+          "endpoint": "https://lang-01.botpress.io"
+        }
+      ],
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/LanguageSource"
+      }
+    },
+    "modelCacheSize": {
+      "description": "Maximum allowed model cache size",
+      "default": "850mb",
+      "type": "string"
+    },
+    "maxTrainingPerInstance": {
+      "description": "Maximum number of concurrent trainings per Botpress instance",
+      "default": 1,
+      "type": "number"
+    },
+    "queueTrainingOnBotMount": {
+      "description": "Whether or not to train bots that require training on mount",
+      "default": false,
+      "type": "boolean"
+    },
+    "legacyElection": {
+      "description": "Whether or not you want to use the deprecated legacy election",
+      "default": false,
+      "type": "boolean"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "ducklingEnabled",
+    "ducklingURL",
+    "languageSources",
+    "legacyElection",
+    "modelCacheSize",
+    "nluServer",
+    "preloadModels"
+  ],
+  "definitions": {
+    "LanguageSource": {
+      "type": "object",
+      "properties": {
+        "endpoint": {
+          "type": "string"
+        }
+      },
+      "additionalProperties": false,
+      "required": [
+        "endpoint"
+      ]
+    }
+  },
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
+

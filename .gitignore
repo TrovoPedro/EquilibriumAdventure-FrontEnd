@@ -1,0 +1,5 @@
+# Ignorar executáveis grandes do Botpress
+botpress-v12_30_6-win-x64/bp.exe
+botpress-v12_30_6-win-x64/bin/messaging.exe
+botpress-v12_30_6-win-x64/bin/nlu.exe
+botpress-v12_30_6-win-x64/bin/studio.exe

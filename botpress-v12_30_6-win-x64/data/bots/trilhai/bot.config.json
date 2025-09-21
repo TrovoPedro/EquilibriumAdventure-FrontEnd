@@ -1,0 +1,58 @@
+{
+  "locked": false,
+  "disabled": false,
+  "private": false,
+  "details": {
+    "website": "",
+    "phoneNumber": "",
+    "emailAddress": "",
+    "termsConditions": "",
+    "privacyPolicy": "",
+    "avatarUrl": "/api/v1/bots/trilhai/media/dhprxjn6q39mgkobc3fe-imagem_2025-05-23_194328110-removebg-preview%20(1).png",
+    "coverPictureUrl": "/api/v1/bots/trilhai/media/oec449puy7pyb5ebccgc-download.jpeg"
+  },
+  "$schema": "../../bot.config.schema.json",
+  "description": "",
+  "active": true,
+  "version": "12.30.6",
+  "author": "Botpress, Inc.",
+  "license": "AGPL-3.0",
+  "imports": {
+    "modules": [],
+    "incomingMiddleware": [],
+    "outgoingMiddleware": [],
+    "contentTypes": [
+      "builtin_action-button",
+      "builtin_audio",
+      "builtin_card",
+      "builtin_carousel",
+      "dropdown",
+      "builtin_file",
+      "builtin_image",
+      "builtin_location",
+      "builtin_single-choice",
+      "builtin_text",
+      "builtin_video"
+    ]
+  },
+  "dialog": {
+    "timeoutInterval": "5m"
+  },
+  "logs": {
+    "expiration": "1 week"
+  },
+  "defaultLanguage": "en",
+  "languages": [
+    "en"
+  ],
+  "id": "trilhai",
+  "name": "Trilheirinho ",
+  "avatarUrl": "https://cdn-icons-png.flaticon.com/512/4712/4712035.png",
+  "pipeline_status": {
+    "current_stage": {
+      "id": "prod",
+      "promoted_on": "2025-05-17T21:28:44.176Z",
+      "promoted_by": "guilherme.loliveira@sptech.school"
+    }
+  }
+}

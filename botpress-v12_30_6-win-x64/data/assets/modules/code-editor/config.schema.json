@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "includeBuiltin": {
+      "description": "When enabled, actions & hooks created by Botpress will also be available in the UI",
+      "default": false,
+      "type": "boolean"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "includeBuiltin"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
+

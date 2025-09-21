@@ -1,0 +1,50 @@
+{
+  "type": "object",
+  "properties": {
+    "defaultContentElement": {
+      "default": "builtin_single-choice",
+      "type": "string"
+    },
+    "defaultContentRenderer": {
+      "default": "#builtin_single-choice",
+      "type": "string"
+    },
+    "defaultMaxAttempts": {
+      "default": 3,
+      "type": "number"
+    },
+    "disableIntegrityCheck": {
+      "default": true,
+      "type": "boolean"
+    },
+    "matchNumbers": {
+      "default": true,
+      "type": "boolean"
+    },
+    "matchNLU": {
+      "default": true,
+      "type": "boolean"
+    },
+    "transportConnectionString": {
+      "description": "Nodemailer2 transport connection string.",
+      "see": "https ://nodemailer.com/smtp/#examples",
+      "example": "smtps://user%40gmail.com:pass@smtp.gmail.com",
+      "default": "<<change me>>"
+    },
+    "$schema": {
+      "type": "string"
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "defaultContentElement",
+    "defaultContentRenderer",
+    "defaultMaxAttempts",
+    "disableIntegrityCheck",
+    "matchNLU",
+    "matchNumbers",
+    "transportConnectionString"
+  ],
+  "$schema": "http://json-schema.org/draft-07/schema#"
+}
+
