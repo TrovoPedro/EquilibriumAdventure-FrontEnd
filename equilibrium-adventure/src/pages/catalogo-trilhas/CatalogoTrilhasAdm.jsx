@@ -74,7 +74,7 @@ const CatalogoTrilhas = () => {
           <div className="search-overlay">
             <div className="search-text-group">
               <h2>Olá, Edgar</h2>
-              <p>Digite o nome do evento que deseja achar</p>
+              <p>Bora ver como estão seus eventos?</p>
             </div>
             <div className="search-box">
               <input type="text" placeholder="Escreva aqui" className="pesquisar-trilha" />

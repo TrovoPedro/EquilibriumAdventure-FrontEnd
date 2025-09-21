@@ -1,8 +1,8 @@
 .home-container {
-  font-family: "Arial", sans-serif;
-  color: #00331f;
-  padding: 0 160px 80px 160px;
-  margin-top: 70px;
+    font-family: "Arial", sans-serif;
+    color: #00331f;
+    padding: 0 160px 80px 160px;
+    margin-top: 70px;
 }
 
 .card-guia {
@@ -12,7 +12,7 @@
     justify-content: start;
     align-items: end;
     gap: 50px;
-}   
+}
 
 .foto-guia {
     height: 75%;
@@ -167,23 +167,26 @@
 }
 
 .cards-eventos {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 30px;
-    width: 100%;
-    margin-top: 30px;
-    min-height: 600px;
+    height: auto;
+    margin-top: 15px;
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .eventos-anamnese-ativos {
     background-color: #E9E9E9;
     border-radius: 15px;
-    padding: 30px;
     height: 100%;
+    width: 48.5%;
     display: flex;
     flex-direction: column;
-    gap: 25px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    padding: 45px 0 45px 0;
+    gap: 20px;
+    min-height: 800px;
+    justify-content: flex-start;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     align-items: center;
 }
 
@@ -199,12 +202,13 @@
     align-items: stretch;
 }
 
-.eventos-anamnese-ativos > p {
+.eventos-anamnese-ativos>p {
     font-size: 24px;
     font-weight: 600;
     color: #0C513F;
     margin: 0 0 20px 0;
     text-align: center;
+    text-align: left ;
 }
 
 .filtro-button-data {
@@ -217,10 +221,10 @@
 }
 
 .button-add-data {
-    width: 100%;
-    max-width: 280px;
-    padding: 12px 24px;
-    font-size: 16px;
+    width: 70%; /* Aumenta a largura */
+    max-width: 700px; /* Aumenta a largura máxima */
+    padding: 8px 24px; /* Reduz a altura ajustando o padding vertical de 12px para 8px */
+    font-size: 19px;
     font-weight: 600;
     border-radius: 8px;
     color: white;
@@ -228,7 +232,7 @@
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .button-add-data:hover {
@@ -249,23 +253,16 @@
 }
 
 .card-eventos {
-    width: 100%;
+    width: 85%;
+    height: 255px;
     background-color: white;
-    border-radius: 12px;
+    border-radius: 20px;
     padding: 20px;
-    margin-bottom: 15px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
-    transition: transform 0.3s ease;
-    align-items: flex-start;
-    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-bottom: 10px;
 }
 
-.card-eventos:hover {
-    transform: translateY(-4px);
-}
 
 .inicial-data {
     width: 100%;
@@ -286,7 +283,7 @@
 .cubo-inicial {
     width: 80px;
     height: 80px;
-    background-color:  var(--bg, #000);
+    background-color: var(--bg, #000);
     display: flex;
     justify-content: center;
     align-items: center;

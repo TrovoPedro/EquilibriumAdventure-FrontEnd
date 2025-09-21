@@ -8,10 +8,25 @@ import Evento1 from "../../assets/cachoeiralago.jpg";
 import Evento2 from "../../assets/chile.jpg";
 import Evento3 from "../../assets/img12-catalogo.jpg";
 import EscolhaDataCard from "../escolher-data/escolher-data";
+import { useNavigate } from "react-router-dom";
+import routeUrls from "../../routes/routeUrls";
 
 const CriarInformacoesAdicionaisGuia = (title, onClick) => {
     const [showEscolherData, setShowEscolherData] = useState(false);
     const titulo = "Salvar Alterações";
+    const redirect = useNavigate();
+
+    const handleOnClickRelatorio = () => {
+       redirect(routeUrls.RELATORIO_ANAMNESE);
+    }
+
+    const handleOnClickMaisInfo = () => {
+         redirect(routeUrls.INSCRICAO_TRILHAS);
+    }
+
+    const handleOnClickCard = () => {
+         redirect(routeUrls.DADOS_CLIENTE);
+    }
 
     return (
     <>
@@ -56,14 +71,12 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                     >
                         Adicionar Datas Para Anamnese
                     </button>
-                    <select name="" id="" className="filtro-data">
-                        <option value="0" disabled selected>Filtrar Data</option>
-                    </select>
+                    
                 </div>
 
                
                     <p>Aventureiros para Anamnese:</p>
-                    <div className="card-eventos">
+                    <div className="card-eventos" onClick={() => handleOnClickCard()}>
                         <div className="inicial-data">
                             <div className="cubo-inicial" style={{ backgroundColor: "blue" }}>J</div>
 
@@ -73,12 +86,15 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                         <div className="nome-button">
                             <p>João Ribeiro</p>
 
-                            <button>Relatório</button>
+                            <button onClick={(e) => {
+                                e.stopPropagation();
+                                handleOnClickRelatorio();
+                            }}>Relatório</button>
                         </div>
                     </div>
                
 
-                <div className="card-eventos">
+                <div className="card-eventos" onClick={() => handleOnClickCard()}>
                     <div className="inicial-data">
                         <div className="cubo-inicial" style={{ backgroundColor: "#ea96cf" }}>C</div>
 
@@ -88,11 +104,14 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                     <div className="nome-button">
                         <p>Carolina Andrade</p>
 
-                        <button>Relatório</button>
+                        <button onClick={(e) => {
+                            e.stopPropagation();
+                            handleOnClickRelatorio();
+                        }}>Relatório</button>
                     </div>
                 </div>
 
-                <div className="card-eventos">
+                <div className="card-eventos" onClick={() => handleOnClickCard()}>
                     <div className="inicial-data">
                         <div className="cubo-inicial" style={{ backgroundColor: "#b11c1cff" }}>L</div>
 
@@ -102,7 +121,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                     <div className="nome-button">
                         <p>Leandro Alves</p>
 
-                        <button>Relatório</button>
+                        <button onClick={() => handleOnClickRelatorio()}>Relatório</button>
                     </div>
                 </div>
             </div>
@@ -122,7 +141,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                         <div className="nome-button">
                             <p>Cachoeira</p>
 
-                            <button>Mais Informações</button>
+                            <button onClick={() => handleOnClickMaisInfo()}>Mais Informações</button>
                         </div> 
                     </div>
 
@@ -136,7 +155,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                     <div className="nome-button">
                         <p>Montanha</p>
 
-                        <button>Mais Informações</button>
+                        <button onClick={() => handleOnClickMaisInfo()}>Mais Informações</button>
                     </div>
                 </div>
 
@@ -150,7 +169,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                     <div className="nome-button">
                         <p>Trilha</p>
 
-                        <button>Mais Informações</button>
+                        <button onClick={() => handleOnClickMaisInfo()}>Mais Informações</button>
                     </div>
                 </div>
             </div>

@@ -4,21 +4,31 @@ import routeUrls from "../../routes/routeUrls";
 import "./header.css";
 import img from "../../assets/beneficiario.png";
 import { useAuth } from "../../context/AuthContext"; // ajuste o caminho conforme sua pasta
+import { useScore } from "../../context/ScoreContext";
+import { useGuia } from "../../context/ChoiceGuiaContext";
 
 const Header = () => {
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const { resetarPontuacao } = useScore();
+  const { resetarChoiceGuia } = useGuia();
+
   const { usuario, logout } = useAuth(); // pega o usuário e logout do contexto
-  const tipoUsuario = usuario?.tipo_usuario; // se não existir usuario, fica undefined
+  const tipoUsuario = usuario?.tipoUsuario; // se não existir usuario, fica undefined
+
+  const resetarDados = () => {
+    resetarPontuacao(); // Reseta pontuação e nível do aventureiro
+    resetarChoiceGuia(); // Reseta escolha do guia
+  };
 
   return (
     <header className="header">
       <div className="header-left" onClick={() => navigate(routeUrls.INFOS_ADICIONAIS_GUIA)}>
-        <img 
-          src={img} 
-          alt="Usuário" 
-          className="header-avatar" 
+        <img
+          src={img}
+          alt="Usuário"
+          className="header-avatar"
         />
       </div>
 
@@ -55,11 +65,12 @@ const Header = () => {
 
       <div className="header-right">
         <button className="agendar" onClick={() => navigate(routeUrls.INFOS_ADICIONAIS_GUIA)}>AGENDA</button>
-        <button 
-          className="sair" 
+        <button
+          className="sair"
           onClick={() => {
             logout(); // limpa usuário do contexto + localStorage
             navigate(routeUrls.HOME);
+            resetarDados(); // reseta pontuação e escolha do guia
           }}
         >
           SAIR
