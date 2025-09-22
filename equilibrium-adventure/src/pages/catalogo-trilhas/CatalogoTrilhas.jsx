@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 import "./CatalogoTrilhas.css";
 import Header from "../../components/header/header-usuario";
+import BotpressChat from "../../components/botpress-chat/BotpressChat";
 import catalogo1 from "../../assets/chile.jpg";
 import catalogo2 from "../../assets/amazonia.jpg";
 import catalogo3 from "../../assets/montanha.jpg";
@@ -58,6 +59,7 @@ const CatalogoTrilhas = () => {
   };
   return (
     <>
+      <BotpressChat />
       <Header />
       <div className="home-container">
         {/* Seção de busca */}
