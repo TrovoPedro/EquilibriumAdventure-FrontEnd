@@ -62,7 +62,7 @@
 	font-weight: 600;
 	margin: 0;
 	padding: 0;
-	
+
 }
 
 .form-group-full {
@@ -130,42 +130,3 @@
 	line-height: 1.1;
 }
 
-/* Responsividade */
-@media (max-width: 1200px) {
-	.ativar-evento-container {
-		padding: 110px 20px 40px 20px;
-	}
-	
-	.ativar-evento-form-wrapper {
-		padding: 32px;
-	}
-}
-
-@media (max-width: 768px) {
-	.form-row {
-		grid-template-columns: 1fr;
-		gap: 16px;
-	}
-	
-	.ativar-evento-title {
-		font-size: 2rem;
-	}
-	
-	.ativar-evento-form-wrapper {
-		padding: 24px;
-	}
-}
-
-@media (max-width: 480px) {
-	.ativar-evento-container {
-		padding: 110px 16px 40px 16px;
-	}
-	
-	.ativar-evento-header {
-		gap: 12px;
-	}
-	
-	.ativar-evento-title {
-		font-size: 1.8rem;
-	}
-}
