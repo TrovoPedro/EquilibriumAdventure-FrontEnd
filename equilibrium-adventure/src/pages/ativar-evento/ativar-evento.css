@@ -3,6 +3,7 @@
 	background: #f6f7f8;
 	min-height: 100vh;
 	padding-top: 110px;
+	padding: 110px 40px 40px 40px;
 }
 
 /* Header com seta e título */
@@ -12,8 +13,7 @@
 	gap: 18px;
 	justify-content: flex-start;
 	margin-left: 0;
-	margin-bottom: 18px;
-	padding-left: 40px;
+	margin-bottom: 32px;
 }
 
 /* Corrige bug de sobreposição do título */
@@ -24,67 +24,82 @@
 	background: none;
 }
 
-/* Wrapper do formulário */
+/* Wrapper do formulário */	
 .ativar-evento-form-wrapper {
 	background: #ededed;
 	border-radius: 16px;
-	margin: 32px auto;
-	padding: 32px 24px 48px 24px;
+	padding: 40px;
 	box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-	max-width: 88vw;
+	max-width: 1445px;
+	height: 450px;
+	margin: 0 auto;
 }
 
 /* Formulário em grid */
 .ativar-evento-form {
 	display: flex;
 	flex-direction: column;
-	gap: 18px;
+	gap: 32px;
+	margin-top: 40px;
 }
 
 .form-row {
-	display: flex;
-	gap: 32px;
-	margin-bottom: 0;
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 20px;
+	align-items: end;
 }
 
 .form-group {
 	display: flex;
 	flex-direction: column;
-	flex: 1;
-	min-width: 0;
+}
+
+.form-group label {
+	font-size: 1rem;
+	color: #226144;
+	margin-bottom: 4px;
+	font-weight: 600;
+	margin: 0;
+	padding: 0;
+	
 }
 
 .form-group-full {
-	flex: 3;
+	grid-column: 1 / -1;
 }
 
 .ativar-evento-form label {
-	font-size: 1.3rem;
+	font-size: 1.2rem;
 	color: #226144;
-	margin-bottom: 6px;
+	margin-bottom: 0px;
 	font-weight: 600;
 }
 
 .ativar-evento-form input {
 	border: 1.5px solid #226144;
 	border-radius: 10px;
-	padding: 8px 12px;
-	font-size: 1.1rem;
+	padding: 12px 16px;
+	font-size: 1rem;
 	outline: none;
 	background: #fff;
-	margin-bottom: 0;
 	box-shadow: none;
 	transition: border 0.2s;
+	min-height: 20px;
+	margin-top: -2px;
 }
 
 .ativar-evento-form input:focus {
 	background: #fff;
 	border: 1.5px solid #226144;
-	box-shadow: none;
+	box-shadow: 0 0 0 2px rgba(34, 97, 68, 0.1);
 }
 
 .form-row-end {
+	display: flex;
 	justify-content: flex-end;
+	grid-column: 1 / -1;
+	margin-top: 16px;
 }
 
 .ativar-evento-btn {
@@ -95,7 +110,7 @@
 	border: none;
 	border-radius: 8px;
 	padding: 12px 36px;
-	margin-top: 24px;
+	margin-top: 15px;
 	cursor: pointer;
 	box-shadow: 0 2px 6px rgba(34,97,68,0.08);
 	transition: background 0.2s;
@@ -107,10 +122,50 @@
 }
 
 .ativar-evento-title {
-	font-size: 2.7rem;
+	font-size: 2.4rem;
 	color: #226144;
 	font-weight: 700;
 	margin-left: 0;
 	letter-spacing: 0.5px;
 	line-height: 1.1;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+	.ativar-evento-container {
+		padding: 110px 20px 40px 20px;
+	}
+	
+	.ativar-evento-form-wrapper {
+		padding: 32px;
+	}
+}
+
+@media (max-width: 768px) {
+	.form-row {
+		grid-template-columns: 1fr;
+		gap: 16px;
+	}
+	
+	.ativar-evento-title {
+		font-size: 2rem;
+	}
+	
+	.ativar-evento-form-wrapper {
+		padding: 24px;
+	}
+}
+
+@media (max-width: 480px) {
+	.ativar-evento-container {
+		padding: 110px 16px 40px 16px;
+	}
+	
+	.ativar-evento-header {
+		gap: 12px;
+	}
+	
+	.ativar-evento-title {
+		font-size: 1.8rem;
+	}
 }
