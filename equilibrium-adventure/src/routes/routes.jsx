@@ -13,8 +13,7 @@ import DadosCliente from "../pages/dados-cliente/dados-cliente"
 import AtivarEvento from "../pages/ativar-evento/ativar-evento"
 import InfosAdicGuia from "../pages/infos-adic-guia/infos-adic-guia"
 import CatalogoTrilhasAdm from "../pages/catalogo-trilhas/CatalogoTrilhasAdm"
-import InscricaoTrilhas from "../pages/inscricao-trilha/InscricaoTrilhas"
-import InscricaoTrilhasLimitado from "../pages/inscricao-trilha/InscricaoTrilhaLimitado"
+import InscricaoTrilhas from "../pages/inscricao-trilha/InscricaoTrilha"
 import AdicionarGuia from "../pages/adicionar-guia/adicionar-guia"
 import Listaconvites from "../pages/lista-convites/lista-convites"
 import EscolhaDataCard from "../pages/escolher-data/escolher-data"
@@ -56,7 +55,6 @@ export default function AppRoutes() {
       <Route path={routeUrls.CRIAR_INFOS_ADIC_GUIA} element={<InfosAdicGuia />}></Route>
       <Route path={routeUrls.CATALOGO_TRILHAS_ADM} element={<CatalogoTrilhasAdm />}></Route>
       <Route path={routeUrls.INSCRICAO_TRILHAS} element={<InscricaoTrilhas />}></Route>
-      <Route path={routeUrls.INSCRICAO_TRILHAS_LIMITADO} element={<InscricaoTrilhasLimitado />}></Route>
       <Route path={routeUrls.DADOS_CLIENTE} element={<DadosCliente />}></Route>
       <Route path={routeUrls.ATIVAR_EVENTO} element={<AtivarEvento />}></Route>
       <Route path={routeUrls.ADICIONAR_GUIA} element={<AdicionarGuia />}></Route>
