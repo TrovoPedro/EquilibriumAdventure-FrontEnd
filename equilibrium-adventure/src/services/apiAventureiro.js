@@ -5,13 +5,41 @@ const api = axios.create({
   baseURL: "http://localhost:3000",
 });
 
-// funções para consumo do json-server QUESTIONÁRIO
-export const getPerguntas = () => api.get("/perguntas");
+export const getPerguntas = async () => {
+  try {
+    const response = await api.get('/perguntas');
+    const questionsFormatted = response.data.map(pergunta => ({
+      id: pergunta.id,
+      title: 'Questão',
+      question: pergunta.textoPergunta,
+      options: pergunta.alternativas.map((alt, index) => ({
+        texto: alt.first,
+        valor: alt.second
+      }))
+    }));
+    return { data: questionsFormatted };
+  } catch (error) {
+    console.error('Erro ao buscar perguntas:', error);
+    throw error;
+  }
+};
 
-export const postRespostas = (respostas) =>
-  api.post("/respostas", {
-    respostas,
-    data: new Date().toISOString(),
-  });
+export const postRespostas = async (respostas) => {
+  try {
+    const response = await api.post('/respostas', respostas);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao enviar respostas:', error);
+    throw error;
+  }
+};
 
-export default api;
+export const calcularNivel = async (usuarioId) => {
+  try {
+    const response = await api.post(`/respostas/calcular-nivel/${usuarioId}`);
+    return response.data;
+  } catch (error) {
+    console.error('Erro ao calcular nível:', error);
+    throw error;
+  }
+};
