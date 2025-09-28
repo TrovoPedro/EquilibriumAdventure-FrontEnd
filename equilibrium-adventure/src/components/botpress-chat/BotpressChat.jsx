@@ -11,12 +11,12 @@ const BotpressChat = () => {
     if (document.getElementById("bp-webchat-script")) return;
     const script = document.createElement("script");
     script.id = "bp-webchat-script";
-    script.src = "http://localhost:3000/assets/modules/channel-web/inject.js";
+    script.src = "http://localhost:3002/assets/modules/channel-web/inject.js";
     script.async = true;
     script.onload = () => {
       if (window.botpressWebChat) {
         window.botpressWebChat.init({
-          host: "http://localhost:3000",
+          host: "http://localhost:3002",
           botId: "trilhai",
           showPoweredBy: false,
           enableReset: true,

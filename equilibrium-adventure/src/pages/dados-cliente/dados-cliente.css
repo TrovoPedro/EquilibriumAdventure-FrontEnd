@@ -61,6 +61,15 @@
 	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
+.info-aventureiro {
+	font-size: 1.4rem;
+	font-weight: 700;
+	color: #e8f5e8;
+	text-shadow: 0 1px 4px rgba(0,0,0,0.3);
+	display: block;
+	margin-top: 8px;
+}
+
 .dados-card {
 	background: #fff;
 	border-radius: 18px;
@@ -131,4 +140,192 @@
 .dados-card-textarea:focus {
 	border: 1.5px solid #2e4d2e;
 	outline: none;
+}
+
+/* Estilos para o questionário estruturado */
+.questionario-lista {
+	margin-top: 12px;
+}
+
+.pergunta-item {
+	background: #f8f9fa;
+	border: 1px solid #e9ecef;
+	border-radius: 8px;
+	padding: 16px;
+	margin-bottom: 16px;
+	transition: box-shadow 0.2s ease;
+}
+
+.pergunta-item:hover {
+	box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.pergunta-numero {
+	font-size: 0.9rem;
+	color: #2e4d2e;
+	font-weight: 600;
+	margin-bottom: 8px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.pergunta-texto {
+	font-size: 1rem;
+	color: #333;
+	font-weight: 500;
+	margin-bottom: 12px;
+	line-height: 1.4;
+}
+
+.resposta-section {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+}
+
+.resposta-section strong {
+	color: #2e4d2e;
+	font-size: 0.9rem;
+}
+
+.resposta-escolhida {
+	background: #e8f5e8;
+	color: #2e4d2e;
+	padding: 6px 10px;
+	border-radius: 4px;
+	font-weight: 500;
+	margin-left: 8px;
+	display: inline-block;
+	margin-top: 4px;
+}
+
+.valor-resposta {
+	font-size: 0.85rem;
+	color: #666;
+	font-style: italic;
+	margin-top: 2px;
+}
+
+.questionario-resumo {
+	background: #2e4d2e;
+	color: white;
+	padding: 12px 16px;
+	border-radius: 8px;
+	text-align: center;
+	margin-top: 20px;
+	font-size: 0.95rem;
+}
+
+.questionario-vazio {
+	text-align: center;
+	color: #666;
+	padding: 40px 20px;
+	font-style: italic;
+}
+
+.questionario-vazio p {
+	margin: 0;
+	font-size: 1rem;
+}
+
+/* Estilos para alternativas */
+.alternativas-section {
+	margin-top: 16px;
+	background: #fdfdfd;
+	border-left: 4px solid #2e4d2e;
+	padding: 12px 16px;
+	border-radius: 0 8px 8px 0;
+}
+
+.alternativas-titulo {
+	font-size: 0.9rem;
+	color: #2e4d2e;
+	font-weight: 600;
+	margin-bottom: 10px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.alternativas-lista {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.alternativa-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 12px;
+	margin-bottom: 6px;
+	border-radius: 6px;
+	border: 1px solid #e9ecef;
+	background: #fff;
+	transition: all 0.2s ease;
+}
+
+.alternativa-item.alternativa-escolhida {
+	background: #e8f5e8;
+	border-color: #2e4d2e;
+	transform: scale(1.02);
+	box-shadow: 0 2px 8px rgba(46, 77, 46, 0.1);
+}
+
+.alternativa-texto {
+	flex: 1;
+	font-size: 0.95rem;
+	color: #333;
+	font-weight: 500;
+}
+
+.alternativa-valor {
+	font-size: 0.85rem;
+	color: #666;
+	font-weight: 400;
+	margin: 0 12px;
+}
+
+.alternativa-escolhida .alternativa-valor {
+	color: #2e4d2e;
+	font-weight: 600;
+}
+
+.marcador-escolhida {
+	background: #2e4d2e;
+	color: white;
+	padding: 4px 8px;
+	border-radius: 4px;
+	font-size: 0.8rem;
+	font-weight: 600;
+	letter-spacing: 0.5px;
+	animation: pulseGreen 2s infinite;
+}
+
+@keyframes pulseGreen {
+	0% { opacity: 1; }
+	50% { opacity: 0.7; }
+	100% { opacity: 1; }
+}
+
+.status-resposta {
+	margin-top: 12px;
+	text-align: right;
+}
+
+.respondida {
+	color: #28a745;
+	font-weight: 600;
+	font-size: 0.9rem;
+}
+
+.nao-respondida {
+	color: #dc3545;
+	font-weight: 600;
+	font-size: 0.9rem;
+}
+
+.resposta-invalida {
+	color: #fd7e14;
+	font-weight: 600;
+	font-size: 0.9rem;
 }
