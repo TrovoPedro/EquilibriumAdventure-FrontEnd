@@ -1,0 +1,409 @@
+/* Encapsular todos os estilos específicos desta página */
+.infos-adic-guia-page .home-container {
+    font-family: "Arial", sans-serif;
+    color: #00331f;
+    padding: 0 160px 80px 160px;
+    margin-top: 70px;
+}
+
+.card-guia {
+    width: 100%;
+    height: 270px;
+    display: flex;
+    justify-content: start;
+    align-items: end;
+    gap: 50px;
+}
+
+.foto-guia {
+    height: 75%;
+    width: 15%;
+    border-radius: 95px;
+    border: none;
+}
+
+.foto-guia img {
+    width: 100%;
+    height: 100%;
+    border-radius: 95px;
+    border: none;
+    object-fit: cover;
+}
+
+.info-guia {
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: start;
+    gap: 20px;
+}
+
+.info-guia p:nth-child(1) {
+    font-size: 42px;
+    color: #0C513F;
+    font-weight: lighter;
+}
+
+.info-guia p:nth-child(2) {
+    font-size: 42px;
+    color: #0C513F;
+    font-weight: bold;
+}
+
+.infos-adic-guia-page .cards-father {
+    width: 100%;
+    height: 580px;
+    display: flex;
+    align-items: end;
+    justify-content: space-between;
+}
+
+/* Novos estilos para Informações Pessoais */
+.card-info-guia {
+    height: 85%;
+    width: 48.5%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+}
+
+.card-info-guia h2 {
+    font-size: 32px;
+    color: #6B7280;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+}
+
+.personal-info-card {
+    background-color: #E5E7EB;
+    height: 84%;
+    width: 100%;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 30px;
+    box-sizing: border-box;
+    gap: 30px;
+}
+
+.user-photo {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.user-photo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.user-info-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 30px;
+    justify-content: center;
+}
+
+.user-info {
+    text-align: left;
+    margin: 0;
+}
+
+.user-info h3 {
+    font-size: 28px;
+    color: #1F2937;
+    font-weight: 600;
+    margin: 0 0 8px 0;
+    line-height: 1.2;
+}
+
+.user-role {
+    font-size: 28px;
+    color: #1F2937;
+    font-weight: 700;
+    margin: 0;
+}
+
+.edit-info-btn {
+    background-color: #004d40;
+    color: white;
+    border: none;
+    padding: 16px 40px;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    align-self: flex-start;
+}
+
+.edit-info-btn:hover {
+    background-color: #059669;
+}
+
+/* Próximo Eventos */
+.card-imagem {
+    height: 85%;
+    width: 48.5%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: space-between;
+}
+
+.card-imagem h2 {
+    font-size: 32px;
+    color: #6B7280;
+    font-weight: 500;
+    margin: 0 0 20px 0;
+}
+
+.next-event-card {
+    background-color: #E5E7EB;
+    height: 84%;
+    width: 100%;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: 0.4s ease;
+}
+
+.next-event-card:hover {
+    transform: translateY(-2px) scale(1.03);
+}
+
+.next-event-card img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    cursor: pointer;
+}
+/* Cards de Eventos e Anamneses */
+.infos-adic-guia-page .cards-eventos {
+    height: auto;
+    margin-top: 40px;
+    border-radius: 15px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.eventos-anamnese-ativos {
+    background-color: #E5E7EB;
+    border-radius: 15px;
+    height: 420px;
+    width: 48.5%;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    justify-content: flex-start;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.eventos-anamnese-ativos h2 {
+    font-size: 32px;
+    color: #6B7280;
+    font-weight: 500;
+    margin: 0 0 40px 0;
+}
+
+/* Espaçamento específico para eventos ativos */
+.eventos-anamnese-ativos:nth-child(2) h2 {
+    margin: 0 0 20px 0;
+}
+
+.filtro-button-data {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+    width: 100%;
+    margin-top: 40px;
+    padding-top: 20px;
+}
+
+.infos-adic-guia-page .button-add-data {
+    width: 100%;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 8px;
+    color: white;
+    background-color: #004d40;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.infos-adic-guia-page .button-add-data:hover {
+    background-color: #059669;
+}
+
+/* Container para Anamneses */
+.anamneses-container, .eventos-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    position: relative;
+}
+
+.anamneses-cards, .eventos-cards {
+    display: flex;
+    gap: 15px;
+    flex: 1;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    padding: 10px 0;
+}
+
+.anamneses-cards::-webkit-scrollbar, .eventos-cards::-webkit-scrollbar {
+    display: none;
+}
+
+.nav-arrow {
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #6B7280;
+    cursor: pointer;
+    padding: 8px;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-arrow:hover {
+    background-color: #D1D5DB;
+    color: #374151;
+}
+
+/* Cards de Anamnese */
+.anamnese-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 15px;
+    min-width: 200px;
+    max-width: 200px;
+    min-height: 160px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.anamnese-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.anamnese-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.anamnese-initial {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.anamnese-details {
+    text-align: center;
+}
+
+.anamnese-date, .evento-date {
+    font-size: 14px;
+    color: #6B7280;
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.anamnese-details h4, .evento-info h4 {
+    font-size: 16px;
+    color: #1F2937;
+    margin: 0 0 8px 0;
+    font-weight: 600;
+}
+
+.anamnese-tag, .evento-info-btn {
+    background-color: #D1FAE5;
+    color: #065F46;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+.anamnese-tag:hover {
+    background-color: #A7F3D0;
+}
+
+.evento-info-btn:hover {
+    background-color: #A7F3D0;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Cards de Evento */
+.evento-ativo-card {
+    background-color: white;
+    border-radius: 12px;
+    padding: 15px;
+    min-width: 200px;
+    max-width: 200px;
+    min-height: 160px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    flex-shrink: 0;
+}
+
+.evento-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 15px auto;
+    flex-shrink: 0;
+}
+
+.evento-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.evento-info {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
