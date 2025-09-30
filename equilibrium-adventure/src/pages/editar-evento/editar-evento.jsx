@@ -7,6 +7,8 @@ import { cadastrarEvento, buscarCep } from "../../services/chamadasAPIEvento";
 import "./editar-evento.css";
 import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
 import ButtonCriarEvento from "../../components/button-eventos/button-criar-evento";
+import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
+import routeUrls from "../../routes/routeUrls";
 
 const CriarEvento = () => {
     const [formData, setFormData] = useState({
@@ -26,6 +28,10 @@ const CriarEvento = () => {
     });
 
     const navigate = useNavigate();
+
+    const handleBack = () => {
+        navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+    };
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -85,7 +91,10 @@ const CriarEvento = () => {
             <div className="criar-evento-container">
                 <Header/>
                 <div className="div-title">
-                    <h1 className="h1-title">Editar de Evento</h1>
+                    <div className="editar-evento-header">
+                        <ButtonBack onClick={handleBack} />
+                        <h1 className="h1-title">Editar Evento</h1>
+                    </div>
                 </div>
                 <form className="evento-form" onSubmit={handleSubmit}>
                     <label>
@@ -160,7 +169,7 @@ const CriarEvento = () => {
                     <label>
                         Mapa da Trilha (.gpx):
                         <div
-                            className="upload-box-trilha"
+                            className="upload-box"
                             onClick={() => document.getElementById("upload-trilha-input").click()}
                         >
                             {formData.trilha ? (

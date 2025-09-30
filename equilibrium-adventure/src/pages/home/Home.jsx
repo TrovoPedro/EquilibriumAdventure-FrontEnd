@@ -5,7 +5,6 @@ import Trilhas from "../../components/trilhas-home/Trilhas.jsx";
 import Eventos from "../../components/eventos-home/Eventos.jsx";
 import Guias from "../../components/guias-home/Guias.jsx";
 import Feedbacks from "../../components/feedback-home/Feedbacks.jsx";
-import Newsletter from "../../components/newsletter-home/Newsletter.jsx";
 import Footer from "../../components/footer-home/Footer.jsx";
 
 const Home = () => {
@@ -17,7 +16,6 @@ const Home = () => {
         <Eventos />
         <Guias />
         <Feedbacks />
-        <Newsletter />
       </main>
       <Footer />
     </>
