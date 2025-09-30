@@ -1,52 +1,150 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import Header from "../../components/header/header";
 import "./ativar-evento.css";
 import leftArrow from "../../assets/left-arrow-green.png";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
+import routeUrls from "../../routes/routeUrls";
 
 export default function AtivarEvento() {
+  const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    horaInicio: '',
+    horaFim: '',
+    duracao: '',
+    preco: '',
+    limiteInscritos: '',
+    dataEvento: '',
+    categoria: ''
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    // Aqui você pode adicionar a lógica para enviar os dados
+    console.log('Dados do formulário:', formData);
+  };
+
+  const handleBack = () => {
+    navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+  };
+
   return (
     <>
       <Header />
       <div className="ativar-evento-container">
         <div className="ativar-evento-header">
-          <ButtonBack />
-          <span className="ativar-evento-title">Ativar Evento (Nome do evento)</span>
+          <ButtonBack onClick={handleBack} />
+          <h1 className="ativar-evento-title">Ativar Evento</h1>
         </div>
         <div className="ativar-evento-form-wrapper">
-          <form className="ativar-evento-form">
+          <form className="ativar-evento-form" onSubmit={handleSubmit}>
             <div className="form-row">
               <div className="form-group">
-                <label>Hora de Início:</label>
-                <input type="text" name="horaInicio" placeholder="08:00" />
+                <label htmlFor="horaInicio">Hora de Início:</label>
+                <input 
+                  type="time" 
+                  id="horaInicio"
+                  name="horaInicio" 
+                  value={formData.horaInicio}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="form-group">
-                <label>Hora de Fim:</label>
-                <input type="text" name="horaFim" placeholder="12:00" />
+                <label htmlFor="horaFim">Hora de Fim:</label>
+                <input 
+                  type="time" 
+                  id="horaFim"
+                  name="horaFim" 
+                  value={formData.horaFim}
+                  onChange={handleChange}
+                  required
+                />
               </div>
               <div className="form-group">
-                <label>Duração:</label>
-                <input type="text" name="duracao" placeholder="4h" />
+                <label htmlFor="duracao">Duração (horas):</label>
+                <input 
+                  type="number" 
+                  id="duracao"
+                  name="duracao" 
+                  placeholder="4"
+                  value={formData.duracao}
+                  onChange={handleChange}
+                  min="1"
+                  max="24"
+                  required
+                />
               </div>
             </div>
-            <div className="form-row">
-              <div className="form-group">
-                <label>Preço:</label>
-                <input type="text" name="preco" placeholder="R$ 100,00" />
+            <div className="form-row form-row-mixed">
+              <div className="form-group form-group-small">
+                <label htmlFor="preco">Preço (R$):</label>
+                <input 
+                  type="number" 
+                  id="preco"
+                  name="preco" 
+                  className="input-largura-reduzida"
+                  placeholder="100.00"
+                  value={formData.preco}
+                  onChange={handleChange}
+                  min="0"
+                  step="0.01"
+                  required
+                />
+              </div>
+              <div className="form-group form-group-small">
+                <label htmlFor="limiteInscritos">Limite de Inscritos:</label>
+                <input 
+                  type="number" 
+                  id="limiteInscritos"
+                  name="limiteInscritos" 
+                  className="input-largura-reduzida"
+                  placeholder="30"
+                  value={formData.limiteInscritos}
+                  onChange={handleChange}
+                  min="1"
+                  required
+                />
               </div>
               <div className="form-group">
-                <label>Limite Inscritos:</label>
-                <input type="text" name="limiteInscritos" placeholder="30" />
-              </div>
-              <div className="form-group">
-                <label>Data do Evento:</label>
-                <input type="date" name="dataEvento" />
+                <label htmlFor="dataEvento">Data do Evento:</label>
+                <input 
+                  type="date" 
+                  id="dataEvento"
+                  name="dataEvento"
+                  value={formData.dataEvento}
+                  onChange={handleChange}
+                  required
+                />
               </div>
             </div>
             <div className="form-row">
               <div className="form-group form-group-full">
-                <label>Categoria:</label>
-                <input type="text" name="categoria" placeholder="Cachoeira, Montanhismo, etc." />
+                <label htmlFor="categoria">Categoria:</label>
+                <select 
+                  id="categoria"
+                  name="categoria"
+                  value={formData.categoria}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Selecione uma categoria</option>
+                  <option value="cachoeira">Cachoeira</option>
+                  <option value="montanhismo">Montanhismo</option>
+                  <option value="trilha">Trilha</option>
+                  <option value="rapel">Rapel</option>
+                  <option value="escalada">Escalada</option>
+                  <option value="camping">Camping</option>
+                  <option value="outros">Outros</option>
+                </select>
               </div>
             </div>
             <div className="form-row form-row-end">

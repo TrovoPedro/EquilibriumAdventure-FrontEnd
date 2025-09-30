@@ -7,34 +7,49 @@
 
 .h1-title {
     font-family: "Raleway", sans-serif;
-    color: #0C513F;
+    color: #226144;
     font-size: 32px;
     margin-bottom: 20px;
+}
+
+/* Header com botão de voltar */
+.editar-evento-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    justify-content: flex-start;
+    margin-bottom: 32px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+}
+
+.editar-evento-header .h1-title {
+    margin-bottom: 0;
 }
 
 .criar-evento-page {
     width: 100%;
     min-height: 100vh;
-    background-size: cover;
-    background-position: center;
+    background: #f6f7f8;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     overflow-x: hidden;
-    padding-bottom: 70px;
+    padding: 110px 20px 70px 20px;
 }
 
 /* Container principal */
 
 .criar-evento-container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0;
     background: transparent;
-    min-height: 100vh;
+    min-height: auto;
     box-sizing: border-box;
-    margin-top: 6%;
 }
 
 /* Título */
@@ -49,12 +64,17 @@
 /* Formulário */
 
 .criar-evento-container form {
-    background-color: #E9E9E9;
-    padding: 20px;
-    border-radius: 10px;
+    background: #ffffff;
+    padding: 50px 60px;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 24px;
+    box-shadow: 0 4px 20px rgba(34, 97, 68, 0.1);
+    border: 1px solid rgba(34, 97, 68, 0.1);
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 95%;
 }
 
 /* Labels e inputs */
@@ -62,42 +82,72 @@
 .evento-form label {
     display: flex;
     flex-direction: column;
-    font-weight: bold;
-    color: #0C513F;
+    font-weight: 600;
+    color: #226144;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
 }
 
 .evento-form input,
 .evento-form textarea,
 .evento-form select {
     width: 100%;
-    margin-top: 5px;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #0C513F;
-    font-size: 14px;
+    margin-top: 0;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+    font-size: 1.1rem;
+    outline: none;
+    background: #ffffff;
+    transition: all 0.3s ease;
+    font-family: inherit;
+    color: #333;
+    height: 56px;
+    box-sizing: border-box;
+}
+
+.evento-form input:focus,
+.evento-form textarea:focus,
+.evento-form select:focus {
+    border: 2px solid #226144;
+    box-shadow: 0 0 0 3px rgba(34, 97, 68, 0.1);
+}
+
+.evento-form input:hover,
+.evento-form textarea:hover,
+.evento-form select:hover {
+    border-color: #226144;
+}
+
+.evento-form textarea {
+    height: auto;
+    min-height: 120px;
+    resize: vertical;
 }
 
 /* Upload box */
 
 .upload-box {
-    border: 2px dashed #bbb;
-    border-radius: 8px;
+    border: 2px dashed #d0d0d0;
+    border-radius: 12px;
     padding: 60px;
     min-height: 320px;
     min-width: 320px;
     text-align: center;
-    background: #f5f5f5;
+    background: #cacaca;
     color: #666;
     cursor: pointer;
-    transition: border 0.3s ease;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
 .upload-box:hover {
-    border-color: #0C513F;
-    background: #f0f0f0;
+    border-color: #226144;
+    background: #f5f5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(34, 97, 68, 0.1);
 }
 
 .upload-placeholder {
@@ -106,29 +156,9 @@
     align-items: center;
     gap: 16px;
     font-size: 16px;
-    color: #0C513F;
+    color: #226144;
 }
 
-.upload-box-trilha {
-    border: 2px dashed #bbb;
-    border-radius: 8px;
-    padding: 60px;
-    min-height: 220;
-    min-width: 220px;
-    text-align: center;
-    background: #f5f5f5;
-    color: #666;
-    cursor: pointer;
-    transition: border 0.3s ease;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.upload-box-trilha:hover {
-    border-color: #0C513F;
-    background: #f0f0f0;
-}
 
 .preview-img {
     max-width: 100%;
@@ -166,13 +196,73 @@
     background: transparent;
 }
 
+/* Responsividade para o header e formulário */
+@media (max-width: 1024px) {
+    .criar-evento-container form {
+        padding: 40px 32px;
+        width: 90%;
+    }
+    
+    .criar-evento-page {
+        padding: 110px 20px 70px 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .editar-evento-header {
+        margin-bottom: 24px;
+        padding-left: 15px;
+        gap: 15px;
+    }
+    
+    .editar-evento-header .h1-title {
+        font-size: 28px;
+    }
+    
+    .criar-evento-container form {
+        padding: 32px 24px;
+        width: calc(100% - 20px);
+    }
+    
+    .criar-evento-page {
+        padding: 100px 15px 50px 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .editar-evento-header {
+        padding-left: 10px;
+        gap: 12px;
+    }
+    
+    .editar-evento-header .h1-title {
+        font-size: 24px;
+    }
+    
+    .criar-evento-container form {
+        padding: 24px 20px;
+        width: calc(100% - 10px);
+    }
+    
+    .criar-evento-page {
+        padding: 90px 10px 40px 10px;
+    }
+    
+    .upload-box,
+    .upload-box-trilha {
+        min-width: 200px;
+        min-height: 200px;
+        padding: 40px 20px;
+    }
+}
+
 .trilha-preview {
     padding: 10px;
     background-color: #f0f0f0;
     border-radius: 6px;
     text-align: center;
     font-weight: bold;
-    color: #0C513F;
+    color: #226144;
 }
 
 .trilha-preview:hover {

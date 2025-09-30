@@ -64,7 +64,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                 </div>
             </div>
             <div className="card-imagem">
-                <h2>Próximo Eventos</h2>
+                <h2>Próximo Evento</h2>
                 <div className="next-event-card">
                     <img src={Trilha} alt="EVENTO"/>
                 </div>

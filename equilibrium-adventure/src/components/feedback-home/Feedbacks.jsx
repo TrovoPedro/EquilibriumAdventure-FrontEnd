@@ -13,38 +13,102 @@ const twitterIcon = (
 );
 
 export default function Feedbacks() {
-  // Todos os feedbacks do mesmo tamanho e mais feedbacks para enfeitar
-  // Os cards do meio (colunas 2 e 3) serão maiores
   const feedbacks = [
-    { img: feedbackImg1, nome: "João Pedro", user: "@fjexplorer70", texto: "A experiência superou minhas expectativas", middle: false },
-    { img: feedbackImg2, nome: "Camila", user: "@camilanature", texto: "O guia foi incrível e me ajudou a perder os meus medos", middle: true },
-    { img: feedbackImg3, nome: "Pedro Henrique", user: "@pedrohtrilhas88", texto: "As paisagens eram de tirar o fôlego, foi incrível", middle: true },
-    { img: feedbackImg4, nome: "Mariana", user: "@marianaaventura", texto: "Organização perfeita da equipe Equilibrium Adventure", middle: false },
-    { img: feedbackImg5, nome: "João", user: "@joaonatureadventure", texto: "O pôr do sol no final da trilha estava lindo", middle: false },
-    { img: feedbackImg2, nome: "Lucas Silva", user: "@lucastrilhas", texto: "Equipe atenciosa e trilha muito bem sinalizada!", middle: true },
-    { img: feedbackImg3, nome: "Fernanda Lima", user: "@feraventura", texto: "Recomendo para quem quer contato real com a natureza.", middle: true },
-    { img: feedbackImg4, nome: "Carlos Souza", user: "@carlostrip", texto: "Voltarei com certeza! Experiência única.", middle: false },
+    { 
+      img: feedbackImg1, 
+      nome: "João Pedro", 
+      user: "@fjexplorer70", 
+      texto: "A experiência superou minhas expectativas! As trilhas são bem organizadas e os guias muito atenciosos.",
+      rating: 5
+    },
+    { 
+      img: feedbackImg2, 
+      nome: "Camila Santos", 
+      user: "@camilanature", 
+      texto: "O guia foi incrível e me ajudou a perder os meus medos. Recomendo para quem quer se aventurar com segurança!",
+      rating: 5
+    },
+    { 
+      img: feedbackImg3, 
+      nome: "Pedro Henrique", 
+      user: "@pedrohtrilhas88", 
+      texto: "As paisagens eram de tirar o fôlego, foi incrível. Voltarei em breve para novas aventuras.",
+      rating: 5
+    },
+    { 
+      img: feedbackImg4, 
+      nome: "Mariana Costa", 
+      user: "@marianaaventura", 
+      texto: "Organização perfeita da equipe Equilibrium Adventure. Tudo foi planejado nos mínimos detalhes.",
+      rating: 5
+    },
+    { 
+      img: feedbackImg5, 
+      nome: "João Silva", 
+      user: "@joaonatureadventure", 
+      texto: "O pôr do sol no final da trilha estava lindo. Uma experiência inesquecível!",
+      rating: 5
+    },
+    { 
+      img: feedbackImg2, 
+      nome: "Lucas Silva", 
+      user: "@lucastrilhas", 
+      texto: "Equipe atenciosa e trilha muito bem sinalizada! Perfeito para iniciantes.",
+      rating: 5
+    }
   ];
+
+  const renderStars = (rating) => {
+    return Array.from({ length: 5 }, (_, index) => (
+      <span
+        key={index}
+        className={`star ${index < rating ? 'filled' : ''}`}
+      >
+        ★
+      </span>
+    ));
+  };
 
   return (
     <section className="feedbacks">
-      <h2>O que os aventureiros acham</h2>
-      <div className="feedback-cards-grid">
-        {feedbacks.map((f, i) => (
-          <div
-            className={`feedback-card-modern${f.middle ? ' feedback-card-middle' : ' feedback-card-edge'}`}
-            key={i}
-          >
-            <div className="feedback-card-header">
-              <img src={f.img} alt={f.nome} className="feedback-avatar" />
-              <div className="feedback-user-info">
-                <span className="feedback-nome">{f.nome}</span>
-                <span className="feedback-user">{f.user}</span>
+      <div className="feedbacks-container">
+        <div className="feedbacks-header">
+          <p className="feedbacks-subtitle">Nossos Feedbacks</p>
+          <h2>Opinião dos Aventureiros</h2>
+        </div>
+        
+        <div className="feedback-cards-container">
+          {feedbacks.map((feedback, index) => (
+            <article
+              className="feedback-card"
+              key={index}
+              style={{ animationDelay: `${index * 0.1}s` }}
+            >
+              <div className="feedback-content">
+                <div className="feedback-quote">
+                  <span className="quote-mark">"</span>
+                  <p className="feedback-texto">{feedback.texto}</p>
+                </div>
+                
+                <div className="feedback-rating">
+                  {renderStars(feedback.rating)}
+                </div>
+                
+                <div className="feedback-author">
+                  <img 
+                    src={feedback.img} 
+                    alt={feedback.nome} 
+                    className="feedback-avatar" 
+                  />
+                  <div className="feedback-user-info">
+                    <span className="feedback-nome">{feedback.nome}</span>
+                    <span className="feedback-user">{feedback.user}</span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <p className="feedback-texto">{f.texto}</p>
-          </div>
-        ))}
+            </article>
+          ))}
+        </div>
       </div>
     </section>
   );
