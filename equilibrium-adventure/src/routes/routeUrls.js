@@ -24,7 +24,9 @@ const routeUrls = {
     DADOS_GUIA: '/dados-guia',
     AGENDA_AVENTUREIRO: '/agenda-aventureiro',
     VISUALIZAR_GUIAS: '/visualizar-guias',
-    RELATORIO_ANAMNESE: '/relatorio-anamnese'
+    RELATORIO_ANAMNESE: '/relatorio-anamnese',
+    CONVITE_AVENTUREIRO: '/convite-aventureiro',
+    AGENDAMENTO_ANAMNESE: '/agendamento-anamnese'
 };
 
 export default routeUrls;
