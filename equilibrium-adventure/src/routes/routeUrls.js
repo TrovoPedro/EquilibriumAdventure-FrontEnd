@@ -14,7 +14,6 @@ const routeUrls = {
     CRIAR_INFOS_ADIC_GUIA: '/infos-adic-guia',
     CATALOGO_TRILHAS_ADM: '/catalogo-trilhas-adm',
     INSCRICAO_TRILHAS: '/inscricao-trilhas',
-    INSCRICAO_TRILHAS_LIMITADO: '/inscricao-trilhas-limitado',
     ADICIONAR_GUIA: '/adicionar-guia',
     LISTA_CONVITES: '/lista-convites',
     VER_GUIAS:'/ver-guias',
