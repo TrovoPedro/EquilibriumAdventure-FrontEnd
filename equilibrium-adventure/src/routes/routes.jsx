@@ -23,6 +23,7 @@ import AgendaAventureiro from "../pages/agenda-aventureiro/agenda-aventureiro"
 import RelatorioAnamnese from "../pages/relatorio-anamnese/relatorio-anamnese"
 import ConviteAventureiro from '../pages/convite-aventureiro/ConviteAventureiro';
 import AgendamentoAnamnese from '../pages/agendamento-anamnese/AgendamentoAnamnese';
+import DetalhesEvento from '../pages/detalhes-evento/DetalhesEvento';
 
 export default function AppRoutes() {
   return (
@@ -63,6 +64,7 @@ export default function AppRoutes() {
       <Route path={routeUrls.DADOS_GUIA} element={<DadosGuia />}></Route>
       <Route path={routeUrls.AGENDA_AVENTUREIRO} element={<AgendaAventureiro/>}></Route>
       <Route path={routeUrls.RELATORIO_ANAMNESE} element={<RelatorioAnamnese/>}></Route>
+      <Route path={routeUrls.DETALHES_EVENTO} element={<DetalhesEvento />} />
     </Routes>
   )
 }

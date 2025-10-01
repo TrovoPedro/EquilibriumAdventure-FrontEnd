@@ -25,7 +25,8 @@ const routeUrls = {
     AGENDA_AVENTUREIRO: '/agenda-aventureiro',
     RELATORIO_ANAMNESE: '/relatorio-anamnese',
     CONVITE_AVENTUREIRO: '/convite-aventureiro',
-    AGENDAMENTO_ANAMNESE: '/agendamento-anamnese'
+    AGENDAMENTO_ANAMNESE: '/agendamento-anamnese',
+    DETALHES_EVENTO: '/detalhes-evento',
 };
 
 export default routeUrls;

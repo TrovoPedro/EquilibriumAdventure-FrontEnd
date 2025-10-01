@@ -6,6 +6,7 @@ import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
 import { useNavigate } from "react-router-dom";
+import Comentarios from '../../components/comentarios/Comentarios';
 import routeUrls from "../../routes/routeUrls";
 
 const comentariosIniciais = [
@@ -118,26 +119,15 @@ const InscricaoTrilhasLimitado = ({ idEvento, nivelNecessario }) => {
 						{inscrito ? 'Já Inscrito' : nivelSuficiente ? 'Se Inscrever' : 'Agendar Anamnese'}
 					</button>
 
-			<div className="inscricao-trilha-comentarios">
-				{comentarios.map((c, i) => (
-					<div className="inscricao-trilha-comentario" key={i}>
-						<b>{c.nome}</b><br />
-						{c.texto}
-					</div>
-				))}
-				<form className="inscricao-trilha-form" onSubmit={handleComentario}>
-					<input
-						type="text"
-						placeholder="Escreva aqui um comentário"
-						value={novoComentario}
-						onChange={e => setNovoComentario(e.target.value)}
-						maxLength={120}
-					/>
-					<button type="submit">Enviar</button>
-				</form>
-			</div>
+			<Comentarios 
+				comentariosIniciais={comentariosIniciais}
+				onEnviarComentario={async (comentario) => {
+					// Aqui você pode implementar a lógica de salvamento do comentário
+					console.log('Enviando comentário:', comentario);
+				}}
+			/>
 
-			   <div style={{ margin: '0 0 8px 0' }}>
+			   <div style={{ margin: '40px 0 8px 0' }}>
 				   <b style={{ color: '#2d4636', fontWeight: 500, fontSize: 22 }}>
 					   O que esperar da sua próxima trilha:
 				   </b>
