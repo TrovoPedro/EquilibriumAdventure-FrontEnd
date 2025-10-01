@@ -8,6 +8,7 @@ import { cadastrarEvento, buscarCep } from "../../services/chamadasAPIEvento";
 import "./criar-evento.css";
 import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
 import ButtonCriarEvento from "../../components/button-eventos/button-criar-evento";
+import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 
 const CriarEvento = () => {
     const [formData, setFormData] = useState({
@@ -27,6 +28,10 @@ const CriarEvento = () => {
     });
 
     const navigate = useNavigate();
+
+    const handleBackToCatalog = () => {
+        navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+    };
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -94,7 +99,10 @@ const CriarEvento = () => {
             <div className="criar-evento-container">
                 <Header />
                 <div className="div-title">
-                    <h1 className="h1-title">Criação de Evento</h1>
+                    <div className="editar-evento-header">
+                        <ButtonBack onClick={handleBackToCatalog} />
+                        <h1 className="h1-title">Criar Evento</h1>
+                    </div>
                 </div>
                 <form className="evento-form" onSubmit={handleSubmit}>
                     <label>
@@ -280,7 +288,7 @@ const CriarEvento = () => {
                     </div>
 
                     <div className="botoes">
-                        <ButtonCancelarEvento title={"Cancelar criação"}></ButtonCancelarEvento>
+                        <ButtonCancelarEvento title={"Cancelar"}></ButtonCancelarEvento>
                         <ButtonCriarEvento title={"Criar evento"}></ButtonCriarEvento>
                     </div>
                 </form>

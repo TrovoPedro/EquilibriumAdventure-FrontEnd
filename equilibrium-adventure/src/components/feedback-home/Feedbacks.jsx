@@ -4,6 +4,7 @@ import feedbackImg2 from "../../assets/mulher1.jpeg";
 import feedbackImg3 from "../../assets/homem2.jpeg";
 import feedbackImg4 from "../../assets/mulher2.jpeg";
 import feedbackImg5 from "../../assets/homem3.jpeg";
+import feedbackImg6 from "../../assets/mulher3.jpeg";
 
 const twitterIcon = (
   <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{marginLeft: 6}}>
@@ -50,9 +51,9 @@ export default function Feedbacks() {
       rating: 5
     },
     { 
-      img: feedbackImg2, 
-      nome: "Lucas Silva", 
-      user: "@lucastrilhas", 
+      img: feedbackImg6, 
+      nome: "Luana Silva", 
+      user: "@lutrilhas", 
       texto: "Equipe atenciosa e trilha muito bem sinalizada! Perfeito para iniciantes.",
       rating: 5
     }

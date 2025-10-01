@@ -7,34 +7,90 @@
 
 .h1-title {
     font-family: "Raleway", sans-serif;
-    color: #0C513F;
+    color: #226144;
     font-size: 32px;
     margin-bottom: 20px;
+}
+
+/* Header com botão de voltar */
+.editar-evento-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    justify-content: flex-start;
+    margin-bottom: 32px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+}
+
+.editar-evento-header .h1-title {
+    margin-bottom: 0;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .criar-evento-page {
+        padding: 110px 10px 40px 10px;
+    }
+    
+    .editar-evento-header {
+        padding-left: 10px;
+        gap: 12px;
+    }
+    
+    .h1-title {
+        font-size: 24px;
+    }
+    
+    .criar-evento-container form {
+        padding: 30px 20px;
+        width: 90%;
+    }
+}
+
+@media (max-width: 480px) {
+    .criar-evento-page {
+        padding: 110px 5px 40px 5px;
+    }
+    
+    .editar-evento-header {
+        padding-left: 5px;
+        gap: 8px;
+    }
+    
+    .h1-title {
+        font-size: 20px;
+    }
+    
+    .criar-evento-container form {
+        padding: 20px 15px;
+        width: 95%;
+    }
 }
 
 .criar-evento-page {
     width: 100%;
     min-height: 100vh;
-    background-size: cover;
-    background-position: center;
+    background: #f6f7f8;
     display: flex;
     justify-content: center;
     align-items: flex-start;
     overflow-x: hidden;
-    padding-bottom: 70px;
+    padding: 110px 20px 70px 20px;
 }
 
 /* Container principal */
 
 .criar-evento-container {
     width: 100%;
-    max-width: 1200px;
+    max-width: 1400px;
     margin: 0 auto;
     padding: 0;
     background: transparent;
-    min-height: 100vh;
+    min-height: auto;
     box-sizing: border-box;
-    margin-top: 6%;
 }
 
 /* Título */
@@ -49,12 +105,17 @@
 /* Formulário */
 
 .criar-evento-container form {
-    background-color: #E9E9E9;
-    padding: 20px;
-    border-radius: 10px;
+    background: #ffffff;
+    padding: 50px 60px;
+    border-radius: 20px;
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 24px;
+    box-shadow: 0 4px 20px rgba(34, 97, 68, 0.1);
+    border: 1px solid rgba(34, 97, 68, 0.1);
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 95%;
 }
 
 /* Labels e inputs */
@@ -62,19 +123,22 @@
 .evento-form label {
     display: flex;
     flex-direction: column;
-    font-weight: bold;
-    color: #0C513F;
+    font-weight: 600;
+    color: #226144;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
 }
 
 .evento-form input,
 .evento-form textarea,
 .evento-form select {
     width: 100%;
-    margin-top: 5px;
-    padding: 10px;
-    border-radius: 10px;
-    border: 1px solid #0C513F;
-    font-size: 14px;
+    margin-top: 0;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+    font-size: 1.1rem;
+    outline: none;
 }
 
 /* Upload box */

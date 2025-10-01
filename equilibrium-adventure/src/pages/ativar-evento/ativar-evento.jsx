@@ -37,15 +37,16 @@ export default function AtivarEvento() {
   };
 
   return (
-    <>
-      <Header />
+    <div className="ativar-evento-page">
       <div className="ativar-evento-container">
-        <div className="ativar-evento-header">
-          <ButtonBack onClick={handleBack} />
-          <h1 className="ativar-evento-title">Ativar Evento</h1>
+        <Header />
+        <div className="div-title">
+          <div className="editar-evento-header">
+            <ButtonBack onClick={handleBack} />
+            <h1 className="h1-title">Ativar Evento</h1>
+          </div>
         </div>
-        <div className="ativar-evento-form-wrapper">
-          <form className="ativar-evento-form" onSubmit={handleSubmit}>
+        <form className="ativar-evento-form" onSubmit={handleSubmit}>
             <div className="form-row">
               <div className="form-group">
                 <label htmlFor="horaInicio">Hora de Início:</label>
@@ -150,9 +151,8 @@ export default function AtivarEvento() {
             <div className="form-row form-row-end">
               <button className="ativar-evento-btn" type="submit">Ativar Evento</button>
             </div>
-          </form>
-        </div>
+        </form>
       </div>
-    </>
+    </div>
   );
 }
