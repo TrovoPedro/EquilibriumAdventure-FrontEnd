@@ -1,13 +1,13 @@
 
 import React from "react";
-import "./editar-dados-aventureiro.css";
+import "./informacoes-pessoais.css";
 import CircleBackButton from "../../components/circle-back-button/circle-back-button";
 import InfoPessoaisCard from "../../components/info-pessoais-card/info-pessoais-card";
 import EnderecoCard from "../../components/endereco-card/endereco-card";
 
-export default function EditarDadosAventureiro() {
+export default function InformacoesPessoais() {
 	return (
-		<div className="editar-dados-container">
+		<div className="editar-dados-container">  
 			<CircleBackButton onClick={() => window.history.back()} />
 			<h1 className="titulo-editar-dados">Dados da Conta</h1>
 			<InfoPessoaisCard />

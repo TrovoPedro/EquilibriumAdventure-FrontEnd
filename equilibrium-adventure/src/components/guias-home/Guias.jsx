@@ -16,7 +16,7 @@ const guias = [
     nome: 'Letícia Mendes',
     cidade: 'Rio de Janeiro, RJ',
     depoimento:
-      'Cada trilha é uma nova história. Amo compartilhar esse contato com a natureza e ver as pessoas se transformando a cada passo.',
+      'Cada trilha é uma nova história que se revela a cada passo dado. Sinto uma paixão imensa em compartilhar esse contato profundo com a natureza, onde o silêncio das árvores e o frescor do ar renovam a alma.',
     imagem: guia3Img, // Mantido igual
   },
    {

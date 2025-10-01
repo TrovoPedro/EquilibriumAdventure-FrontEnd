@@ -11,11 +11,21 @@ const Home = () => {
   return (
     <>
       <main>
-        <BannerComHeader />
-        <Trilhas />
-        <Eventos />
-        <Guias />
-        <Feedbacks />
+        <div id="home">
+          <BannerComHeader />
+        </div>
+        <div id="trilhas-section">
+          <Trilhas />
+        </div>
+        <div id="eventos-section">
+          <Eventos />
+        </div>
+        <div id="guias-section">
+          <Guias />
+        </div>
+        <div id="feedbacks-section">
+          <Feedbacks />
+        </div>
       </main>
       <Footer />
     </>

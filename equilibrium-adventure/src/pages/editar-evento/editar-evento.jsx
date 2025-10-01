@@ -280,7 +280,7 @@ const CriarEvento = () => {
                     </div>
 
                     <div className="botoes">
-                        <ButtonCancelarEvento title={"Cancelar criação"}></ButtonCancelarEvento>
+                        <ButtonCancelarEvento title={"Cancelar"}></ButtonCancelarEvento>
                         <ButtonCriarEvento title={"Criar evento"}></ButtonCriarEvento>
                     </div>
                 </form>

@@ -8,7 +8,7 @@ import Cadastro from "../pages/cadastro/cadastro"
 import Questionario from "../pages/questionario/questionario"
 import EscolhaGuia from "../pages/escolher-guia/EscolherGuia"
 import CatalogoTrilha from "../pages/catalogo-trilhas/CatalogoTrilhas"
-import EditarDadosAventureiro from "../pages/editar-dados-aventureiro/editar-dados-aventureiro"
+import InformacoesPessoais from "../pages/informacoes-pessoais/informacoes-pessoais"
 import DadosCliente from "../pages/dados-cliente/dados-cliente"
 import AtivarEvento from "../pages/ativar-evento/ativar-evento"
 import CriarInformacoesAdicionaisGuia from "../pages/agenda-infos-adic-guia/infos-adic-guia"
@@ -20,7 +20,6 @@ import EscolhaDataCard from "../pages/escolher-data/escolher-data"
 import VerGuias from "../pages/ver-guias/ver-guias"
 import DadosGuia from "../pages/dados-guia/dados-guia"
 import AgendaAventureiro from "../pages/agenda-aventureiro/agenda-aventureiro"
-import VisualizarGuias from "../pages/visualizar-guias/visualizar-guias"
 import RelatorioAnamnese from "../pages/relatorio-anamnese/relatorio-anamnese"
 import ConviteAventureiro from '../pages/convite-aventureiro/ConviteAventureiro';
 import AgendamentoAnamnese from '../pages/agendamento-anamnese/AgendamentoAnamnese';
@@ -38,7 +37,7 @@ export default function AppRoutes() {
       <Route path={routeUrls.QUESTIONARIO} element={<Questionario/>}></Route>
       <Route path={routeUrls.ESCOLHER_GUIA} element={<EscolhaGuia/>}></Route>
       <Route path={routeUrls.CATALOGO_TRILHA} element={<CatalogoTrilha/>}></Route>
-      <Route path={routeUrls.EDITAR_DADOS_AVENTUREIRO} element={<EditarDadosAventureiro/>}></Route>
+      <Route path={routeUrls.INFORMACOES_PESSOAIS} element={<InformacoesPessoais/>}></Route>
       <Route path={routeUrls.DADOS_CLIENTE} element={<DadosCliente/>}></Route>
       <Route path={routeUrls.ATIVAR_EVENTO} element={<AtivarEvento/>}></Route>
       <Route path={routeUrls.ADICIONAR_GUIA} element={<AdicionarGuia/>}></Route>
@@ -50,7 +49,6 @@ export default function AppRoutes() {
       <Route path={routeUrls.QUESTIONARIO} element={<Questionario />}></Route>
       <Route path={routeUrls.ESCOLHER_GUIA} element={<EscolhaGuia />}></Route>
       <Route path={routeUrls.CATALOGO_TRILHA} element={<CatalogoTrilha />}></Route>
-      <Route path={routeUrls.EDITAR_DADOS_AVENTUREIRO} element={<EditarDadosAventureiro />}></Route>
       <Route path={routeUrls.DADOS_CLIENTE} element={<DadosCliente />}></Route>
       <Route path={routeUrls.ATIVAR_EVENTO} element={<AtivarEvento />}></Route>
       <Route path={routeUrls.CRIAR_INFOS_ADIC_GUIA} element={<CriarInformacoesAdicionaisGuia />}></Route>
@@ -64,7 +62,6 @@ export default function AppRoutes() {
       <Route path={routeUrls.VER_GUIAS} element={<VerGuias />}></Route>
       <Route path={routeUrls.DADOS_GUIA} element={<DadosGuia />}></Route>
       <Route path={routeUrls.AGENDA_AVENTUREIRO} element={<AgendaAventureiro/>}></Route>
-      <Route path={routeUrls.VISUALIZAR_GUIAS} element={<VisualizarGuias/>}></Route>
       <Route path={routeUrls.RELATORIO_ANAMNESE} element={<RelatorioAnamnese/>}></Route>
     </Routes>
   )

@@ -1,48 +1,78 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+}
+
+.h1-title {
+    font-family: "Raleway", sans-serif;
+    color: #226144;
+    font-size: 32px;
+    margin-bottom: 20px;
+}
+
+/* Header com botão de voltar */
+.editar-evento-header {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    justify-content: flex-start;
+    margin-bottom: 32px;
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+}
+
+.editar-evento-header .h1-title {
+    margin-bottom: 0;
+}
+
+.ativar-evento-page {
+    width: 100%;
+    min-height: 100vh;
+    background: #f6f7f8;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-x: hidden;
+    padding: 110px 20px 70px 20px;
+}
+
 /* Container principal */
+
 .ativar-evento-container {
-	background: #f6f7f8;
-	min-height: 100vh;
-	padding: 110px 20px 40px 20px;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0;
+    background: transparent;
+    min-height: auto;
+    box-sizing: border-box;
 }
 
-/* Header com seta e título */
-.ativar-evento-header {
-	display: flex;
-	align-items: center;
-	gap: 18px;
-	justify-content: flex-start;
-	margin-bottom: 32px;
-	max-width: 1200px;
-	margin-left: auto;
-	margin-right: auto;
-	padding-left: 20px;
-}
+/* Formulário */
 
-/* Corrige bug de sobreposição do título */
-.ativar-evento-container h1,
-.ativar-evento-container .ativar-evento-title {
-	position: static;
-	z-index: 2;
-	background: none;
-}
-
-/* Wrapper do formulário */
-.ativar-evento-form-wrapper {
-	background: #ffffff;
-	border-radius: 20px;
-	margin: 0 auto;
-	padding: 50px 60px;
-	box-shadow: 0 4px 20px rgba(34, 97, 68, 0.1);
-	max-width: 1400px;
-	border: 1px solid rgba(34, 97, 68, 0.1);
-	width: 95%;
+.ativar-evento-container form {
+    background: #ffffff;
+    padding: 50px 60px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    box-shadow: 0 4px 20px rgba(34, 97, 68, 0.1);
+    border: 1px solid rgba(34, 97, 68, 0.1);
+    max-width: 1400px;
+    margin: 0 auto;
+    width: 95%;
 }
 
 /* Formulário em grid */
 .ativar-evento-form {
 	display: flex;
 	flex-direction: column;
-	gap: 40px;
+	gap: 24px;
 }
 
 .form-row {
@@ -64,12 +94,15 @@
 	grid-column: 1 / -1;
 }
 
+/* Labels e inputs */
+
 .ativar-evento-form label {
-	font-size: 1.1rem;
-	color: #226144;
-	margin-bottom: 8px;
+	display: flex;
+	flex-direction: column;
 	font-weight: 600;
-	display: block;
+	color: #226144;
+	font-size: 1.1rem;
+	margin-bottom: 8px;
 }
 
 .ativar-evento-form input,
@@ -157,7 +190,7 @@
 
 /* Responsividade */
 @media (max-width: 1024px) {
-	.ativar-evento-form-wrapper {
+	.ativar-evento-container form {
 		margin: 0 20px;
 		padding: 32px 24px;
 	}
@@ -168,7 +201,7 @@
 	}
 	
 	.ativar-evento-form {
-		gap: 30px;
+		gap: 20px;
 	}
 	
 	.form-group {
@@ -177,23 +210,23 @@
 }
 
 @media (max-width: 768px) {
-	.ativar-evento-container {
-		padding: 100px 15px 30px 15px;
+	.ativar-evento-page {
+		padding: 110px 10px 40px 10px;
 	}
 	
-	.ativar-evento-header {
+	.editar-evento-header {
+		padding-left: 10px;
+		gap: 12px;
 		margin-bottom: 24px;
-		padding-left: 15px;
 	}
 	
-	.ativar-evento-title {
-		font-size: 2rem;
+	.h1-title {
+		font-size: 24px;
 	}
 	
-	.ativar-evento-form-wrapper {
-		margin: 0 10px;
-		padding: 24px 20px;
-		border-radius: 16px;
+	.ativar-evento-container form {
+		padding: 30px 20px;
+		width: 90%;
 	}
 	
 	.form-row {
@@ -202,7 +235,7 @@
 	}
 	
 	.ativar-evento-form {
-		gap: 24px;
+		gap: 20px;
 	}
 	
 	.form-group {
@@ -238,21 +271,26 @@
 }
 
 @media (max-width: 480px) {
-	.ativar-evento-container {
-		padding: 90px 10px 20px 10px;
+	.ativar-evento-page {
+		padding: 110px 5px 40px 5px;
 	}
 	
-	.ativar-evento-title {
-		font-size: 1.6rem;
+	.editar-evento-header {
+		padding-left: 5px;
+		gap: 8px;
 	}
 	
-	.ativar-evento-form-wrapper {
-		margin: 0;
-		padding: 20px 16px;
+	.h1-title {
+		font-size: 20px;
+	}
+	
+	.ativar-evento-container form {
+		padding: 20px 15px;
+		width: 95%;
 	}
 	
 	.ativar-evento-form {
-		gap: 20px;
+		gap: 16px;
 	}
 	
 	.form-group {
