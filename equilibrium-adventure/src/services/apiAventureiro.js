@@ -2,12 +2,12 @@ import axios from "axios";
 
 // cria uma instância com a URL base
 const api = axios.create({
-  baseURL: "http://localhost:3000",
+  baseURL: "http://localhost:8080",
 });
 
 export const getPerguntas = async () => {
   try {
-    const response = await api.get('/perguntas');
+    const response = await api.get('/perguntas/listar');
     const questionsFormatted = response.data.map(pergunta => ({
       id: pergunta.id,
       title: 'Questão',
@@ -26,7 +26,7 @@ export const getPerguntas = async () => {
 
 export const postRespostas = async (respostas) => {
   try {
-    const response = await api.post('/respostas', respostas);
+    const response = await api.post('/respostas-aventureiro/salvar', respostas);
     return response.data;
   } catch (error) {
     console.error('Erro ao enviar respostas:', error);
@@ -36,7 +36,7 @@ export const postRespostas = async (respostas) => {
 
 export const calcularNivel = async (usuarioId) => {
   try {
-    const response = await api.post(`/respostas/calcular-nivel/${usuarioId}`);
+    const response = await api.post(`/respostas-aventureiro/calcular-nivel/${usuarioId}`);
     return response.data;
   } catch (error) {
     console.error('Erro ao calcular nível:', error);

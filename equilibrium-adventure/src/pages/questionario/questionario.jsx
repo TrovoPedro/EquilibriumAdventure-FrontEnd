@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./questionario.css";
 import ButtonQuest from "../../components/button-questionario/button-questionario";
-import { getPerguntas, postRespostas } from "../../services/apiAventureiro";
+import { getPerguntas, postRespostas, calcularNivel } from "../../services/apiAventureiro";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls"
 import { useScore } from "../../context/ScoreContext";
@@ -43,7 +43,7 @@ const Questionario = () => {
     if (total <= 10) nivelamento = "Explorador";
     else if (total <= 20) nivelamento = "Aventureiro";
     else if (total <= 27) nivelamento = "Desbravador";
-    else nivelamento = "Expert";
+    else nivelamento = "Desbravador";
 
     return { total, nivelamento };
   };
@@ -51,20 +51,20 @@ const Questionario = () => {
   const handleSubmitAnswers = async () => {
     try {
       const respostasParaEnviar = Object.entries(answers).map(([perguntaId, alternativa]) => ({
-        usuarioId: usuario.id_usuario,
+        usuarioId: usuario.id,
         perguntaId: Number(perguntaId),
         alternativaEscolhida: Number(alternativa)
       }));
 
       await postRespostas(respostasParaEnviar);
 
-      const nivelCalculado = await api.post(`/respostas/calcular-nivel/${usuario.id_usuario}`);
+      const nivelCalculado = await calcularNivel(`/respostas/calcular-nivel/${usuario.id}`);
 
       setNivel(nivelCalculado.data);
 
       alert(`Respostas enviadas! Parabéns você é um ${nivelCalculado.data}`);
 
-      salvarPontuacao(0, nivelCalculado.data); // Score is now calculated on backend
+      salvarPontuacao(0, nivelCalculado.data);
 
       navigate(routeUrls.ESCOLHER_GUIA, {
         state: { nivel: nivelCalculado.data }
