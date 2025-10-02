@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import Header from "../../components/header/header";
 import { maskCep, maskDistancia } from "../../utils/masks";
+import { scrollToTop } from "../../utils/scrollToTop";
 import { cadastrarEvento, buscarCep } from "../../services/chamadasAPIEvento";
 import "./editar-evento.css";
 import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
@@ -28,6 +29,11 @@ const CriarEvento = () => {
     });
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Rola para o topo da página quando o componente é montado
+        scrollToTop();
+    }, []);
 
     const handleBack = () => {
         navigate(routeUrls.CATALOGO_TRILHAS_ADM);

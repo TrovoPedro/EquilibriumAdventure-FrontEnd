@@ -2,7 +2,7 @@
 body {
 	margin: 0;
 	padding: 0;
-	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
 	overflow-x: hidden;
 }
 
@@ -24,34 +24,88 @@ body {
 }
 
 .titulo-editar-dados {
-	color: #fff;
-	font-size: 2.2rem;
-	font-weight: 600;
-	margin-top: 48px;
-	margin-bottom: 32px;
+	color: rgba(255, 255, 255, 0.95);
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 60px;
+	margin-bottom: 40px;
 	text-align: center;
-	text-shadow: 0 2px 8px rgba(0,0,0,0.4);
-	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+	font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+	letter-spacing: -0.025em;
+	position: relative;
+	z-index: 1;
 }
 
 
 .salvar-btn {
-	margin-top: 18px;
-	width: 320px;
-	max-width: 90vw;
-	padding: 12px 0;
-	background: #489465;
-	color: #fff;
-	border-radius: 10px;
-	font-size: 1.1rem;
+	background: #226144;
+	color: #ffffff;
+	font-size: 1.2rem;
 	font-weight: 600;
+	border: none;
+	border-radius: 12px;
+	padding: 16px 40px;
 	cursor: pointer;
-	box-shadow: 0 2px 8px rgba(237, 237, 237, 0.13);
-	transition: background 0.3s;
-	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	box-shadow: 0 4px 12px rgba(34, 97, 68, 0.2);
+	transition: all 0.3s ease;
+	text-transform: none;
+	letter-spacing: 0.5px;
+	margin-top: 32px;
 }
 
 .salvar-btn:hover {
-	background: #366036;
+	background: #1a4d36;
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(34, 97, 68, 0.3);
 }
+
+.salvar-btn:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 8px rgba(34, 97, 68, 0.2);
+}
+
+/* Animations and Interactions */
+@keyframes slideInFromBottom {
+	0% {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes slideInFromLeft {
+	0% {
+		opacity: 0;
+		transform: translateX(-30px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes fadeInScale {
+	0% {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.titulo-editar-dados {
+	animation: slideInFromBottom 0.6s ease-out;
+}
+
+.salvar-btn {
+	animation: slideInFromBottom 0.6s ease-out 0.4s both;
+}
+
+
 

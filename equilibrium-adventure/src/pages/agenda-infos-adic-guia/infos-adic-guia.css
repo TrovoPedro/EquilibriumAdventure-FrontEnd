@@ -1,9 +1,23 @@
+/* Página principal */
+.infos-adic-guia-page {
+    width: 100%;
+    min-height: 100vh;
+    background: #f6f7f8;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    overflow-x: hidden;
+    padding: 80px 20px 70px 20px;
+}
+
 /* Encapsular todos os estilos específicos desta página */
 .infos-adic-guia-page .home-container {
     font-family: "Arial", sans-serif;
     color: #00331f;
     padding: 0 160px 80px 160px;
-    margin-top: 70px;
+    margin-top: 0px;
+    width: 100%;
+    max-width: 1400px;
 }
 
 .card-guia {
@@ -69,11 +83,19 @@
     justify-content: space-between;
 }
 
+/* Header de informações pessoais com botão de voltar */
+.info-pessoais-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
 .card-info-guia h2 {
     font-size: 32px;
     color: #6B7280;
     font-weight: 500;
-    margin: 0 0 20px 0;
+    margin: 0;
 }
 
 .personal-info-card {
@@ -119,7 +141,7 @@
 }
 
 .user-info h3 {
-    font-size: 28px;
+    font-size: 22px;
     color: #1F2937;
     font-weight: 600;
     margin: 0 0 8px 0;
@@ -127,7 +149,7 @@
 }
 
 .user-role {
-    font-size: 28px;
+    font-size: 20px;
     color: #1F2937;
     font-weight: 700;
     margin: 0;
@@ -178,6 +200,13 @@
 
 .next-event-card:hover {
     transform: translateY(-2px) scale(1.03);
+}
+
+.next-event-card img {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    cursor: pointer;
 }
 
 .next-event-card img {
