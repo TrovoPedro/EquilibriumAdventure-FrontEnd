@@ -8,13 +8,12 @@ const routeUrls = {
     ESCOLHER_GUIA: '/escolher-guia',
     CATALOGO_TRILHA: '/catalogo-trilhas',
     QUESTIONARIO: '/questionario',
-    EDITAR_DADOS_AVENTUREIRO: '/editar-dados-aventureiro',
+    INFORMACOES_PESSOAIS: '/informacoes-pessoais',
     DADOS_CLIENTE: '/dados-cliente',
     ATIVAR_EVENTO: '/ativar-evento',
     CRIAR_INFOS_ADIC_GUIA: '/infos-adic-guia',
     CATALOGO_TRILHAS_ADM: '/catalogo-trilhas-adm',
     INSCRICAO_TRILHAS: '/inscricao-trilhas',
-    INSCRICAO_TRILHAS_LIMITADO: '/inscricao-trilhas-limitado',
     ADICIONAR_GUIA: '/adicionar-guia',
     LISTA_CONVITES: '/lista-convites',
     VER_GUIAS:'/ver-guias',
@@ -24,8 +23,10 @@ const routeUrls = {
     ESCOLHER_DATA: '/escolher-data',
     DADOS_GUIA: '/dados-guia',
     AGENDA_AVENTUREIRO: '/agenda-aventureiro',
-    VISUALIZAR_GUIAS: '/visualizar-guias',
-    RELATORIO_ANAMNESE: '/relatorio-anamnese'
+    RELATORIO_ANAMNESE: '/relatorio-anamnese',
+    CONVITE_AVENTUREIRO: '/convite-aventureiro',
+    AGENDAMENTO_ANAMNESE: '/agendamento-anamnese',
+    DETALHES_EVENTO: '/detalhes-evento',
 };
 
 export default routeUrls;

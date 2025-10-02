@@ -38,7 +38,7 @@ export default function InfoPessoaisCard() {
           <label htmlFor="idiomas">Idiomas:</label>
           <input type="text" id="idiomas" name="idiomas" placeholder="Português, Inglês" />
         </div>
-        <div className="info-pessoais__form-group">
+        <div className="info-pessoais__form-group full-width">
           <label htmlFor="contato-emergencia">Contato De Emergência:</label>
           <input type="text" id="contato-emergencia" name="contato-emergencia" placeholder="Nome + Telefone" />
         </div>

@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import "./questionario.css";
 import ButtonQuest from "../../components/button-questionario/button-questionario";
-import { getPerguntas, postRespostas } from "../../services/apiAventureiro";
+import { getPerguntas, postRespostas, calcularNivel } from "../../services/apiAventureiro";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls"
 import { useScore } from "../../context/ScoreContext";
+import { useAuth } from "../../context/AuthContext";
 
 const Questionario = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const Questionario = () => {
   const [loading, setLoading] = useState(true);
   const [nivel, setNivel] = useState(null);
   const { salvarPontuacao } = useScore();
+  const { usuario } = useAuth();
 
   // Buscar perguntas no backend
   useEffect(() => {
@@ -41,34 +43,33 @@ const Questionario = () => {
     if (total <= 10) nivelamento = "Explorador";
     else if (total <= 20) nivelamento = "Aventureiro";
     else if (total <= 27) nivelamento = "Desbravador";
-    else nivelamento = "Expert";
+    else nivelamento = "Desbravador";
 
     return { total, nivelamento };
   };
 
-  // Enviar respostas para o json-server
   const handleSubmitAnswers = async () => {
-    const resultado = calcularNivel(answers);
-
     try {
-      await postRespostas({
-        respostas: answers,
-        total: resultado.total,
-        nivel: resultado.nivelamento,
-        data: new Date().toISOString(),
+      const respostasParaEnviar = Object.entries(answers).map(([perguntaId, alternativa]) => ({
+        usuarioId: usuario.id,
+        perguntaId: Number(perguntaId),
+        alternativaEscolhida: Number(alternativa)
+      }));
+
+      await postRespostas(respostasParaEnviar);
+
+      const nivelCalculado = await calcularNivel(`/respostas/calcular-nivel/${usuario.id}`);
+
+      setNivel(nivelCalculado.data);
+
+      alert(`Respostas enviadas! Parabéns você é um ${nivelCalculado.data}`);
+
+      salvarPontuacao(0, nivelCalculado.data);
+
+      navigate(routeUrls.ESCOLHER_GUIA, {
+        state: { nivel: nivelCalculado.data }
       });
 
-      setNivel(resultado);
-
-      alert(
-        `Respostas enviadas! Parabéns você é um ${resultado.nivelamento}`
-      );
-
-      salvarPontuacao(resultado.total, resultado.nivelamento);
-
-      navigate(routeUrls.ESCOLHER_GUIA, { state: { nivel: resultado.nivelamento } });
-      
-      // Resetar
       setAnswers({});
       setCurrentQuestionIndex(0);
       setSelectedOption(null);
@@ -78,37 +79,30 @@ const Questionario = () => {
       alert("Falha ao enviar respostas.");
     }
   };
-
-  // Avançar para próxima questão
   const handleOnClickNext = () => {
     if (selectedOption === null) {
       alert("Por favor, selecione uma opção antes de prosseguir.");
       return;
     }
 
-    // Salvar a resposta atual
     setAnswers((prev) => ({
       ...prev,
       [questions[currentQuestionIndex].id]: selectedOption,
     }));
 
-    // Última questão → envia respostas
     if (currentQuestionIndex === questions.length - 1) {
       handleSubmitAnswers();
       return;
     }
 
-    // Avançar
     setCurrentQuestionIndex((prev) => prev + 1);
     setSelectedOption(null);
 
-    // Atualizar botão
     if (currentQuestionIndex === questions.length - 2) {
       setTitleButton("Finalizar");
     }
   };
 
-  // Voltar ou navegar pelo grid
   const handleNavigatorClick = (index) => {
     if (Object.keys(answers).length >= index) {
       setCurrentQuestionIndex(index);
@@ -157,9 +151,8 @@ const Questionario = () => {
             {questions.map((question, index) => (
               <button
                 key={index}
-                className={`navigator-button ${
-                  answers[question.id] !== undefined ? "answered" : ""
-                } ${currentQuestionIndex === index ? "active" : ""}`}
+                className={`navigator-button ${answers[question.id] !== undefined ? "answered" : ""
+                  } ${currentQuestionIndex === index ? "active" : ""}`}
                 onClick={() => handleNavigatorClick(index)}
               >
                 {index + 1}
@@ -167,7 +160,7 @@ const Questionario = () => {
             ))}
           </div>
         </div>
-        </div>
+      </div>
     </div>
   );
 };

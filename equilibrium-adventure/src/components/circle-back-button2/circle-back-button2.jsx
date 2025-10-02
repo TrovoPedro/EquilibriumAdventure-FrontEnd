@@ -4,7 +4,7 @@ import leftArrow from "../../assets/left-arrow-green.png";
 
 const ButtonBack = ({ onClick, title }) => {
     return (
-          <span className="back-arrow-circle">
+          <span className="back-arrow-circle" onClick={onClick} style={{ cursor: 'pointer' }}>
             <img className="back-arrow" src={leftArrow} alt="Voltar" />
           </span>
     );

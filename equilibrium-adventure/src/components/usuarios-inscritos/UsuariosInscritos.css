@@ -1,0 +1,70 @@
+.usuarios-inscritos-container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.usuarios-inscritos-container h3 {
+    color: #0C513F;
+    font-size: 20px;
+    margin-bottom: 15px;
+}
+
+.usuarios-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.usuario-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+}
+
+.usuario-card:hover {
+    background-color: #f0f0f0;
+}
+
+.usuario-nome {
+    font-size: 16px;
+    color: #333;
+}
+
+.usuario-acoes {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-aprovar, .btn-negar {
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.btn-aprovar {
+    background-color: #336948;
+    color: white;
+}
+
+.btn-aprovar:hover {
+    background-color: #245234;
+}
+
+.btn-negar {
+    background-color: #dc3545;
+    color: white;
+}
+
+.btn-negar:hover {
+    background-color: #bb2d3b;
+}

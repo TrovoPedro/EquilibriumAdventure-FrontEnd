@@ -1,0 +1,85 @@
+.comentarios-container {
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 20px 0 40px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.lista-comentarios {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    margin-bottom: 20px;
+}
+
+.comentario-card {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 16px;
+    transition: all 0.3s ease;
+}
+
+.comentario-card:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.comentario-header {
+    margin-bottom: 8px;
+}
+
+.comentario-autor {
+    font-weight: 600;
+    color: #336948;
+    font-size: 16px;
+}
+
+.comentario-texto {
+    color: #333;
+    font-size: 14px;
+    line-height: 1.5;
+    margin: 0;
+}
+
+.comentario-form {
+    display: flex;
+    gap: 12px;
+    margin-top: 20px;
+}
+
+.comentario-input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.comentario-input:focus {
+    border-color: #336948;
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(51, 105, 72, 0.1);
+}
+
+.comentario-btn {
+    padding: 12px 24px;
+    background-color: #336948;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.comentario-btn:hover {
+    background-color: #245234;
+    transform: translateY(-1px);
+}
+
+.comentario-btn:active {
+    transform: translateY(0);
+}
