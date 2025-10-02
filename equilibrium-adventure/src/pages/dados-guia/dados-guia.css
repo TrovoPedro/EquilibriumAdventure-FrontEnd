@@ -6,64 +6,46 @@
     background-attachment: fixed;
     min-height: 100vh;
     width: 100%;
-    row-gap: 6vh;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    backdrop-filter: blur(5px);
+    padding: 40px 20px;
 }
 
 .dados-guia-wrapper::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, 0.5);
-    z-index: -1;
+    /* removido para visual mais clean */
 }
 
 .dados-guia-container {
-    background-color: #ffffff;
-    border-radius: 8px;
-    height: 80vh;
-    width: 90vw;
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 4px 20px rgba(34, 97, 68, 0.1);
+    border: 1px solid rgba(34, 97, 68, 0.1);
+    width: 100%;
+    max-width: 600px;
+    padding: 50px 60px;
     display: flex;
-    justify-content: space-around;
-    align-items: center;
     flex-direction: column;
-    flex-wrap: nowrap;
-    padding: 3vh 2vw 6vh;
-    /* box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); */
+    gap: 24px;
     z-index: 2;
-    /* row-gap: 5vh; */
-    /* column-gap: 4vw; */
 }
 
 .dados-guia-body {
     display: flex;
-    width: 95%;
-    height: 100%;
-    justify-content: center;
-    column-gap: 4vw;
-    /* align-items: center; */
-    flex-wrap: wrap;
+    flex-direction: column;
+    gap: 18px;
+    width: 100%;
 }
 
 .dados-guia-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 2rem;
-    font-weight: 500;
+    font-size: 2.4rem;
     color: #ffffff;
-
-    height: 4vh;
-    width: 100%;
+    font-weight: 700;
     text-align: center;
-    /* margin-bottom: 2vh; */
+    margin-bottom: 24px;
+    letter-spacing: 0.5px;
+    line-height: 1.2;
 }
 
 .dados-guia-content {
@@ -76,66 +58,79 @@
 
 .adicionar-guia-imagem {
     width: 100%;
-    height: 100% !important;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .upload-box {
-    border: 2px dashed #838383;
-    border-radius: 8px;
-    padding: 0px !important;
-    min-height: 280px !important;
-    height: 100% !important;
-    /* text-align: center; */
-    background: #CACACA;
-    color: #666;
+    border: 2px dashed #226144;
+    border-radius: 12px;
+    min-height: 180px;
+    width: 100%;
+    background: #ffffff;
+    color: #226144;
     cursor: pointer;
-    /* transition: border 0.3s ease; */
-    /* height: 100%; */
-    /* display: flex; */
-    /* justify-content: center; */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
 }
 
 .upload-box:hover {
     border-color: #0C513F;
-    background: #c0c0c0;
+    background: #e8f6ef;
 }
 
 .upload-placeholder {
-   
     color: #0C513F;
+    text-align: center;
+    font-size: 1.1rem;
 }
 
 .preview-img {
-    max-width: 44%;
-    border-radius: 6px;
+    max-width: 120px;
+    max-height: 120px;
+    border-radius: 10px;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(12, 81, 63, 0.08);
 }
 
 .dados-guia-container input {
     width: 100%;
-    padding: 4px 16px;
-    background-color: #CACACA;
-    border: 1px inset #000000;
+    padding: 10px 14px;
+    background-color: #e8f6ef;
+    border: 1px solid #b2dfdb;
     outline: none;
     border-radius: 8px;
+    font-size: 1rem;
+    margin-top: 6px;
+    margin-bottom: 2px;
+    transition: border 0.2s;
 }
 .dados-guia-container textarea {
     width: 100%;
-    height: 100%;
-    resize: none;
-    background-color: #CACACA;
-    padding: 12px 16px;
+    padding: 10px 14px;
+    background-color: #e8f6ef;
+    border: 1px solid #b2dfdb;
     outline: none;
-    border: 1px inset #000000;
     border-radius: 8px;
+    font-size: 1rem;
+    margin-top: 6px;
+    margin-bottom: 2px;
+    transition: border 0.2s;
+    resize: vertical;
+    min-height: 80px;
+    max-height: 180px;
 }
 .dados-guia-container label {
-    gap: 0.7vh;
-    width: 45%;
-    color: #0C513F;
     display: flex;
-    font-size: 1.15rem;
     flex-direction: column;
-    align-items: flex-start;
+    font-weight: 600;
+    color: #226144;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
 }
 
 .dados-guia-container label #text {
@@ -143,25 +138,28 @@
 }
 
 .dados-guia-container #descricao-label {
-    width: 45%;
-    height: 72%;
+    width: 100%;
 }
 
 .dados-guia-container #imagem-label {
-    /* width: 45%; */
-    height: 72%;
+    width: 100%;
 }
 
 .dados-guia-btn {
-    background-color: #0C513F;
+    background: #226144;
     color: #ffffff;
-    border: none;
-    width: 55%;
-    border-radius: 8px;
-    padding: 12px 24px;
     font-size: 1.2rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 40px;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 12px rgba(34, 97, 68, 0.2);
+    transition: all 0.3s ease;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    width: auto;
+    min-width: 200px;
 }
 
 .dados-guia-bottom {
@@ -169,9 +167,15 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* margin-top: 2vh; */
 }
 
 .dados-guia-btn:hover {
-    background-color: #094936;
+    background: #1a4d36;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(34, 97, 68, 0.3);
+}
+
+.dados-guia-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(34, 97, 68, 0.2);
 }

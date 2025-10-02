@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 import "./header.css";
 import img from "../../assets/mulher1.jpeg";
-
+import { useAuth } from "../../context/AuthContext";
 
 const Header = () => {
   const navigate = useNavigate();
+  const { logout } = useAuth();
 
   return (
     <header className="header">

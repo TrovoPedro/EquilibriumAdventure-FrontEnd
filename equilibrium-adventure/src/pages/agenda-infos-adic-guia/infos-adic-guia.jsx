@@ -8,6 +8,7 @@ import Evento1 from "../../assets/cachoeiralago.jpg";
 import Evento2 from "../../assets/chile.jpg";
 import Evento3 from "../../assets/img12-catalogo.jpg";
 import EscolhaDataCard from "../escolher-data/escolher-data";
+import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 
@@ -15,6 +16,10 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
     const [showEscolherData, setShowEscolherData] = useState(false);
     const titulo = "Salvar Alterações";
     const redirect = useNavigate();
+
+    const handleBack = () => {
+        redirect(-1); // Volta para a página anterior
+    };
 
     const handleOnClickRelatorio = () => {
        redirect(routeUrls.RELATORIO_ANAMNESE);
@@ -26,6 +31,10 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
 
     const handleOnClickCard = () => {
          redirect(routeUrls.DADOS_CLIENTE);
+    }
+
+    const handleEditInfo = () => {
+        redirect(routeUrls.INFORMACOES_PESSOAIS);
     }
 
     const scrollLeft = (containerId) => {
@@ -49,7 +58,10 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
         <div className="home-container">
         <div className="cards-father">
             <div className="card-info-guia">
-                <h2>Informações Pessoais</h2>
+                <div className="info-pessoais-header">
+                    <ButtonBack onClick={handleBack} />
+                    <h2>Informações Pessoais</h2>
+                </div>
                 <div className="personal-info-card">
                     <div className="user-photo">
                         <img src={Beneficiario} alt="Foto do usuário"/>
@@ -59,7 +71,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                             <h3>Edgar de Mendonça Oliveira</h3>
                             <span className="user-role">Administrador</span>
                         </div>
-                        <button className="edit-info-btn">Editar Informações</button>
+                        <button className="edit-info-btn" onClick={handleEditInfo}>Editar Informações</button>
                     </div>
                 </div>
             </div>

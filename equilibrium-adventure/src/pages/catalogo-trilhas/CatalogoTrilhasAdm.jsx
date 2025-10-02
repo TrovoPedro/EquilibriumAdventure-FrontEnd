@@ -61,6 +61,9 @@ const CatalogoTrilhas = () => {
       navigate(routeUrls.ATIVAR_EVENTO);
     } else if (action === "editar") {
       navigate(routeUrls.EDITAR_EVENTO);
+    } else if (action === "detalhes") {
+      // Adicione aqui a navegação para a página de detalhes
+      console.log("Navegar para detalhes do evento");
     }
   };
 
@@ -87,11 +90,16 @@ const CatalogoTrilhas = () => {
         <section className="destinos">
           <h2>Eventos Ativos</h2>
           <div className="destinos-grid">
-            <img src={trilhas[0].img} alt={trilhas[0].alt} className="destino-img destino-img1" />
-            <img src={trilhas[1].img} alt={trilhas[1].alt} className="destino-img destino-img2" />
-            <img src={trilhas[2].img} alt={trilhas[2].alt} className="destino-img destino-img3" />
-            <img src={trilhas[3].img} alt={trilhas[3].alt} className="destino-img destino-img4" />
-            <img src={trilhas[4].img} alt={trilhas[4].alt} className="destino-img destino-img5" />
+            {trilhas.map((trilha, idx) => (
+              <div className={`destino-card destino-img${idx + 1}`} key={idx}>
+                <img src={trilha.img} alt={trilha.alt} className="destino-img" />
+                <div className="destino-overlay">
+                  <button className="destino-detalhes-btn" onClick={() => handleOnClick("detalhes")}>
+                    Detalhes
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -117,7 +125,7 @@ const CatalogoTrilhas = () => {
                   </div>
                 </div>
               </div>
-            ))}
+            ))} 
           </div>
         </section>
       </div>

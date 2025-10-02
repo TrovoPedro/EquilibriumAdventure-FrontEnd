@@ -1,52 +1,122 @@
 .form-section {
-  background: #fff;
-  border-radius: 18px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.13);
-  padding: 32px 32px 24px 32px;
-  margin-bottom: 32px;
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 1px 3px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  padding: 40px 36px 32px 36px;
+  margin-bottom: 40px;
   width: 90%;
-  max-width: 800px;
+  max-width: 850px;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  position: relative;
 }
 
+
+
 .form-section h2 {
-  font-size: 1.2rem;
-  font-weight: 600;
-  color: #2e4d2e;
-  margin-bottom: 18px;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #1e3a1e;
+  margin-bottom: 28px;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  position: relative;
+  padding-bottom: 12px;
+}
+
+.form-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(135deg, #489465 0%, #2e4d2e 100%);
+  border-radius: 2px;
 }
 
 .form-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 18px 32px;
+  gap: 24px 36px;
 }
 
 .endereco__form-group {
   display: flex;
   flex-direction: column;
-  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
 }
 
 .endereco__form-group label {
-  font-size: 1rem;
-  color: #333;
-  margin-bottom: 6px;
-  font-weight: 500;
+  font-size: 0.9rem;
+  color: #2e4d2e;
+  margin-bottom: 8px;
+  font-weight: 600;
+  letter-spacing: 0.025em;
+  text-transform: uppercase;
 }
 
 .endereco__form-group input {
-  padding: 8px 10px;
-  border: 1.5px solid #b2b2b2;
-  border-radius: 6px;
+  padding: 16px 20px;
+  border: 2px solid #e1e8e1;
+  border-radius: 14px;
   font-size: 1rem;
-  background: #fafafa;
-  transition: border 0.2s;
+  background: #ffffff;
+  color: #2c3e2c;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  font-weight: 500;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.04),
+    0 1px 3px rgba(0, 0, 0, 0.05);
+  position: relative;
 }
 
 .endereco__form-group input:focus {
-  border: 1.5px solid #2e4d2e;
+  border-color: #489465;
   outline: none;
+  background: #ffffff;
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.04),
+    0 0 0 4px rgba(72, 148, 101, 0.1),
+    0 4px 12px rgba(72, 148, 101, 0.15);
+  transform: translateY(-1px);
+}
+
+.endereco__form-group input::placeholder {
+  color: #8a9d8a;
+  font-weight: 400;
+}
+
+.endereco__form-group input:hover {
+  border-color: #c1d4c1;
+  background: #ffffff;
+  transform: translateY(-1px);
+  box-shadow: 
+    inset 0 2px 4px rgba(0, 0, 0, 0.04),
+    0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.endereco__form-group input:invalid {
+  border-color: #e74c3c;
+}
+
+.endereco__form-group input:valid {
+  border-color: #27ae60;
+}
+
+
+
+@keyframes slideInFromLeft {
+  0% {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
 }

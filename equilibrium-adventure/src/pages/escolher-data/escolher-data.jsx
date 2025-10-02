@@ -97,7 +97,7 @@ export default function EscolhaDataCard({ onClose, fkAventureiro }) {
             </IconButton>
           </Box>
 
-          <Typography variant="h6" align="center" style={{ marginBottom: 8, color: "#0C513F" }}>
+          <Typography variant="h6" align="center" style={{ marginBottom: 8, color: "#226144" }}>
             Adicione uma data que você esteja disponível:
           </Typography>
 
@@ -113,13 +113,13 @@ export default function EscolhaDataCard({ onClose, fkAventureiro }) {
               }
               sx={{
                 "& .MuiPickersDay-root.Mui-selected, .MuiPickersDay-root.Mui-selected:hover": {
-                  backgroundColor: "#2e5e46",
+                  backgroundColor: "#226144",
                 },
               }}
             />
           </LocalizationProvider>
 
-          <Typography variant="h6" align="center" style={{ marginTop: 16, marginBottom: 8, color: "#0C513F" }}>
+          <Typography variant="h6" align="center" style={{ marginTop: 16, marginBottom: 8, color: "#226144" }}>
             Adicione um horário que você esteja disponível:
           </Typography>
 
@@ -151,15 +151,16 @@ export default function EscolhaDataCard({ onClose, fkAventureiro }) {
             <Button
               variant="contained"
               sx={{
-                backgroundColor: "#2e5e46",
+                backgroundColor: "#226144",
                 color: "#fff",
                 fontWeight: 300,
                 fontSize: "0.8rem",
                 borderRadius: "8px",
-                padding: "10px 32px",
-                boxShadow: "0 2px 8px rgba(46,94,70,0.13)",
+                padding: "12px 24px",
+                minWidth: "140px",
+                boxShadow: "0 2px 8px rgba(34,97,68,0.13)",
                 "&:hover": {
-                  backgroundColor: "#244c38"
+                  backgroundColor: "#1a4d35"
                 }
               }}
               onClick={handleSave}
@@ -169,15 +170,16 @@ export default function EscolhaDataCard({ onClose, fkAventureiro }) {
             <Button
               variant="contained"
               sx={{
-                backgroundColor: "#2e5e46",
+                backgroundColor: "#226144",
                 color: "#fff",
                 fontWeight: 300,
                 fontSize: "0.8rem",
                 borderRadius: "8px",
-                padding: "5px 10px",
-                boxShadow: "0 2px 8px rgba(46,94,70,0.13)",
+                padding: "12px 24px",
+                minWidth: "140px",
+                boxShadow: "0 2px 8px rgba(34,97,68,0.13)",
                 "&:hover": {
-                  backgroundColor: "#244c38"
+                  backgroundColor: "#1a4d35"
                 }
               }}
               onClick={handleSave}
