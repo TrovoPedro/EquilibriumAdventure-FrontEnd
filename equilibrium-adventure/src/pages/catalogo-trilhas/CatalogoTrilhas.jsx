@@ -57,6 +57,12 @@ const CatalogoTrilhas = () => {
   const handleSaibaMais = () => {
     navigate(routeUrls.INSCRICAO_TRILHAS);
   };
+  
+  const handleDetalhes = () => {
+    // Navegação para página de detalhes - pode ser personalizada conforme necessário
+    console.log("Navegar para detalhes da trilha");
+    // navigate(routeUrls.DETALHES_TRILHA); // Descomente quando a rota estiver definida
+  };
   return (
     <>
       <BotpressChat />
@@ -67,7 +73,7 @@ const CatalogoTrilhas = () => {
           <div className="search-overlay">
             <div className="search-text-group">
               <h2>Pesquise sua próxima aventura</h2>
-              <p>Digite o nome do evento que deseja achar</p>
+              <p>Bora achar sua próxima trilha?</p>
             </div>
             <div className="search-box">
               <input type="text" placeholder="Escreva aqui" className="pesquisar-trilha" />
@@ -80,11 +86,16 @@ const CatalogoTrilhas = () => {
         <section className="destinos">
           <h2>Destinos que você vai amar conhecer</h2>
           <div className="destinos-grid">
-            <img src={trilhas[0].img} alt={trilhas[0].alt} className="destino-img destino-img1" loading="lazy" />
-            <img src={trilhas[1].img} alt={trilhas[1].alt} className="destino-img destino-img2" loading="lazy" />
-            <img src={trilhas[2].img} alt={trilhas[2].alt} className="destino-img destino-img3" loading="lazy" />
-            <img src={trilhas[3].img} alt={trilhas[3].alt} className="destino-img destino-img4" loading="lazy" />
-            <img src={trilhas[4].img} alt={trilhas[4].alt} className="destino-img destino-img5" loading="lazy" />
+            {trilhas.map((trilha, idx) => (
+              <div className={`destino-card destino-img${idx + 1}`} key={idx}>
+                <img src={trilha.img} alt={trilha.alt} className="destino-img" loading="lazy" />
+                <div className="destino-overlay">
+                  <button className="destino-detalhes-btn" onClick={handleDetalhes}>
+                    Detalhes
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </section>
 
@@ -103,7 +114,9 @@ const CatalogoTrilhas = () => {
                   <p className="anuncio-desc">{anuncio.descricao}</p>
                   <div className="anuncio-footer">
                     <span className="anuncio-preco">{anuncio.preco}<span className="anuncio-preco-unidade">/pessoa</span></span>
-                    <button className="anuncio-btn" onClick={handleSaibaMais}>Saiba Mais</button>
+                    <div className="anuncio-btn-group">
+                      <button className="anuncio-btn" onClick={handleSaibaMais}>Saiba Mais</button>
+                    </div>
                   </div>
                 </div>
               </div>

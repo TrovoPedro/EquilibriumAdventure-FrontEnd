@@ -1,0 +1,111 @@
+
+body {
+	margin: 0;
+	padding: 0;
+	font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+	overflow-x: hidden;
+}
+
+.editar-dados-container {
+	min-height: 100vh;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: flex-start;
+	background: url('../../assets/vertical-shot-branches-green-tree-perfect-background.jpg') no-repeat center center fixed;
+	background-size: cover;
+	box-sizing: border-box;
+	background-blend-mode: darken;
+	padding-bottom: 40px;
+	overflow-x: hidden; 
+	overflow-y: auto;   
+	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.titulo-editar-dados {
+	color: rgba(255, 255, 255, 0.95);
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 60px;
+	margin-bottom: 40px;
+	text-align: center;
+	text-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+	font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+	letter-spacing: -0.025em;
+	position: relative;
+	z-index: 1;
+}
+
+
+.salvar-btn {
+	background: #226144;
+	color: #ffffff;
+	font-size: 1.2rem;
+	font-weight: 600;
+	border: none;
+	border-radius: 12px;
+	padding: 16px 40px;
+	cursor: pointer;
+	box-shadow: 0 4px 12px rgba(34, 97, 68, 0.2);
+	transition: all 0.3s ease;
+	text-transform: none;
+	letter-spacing: 0.5px;
+	margin-top: 32px;
+}
+
+.salvar-btn:hover {
+	background: #1a4d36;
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(34, 97, 68, 0.3);
+}
+
+.salvar-btn:active {
+	transform: translateY(0);
+	box-shadow: 0 2px 8px rgba(34, 97, 68, 0.2);
+}
+
+
+@keyframes slideInFromBottom {
+	0% {
+		opacity: 0;
+		transform: translateY(30px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateY(0);
+	}
+}
+
+@keyframes slideInFromLeft {
+	0% {
+		opacity: 0;
+		transform: translateX(-30px);
+	}
+	100% {
+		opacity: 1;
+		transform: translateX(0);
+	}
+}
+
+@keyframes fadeInScale {
+	0% {
+		opacity: 0;
+		transform: scale(0.95);
+	}
+	100% {
+		opacity: 1;
+		transform: scale(1);
+	}
+}
+
+.titulo-editar-dados {
+	animation: slideInFromBottom 0.6s ease-out;
+}
+
+.salvar-btn {
+	animation: slideInFromBottom 0.6s ease-out 0.4s both;
+}
+
+
+

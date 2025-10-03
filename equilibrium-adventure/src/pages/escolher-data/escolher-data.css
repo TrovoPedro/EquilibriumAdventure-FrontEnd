@@ -15,10 +15,11 @@
 
 /* Card central */
 .card-escolha {
-    width: 380px;
-    border-radius: 12px !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2) !important;
-    padding: 10px;
+    width: 650px;
+    max-width: 95vw;
+    border-radius: 16px !important;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+    padding: 20px;
     background-color: #fff;
     animation: fadeIn 0.3s ease;
     position: relative;
@@ -51,7 +52,7 @@
     margin: 12px 0;
     font-size: 16px !important;
     font-weight: 500 !important;
-    color: #2e5e46 !important;
+    color: #226144 !important;
 }
 
 /* Select de horários */
@@ -65,7 +66,7 @@
 .select-horario {
     min-width: 220px !important;
     text-align: center;
-    color: #2e5e46 !important;
+    color: #226144 !important;
     font-weight: 500 !important;
 }
 
@@ -78,7 +79,7 @@
 
 .btn-salvar,
 .btn-calendario {
-    background-color: #2e5e46 !important;
+    background-color: #226144 !important;
     text-transform: none !important;
     font-weight: 500 !important;
     border-radius: 8px !important;

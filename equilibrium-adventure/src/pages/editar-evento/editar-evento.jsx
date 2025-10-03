@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import Header from "../../components/header/header";
 import { maskCep, maskDistancia } from "../../utils/masks";
+import { scrollToTop } from "../../utils/scrollToTop";
 import { cadastrarEvento, buscarCep } from "../../services/chamadasAPIEvento";
 import "./editar-evento.css";
 import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
 import ButtonCriarEvento from "../../components/button-eventos/button-criar-evento";
+import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
+import routeUrls from "../../routes/routeUrls";
 
 const CriarEvento = () => {
     const [formData, setFormData] = useState({
@@ -26,6 +29,15 @@ const CriarEvento = () => {
     });
 
     const navigate = useNavigate();
+
+    useEffect(() => {
+        // Rola para o topo da página quando o componente é montado
+        scrollToTop();
+    }, []);
+
+    const handleBack = () => {
+        navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+    };
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -85,7 +97,10 @@ const CriarEvento = () => {
             <div className="criar-evento-container">
                 <Header/>
                 <div className="div-title">
-                    <h1 className="h1-title">Editar de Evento</h1>
+                    <div className="editar-evento-header">
+                        <ButtonBack onClick={handleBack} />
+                        <h1 className="h1-title">Editar Evento</h1>
+                    </div>
                 </div>
                 <form className="evento-form" onSubmit={handleSubmit}>
                     <label>
@@ -160,7 +175,7 @@ const CriarEvento = () => {
                     <label>
                         Mapa da Trilha (.gpx):
                         <div
-                            className="upload-box-trilha"
+                            className="upload-box"
                             onClick={() => document.getElementById("upload-trilha-input").click()}
                         >
                             {formData.trilha ? (
@@ -271,7 +286,7 @@ const CriarEvento = () => {
                     </div>
 
                     <div className="botoes">
-                        <ButtonCancelarEvento title={"Cancelar criação"}></ButtonCancelarEvento>
+                        <ButtonCancelarEvento title={"Cancelar"}></ButtonCancelarEvento>
                         <ButtonCriarEvento title={"Criar evento"}></ButtonCriarEvento>
                     </div>
                 </form>

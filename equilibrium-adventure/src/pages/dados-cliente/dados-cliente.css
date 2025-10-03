@@ -71,28 +71,46 @@
 }
 
 .dados-card {
-	background: #fff;
-	border-radius: 18px;
-	box-shadow: 0 4px 24px rgba(0,0,0,0.13);
-	padding: 32px 32px 24px 32px;
+	background: #ffffff;
+	border-radius: 20px;
+	box-shadow: 
+		0 20px 40px rgba(0, 0, 0, 0.1),
+		0 1px 3px rgba(0, 0, 0, 0.05),
+		inset 0 1px 0 rgba(255, 255, 255, 0.9);
+	padding: 24px 28px 20px 28px;
 	margin-bottom: 32px;
 	width: 90%;
-	max-width: 800px;
+	max-width: 850px;
 	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	border: 1px solid rgba(255, 255, 255, 0.8);
+	position: relative;
 }
 
 .dados-card-title {
 	font-size: 1.2rem;
-	font-weight: 600;
-	color: #2e4d2e;
+	font-weight: 700;
+	color: #1e3a1e;
 	margin-bottom: 18px;
-	font-family: inherit;
+	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	position: relative;
+	padding-bottom: 12px;
+}
+
+.dados-card-title::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 60px;
+	height: 3px;
+	background: linear-gradient(135deg, #489465 0%, #2e4d2e 100%);
+	border-radius: 2px;
 }
 
 .dados-card-grid {
-	display: flex;
-	gap: 32px;
-	flex-wrap: wrap;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px 24px;
 }
 
 .dados-card-group {
@@ -103,46 +121,97 @@
 }
 
 .dados-card-group label {
-	font-size: 1rem;
-	color: #333;
-	margin-bottom: 6px;
-	font-weight: 500;
+	font-size: 0.9rem;
+	color: #2e4d2e;
+	margin-bottom: 8px;
+	font-weight: 600;
+	letter-spacing: 0.025em;
+	text-transform: uppercase;
 }
 
 .dados-card-input {
-	padding: 8px 10px;
-	border: 1.5px solid #b2b2b2;
-	border-radius: 6px;
-	font-size: 1rem;
-	background: #ededed;
-	transition: border 0.2s;
-	font-family: inherit;
+	padding: 12px 16px;
+	border: 2px solid #e1e8e1;
+	border-radius: 14px;
+	font-size: 0.95rem;
+	background: #ffffff;
+	color: #2c3e2c;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	font-weight: 500;
+	box-shadow: 
+		inset 0 2px 4px rgba(0, 0, 0, 0.04),
+		0 1px 3px rgba(0, 0, 0, 0.05);
+	position: relative;
 }
 
 .dados-card-input:focus {
-	border: 1.5px solid #2e4d2e;
+	border-color: #489465;
 	outline: none;
+	background: #ffffff;
+	box-shadow: 
+		inset 0 2px 4px rgba(0, 0, 0, 0.04),
+		0 0 0 4px rgba(72, 148, 101, 0.1),
+		0 4px 12px rgba(72, 148, 101, 0.15);
+	transform: translateY(-1px);
+}
+
+.dados-card-display {
+	padding: 12px 16px;
+	border: 2px solid #e1e8e1;
+	border-radius: 14px;
+	font-size: 0.95rem;
+	background: #ededed;
+	color: #2c3e2c;
+	min-height: auto;
+	display: flex;
+	align-items: center;
+	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	font-weight: 500;
+	box-shadow: 
+		inset 0 2px 4px rgba(0, 0, 0, 0.04),
+		0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .dados-card-textarea {
 	width: 100%;
 	min-height: 80px;
-	padding: 10px;
-	border: 1.5px solid #b2b2b2;
-	border-radius: 6px;
-	font-size: 1rem;
+	padding: 12px 16px;
+	border: 2px solid #e1e8e1;
+	border-radius: 14px;
+	font-size: 0.95rem;
 	background: #ededed;
+	color: #2c3e2c;
 	resize: vertical;
-	font-family: inherit;
+	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	font-weight: 500;
 	margin-top: 12px;
+	box-shadow: 
+		inset 0 2px 4px rgba(0, 0, 0, 0.04),
+		0 1px 3px rgba(0, 0, 0, 0.05);
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .dados-card-textarea:focus {
-	border: 1.5px solid #2e4d2e;
+	border-color: #489465;
 	outline: none;
+	background: #ffffff;
+	box-shadow: 
+		inset 0 2px 4px rgba(0, 0, 0, 0.04),
+		0 0 0 4px rgba(72, 148, 101, 0.1),
+		0 4px 12px rgba(72, 148, 101, 0.15);
+	transform: translateY(-1px);
 }
 
-/* Estilos para o questionário estruturado */
+.dados-card-textarea[readonly] {
+	background: #ededed !important;
+	color: #333 !important;
+	cursor: default !important;
+	user-select: none !important;
+	pointer-events: none !important;
+	border-color: #b2b2b2 !important;
+}
+
 .questionario-lista {
 	margin-top: 12px;
 }
@@ -170,12 +239,15 @@
 }
 
 .pergunta-texto {
-	font-size: 1rem;
-	color: #333;
-	font-weight: 500;
-	margin-bottom: 12px;
-	line-height: 1.4;
+  white-space: normal;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  flex: 1;
+  min-width: 0;
 }
+
+
+
 
 .resposta-section {
 	display: flex;
@@ -228,7 +300,6 @@
 	font-size: 1rem;
 }
 
-/* Estilos para alternativas */
 .alternativas-section {
 	margin-top: 16px;
 	background: #fdfdfd;
@@ -329,3 +400,391 @@
 	font-weight: 600;
 	font-size: 0.9rem;
 }
+
+.dados-cliente-container .form-section {
+	background: #ffffff;
+	border-radius: 20px;
+	box-shadow: 
+		0 20px 40px rgba(0, 0, 0, 0.1),
+		0 1px 3px rgba(0, 0, 0, 0.05),
+		inset 0 1px 0 rgba(255, 255, 255, 0.9);
+	padding: 24px 28px 20px 28px;
+	margin-bottom: 32px;
+	width: 90%;
+	max-width: 850px;
+	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	border: 1px solid rgba(255, 255, 255, 0.8);
+	position: relative;
+}
+
+.dados-cliente-container .form-section h2 {
+	font-size: 1.2rem;
+	font-weight: 700;
+	color: #1e3a1e;
+	margin-bottom: 18px;
+	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	position: relative;
+	padding-bottom: 12px;
+}
+
+.dados-cliente-container .form-section h2::after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 60px;
+	height: 3px;
+	background: linear-gradient(135deg, #489465 0%, #2e4d2e 100%);
+	border-radius: 2px;
+}
+
+.dados-cliente-container .form-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 16px 24px;
+}
+
+.dados-cliente-container .info-pessoais__form-group input {
+	padding: 12px 16px;
+	border: 2px solid #e1e8e1;
+	border-radius: 14px;
+	font-size: 0.95rem;
+	background: #ededed;
+	color: #2c3e2c;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	font-weight: 500;
+	box-shadow: 
+		inset 0 2px 4px rgba(0, 0, 0, 0.04),
+		0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.dados-cliente-container .info-pessoais__form-group label {
+	font-size: 0.9rem;
+	color: #2e4d2e;
+	margin-bottom: 8px;
+	font-weight: 600;
+	letter-spacing: 0.025em;
+	text-transform: uppercase;
+}
+
+.questionario-carrossel {
+	margin-top: 12px;
+}
+
+.carrossel-navigation {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 12px;
+	padding: 0 10px;
+}
+
+.carrossel-navigation--info-only {
+	justify-content: center;
+}
+
+.carrossel-btn {
+	background: linear-gradient(135deg, #489465 0%, #2e4d2e 100%);
+	border: none;
+	border-radius: 50%;
+	width: 50px;
+	height: 50px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	cursor: pointer;
+	transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+	box-shadow: 0 4px 12px rgba(72, 148, 101, 0.3);
+}
+
+.carrossel-btn:hover:not(:disabled) {
+	transform: translateY(-2px);
+	box-shadow: 0 6px 20px rgba(72, 148, 101, 0.4);
+}
+
+.carrossel-btn:disabled {
+	background: #cccccc;
+	cursor: not-allowed;
+	box-shadow: none;
+}
+
+.seta-icon {
+	color: white;
+	font-size: 1.5rem;
+	font-weight: bold;
+}
+
+.carrossel-info {
+	display: flex;
+	align-items: center;
+	font-size: 1.1rem;
+	font-weight: 600;
+	color: #2e4d2e;
+}
+
+.pergunta-atual {
+	color: #489465;
+	font-size: 1.3rem;
+	font-weight: 700;
+}
+
+.separador {
+	margin: 0 8px;
+	color: #8a9d8a;
+}
+
+.total-perguntas {
+	color: #666;
+}
+
+
+.carrossel-container {
+	overflow-x: auto;
+	overflow-y: hidden;
+	border-radius: 16px;
+	margin-bottom: 20px;
+	scroll-snap-type: x mandatory;
+	-webkit-overflow-scrolling: touch; 
+	scrollbar-width: thin;
+}
+
+.carrossel-track {
+	display: flex;
+	gap: 0; 
+	width: 100%;
+}
+
+.carrossel-slide {
+	min-width: 100%;
+	flex-shrink: 0;
+	scroll-snap-align: start;
+}
+
+.carrossel-slide .pergunta-item {
+	background: #f8f9fa;
+	border: 2px solid #e1e8e1;
+	border-radius: 12px;
+	padding: 20px;
+	margin: 0;
+	transition: all 0.3s ease;
+	box-shadow: 
+		inset 0 1px 2px rgba(0, 0, 0, 0.04),
+		0 1px 4px rgba(0, 0, 0, 0.06);
+	max-height: 450px;
+	min-height: 350px;
+	overflow-y: auto;
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	box-sizing: border-box;
+}
+
+.carrossel-indicators {
+	display: flex;
+	justify-content: center;
+	gap: 8px;
+	margin-bottom: 20px;
+}
+
+.indicator {
+	width: 12px;
+	height: 12px;
+	border-radius: 50%;
+	border: none;
+	background: #e1e8e1;
+	cursor: pointer;
+	transition: all 0.3s ease;
+}
+
+.indicator.active {
+	background: linear-gradient(135deg, #489465 0%, #2e4d2e 100%);
+	transform: scale(1.2);
+}
+
+.indicator:hover {
+	background: #489465;
+	transform: scale(1.1);
+}
+
+.carrossel-slide .pergunta-numero {
+	font-size: 0.85rem;
+	color: #2e4d2e;
+	font-weight: 700;
+	margin-bottom: 8px;
+	text-transform: uppercase;
+	letter-spacing: 0.3px;
+	background: linear-gradient(135deg, #489465 0%, #2e4d2e 100%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+	background-clip: text;
+	width: 100%;
+	display: block;
+}
+
+.carrossel-slide .pergunta-texto {
+  font-size: 0.95rem;
+  color: #333;
+  font-weight: 600;
+  margin-bottom: 12px;
+  line-height: 1.6;
+
+  white-space: normal;        
+  overflow-wrap: break-word;  
+  word-break: break-word;   
+  
+  max-width: 100%;   
+  min-width: 0;      
+  display: block;
+}
+
+
+.carrossel-slide .alternativas-section {
+	margin-bottom: 12px;
+}
+
+.carrossel-slide .alternativas-titulo {
+	font-size: 0.9rem;
+	color: #2e4d2e;
+	font-weight: 600;
+	margin-bottom: 8px;
+}
+
+.carrossel-slide .alternativas-lista {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 6px;
+}
+
+.carrossel-slide .alternativa-item {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 8px 12px;
+	background: #ffffff;
+	border: 1px solid #e9ecef;
+	border-radius: 8px;
+	transition: all 0.3s ease;
+	font-size: 0.9rem;
+}
+
+.carrossel-slide .alternativa-item.alternativa-escolhida {
+	background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 100%);
+	border-color: #489465;
+	box-shadow: 0 2px 8px rgba(72, 148, 101, 0.2);
+}
+
+.carrossel-slide .alternativa-texto {
+	flex: 1;
+	font-weight: 500;
+	color: #333;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+	line-height: 1.4;
+	max-width: 70%;
+	padding-right: 8px;
+	white-space: normal;
+}
+
+.carrossel-slide .alternativa-valor {
+	font-size: 0.9rem;
+	color: #666;
+	margin-left: 12px;
+}
+
+.carrossel-slide .marcador-escolhida {
+	color: #489465;
+	font-weight: 700;
+	font-size: 0.9rem;
+	margin-left: 12px;
+	background: #489465;
+	color: white;
+	padding: 4px 8px;
+	border-radius: 6px;
+	font-size: 0.8rem;
+}
+
+.carrossel-slide .status-resposta {
+	margin-top: 12px;
+	text-align: center;
+	padding: 8px;
+	border-radius: 8px;
+	background: #f8f9fa;
+}
+
+.questionario-carrossel {
+	margin-top: 12px;
+	height: 550px;
+	overflow: visible;
+}
+
+@media (max-width: 768px) {
+	.carrossel-navigation { padding: 0 5px; }
+	
+	.carrossel-btn { width: 40px; height: 40px; }
+	
+	.seta-icon {
+		font-size: 1.2rem;
+	}
+	
+	.carrossel-info {
+		font-size: 1rem;
+	}
+	
+	.pergunta-atual {
+		font-size: 1.1rem;
+	}
+	
+	.carrossel-slide .pergunta-item {
+		padding: 16px;
+		height: auto;
+		min-height: 350px;
+		max-height: 420px;
+		overflow-y: auto;
+	}
+	
+	.carrossel-container { height: 380px; }
+	
+	.questionario-carrossel {
+		height: 480px;
+	}
+	
+	.carrossel-slide .pergunta-texto {
+		font-size: 0.95rem;
+		line-height: 1.6;
+		word-wrap: break-word;
+		overflow-wrap: break-word;
+		white-space: normal;
+	}
+	
+	.carrossel-slide .alternativa-texto {
+		max-width: 65%;
+		font-size: 0.85rem;
+	}
+	
+	.carrossel-slide .alternativa-item {
+		padding: 6px 10px;
+		font-size: 0.85rem;
+	}
+}
+
+#dados-cliente-endereco .endereco__form-group--full-width {
+	grid-column: 1 / -1; 
+}
+
+#dados-cliente-endereco .endereco__form-group--full-width label[for="complemento"]::after {
+	content: ":";
+}
+
+#dados-cliente-endereco .endereco__form-group--full-width label[for="complemento"] {
+	font-size: 0; 
+}
+
+#dados-cliente-endereco .endereco__form-group--full-width label[for="complemento"]::before {
+	content: "Complemento";
+	font-size: 1rem; 
+}
+

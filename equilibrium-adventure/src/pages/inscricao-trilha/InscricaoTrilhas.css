@@ -71,6 +71,16 @@
 }
 
 .inscricao-trilha-btn {
+    /* Estilos existentes */
+}
+
+.inscricao-trilha-btn.disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.inscricao-trilha-btn {
   width: 100%;
   margin: 0 0 48px 0;
   background: #2d4636;

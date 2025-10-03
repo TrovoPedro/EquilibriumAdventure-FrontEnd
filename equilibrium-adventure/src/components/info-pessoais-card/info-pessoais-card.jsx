@@ -11,7 +11,7 @@ export default function InfoPessoaisCard({ formData, onInputChange, errors, read
     const { name, value } = e.target;
     let maskedValue = value;
 
-    // Aplicar máscaras conforme o campo
+  
     switch (name) {
       case "telefone":
         const phoneValidation = validatePhone(maskTelefone(value));
@@ -19,7 +19,7 @@ export default function InfoPessoaisCard({ formData, onInputChange, errors, read
           maskedValue = phoneValidation.value;
         } else {
           maskedValue = phoneValidation.value;
-          // Você pode mostrar erro se necessário
+        
         }
         break;
       case "cpf":
@@ -32,7 +32,7 @@ export default function InfoPessoaisCard({ formData, onInputChange, errors, read
         maskedValue = maskData(value);
         break;
       case "contatoEmergencia":
-        // Detectar se há números no final e aplicar máscara de telefone
+       
         const phonePattern = /([\d\(\)\-\s]+)$/;
         const match = value.match(phonePattern);
         if (match) {
@@ -67,7 +67,6 @@ export default function InfoPessoaisCard({ formData, onInputChange, errors, read
             className={errors?.username ? "error" : ""}
             readOnly={readOnly}
           />
-          {errors?.username && <span className="error-message">{errors.username}</span>}
         </div>
         <div className="info-pessoais__form-group">
           <label htmlFor="email">Email:</label>
@@ -78,6 +77,7 @@ export default function InfoPessoaisCard({ formData, onInputChange, errors, read
             placeholder="Ex: joao@email.com"
             value={formData?.email || ""}
             onChange={handleInputChange}
+            className={errors?.email ? "error" : ""}
             readOnly={readOnly}
           />
         </div>
@@ -90,6 +90,7 @@ export default function InfoPessoaisCard({ formData, onInputChange, errors, read
             placeholder="(11) 99999-9999"
             value={formData?.telefone || ""}
             onChange={handleInputChange}
+            className={errors?.telefone ? "error" : ""}
             maxLength="15"
             readOnly={readOnly}
           />
@@ -103,6 +104,7 @@ export default function InfoPessoaisCard({ formData, onInputChange, errors, read
             placeholder="DD/MM/AAAA"
             value={formData?.dataNascimento || ""}
             onChange={handleInputChange}
+            className={errors?.dataNascimento ? "error" : ""}
             maxLength="10"
             readOnly={readOnly}
           />
@@ -116,6 +118,7 @@ export default function InfoPessoaisCard({ formData, onInputChange, errors, read
             placeholder="123.456.789-00"
             value={formData?.cpf || ""}
             onChange={handleInputChange}
+            className={errors?.cpf ? "error" : ""}
             maxLength="14"
             readOnly={readOnly}
           />
@@ -129,6 +132,7 @@ export default function InfoPessoaisCard({ formData, onInputChange, errors, read
             placeholder="12.345.678-9"
             value={formData?.rg || ""}
             onChange={handleInputChange}
+            className={errors?.rg ? "error" : ""}
             maxLength="12"
             readOnly={readOnly}
           />
@@ -151,9 +155,10 @@ export default function InfoPessoaisCard({ formData, onInputChange, errors, read
             type="text" 
             id="contatoEmergencia" 
             name="contatoEmergencia" 
-            placeholder="(11) 98765-4321"
+            placeholder="(11) 99999-9999"
             value={formData?.contatoEmergencia || ""}
             onChange={handleInputChange}
+            className={errors?.contatoEmergencia ? "error" : ""}
             readOnly={readOnly}
           />
         </div>

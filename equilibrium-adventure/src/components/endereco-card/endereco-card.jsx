@@ -7,12 +7,10 @@ export default function EnderecoCard({ formData, onInputChange, onCepSearch, loa
     const { name, value } = e.target;
     let maskedValue = value;
 
-    // Aplicar máscara de CEP
     if (name === "cep") {
       maskedValue = maskCep(value);
       onInputChange(name, maskedValue);
       
-      // Buscar endereço automaticamente quando CEP estiver completo
       if (maskedValue.replace(/\D/g, "").length === 8) {
         onCepSearch(maskedValue);
       }
@@ -35,10 +33,22 @@ export default function EnderecoCard({ formData, onInputChange, onCepSearch, loa
             value={formData?.cep || ""}
             onChange={handleInputChange}
             maxLength="9"
-            className={loading ? "loading" : ""}
+            className={loading ? "loading" : (errors?.cep ? "error" : "")}
             readOnly={readOnly}
           />
           {loading && <span className="loading-text">Buscando endereço...</span>}
+        </div>
+        <div className="endereco__form-group">
+          <label htmlFor="rua">Rua:</label>
+          <input 
+            type="text" 
+            id="rua" 
+            name="rua" 
+            placeholder="Av. Paulista"
+            value={formData?.rua || ""}
+            onChange={handleInputChange}
+            readOnly={loading || readOnly}
+          />
         </div>
         <div className="endereco__form-group">
           <label htmlFor="cidade">Cidade:</label>
@@ -88,18 +98,18 @@ export default function EnderecoCard({ formData, onInputChange, onCepSearch, loa
             readOnly={readOnly}
           />
         </div>
-        <div className="endereco__form-group">
-          <label htmlFor="complemento">Complemento (Opcional):</label>
-          <input 
-            type="text" 
-            id="complemento" 
-            name="complemento" 
-            placeholder="Apto 45"
-            value={formData?.complemento || ""}
-            onChange={handleInputChange}
-            readOnly={readOnly}
-          />
-        </div>
+      </div>
+      <div className="endereco__form-group endereco__form-group--full-width">
+        <label htmlFor="complemento">Complemento (Opcional):</label>
+        <input 
+          type="text" 
+          id="complemento" 
+          name="complemento" 
+          placeholder="Apto 45, Bloco B, etc."
+          value={formData?.complemento || ""}
+          onChange={handleInputChange}
+          readOnly={readOnly}
+        />
       </div>
     </form>
   );

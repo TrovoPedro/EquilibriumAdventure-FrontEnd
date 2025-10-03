@@ -18,7 +18,6 @@ export default function useBackWithCleanSession(redirectPath = -1) {
   }, [navigate, redirectPath]);
 
   const goBack = () => {
-    sessionStorage.clear();
     navigate(redirectPath);
   };
 

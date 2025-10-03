@@ -20,7 +20,7 @@ const Login = () => {
 
     try {
         const usuario = await loginUsuario(credentials);
-        login(usuario);
+        login(usuario); 
 
         if (usuario.tipoUsuario === "ADMINISTRADOR" || usuario.tipoUsuario === "GUIA") {
             navigate(routeUrls.CATALOGO_TRILHAS_ADM);
