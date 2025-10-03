@@ -14,13 +14,13 @@ const UsuariosInscritos = ({ usuarios, onAprovar, onNegar }) => {
                 className="btn-aprovar"
                 onClick={() => onAprovar(usuario.id)}
               >
-                Aprovar
+                Detalhes
               </button>
               <button 
                 className="btn-negar"
                 onClick={() => onNegar(usuario.id)}
               >
-                Negar
+                Deletar
               </button>
             </div>
           </div>

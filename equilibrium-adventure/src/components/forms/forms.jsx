@@ -166,7 +166,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
             {renderFormFields()}
             <div className='forms-footer'>
                 <span>
-                    {path === '/login' ? 'Ainda não tem uma conta?' : 'Já tem uma conta?'}
+                    {path.toLowerCase() === '/login' ? 'Ainda não tem uma conta?' : 'Já tem uma conta?'}
                     <button type="button" className='button-cad' onClick={handleNavigate}>{text}</button>
                 </span>
                 <ButtonAuth type="submit" title={title} />
