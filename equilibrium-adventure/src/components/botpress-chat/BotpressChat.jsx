@@ -2,12 +2,11 @@ import { useEffect } from "react";
 
 const BotpressChat = () => {
   useEffect(() => {
-    // Limpa o localStorage do Botpress WebChat para evitar histórico compartilhado
+   
     Object.keys(localStorage)
       .filter((k) => k.startsWith('webchat:'))
       .forEach((k) => localStorage.removeItem(k));
 
-    // Evita múltiplas injeções do script
     if (document.getElementById("bp-webchat-script")) return;
     const script = document.createElement("script");
     script.id = "bp-webchat-script";
@@ -21,7 +20,7 @@ const BotpressChat = () => {
           showPoweredBy: false,
           enableReset: true,
         });
-        // Sempre limpa o chat ao abrir
+  
         window.botpressWebChat.onEvent(function(event) {
           if (event.type === "LIFECYCLE.LOADED") {
             window.botpressWebChat.sendEvent({ type: "reset" });
@@ -32,7 +31,7 @@ const BotpressChat = () => {
     document.body.appendChild(script);
   }, []);
 
-  return null; // Não renderiza nada visível
+  return null; 
 };
 
 export default BotpressChat;
