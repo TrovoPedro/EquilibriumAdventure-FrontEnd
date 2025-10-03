@@ -24,6 +24,7 @@ export const getPerguntas = async () => {
   }
 };
 
+
 export const postRespostas = async (respostas) => {
   try {
     const response = await api.post('/respostas-aventureiro/salvar', respostas);
@@ -36,9 +37,31 @@ export const postRespostas = async (respostas) => {
 
 export const calcularNivel = async (usuarioId) => {
   try {
-    const response = await api.post(`/respostas-aventureiro/calcular-nivel/${usuarioId}`);
-    return response.data;
+    // Envia um objeto vazio no corpo da requisição POST
+    const response = await api.post(`/respostas-aventureiro/calcular-nivel/${usuarioId}`, {});
+    
+    if (response.data === null) {
+      throw new Error('Nível não pôde ser calculado');
+    }
+
+    // Se a resposta for um enum Nivel, será uma string
+    if (typeof response.data === 'string') {
+      return response.data;
+    }
+
+    // Se for um objeto contendo o nível
+    if (response.data.nivel) {
+      return response.data.nivel;
+    }
+
+    return 'EXPLORADOR'; // valor padrão
   } catch (error) {
+    if (error.response?.status === 500) {
+      const message = error.response.data?.message || 'Erro interno do servidor';
+      if (message.includes('Informações pessoais não encontradas')) {
+        throw new Error('É necessário preencher suas informações pessoais antes de calcular o nível.');
+      }
+    }
     console.error('Erro ao calcular nível:', error);
     throw error;
   }
