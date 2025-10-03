@@ -157,7 +157,6 @@ export default function Footer() {
           <div className="footer-section">
             <h4>Suporte</h4>
             <ul>
-              <li><a href="#faq" onClick={(e) => handleLinkClick(e, 'faq')}>Ajuda/FAQ</a></li>
               <li>
                 <a 
                   href="#contato" 

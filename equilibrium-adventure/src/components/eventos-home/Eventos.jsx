@@ -5,6 +5,7 @@ export default function Eventos() {
   return (
     <div className="eventos-container">
       <section className="eventos">
+        <div className="eventos-content">
         <div className="evento-card">
           <img src={eventosImg} alt="Trilha da Pedra Grande" />
           <div>
@@ -19,13 +20,32 @@ export default function Eventos() {
         </div>
 
         <div className="evento-tipos">
-          <h4>Para aproveitar</h4>
+          <p className="eventos-subtitle">Para aproveitar</p>
           <h2>Encontre o evento ideal para você</h2>
           <ul>
-            <li><span className="tipo explorador"></span> Explorador <p>Trilha leve e acessível, perfeita para quem está começando a explorar a natureza.</p></li>
-            <li><span className="tipo aventureiro"></span> Aventureiro <p>Trilha com nível moderado, indicada para quem busca novos desafios com segurança.</p></li>
-            <li><span className="tipo desbravador"></span> Desbravador <p> Trilha mais exigente, voltada a quem já tem experiência e deseja uma imersão completa.</p></li>
+            <li>
+              <span className="tipo explorador"></span> 
+              <div>
+                <span>Explorador</span>
+                <p>Trilha leve e acessível, perfeita para quem está começando a explorar a natureza.</p>
+              </div>
+            </li>
+            <li>
+              <span className="tipo aventureiro"></span> 
+              <div>
+                <span>Aventureiro</span>
+                <p>Trilha com nível moderado, indicada para quem busca novos desafios com segurança.</p>
+              </div>
+            </li>
+            <li>
+              <span className="tipo desbravador"></span> 
+              <div>
+                <span>Desbravador</span>
+                <p>Trilha mais exigente, voltada a quem já tem experiência e deseja uma imersão completa.</p>
+              </div>
+            </li>
           </ul>
+        </div>
         </div>
       </section>
     </div>
