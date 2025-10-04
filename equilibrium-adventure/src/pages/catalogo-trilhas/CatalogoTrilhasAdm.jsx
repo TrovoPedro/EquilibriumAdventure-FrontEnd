@@ -12,12 +12,34 @@ import catalogo8 from "../../assets/cachoeiralago.jpg";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 
-const trilhas = [
-  { img: catalogo1, alt: "Trilha montanha" },
-  { img: catalogo2, alt: "Trilha nascente" },
-  { img: catalogo3, alt: "Trilha bike" },
-  { img: catalogo4, alt: "Trilha deserto" },
-  { img: catalogo5, alt: "Trilha cachoeira" },
+const trilhasAtivas = [
+  {
+    img: catalogo1,
+    local: "Chile",
+    titulo: "Aventura nos Andes",
+    descricao: "Descubra as majestosas montanhas chilenas em uma experiência única.",
+    preco: "R$200",
+    nota: 4.9,
+    reviews: 150,
+  },
+  {
+    img: catalogo2,
+    local: "Amazônia",
+    titulo: "Expedição Amazônica",
+    descricao: "Mergulhe na exuberante floresta tropical e sua biodiversidade.",
+    preco: "R$180",
+    nota: 4.8,
+    reviews: 98,
+  },
+  {
+    img: catalogo3,
+    local: "Serra da Mantiqueira",
+    titulo: "Pico das Águias",
+    descricao: "Conquiste um dos pontos mais altos da região sudeste.",
+    preco: "R$140",
+    nota: 4.7,
+    reviews: 230,
+  },
 ];
 
 
@@ -86,17 +108,25 @@ const CatalogoTrilhas = () => {
           </div>
         </div>
 
-        {/* Seção de destinos */}
-        <section className="destinos">
-          <h2>Eventos Ativos</h2>
-          <div className="destinos-grid">
-            {trilhas.map((trilha, idx) => (
-              <div className={`destino-card destino-img${idx + 1}`} key={idx}>
-                <img src={trilha.img} alt={trilha.alt} className="destino-img" />
-                <div className="destino-overlay">
-                  <button className="destino-detalhes-btn" onClick={() => handleOnClick("detalhes")}>
-                    Detalhes
-                  </button>
+        {/* Seção de eventos ativos */}
+        <section className="anuncios-trilhas">
+          <h2 className="anuncios-titulo" style={{textAlign: 'left'}}>Eventos Ativos</h2>
+          <div className="anuncios-grid">
+            {trilhasAtivas.map((trilha, idx) => (
+              <div className="anuncio-card" key={idx}>
+                <div className="anuncio-img-wrap">
+                  <img src={trilha.img} alt={trilha.titulo} className="anuncio-img" />
+                </div>
+                <div className="anuncio-info">
+                  <span className="anuncio-local">{trilha.local}</span>
+                  <h3 className="anuncio-titulo">{trilha.titulo}</h3>
+                  <p className="anuncio-desc">{trilha.descricao}</p>
+                  <div className="anuncio-footer">
+                    <span className="anuncio-preco">{trilha.preco}<span className="anuncio-preco-unidade">/pessoa</span></span>
+                    <div className="anuncio-btn-group">
+                      <button className="anuncio-btn" onClick={() => handleOnClick("detalhes")}>Detalhes</button>
+                    </div>
+                  </div>
                 </div>
               </div>
             ))}
