@@ -28,7 +28,7 @@ const Header = () => {
       </nav>
 
       <div className="header-right">
-        <button className="agendar" onClick={() => navigate(routeUrls.AGENDA)}>AGENDA</button>
+        <button className="agendar" onClick={() => navigate(routeUrls.AGENDA_AVENTUREIRO)}>AGENDA</button>
         <button className="sair" onClick={() => {
           logout(); // limpa usuário do contexto + localStorage
           navigate(routeUrls.HOME);
