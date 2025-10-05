@@ -381,7 +381,6 @@ export default function InformacoesPessoais() {
 			cpf: cpfDigits || "00000000000",
 			rg: rgFormatted || "00.000.000-0",
 			contatoEmergencia: contatoEmergenciaDigits || "11999999999",
-			nivel: "AVENTUREIRO",
 			relatorioAnamnese: dadosOriginais?.relatorioAnamnese || null,
 			idioma: formData.idiomas || "Português",
 			questionarioRespondido: dadosOriginais?.questionarioRespondido || false
@@ -410,7 +409,6 @@ export default function InformacoesPessoais() {
 					cpf: cpfDigits || "00000000000",
 					rg: rgFormatted || "00.000.000-0",
 					contatoEmergencia: contatoEmergenciaDigits || "11999999999",
-					nivel: "AVENTUREIRO",
 					relatorioAnamnese: dadosOriginais?.relatorioAnamnese || null,
 					idioma: (formData.idiomas || "Português").trim(),
 					questionarioRespondido: dadosOriginais?.questionarioRespondido || false
@@ -462,7 +460,6 @@ export default function InformacoesPessoais() {
 					cpf: cpfDigits || "00000000000",
 					rg: rgFormatted || "00.000.000-0",
 					contatoEmergencia: contatoEmergenciaDigits || "11999999999",
-					nivel: "AVENTUREIRO",
 					relatorioAnamnese: null,
 					idioma: (formData.idiomas || "Português").trim(),
 					questionarioRespondido: false
