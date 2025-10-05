@@ -4,6 +4,7 @@ import { gerarRelatorioAnamnese } from "../../services/chamadasAPIAgenda";
 import { buscarUsuarioPorId } from "../../services/api";
 import { data, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
+import useGoBack from "../../utils/useGoBack";
 
 const RelatorioAnamnese = () => {
 
@@ -13,7 +14,8 @@ const RelatorioAnamnese = () => {
 
     const handleExibirNome = async () => {
         try {
-            const userId = 10; // Substitua pelo ID do usuário que você deseja buscar
+            const usuarioLocal = localStorage.getItem("usuario");
+            const userId = usuarioLocal ? JSON.parse(usuarioLocal).id : null;
             const usuario = await buscarUsuarioPorId(userId);
             setNome(usuario.nome);
         } catch (error) {
@@ -22,7 +24,6 @@ const RelatorioAnamnese = () => {
     };
 
     useEffect(() => {
-        // chama a função ao montar a página
         handleExibirNome();
     }, []);
 
@@ -33,15 +34,15 @@ const RelatorioAnamnese = () => {
         try {
             // setRelatorio(document.querySelector('.input2').value.trim());
             // const userId = localStorage.getItem("usuario");
-            console.log("userId:", userId);
-            console.log("relatorio:", relatorio);
+            if (!relatorio) {
+                alert("O relatório não pode estar vazio.");
+                return false;
+            }
             setUserId(10);
             const data = await gerarRelatorioAnamnese({ userId, relatorio });
             alert("Relatório salvo com sucesso!");
-            console.log("Relatório salvo:", data);
             return true;
         } catch (error) {
-            console.error("Erro ao salvar relatório:", error);
             alert("Erro ao salvar relatório. Tente novamente.");
             return false;
         }
@@ -76,7 +77,7 @@ const RelatorioAnamnese = () => {
                             const ok = await handleSalvarRelatorio();
                             if (ok) navigate("/catalogo-trilhas");
                         }}>Salvar Relatório</button>
-                    <button className="button-voltar">Voltar</button>
+                    <button onClick={useGoBack} className="button-voltar">Voltar</button>
                 </div>
             </div>
         </>
