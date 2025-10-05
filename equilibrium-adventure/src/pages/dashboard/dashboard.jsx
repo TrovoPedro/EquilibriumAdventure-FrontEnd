@@ -260,8 +260,8 @@ const Dashboard = () => {
               </div>
               <div className="chart-container">
                 <div className="chart-filters">
-                  <button onClick={() => handleFilter('Mensal')}>Últimos Meses</button>
                   <button onClick={() => handleFilter('Semanal')}>Última Semana</button>
+                  <button onClick={() => handleFilter('Mensal')}>Últimos Meses</button>
                   <button onClick={() => handleFilter('Anual')}>Últimos Anos</button>
                 </div>
                 <ResponsiveContainer width="100%" height={400}>
