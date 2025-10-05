@@ -50,6 +50,15 @@
   position: relative;
 }
 
+.endereco__form-group--full-width {
+  grid-column: 1 / -1; 
+  margin-top: 16px;
+}
+
+.endereco__form-group--full-width input {
+  width: 100%;
+}
+
 .endereco__form-group label {
   font-size: 0.9rem;
   color: #2e4d2e;

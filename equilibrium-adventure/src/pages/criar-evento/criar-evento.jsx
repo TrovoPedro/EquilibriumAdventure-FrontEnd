@@ -5,6 +5,7 @@ import routeUrls from "../../routes/routeUrls";
 import Header from "../../components/header/header";
 import { maskCep, maskDistancia } from "../../utils/masks";
 import { cadastrarEvento, buscarCep } from "../../services/chamadasAPIEvento";
+import { useAuth } from "../../context/AuthContext";
 import "./criar-evento.css";
 import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
 import ButtonCriarEvento from "../../components/button-eventos/button-criar-evento";
@@ -28,6 +29,7 @@ const CriarEvento = () => {
     });
 
     const navigate = useNavigate();
+    const { usuario } = useAuth(); // pegando usuário logado
 
     const handleBackToCatalog = () => {
         navigate(routeUrls.CATALOGO_TRILHAS_ADM);
@@ -35,14 +37,14 @@ const CriarEvento = () => {
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
-        let newValue = value;
 
+        let newValue = value;
         if (name === "cep") newValue = maskCep(value);
         if (name === "distancia") newValue = maskDistancia(value);
 
         setFormData({
             ...formData,
-            [name]: files ? files[0] : newValue,
+            [name]: files && files.length > 0 ? files[0] : newValue,
         });
     };
 
@@ -66,32 +68,13 @@ const CriarEvento = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-
-        const evento = {
-            nome: formData.titulo,
-            descricao: formData.descricao,
-            nivel_dificuldade: formData.dificuldade,
-            distancia_km: parseFloat(formData.distancia),
-            responsavel_id: 1,
-            endereco: {
-                cep: formData.cep,
-                rua: formData.rua,
-                numero: formData.numero,
-                complemento: formData.complemento,
-                bairro: formData.bairro,
-                cidade: formData.cidade,
-                estado: formData.estado
-            },
-            caminho_arquivo_evento: formData.trilha ? formData.trilha.name : null
-        };
-
-        const form = new FormData();
-        form.append("evento", JSON.stringify(evento)); // importante: stringificar
-        if (formData.imagem) {
-            form.append("imagem", formData.imagem);
+        if (!usuario || !usuario.id) {
+            alert("Usuário não logado. Faça login novamente.");
+            return;
         }
 
-        await cadastrarEvento(form, navigate);
+        // Passando o ID do usuário logado como responsável
+        await cadastrarEvento(formData, navigate, usuario.id);
     };
 
     return (
@@ -288,8 +271,8 @@ const CriarEvento = () => {
                     </div>
 
                     <div className="botoes">
-                        <ButtonCancelarEvento title={"Cancelar"}></ButtonCancelarEvento>
-                        <ButtonCriarEvento title={"Criar evento"}></ButtonCriarEvento>
+                        <ButtonCancelarEvento title={"Cancelar"} />
+                        <ButtonCriarEvento title={"Criar evento"} />
                     </div>
                 </form>
             </div>
