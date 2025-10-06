@@ -21,3 +21,13 @@ export const loginUsuario = async (credentials) => {
     throw error.response?.data || error.message;
   }
 };
+
+// buscar usuario por id
+export const buscarUsuarioPorId = async (id) => {
+  try {
+    const response = await api.get(`/usuarios/buscar/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
