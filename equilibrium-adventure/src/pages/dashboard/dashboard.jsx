@@ -1,98 +1,355 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import Header from '../../components/header/header';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
+import { useAuth } from '../../context/AuthContext';
+import {
+  getEventosAtivosFuturos,
+  getTaxaOcupacaoMedia,
+  getUsuariosNovosFrequentes,
+  getTopCidades,
+  getRankingEventos,
+  getPalavrasComentarios,
+  getTendenciasAno,
+  getTendenciasMes,
+  getTendenciasDia,
+  getInscricaoLimite
+} from '../../services/apiDashboard';
 
 const Dashboard = () => {
+  const { usuario } = useAuth();
   const [activeTab, setActiveTab] = useState('quantitativos');
   const [selectedMonth, setSelectedMonth] = useState('Janeiro');
   const [chartView, setChartView] = useState('Mensal');
-  const [chartData, setChartData] = useState([
-    { month: 'Jan', value: 80 },
-    { month: 'Fev', value: 130 },
-    { month: 'Mar', value: 175 },
-    { month: 'Abr', value: 205 },
-    { month: 'Mai', value: 245 },
-    { month: 'Jun', value: 270 },
-    { month: 'Jul', value: 365 },
-    { month: 'Ago', value: 415 },
-    { month: 'Set', value: 285 },
-    { month: 'Out', value: 245 },
-    { month: 'Nov', value: 205 },
-    { month: 'Dez', value: 105 },
-  ]);
+  const [loading, setLoading] = useState(true);
+  
+  const [eventosAtivos, setEventosAtivos] = useState(0);
+  const [participationData, setParticipationData] = useState([]);
+  const [citiesData, setCitiesData] = useState([]);
+  const [eventsRanking, setEventsRanking] = useState([]);
+  const [words, setWords] = useState([]);
+  const [chartData, setChartData] = useState([]);
+  const [participantsData, setParticipantsData] = useState({ frequentes: 0, novos: 0 });
+  const [occupancyData, setOccupancyData] = useState([]);
+  const [dataLoaded, setDataLoaded] = useState(false);
 
-  const participationData = [
-    { name: 'Trilha na Floresta da Tijuca', value: 45, max: 50, color: '#2e8b57' }, // Verde Floresta
-    { name: 'Workshop de Fotografia de Natureza', value: 35, max: 40, color: '#556b2f' }, // Verde Oliva
-    { name: 'Passeio de Observação de Aves', value: 28, max: 40, color: '#8fbc8f' }, // Verde Claro
-    { name: 'Acampamento Sustentável', value: 38, max: 60, color: '#6b8e23' }, // Verde Musgo
-    { name: 'Expedição Fotográfica: Chapada dos', value: 22, max: 25, color: '#228b22' } // Verde Floresta Escuro
-  ];
+  useEffect(() => {
+    if (dataLoaded) return;
+    
+    const loadDashboardData = async () => {
+      try {
+        setLoading(true);
+        
+        const storedUser = localStorage.getItem("usuario");
+        if (!storedUser) {
+          console.error("Usuário não encontrado na localStorage");
+          setLoading(false);
+          return;
+        }
+        
+        const userData = JSON.parse(storedUser);
+        const usuarioId = userData.id || userData.id_usuario;
+        
+        if (!usuarioId) {
+          console.error("ID do usuário não encontrado");
+          setLoading(false);
+          return;
+        }
 
-  const citiesData = [
-    { name: 'Rio de Janeiro', value: 245, color: '#10b981', state: 'RJ' },
-    { name: 'São Paulo', value: 187, color: '#3b82f6', state: 'SP' },
-    { name: 'Curitiba', value: 125, color: '#8b5cf6', state: 'PR' },
-    { name: 'Florianópolis', value: 98, color: '#94a3b8', state: 'SC' },
-    { name: 'Belo Horizonte', value: 76, color: '#6b7280', state: 'MG' }
-  ];
+        console.log("Carregando dados do dashboard para usuário:", usuarioId);
 
-  const eventsRanking = [
-    { name: 'Trilha na Floresta da Tijuca', inscricoes: 42, avaliacao: 4.8 },
-    { name: 'Workshop de Fotografia d...', inscricoes: 35, avaliacao: 4.5 },
-    { name: 'Passeio de Observação de ...', inscricoes: 28, avaliacao: 4.7 },
-    { name: 'Acampamento Sustentável', inscricoes: 38, avaliacao: 4.2 },
-    { name: 'Expedição Fotográfica: Ch...', inscricoes: 22, avaliacao: 4.9 },
-    { name: 'Passeio de Canoa no Pant...', inscricoes: 18, avaliacao: 4.6 },
-    { name: 'Curso de Identificação de ...', inscricoes: 25, avaliacao: 4.3 },
-    { name: 'Trekking Serra dos Órgãos', inscricoes: 32, avaliacao: 4.7 }
-  ];
+        try {
+          const eventosAtivosData = await getEventosAtivosFuturos(usuarioId);
+          if (eventosAtivosData !== null && eventosAtivosData !== undefined) {
+            setEventosAtivos(eventosAtivosData);
+            console.log("Eventos ativos carregados:", eventosAtivosData);
+          }
+        } catch (error) {
+          console.log("Eventos ativos falharam:", error.message);
+        }
 
-  const words = [
-    { text: 'incrível', size: 32, color: '#10b981' },
-    { text: 'natureza', size: 42, color: '#3b82f6' },
-    { text: 'experiência', size: 38, color: '#3b82f6' },
-    { text: 'organizado', size: 34, color: '#10b981' },
-    { text: 'guias', size: 30, color: '#3b82f6' },
-    { text: 'atrasado', size: 24, color: '#ef4444' },
-    { text: 'conhecimento', size: 36, color: '#10b981' },
-    { text: 'recomendo', size: 38, color: '#10b981' },
-    { text: 'aventura', size: 34, color: '#10b981' },
-    { text: 'cansativo', size: 22, color: '#ef4444' },
-    { text: 'paisagem', size: 36, color: '#10b981' },
-    { text: 'equipamento', size: 28, color: '#3b82f6' },
-    { text: 'desorganizado', size: 24, color: '#ef4444' },
-    { text: 'inesquecível', size: 34, color: '#10b981' },
-    { text: 'transporte', size: 26, color: '#3b82f6' },
-    { text: 'lotado', size: 22, color: '#ef4444' },
-    { text: 'biodiversidade', size: 32, color: '#3b82f6' },
-    { text: 'sustentável', size: 30, color: '#10b981' },
-    { text: 'caro', size: 20, color: '#ef4444' },
-    { text: 'aprendizado', size: 34, color: '#10b981' }
-  ];
+        try {
+          const citiesDataFromAPI = await getTopCidades(usuarioId);
+          if (citiesDataFromAPI && citiesDataFromAPI.length > 0) {
+            const formattedCities = citiesDataFromAPI.map((item, index) => ({
+              name: item.cidade,
+              value: item.totalParticipantes,
+              color: ['#10b981', '#3b82f6', '#8b5cf6', '#94a3b8', '#6b7280'][index % 5],
+              state: ''
+            }));
+            setCitiesData(formattedCities);
+            console.log("Top cidades carregadas:", formattedCities.length, "cidades");
+          }
+        } catch (error) {
+          console.log("Top cidades falharam:", error.message);
+        }
 
-  const handleFilter = (filterType) => {
-    if (filterType === 'Mensal') {
-      setChartData([
-        { month: 'Ago', value: 415 },
-        { month: 'Set', value: 285 },
-        { month: 'Out', value: 245 },
-      ]); // Últimos 3 meses
-    } else if (filterType === 'Semanal') {
-      setChartData([
-        { month: 'Segunda', value: 50 },
-        { month: 'Terça', value: 70 },
-        { month: 'Quarta', value: 90 },
-        { month: 'Quinta', value: 110 },
-        { month: 'Sexta', value: 130 },
-      ]); // Dados semanais
-    } else if (filterType === 'Anual') {
-      setChartData([
-        { month: '2022', value: 300 },
-        { month: '2023', value: 400 },
-        { month: '2024', value: 500 },
-      ]); // Dados anuais
+        try {
+          const eventsRankingData = await getRankingEventos(usuarioId);
+          if (eventsRankingData && eventsRankingData.length > 0) {
+            const formattedRanking = eventsRankingData.map(item => ({
+              name: item.nome,
+              inscricoes: item.totalInscricoes,
+              avaliacao: item.notaMedia
+            }));
+            setEventsRanking(formattedRanking);
+            console.log("Ranking eventos carregado:", formattedRanking.length, "eventos");
+          }
+        } catch (error) {
+          console.log("Ranking eventos falharam:", error.message);
+        }
+
+        try {
+          const wordsData = await getPalavrasComentarios(usuarioId);
+          if (wordsData && wordsData.length > 0) {
+            const formattedWords = wordsData.map(item => ({
+              text: item.palavra,
+              size: Math.min(Math.max(item.quantidade * 4, 18), 64),
+              color: item.quantidade > 5 ? '#10b981' : item.quantidade > 2 ? '#3b82f6' : '#6b7280'
+            }));
+            setWords(formattedWords);
+            console.log("Palavras carregadas:", formattedWords.length, "palavras");
+          }
+        } catch (error) {
+          console.log("Palavras comentários falharam:", error.message);
+        }
+
+        try {
+          const usuariosData = await getUsuariosNovosFrequentes(usuarioId);
+          if (usuariosData) {
+            setParticipantsData({
+              frequentes: usuariosData.Frequente || 0,
+              novos: usuariosData.Novo || 0
+            });
+            console.log("Usuários carregados:", usuariosData);
+          }
+        } catch (error) {
+          console.log("Usuários novos/frequentes falharam:", error.message);
+        }
+
+        try {
+          const participationDataFromAPI = await getInscricaoLimite(usuarioId);
+          console.log("Resposta inscrição vs limite:", participationDataFromAPI);
+          
+          if (participationDataFromAPI && participationDataFromAPI.length > 0) {
+            console.log("Dados de inscrição recebidos:", participationDataFromAPI.length, "eventos");
+            
+            const formattedParticipation = participationDataFromAPI.map((item, index) => ({
+              name: item.evento,
+              value: item.inscricoes,
+              max: item.capacidadeMaxima,
+              color: [
+                '#065f46', '#10b981', '#3b82f6', '#6b7280', '#d1fae5'
+              ][index % 5]
+            }));
+            
+            setParticipationData(formattedParticipation);
+            console.log("Dados formatados e aplicados:", formattedParticipation);
+          } else {
+            console.log("Dados de inscrição vazios ou nulos");
+          }
+        } catch (error) {
+          console.log("Erro inscrição vs limite:", error.message);
+        }
+
+        try {
+          const occupancyDataFromAPI = await getTaxaOcupacaoMedia(usuarioId);
+          if (occupancyDataFromAPI && occupancyDataFromAPI.length > 0) {
+            setOccupancyData(occupancyDataFromAPI);
+            console.log("Taxa de ocupação média carregada:", occupancyDataFromAPI.length, "meses");
+          }
+        } catch (error) {
+          console.log("Taxa de ocupação média falhou:", error.message);
+        }
+
+        try {
+          const tendenciasData = await getTendenciasAno(usuarioId);
+          console.log("Resposta tendências anuais:", tendenciasData);
+          
+          if (tendenciasData && tendenciasData.length > 0) {
+            console.log("Dados anuais recebidos:", tendenciasData.length, "anos");
+            
+            const formattedChart = tendenciasData
+              .sort((a, b) => a.ano - b.ano) 
+              .map(item => ({
+                month: item.ano.toString(),
+                value: item.totalInscricoes
+              }));
+            setChartData(formattedChart);
+            setChartView('Anual');
+            console.log("Gráfico anual aplicado:", formattedChart);
+          } else {
+            console.log("Dados anuais vazios ou nulos");
+          }
+        } catch (error) {
+          console.log("Erro tendências anuais:", error.message);
+        }
+        
+      } catch (error) {
+        console.error("Erro geral ao carregar dados do dashboard:", error);
+      } finally {
+        setLoading(false);
+        setDataLoaded(true);
+      }
+    };
+
+    loadDashboardData();
+  }, [dataLoaded]);
+
+  const calculateOccupancyRate = (data) => {
+    if (!data || data.length === 0) return 0;
+    const totalOccupancy = data.reduce((sum, item) => {
+      return sum + (item.value / item.max) * 100;
+    }, 0);
+    return Math.round(totalOccupancy / data.length);
+  };
+
+  const averageOccupancyRate = occupancyData.length > 0 
+    ? Math.round(occupancyData.reduce((sum, item) => sum + parseFloat(item.taxaOcupacaoPercentual), 0) / occupancyData.length)
+    : (participationData.length > 0 ? calculateOccupancyRate(participationData) : 0);
+
+  console.log("Taxa de ocupação calculada:", averageOccupancyRate, "occupancyData:", occupancyData);
+
+  const monthlyOccupancyData = {};
+  
+  if (occupancyData.length > 0) {
+    const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
+    
+    meses.forEach(mes => {
+      monthlyOccupancyData[mes] = averageOccupancyRate || 0;
+    });
+    
+    occupancyData.forEach(item => {
+      const mesString = item.mes;
+      const mesNumero = parseInt(mesString.split('-')[1]);
+      const mesIndex = mesNumero - 1;
+      
+      if (mesIndex >= 0 && mesIndex < 12) {
+        monthlyOccupancyData[meses[mesIndex]] = Math.round(parseFloat(item.taxaOcupacaoPercentual));
+      }
+      
+      console.log(`API: ${mesString} -> Mês: ${meses[mesIndex]} -> Taxa: ${item.taxaOcupacaoPercentual}%`);
+    });
+    
+    console.log("Dados mensais da API aplicados:", monthlyOccupancyData);
+  } else {
+    const baseRate = participationData.length > 0 ? calculateOccupancyRate(participationData) : 75;
+    monthlyOccupancyData['Janeiro'] = Math.max(10, baseRate - 15);
+    monthlyOccupancyData['Fevereiro'] = Math.max(10, baseRate - 10);
+    monthlyOccupancyData['Março'] = Math.max(10, baseRate - 5);
+    monthlyOccupancyData['Abril'] = baseRate;
+    monthlyOccupancyData['Maio'] = Math.min(100, baseRate + 5);
+    monthlyOccupancyData['Junho'] = Math.min(100, baseRate + 10);
+    monthlyOccupancyData['Julho'] = Math.min(100, baseRate + 15);
+    monthlyOccupancyData['Agosto'] = Math.min(100, baseRate + 8);
+    monthlyOccupancyData['Setembro'] = Math.max(10, baseRate - 3);
+    monthlyOccupancyData['Outubro'] = baseRate;
+    monthlyOccupancyData['Novembro'] = Math.max(10, baseRate - 8);
+    monthlyOccupancyData['Dezembro'] = Math.max(10, baseRate - 12);
+    
+    console.log("Usando dados simulados:", monthlyOccupancyData);
+  }
+
+  const selectedMonthOccupancy = monthlyOccupancyData[selectedMonth] || averageOccupancyRate || 0;
+  
+  console.log(`Mês selecionado: ${selectedMonth}, Taxa: ${selectedMonthOccupancy}%`);
+  console.log("participationData atual:", participationData.length, "itens");
+  console.log("chartData atual:", chartData.length, "pontos");
+
+  const handleFilter = async (filterType) => {
+    try {
+      setLoading(true);
+      setChartView(filterType);
+      
+      const storedUser = localStorage.getItem("usuario");
+      if (!storedUser) return;
+      
+      const userData = JSON.parse(storedUser);
+      const usuarioId = userData.id || userData.id_usuario;
+      
+      if (!usuarioId) return;
+
+      let tendenciasData = [];
+      
+      if (filterType === 'Semanal') {
+        try {
+          tendenciasData = await getTendenciasDia(usuarioId);
+          console.log("Resposta diárias:", tendenciasData);
+          
+          if (tendenciasData && tendenciasData.length > 0) {
+            console.log("Dados diários:", tendenciasData.length, "dias");
+            
+            const formattedChart = tendenciasData
+              .sort((a, b) => new Date(a.dia) - new Date(b.dia))
+              .slice(-7)
+              .map(item => ({
+                month: new Date(item.dia).toLocaleDateString('pt-BR', { weekday: 'short' }),
+                value: item.totalInscricoes
+              }));
+            setChartData(formattedChart);
+            console.log("Gráfico semanal aplicado:", formattedChart);
+          } else {
+            console.log("Dados diários vazios");
+            setChartData([]);
+          }
+        } catch (error) {
+          console.log("Erro tendências diárias:", error.message);
+          setChartData([]);
+        }
+      } else if (filterType === 'Mensal') {
+        try {
+          tendenciasData = await getTendenciasMes(usuarioId);
+          console.log("Resposta mensais:", tendenciasData);
+          
+          if (tendenciasData && tendenciasData.length > 0) {
+            console.log("Dados mensais:", tendenciasData.length, "meses");
+            
+            const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+            const formattedChart = tendenciasData
+              .sort((a, b) => a.mes - b.mes)
+              .map(item => ({
+                month: meses[item.mes - 1] || item.mes,
+                value: item.totalInscricoes
+              }));
+            setChartData(formattedChart);
+            console.log("Gráfico mensal aplicado:", formattedChart);
+          } else {
+            console.log("Dados mensais vazios");
+            setChartData([]);
+          }
+        } catch (error) {
+          console.log("Erro tendências mensais:", error.message);
+          setChartData([]);
+        }
+      } else if (filterType === 'Anual') {
+        try {
+          tendenciasData = await getTendenciasAno(usuarioId);
+          console.log("Resposta anuais (filtro):", tendenciasData);
+          
+          if (tendenciasData && tendenciasData.length > 0) {
+            console.log("Dados anuais (filtro):", tendenciasData.length, "anos");
+            const formattedChart = tendenciasData
+              .sort((a, b) => a.ano - b.ano)
+              .map(item => ({
+                month: item.ano.toString(),
+                value: item.totalInscricoes
+              }));
+            setChartData(formattedChart);
+            console.log("Gráfico anual (filtro) aplicado:", formattedChart);
+          } else {
+            console.log("Dados anuais (filtro) vazios");
+            setChartData([]);
+          }
+        } catch (error) {
+          console.log("Erro tendências anuais (filtro):", error.message);
+          setChartData([]);
+        }
+      }
+    } catch (error) {
+      console.error("Erro ao filtrar dados:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -152,15 +409,17 @@ const Dashboard = () => {
                   <div className="stat-icon">📅</div>
                   <div>
                     <div className="stat-label">Eventos Ativos</div>
-                    <div className="stat-value">28</div>
+                    <div className="stat-value">{loading ? '...' : eventosAtivos}</div>
                   </div>
                 </div>
 
                 <div className="stat-card blue">
                   <div className="stat-icon">👥</div>
                   <div>
-                    <div className="stat-label">Taxa de Ocupação Média</div>
-                    <div className="stat-value">73%</div>
+                    <div className="stat-label">Taxa de Ocupação Média (Últimos 12 meses)</div>
+                    <div className="stat-value">
+                      {loading ? '...' : `${averageOccupancyRate}%`}
+                    </div>
                   </div>
                 </div>
 
@@ -183,14 +442,22 @@ const Dashboard = () => {
                     </select>
                   </div>
                   <div className="progress-bar">
-                    <div className="progress-fill" style={{ width: '65%' }}></div>
+                    <div 
+                      className="progress-fill" 
+                      style={{ 
+                        width: `${selectedMonthOccupancy}%`,
+                        transition: 'width 0.3s ease'
+                      }}
+                    ></div>
                   </div>
                   <div className="progress-labels">
                     <span>0%</span>
                     <span>50%</span>
                     <span>100%</span>
                   </div>
-                  <div className="occupancy-footer">Taxa de ocupação em Janeiro: 65%</div>
+                  <div className="occupancy-footer">
+                    Taxa de ocupação em {selectedMonth}: {selectedMonthOccupancy}%
+                  </div>
                 </div>
               </div>
 
@@ -206,23 +473,41 @@ const Dashboard = () => {
 
                 <div className="participation-section">
                   <div className="section-subtitle">Inscrições vs. Limite por Evento</div>
-                  {participationData.map((item, index) => (
-                    <div key={index} className="participation-item">
-                      <div className="participation-name">{item.name}</div>
-                      <div className="participation-bar-container">
-                        <div className="participation-bar">
-                          <div
-                            className="participation-fill"
-                            style={{
-                              width: `${(item.value / item.max) * 100}%`,
-                              backgroundColor: index === 0 ? '#3b82f6' : '#3b82f6'
-                            }}
-                          ></div>
+                  {(() => {
+                    if (participationData.length === 0) {
+                      return (
+                        <div className="participation-placeholder">
+                          <p style={{ color: '#6b7280', fontStyle: 'italic', textAlign: 'center', padding: '20px' }}>
+                            📊 Dados de inscrições vs limite não disponíveis
+                            <br />
+                            <small>Endpoint com erro 500 - verificar backend</small>
+                          </p>
                         </div>
-                        <span className="participation-value">{item.value}/{item.max}</span>
-                      </div>
-                    </div>
-                  ))}
+                      );
+                    }
+                    
+                    return participationData.map((item, index) => {
+                      const percentage = item.value && item.max ? (item.value / item.max) * 100 : 0;
+                      
+                      return (
+                        <div key={index} className="participation-item">
+                          <div className="participation-name">{item.name}</div>
+                          <div className="participation-bar-container">
+                            <div className="participation-bar">
+                              <div
+                                className="participation-fill"
+                                style={{
+                                  width: `${percentage}%`,
+                                  backgroundColor: '#3b82f6'
+                                }}
+                              ></div>
+                            </div>
+                            <span className="participation-value">{item.value}/{item.max}</span>
+                          </div>
+                        </div>
+                      );
+                    });
+                  })()}
                 </div>
 
                 <div className="participants-section">
@@ -232,17 +517,33 @@ const Dashboard = () => {
                       <span className="participant-dot blue"></span>
                       <span className="participant-label">Participantes Recorrentes</span>
                       <div className="participant-bar">
-                        <div className="participant-fill blue" style={{ width: '66%' }}></div>
+                        <div className="participant-fill blue" style={{ 
+                          width: `${participantsData.frequentes + participantsData.novos > 0 
+                            ? (participantsData.frequentes / (participantsData.frequentes + participantsData.novos)) * 100 
+                            : 0}%` 
+                        }}></div>
                       </div>
-                      <span className="participant-count">345 (66.0%)</span>
+                      <span className="participant-count">
+                        {loading ? '...' : `${participantsData.frequentes} (${participantsData.frequentes + participantsData.novos > 0 
+                          ? ((participantsData.frequentes / (participantsData.frequentes + participantsData.novos)) * 100).toFixed(1) 
+                          : 0}%)`}
+                      </span>
                     </div>
                     <div className="participant-bar-item">
                       <span className="participant-dot orange"></span>
                       <span className="participant-label">Participantes Novos</span>
                       <div className="participant-bar">
-                        <div className="participant-fill orange" style={{ width: '34%' }}></div>
+                        <div className="participant-fill orange" style={{ 
+                          width: `${participantsData.frequentes + participantsData.novos > 0 
+                            ? (participantsData.novos / (participantsData.frequentes + participantsData.novos)) * 100 
+                            : 0}%` 
+                        }}></div>
                       </div>
-                      <span className="participant-count">178 (34.0%)</span>
+                      <span className="participant-count">
+                        {loading ? '...' : `${participantsData.novos} (${participantsData.frequentes + participantsData.novos > 0 
+                          ? ((participantsData.novos / (participantsData.frequentes + participantsData.novos)) * 100).toFixed(1) 
+                          : 0}%)`}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -260,19 +561,43 @@ const Dashboard = () => {
               </div>
               <div className="chart-container">
                 <div className="chart-filters">
-                  <button onClick={() => handleFilter('Semanal')}>Última Semana</button>
-                  <button onClick={() => handleFilter('Mensal')}>Últimos Meses</button>
-                  <button onClick={() => handleFilter('Anual')}>Últimos Anos</button>
+                  <button 
+                    className={chartView === 'Semanal' ? 'filter-btn active' : 'filter-btn'} 
+                    onClick={() => handleFilter('Semanal')}
+                  >
+                    Última Semana
+                  </button>
+                  <button 
+                    className={chartView === 'Mensal' ? 'filter-btn active' : 'filter-btn'} 
+                    onClick={() => handleFilter('Mensal')}
+                  >
+                    Últimos Meses
+                  </button>
+                  <button 
+                    className={chartView === 'Anual' ? 'filter-btn active' : 'filter-btn'} 
+                    onClick={() => handleFilter('Anual')}
+                  >
+                    Últimos Anos
+                  </button>
                 </div>
-                <ResponsiveContainer width="100%" height={400}>
-                  <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis />
-                    <Tooltip />
-                    <Line type="monotone" dataKey="value" stroke="#10b981" strokeWidth={2} fillOpacity={0.1} fill="url(#lineGradient)" />
-                  </LineChart>
-                </ResponsiveContainer>
+                {chartData.length > 0 ? (
+                  <ResponsiveContainer width="100%" height={450}>
+                    <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
+                      <CartesianGrid strokeDasharray="3 3" />
+                      <XAxis dataKey="month" />
+                      <YAxis />
+                      <Tooltip />
+                      <Line type="monotone" dataKey="value" stroke="#10b981" strokeWidth={2} fillOpacity={0.1} fill="url(#lineGradient)" />
+                    </LineChart>
+                  </ResponsiveContainer>
+                ) : (
+                  <div style={{ textAlign: 'center', padding: '60px 20px', color: '#6b7280' }}>
+                    <p>📈 {loading ? 'Carregando dados de tendências...' : `Dados de tendências ${chartView ? chartView.toLowerCase() : 'anuais'} não disponíveis`}</p>
+                    {!loading && (
+                      <small>Clique nos filtros acima para tentar outros períodos</small>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </div>
@@ -281,7 +606,7 @@ const Dashboard = () => {
             <div className="qualitative-top">
               <div className="cities-panel">
                 <div className="card-title">
-                  <h2>Público-Alvo (Top 5 Cidades)</h2>
+                  <h2>Público-Alvo (Top 7 Cidades)</h2>
                   <img
                     src="/src/assets/info.png"
                     alt="Mais informações"
@@ -304,7 +629,7 @@ const Dashboard = () => {
                             <div
                               className="city-fill"
                               style={{
-                                width: `${(city.value / 245) * 100}%`,
+                                width: `${(city.value / 60) * 100}%`,
                                 backgroundColor: city.color
                               }}
                             ></div>
