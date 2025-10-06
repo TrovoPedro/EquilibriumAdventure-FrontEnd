@@ -338,6 +338,9 @@ export default function InformacoesPessoais() {
 		}
 
 		console.log("Iniciando processo de salvamento...");
+		console.log("dadosOriginais completo:", dadosOriginais);
+		console.log("dadosOriginais.nivel:", dadosOriginais?.nivel);
+		console.log("Modo:", isEditMode ? "EDICAO" : "CADASTRO");
 		setSaving(true);
 		try {
 		let dataFormatada = "";
@@ -383,7 +386,8 @@ export default function InformacoesPessoais() {
 			contatoEmergencia: contatoEmergenciaDigits || "11999999999",
 			relatorioAnamnese: dadosOriginais?.relatorioAnamnese || null,
 			idioma: formData.idiomas || "Português",
-			questionarioRespondido: dadosOriginais?.questionarioRespondido || false
+			questionarioRespondido: dadosOriginais?.questionarioRespondido || false,
+			nivel: dadosOriginais?.nivel || "EXPLORADOR" // Garante que nunca seja null
 		};
 
 		console.log("Processando informacoes pessoais...");
@@ -411,9 +415,15 @@ export default function InformacoesPessoais() {
 					contatoEmergencia: contatoEmergenciaDigits || "11999999999",
 					relatorioAnamnese: dadosOriginais?.relatorioAnamnese || null,
 					idioma: (formData.idiomas || "Português").trim(),
-					questionarioRespondido: dadosOriginais?.questionarioRespondido || false
+					questionarioRespondido: dadosOriginais?.questionarioRespondido || false,
+					nivel: dadosOriginais?.nivel || "EXPLORADOR" // Garante que nunca seja null
 				}
 			};
+
+			console.log("=== DTO EDICAO COMPLETO ===");
+			console.log("dtoEdicao.informacoes.nivel:", dtoEdicao.informacoes.nivel);
+			console.log("JSON completo:", JSON.stringify(dtoEdicao, null, 2));
+			console.log("===========================");
 
 			const resultado = await editarPerfilCompleto(usuarioId, dtoEdicao);
 			console.log("Perfil editado com sucesso");
@@ -462,7 +472,8 @@ export default function InformacoesPessoais() {
 					contatoEmergencia: contatoEmergenciaDigits || "11999999999",
 					relatorioAnamnese: null,
 					idioma: (formData.idiomas || "Português").trim(),
-					questionarioRespondido: false
+					questionarioRespondido: false,
+					nivel: dadosOriginais?.nivel || "EXPLORADOR" // Garante que nunca seja null
 				}
 			};
 
