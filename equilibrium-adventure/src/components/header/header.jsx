@@ -36,7 +36,7 @@ const Header = () => {
         <ul>
           <li onClick={() => navigate(routeUrls.CATALOGO_TRILHAS_ADM)}>HOME</li>
           <li onClick={() => navigate(routeUrls.CRIAR_EVENTO)}>CRIAR EVENTO</li>
-          <li onClick={() => navigate(routeUrls.SOBRE)}>DASHBOARD</li>
+          <li onClick={() => navigate('/dashboard')}>DASHBOARD</li>
 
           {/* Só aparece se for ADMINISTRADOR */}
           {tipoUsuario === "ADMINISTRADOR" && (
@@ -54,7 +54,7 @@ const Header = () => {
         <ul>
           <li onClick={() => { setMenuOpen(false); navigate(routeUrls.HOME); }}>HOME</li>
           <li onClick={() => { setMenuOpen(false); navigate(routeUrls.CRIAR_EVENTO); }}>CRIAR EVENTO</li>
-          <li onClick={() => { setMenuOpen(false); navigate(routeUrls.SOBRE); }}>DASHBOARD</li>
+          <li onClick={() => { setMenuOpen(false); navigate('/dashboard'); }}>DASHBOARD</li>
 
           {/* Só aparece se for ADMINISTRADOR */}
           {tipoUsuario === "ADMINISTRADOR" && (
