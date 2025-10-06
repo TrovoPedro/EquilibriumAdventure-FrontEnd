@@ -33,12 +33,31 @@ const Dashboard = () => {
   const [occupancyData, setOccupancyData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
 
+  // Log para verificar o estado atual dos participantes
+  console.log("Estado atual participantsData:", participantsData);
+
   useEffect(() => {
-    if (dataLoaded) return;
+    console.log("useEffect executado - dataLoaded:", dataLoaded);
+    if (dataLoaded) {
+      console.log("Dados já carregados, pulando...");
+      return;
+    }
     
     const loadDashboardData = async () => {
       try {
         setLoading(true);
+        
+        // Reset explícito de todos os dados no início
+        console.log("=== RESETANDO TODOS OS DADOS ===");
+        setEventosAtivos(0);
+        setParticipationData([]);
+        setCitiesData([]);
+        setEventsRanking([]);
+        setWords([]);
+        setChartData([]);
+        setParticipantsData({ frequentes: 0, novos: 0 });
+        setOccupancyData([]);
+        console.log("Dados resetados - participantsData:", { frequentes: 0, novos: 0 });
         
         const storedUser = localStorage.getItem("usuario");
         if (!storedUser) {
@@ -49,6 +68,11 @@ const Dashboard = () => {
         
         const userData = JSON.parse(storedUser);
         const usuarioId = userData.id || userData.id_usuario;
+        
+        console.log("=== DEBUG DASHBOARD ===");
+        console.log("Dados do usuário:", userData);
+        console.log("ID do usuário extraído:", usuarioId);
+        console.log("=======================");
         
         if (!usuarioId) {
           console.error("ID do usuário não encontrado");
@@ -115,16 +139,33 @@ const Dashboard = () => {
         }
 
         try {
+          console.log("=== CHAMANDO API USUÁRIOS NOVOS/FREQUENTES ===");
+          console.log("Enviando usuarioId:", usuarioId);
+          
           const usuariosData = await getUsuariosNovosFrequentes(usuarioId);
-          if (usuariosData) {
+          
+          console.log("Resposta completa da API:", usuariosData);
+          console.log("Tipo da resposta:", typeof usuariosData);
+          console.log("=== FIM DEBUG USUÁRIOS ===");
+          
+          // Verificar se a API retornou dados válidos E se realmente há participantes
+          if (usuariosData && 
+              typeof usuariosData === 'object' && 
+              (usuariosData.Frequente > 0 || usuariosData.Novo > 0)) {
+            console.log("Dados válidos encontrados - aplicando:", usuariosData);
             setParticipantsData({
               frequentes: usuariosData.Frequente || 0,
               novos: usuariosData.Novo || 0
             });
-            console.log("Usuários carregados:", usuariosData);
+          } else {
+            console.log("Sem dados válidos de usuários - mantendo valores vazios");
+            console.log("Motivo: usuariosData =", usuariosData);
+            setParticipantsData({ frequentes: 0, novos: 0 });
           }
+          
         } catch (error) {
           console.log("Usuários novos/frequentes falharam:", error.message);
+          setParticipantsData({ frequentes: 0, novos: 0 });
         }
 
         try {
@@ -206,7 +247,7 @@ const Dashboard = () => {
 
   const averageOccupancyRate = occupancyData.length > 0 
     ? Math.round(occupancyData.reduce((sum, item) => sum + parseFloat(item.taxaOcupacaoPercentual), 0) / occupancyData.length)
-    : (participationData.length > 0 ? calculateOccupancyRate(participationData) : 0);
+    : 0;
 
   console.log("Taxa de ocupação calculada:", averageOccupancyRate, "occupancyData:", occupancyData);
 
@@ -217,7 +258,7 @@ const Dashboard = () => {
                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     
     meses.forEach(mes => {
-      monthlyOccupancyData[mes] = averageOccupancyRate || 0;
+      monthlyOccupancyData[mes] = 0;
     });
     
     occupancyData.forEach(item => {
@@ -234,24 +275,17 @@ const Dashboard = () => {
     
     console.log("Dados mensais da API aplicados:", monthlyOccupancyData);
   } else {
-    const baseRate = participationData.length > 0 ? calculateOccupancyRate(participationData) : 75;
-    monthlyOccupancyData['Janeiro'] = Math.max(10, baseRate - 15);
-    monthlyOccupancyData['Fevereiro'] = Math.max(10, baseRate - 10);
-    monthlyOccupancyData['Março'] = Math.max(10, baseRate - 5);
-    monthlyOccupancyData['Abril'] = baseRate;
-    monthlyOccupancyData['Maio'] = Math.min(100, baseRate + 5);
-    monthlyOccupancyData['Junho'] = Math.min(100, baseRate + 10);
-    monthlyOccupancyData['Julho'] = Math.min(100, baseRate + 15);
-    monthlyOccupancyData['Agosto'] = Math.min(100, baseRate + 8);
-    monthlyOccupancyData['Setembro'] = Math.max(10, baseRate - 3);
-    monthlyOccupancyData['Outubro'] = baseRate;
-    monthlyOccupancyData['Novembro'] = Math.max(10, baseRate - 8);
-    monthlyOccupancyData['Dezembro'] = Math.max(10, baseRate - 12);
+    const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
+                   'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
     
-    console.log("Usando dados simulados:", monthlyOccupancyData);
+    meses.forEach(mes => {
+      monthlyOccupancyData[mes] = 0;
+    });
+    
+    console.log("Sem dados de ocupação - usando valores vazios:", monthlyOccupancyData);
   }
 
-  const selectedMonthOccupancy = monthlyOccupancyData[selectedMonth] || averageOccupancyRate || 0;
+  const selectedMonthOccupancy = monthlyOccupancyData[selectedMonth] || 0;
   
   console.log(`Mês selecionado: ${selectedMonth}, Taxa: ${selectedMonthOccupancy}%`);
   console.log("participationData atual:", participationData.length, "itens");
@@ -367,6 +401,12 @@ const Dashboard = () => {
       </div>
     );
   };
+
+  // Log final antes da renderização
+  console.log("=== ESTADO FINAL ANTES DO RENDER ===");
+  console.log("participantsData no render:", participantsData);
+  console.log("frequentes:", participantsData.frequentes, "novos:", participantsData.novos);
+  console.log("===================================");
 
   return (
     <>
