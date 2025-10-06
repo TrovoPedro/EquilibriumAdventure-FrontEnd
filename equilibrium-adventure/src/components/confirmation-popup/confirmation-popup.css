@@ -1,0 +1,141 @@
+.confirmation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(2px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.confirmation-popup {
+  background: #ffffff;
+  border-radius: 20px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.15),
+    0 1px 3px rgba(0, 0, 0, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  width: 90%;
+  max-width: 450px;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  border: 1px solid rgba(255, 255, 255, 0.8);
+  overflow: hidden;
+  animation: slideUp 0.3s ease-out;
+}
+
+.confirmation-header {
+  padding: 24px 28px 16px 28px;
+  border-bottom: 1px solid #e8f5e8;
+}
+
+.confirmation-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: #1e3a1e;
+  margin: 0;
+  text-align: center;
+}
+
+.confirmation-body {
+  padding: 20px 28px;
+}
+
+.confirmation-message {
+  font-size: 1rem;
+  color: #2c3e2c;
+  line-height: 1.6;
+  margin: 0;
+  text-align: center;
+}
+
+.confirmation-actions {
+  display: flex;
+  gap: 16px;
+  padding: 16px 28px 24px 28px;
+  justify-content: center;
+}
+
+.confirmation-btn {
+  padding: 12px 24px;
+  border-radius: 12px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 2px solid transparent;
+  min-width: 120px;
+}
+
+.confirmation-btn--cancel {
+  background: #f8f9fa;
+  color: #6c757d;
+  border-color: #e9ecef;
+}
+
+.confirmation-btn--cancel:hover {
+  background: #e9ecef;
+  color: #495057;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.confirmation-btn--confirm {
+  background: linear-gradient(135deg, #489465 0%, #2e4d2e 100%);
+  color: white;
+  border-color: #489465;
+}
+
+.confirmation-btn--confirm:hover {
+  background: linear-gradient(135deg, #3a7a52 0%, #1e3a1e 100%);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(72, 148, 101, 0.4);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+  .confirmation-popup {
+    width: 95%;
+    margin: 0 16px;
+  }
+  
+  .confirmation-header,
+  .confirmation-body,
+  .confirmation-actions {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  
+  .confirmation-actions {
+    flex-direction: column;
+  }
+  
+  .confirmation-btn {
+    width: 100%;
+  }
+}

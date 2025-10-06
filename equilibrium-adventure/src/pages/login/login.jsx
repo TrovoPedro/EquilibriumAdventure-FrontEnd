@@ -69,7 +69,6 @@ const Login = () => {
                 </div>
             </div>
 
-            <button className="chat-floating" aria-hidden>💬</button>
         </div>
     );
 };
