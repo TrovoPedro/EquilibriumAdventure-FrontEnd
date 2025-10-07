@@ -69,7 +69,7 @@ export default function InformacoesPessoais() {
 		const obterUsuarioLogado = () => {
 			console.log("Verificando dados do usuário logado...");
 			
-			const usuarioLogadoString = localStorage.getItem("usuario");
+			const usuarioLogadoString = sessionStorage.getItem("usuario");
 			
 			if (usuarioLogadoString) {
 				try {
@@ -141,7 +141,7 @@ export default function InformacoesPessoais() {
 					console.warn("Falha ao buscar dados básicos no backend");
 				}
 
-				const usuarioLogadoString = localStorage.getItem("usuario");
+				const usuarioLogadoString = sessionStorage.getItem("usuario");
 				let usuarioLS = {};
 				if (usuarioLogadoString) {
 					try { 
