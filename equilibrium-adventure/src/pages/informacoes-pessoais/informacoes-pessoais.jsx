@@ -62,6 +62,7 @@ export default function InformacoesPessoais() {
 	const [usuarioId, setUsuarioId] = useState(null); 
 	const [isEditMode, setIsEditMode] = useState(false);
 	const [showConfirmation, setShowConfirmation] = useState(false);
+	const [dadosOriginais, setDadosOriginais] = useState(null);
 
 	// Obter ID do usuário logado da sessão
 	useEffect(() => {
@@ -132,31 +133,39 @@ export default function InformacoesPessoais() {
 			try {
 				console.log("Carregando dados do usuario ID:", usuarioId);
 				
+				let dadosUsuario = {};
+				try {
+					dadosUsuario = await buscarDadosUsuario(usuarioId);
+					console.log("Dados básicos do usuário:", dadosUsuario);
+				} catch (e) {
+					console.warn("Falha ao buscar dados básicos no backend");
+				}
+
+				const usuarioLogadoString = localStorage.getItem("usuario");
+				let usuarioLS = {};
+				if (usuarioLogadoString) {
+					try { 
+						usuarioLS = JSON.parse(usuarioLogadoString) || {}; 
+						console.log("Dados do localStorage:", usuarioLS);
+					} catch {}
+				}
 				
 				try {
 					const dados = await buscarPerfilCompleto(usuarioId);
-					console.log("Dados completos encontrados - MODO EDICAO");
-				
-					const isEmptyObject = dados && typeof dados === 'object' && !Array.isArray(dados) && Object.keys(dados).length === 0;
-					const isEmptyString = typeof dados === 'string' && dados.trim() === '';
-					if (!dados || isEmptyObject || isEmptyString) {
-						throw new Error('Perfil vazio ou inválido');
-					}
+					console.log("Dados completos encontrados - MODO EDICAO", dados);
 					
 					setIsEditMode(true);
+					setDadosOriginais(dados);
 				
 					setFormData({
-						
-						nome: dados.nome || "",
-						email: dados.email || "",
-						telefone: dados.telefoneContato || dados.telefone || dados.telefone_contato || "",
-						
+						nome: dados.nome || dadosUsuario.nome || usuarioLS.nome || "",
+						email: dados.email || dadosUsuario.email || usuarioLS.email || "",
+						telefone: dados.telefoneContato || dados.telefone || dadosUsuario.telefone_contato || dadosUsuario.telefone || usuarioLS.telefone || "",
 						dataNascimento: convertDateToBrazilian(dados.dataNascimento),
 						cpf: dados.cpf || "",
 						rg: dados.rg || "",
 						idiomas: dados.idioma || "",
 						contatoEmergencia: dados.contatoEmergencia || "",
-					
 						rua: dados.endereco?.rua || dados.endereco?.logradouro || "",
 						cep: dados.endereco?.cep || "",
 						cidade: dados.endereco?.cidade || "",
@@ -167,37 +176,21 @@ export default function InformacoesPessoais() {
 					});
 					
 					console.log("FormData montado para modo edicao");
-					console.log("MODO DEFINIDO: EDICAO");
 					
 				} catch (error) {
 					console.log("Dados nao encontrados - MODO CADASTRO");
 					console.error("Detalhes do erro:", error);
-					
-					console.log("Buscando dados basicos do usuario...");
-					let dadosUsuario = {};
-					try {
-						dadosUsuario = await buscarDadosUsuario(usuarioId);
-					} catch (e) {
-						console.warn("Falha ao buscar dados basicos no backend, usando localStorage se disponivel.");
-					}
-
-					const usuarioLogadoString = localStorage.getItem("usuario");
-					let usuarioLS = {};
-					if (usuarioLogadoString) {
-						try { usuarioLS = JSON.parse(usuarioLogadoString) || {}; } catch {}
-					}
 
 					setFormData({
-
 						nome: dadosUsuario.nome || usuarioLS.nome || "",
 						email: dadosUsuario.email || usuarioLS.email || "",
 						telefone: dadosUsuario.telefone_contato || dadosUsuario.telefone || usuarioLS.telefone || "",
-						rua: "",
 						dataNascimento: "",
 						cpf: "",
 						rg: "",
 						idiomas: "",
 						contatoEmergencia: "",
+						rua: "",
 						cep: "",
 						cidade: "",
 						estado: "",
@@ -345,6 +338,9 @@ export default function InformacoesPessoais() {
 		}
 
 		console.log("Iniciando processo de salvamento...");
+		console.log("dadosOriginais completo:", dadosOriginais);
+		console.log("dadosOriginais.nivel:", dadosOriginais?.nivel);
+		console.log("Modo:", isEditMode ? "EDICAO" : "CADASTRO");
 		setSaving(true);
 		try {
 		let dataFormatada = "";
@@ -388,11 +384,10 @@ export default function InformacoesPessoais() {
 			cpf: cpfDigits || "00000000000",
 			rg: rgFormatted || "00.000.000-0",
 			contatoEmergencia: contatoEmergenciaDigits || "11999999999",
-			endereco: 1, 
-			nivel: "AVENTUREIRO",
-			relatorioAnamnese: null,
+			relatorioAnamnese: dadosOriginais?.relatorioAnamnese || null,
 			idioma: formData.idiomas || "Português",
-			questionarioRespondido: false
+			questionarioRespondido: dadosOriginais?.questionarioRespondido || false,
+			nivel: dadosOriginais?.nivel || "EXPLORADOR" // Garante que nunca seja null
 		};
 
 		console.log("Processando informacoes pessoais...");
@@ -418,12 +413,17 @@ export default function InformacoesPessoais() {
 					cpf: cpfDigits || "00000000000",
 					rg: rgFormatted || "00.000.000-0",
 					contatoEmergencia: contatoEmergenciaDigits || "11999999999",
-					nivel: "AVENTUREIRO",
-					relatorioAnamnese: null,
+					relatorioAnamnese: dadosOriginais?.relatorioAnamnese || null,
 					idioma: (formData.idiomas || "Português").trim(),
-					questionarioRespondido: false
+					questionarioRespondido: dadosOriginais?.questionarioRespondido || false,
+					nivel: dadosOriginais?.nivel || "EXPLORADOR" // Garante que nunca seja null
 				}
 			};
+
+			console.log("=== DTO EDICAO COMPLETO ===");
+			console.log("dtoEdicao.informacoes.nivel:", dtoEdicao.informacoes.nivel);
+			console.log("JSON completo:", JSON.stringify(dtoEdicao, null, 2));
+			console.log("===========================");
 
 			const resultado = await editarPerfilCompleto(usuarioId, dtoEdicao);
 			console.log("Perfil editado com sucesso");
@@ -453,7 +453,7 @@ export default function InformacoesPessoais() {
 			}
 			alert("Dados atualizados com sucesso!");
 		} else {
-			console.log("1. Fazendo CADASTRO (POST) do perfil completo (endereço + informações)...");
+			console.log("1. Fazendo CADASTRO (POST) do perfil completo...");
 
 			const dtoCadastro = {
 				endereco: {
@@ -469,12 +469,11 @@ export default function InformacoesPessoais() {
 					dataNascimento: dadosInformacoesPessoais.dataNascimento,
 					cpf: cpfDigits || "00000000000",
 					rg: rgFormatted || "00.000.000-0",
-					telefoneContato: telefoneUsuarioDigits || "11999999999",
 					contatoEmergencia: contatoEmergenciaDigits || "11999999999",
-					nivel: "AVENTUREIRO",
 					relatorioAnamnese: null,
 					idioma: (formData.idiomas || "Português").trim(),
-					questionarioRespondido: false
+					questionarioRespondido: false,
+					nivel: dadosOriginais?.nivel || "EXPLORADOR" // Garante que nunca seja null
 				}
 			};
 

@@ -28,7 +28,7 @@ const Header = () => {
       menuItems: [
         { label: "HOME", route: routeUrls.CATALOGO_TRILHAS_ADM },
         { label: "CRIAR EVENTO", route: routeUrls.CRIAR_EVENTO },
-        { label: "DASHBOARD", route: routeUrls.SOBRE },
+        { label: "DASHBOARD", route: routeUrls.DASHBOARD },
         { label: "NOVO GUIA", route: routeUrls.ADICIONAR_GUIA },
       ],
       agendaRoute: routeUrls.INFOS_ADICIONAIS_GUIA
@@ -38,7 +38,7 @@ const Header = () => {
       menuItems: [
         { label: "HOME", route: routeUrls.CATALOGO_TRILHAS_ADM },
         { label: "CRIAR EVENTO", route: routeUrls.CRIAR_EVENTO },
-        { label: "DASHBOARD", route: routeUrls.SOBRE },
+        { label: "DASHBOARD", route: routeUrls.DASHBOARD },
       ],
       agendaRoute: routeUrls.INFOS_ADICIONAIS_GUIA
     },
