@@ -1,5 +1,5 @@
 import "./InscricaoTrilhas.css";
-import Header from "../../components/header/header-usuario";
+import Header from "../../components/header/header-unified";
 import trilhaImg from "../../assets/cachoeiralago.jpg";
 import MapaTrilha from "../../components/mapa-trilha/MapaTrilha";
 import React, { useState, useEffect } from "react";

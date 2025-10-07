@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./infos-adic-guia.css";
-import Header from "../../components/header/header";
+import Header from "../../components/header/header-unified";
 import Beneficiario from "../../assets/beneficiario.png";
 import Trilha from "../../assets/cachoeiralago.jpg";
 import ButtonAlterar from "../../components/button-padrao/button-alterar"

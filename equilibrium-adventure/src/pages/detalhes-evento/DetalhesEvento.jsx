@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Header from '../../components/header/header';
+import Header from '../../components/header/header-unified';
 import EventoInfo from '../../components/evento-info/EventoInfo';
 import UsuariosInscritos from '../../components/usuarios-inscritos/UsuariosInscritos';
 import Comentarios from '../../components/comentarios/Comentarios'; 

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../components/header/header";
+import Header from "../../components/header/header-unified";
 import "./ativar-evento.css";
 import leftArrow from "../../assets/left-arrow-green.png";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";

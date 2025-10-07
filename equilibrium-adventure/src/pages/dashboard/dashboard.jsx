@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
-import Header from '../../components/header/header';
+import Header from '../../components/header/header-unified';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../../context/AuthContext';
 import {

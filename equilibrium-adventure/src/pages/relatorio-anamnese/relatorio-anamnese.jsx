@@ -1,5 +1,5 @@
 import "./relatorio-anamnese.css"
-import Header from "../../components/header/header";
+import Header from "../../components/header/header-unified";
 
 const RelatorioAnamnese = () => {
     return (
