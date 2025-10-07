@@ -21,3 +21,12 @@ export const loginUsuario = async (credentials) => {
     throw error.response?.data || error.message;
   }
 };
+
+export const getInformacoesPerfil = async (usuarioId) => {
+  try {
+    const response = await api.get(`/informacoes-pessoais/perfil-info/${usuarioId}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};

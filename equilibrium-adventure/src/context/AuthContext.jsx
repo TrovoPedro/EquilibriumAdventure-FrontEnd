@@ -8,24 +8,26 @@ export const useAuth = () => useContext(AuthContext);
 export const AuthProvider = ({ children }) => {
   const [usuario, setUsuario] = useState(null);
 
-  // Carregar usuário do localStorage quando a app abrir
+  // Carregar usuário do sessionStorage quando a app abrir
   useEffect(() => {
-    const storedUser = localStorage.getItem("usuario");
+    const storedUser = sessionStorage.getItem("usuario");
     if (storedUser) {
       setUsuario(JSON.parse(storedUser));
     }
   }, []);
 
-  // Função de login -> salva no estado + localStorage
+  // Função de login -> salva no estado + sessionStorage
   const login = (userData) => {
     setUsuario(userData);
-    localStorage.setItem("usuario", JSON.stringify(userData));
+    sessionStorage.setItem("usuario", JSON.stringify(userData));
   };
 
-  // Função de logout -> limpa estado + localStorage
+  // Função de logout -> limpa estado + sessionStorage
   const logout = () => {
     setUsuario(null);
-    localStorage.removeItem("usuario");
+    sessionStorage.removeItem("usuario");
+    // Limpa todos os dados da sessão
+    sessionStorage.clear();
   };
 
   return (

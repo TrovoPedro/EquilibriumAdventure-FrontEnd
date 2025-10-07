@@ -9,10 +9,10 @@ export const ScoreProvider = ({ children }) => {
   const [pontuacao, setPontuacao] = useState(0);
   const [nivel, setNivel] = useState(null);
 
-  // Carregar dados do localStorage ao iniciar
+  // Carregar dados do sessionStorage ao iniciar
   useEffect(() => {
-    const storedPontuacao = localStorage.getItem("pontuacao");
-    const storedNivel = localStorage.getItem("nivel");
+    const storedPontuacao = sessionStorage.getItem("pontuacao");
+    const storedNivel = sessionStorage.getItem("nivel");
 
     if (storedPontuacao) setPontuacao(Number(storedPontuacao));
     if (storedNivel) setNivel(storedNivel);
@@ -23,16 +23,16 @@ export const ScoreProvider = ({ children }) => {
     setPontuacao(valor);
     setNivel(nivelamento);
 
-    localStorage.setItem("pontuacao", valor.toString());
-    localStorage.setItem("nivel", nivelamento);
+    sessionStorage.setItem("pontuacao", valor.toString());
+    sessionStorage.setItem("nivel", nivelamento);
   };
 
   // Resetar dados
   const resetarPontuacao = () => {
     setPontuacao(0);
     setNivel(null);
-    localStorage.removeItem("pontuacao");
-    localStorage.removeItem("nivel");
+    sessionStorage.removeItem("pontuacao");
+    sessionStorage.removeItem("nivel");
   };
 
   return (

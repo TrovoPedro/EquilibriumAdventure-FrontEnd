@@ -38,12 +38,18 @@ const Questionario = () => {
         return;
       }
 
-      if (Object.keys(answers).length !== questions.length) {
+      // Cria um objeto com todas as respostas, incluindo a última selecionada
+      const todasRespostas = {
+        ...answers,
+        [questions[currentQuestionIndex].id]: selectedOption
+      };
+
+      if (Object.keys(todasRespostas).length !== questions.length) {
         alert("Por favor, responda todas as questões antes de finalizar.");
         return;
       }
 
-      const respostasParaEnviar = Object.entries(answers).map(([perguntaId, alternativa]) => ({
+      const respostasParaEnviar = Object.entries(todasRespostas).map(([perguntaId, alternativa]) => ({
         usuarioId: usuario.id,
         perguntaId: Number(perguntaId),
         alternativaEscolhida: Number(alternativa)
@@ -102,10 +108,12 @@ const Questionario = () => {
       return;
     }
 
-    setAnswers((prev) => ({
-      ...prev,
-      [questions[currentQuestionIndex].id]: selectedOption,
-    }));
+    // Atualiza as respostas com a seleção atual
+    const novasRespostas = {
+      ...answers,
+      [questions[currentQuestionIndex].id]: selectedOption
+    };
+    setAnswers(novasRespostas);
 
     if (currentQuestionIndex === questions.length - 1) {
       handleSubmitAnswers();
