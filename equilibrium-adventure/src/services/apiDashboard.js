@@ -7,11 +7,9 @@ const api = axios.create({
 // Interceptor para requests
 api.interceptors.request.use(
   (config) => {
-    console.log(`Dashboard API Request: ${config.method?.toUpperCase()} ${config.url}`);
     return config;
   },
   (error) => {
-    console.error('Dashboard request error:', error);
     return Promise.reject(error);
   }
 );
@@ -19,16 +17,9 @@ api.interceptors.request.use(
 // Interceptor para responses
 api.interceptors.response.use(
   (response) => {
-    console.log(`Dashboard API Response: ${response.config.method?.toUpperCase()} ${response.config.url} - Status: ${response.status}`);
     return response;
   },
   (error) => {
-    console.error('Dashboard response error:', {
-      status: error.response?.status,
-      url: error.config?.url,
-      method: error.config?.method,
-      data: error.response?.data
-    });
     return Promise.reject(error);
   }
 );
@@ -39,7 +30,6 @@ export const getEventosAtivosFuturos = async (usuarioId) => {
     const response = await api.get(`/eventos-ativos-futuros?usuarioId=${usuarioId}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar eventos ativos/futuros:", error);
     throw error;
   }
 };
@@ -50,7 +40,6 @@ export const getTaxaOcupacaoMedia = async (usuarioId) => {
     const response = await api.get(`/taxa-ocupacao-media?usuarioId=${usuarioId}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar taxa de ocupação média:", error);
     throw error;
   }
 };
@@ -61,7 +50,6 @@ export const getUsuariosNovosFrequentes = async (usuarioId) => {
     const response = await api.get(`/usuarios-novos-frequentes?usuarioId=${usuarioId}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar usuários novos/frequentes:", error);
     throw error;
   }
 };
@@ -72,7 +60,6 @@ export const getTopCidades = async (usuarioId) => {
     const response = await api.get(`/top-cidades?usuarioId=${usuarioId}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar top cidades:", error);
     throw error;
   }
 };
@@ -83,7 +70,6 @@ export const getRankingEventos = async (usuarioId) => {
     const response = await api.get(`/ranking-eventos?usuarioId=${usuarioId}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar ranking de eventos:", error);
     throw error;
   }
 };
@@ -94,7 +80,6 @@ export const getPalavrasComentarios = async (usuarioId) => {
     const response = await api.get(`/palavras-comentarios?usuarioId=${usuarioId}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar palavras dos comentários:", error);
     throw error;
   }
 };
@@ -105,7 +90,6 @@ export const getTendenciasAno = async (usuarioId) => {
     const response = await api.get(`/tendencias-ano?usuarioId=${usuarioId}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar tendências por ano:", error);
     throw error;
   }
 };
@@ -116,7 +100,6 @@ export const getTendenciasMes = async (usuarioId) => {
     const response = await api.get(`/tendencias-mes?usuarioId=${usuarioId}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar tendências por mês:", error);
     throw error;
   }
 };
@@ -127,7 +110,6 @@ export const getTendenciasDia = async (usuarioId) => {
     const response = await api.get(`/tendencias-dia?usuarioId=${usuarioId}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar tendências por dia:", error);
     throw error;
   }
 };
@@ -138,7 +120,6 @@ export const getInscricaoLimite = async (usuarioId) => {
     const response = await api.get(`/inscricao-limite?usuarioId=${usuarioId}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar inscrições vs limite:", error);
     throw error;
   }
 };
