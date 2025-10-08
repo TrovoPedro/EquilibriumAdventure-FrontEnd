@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
-import Header from '../../components/header/header';
+import Header from '../../components/header/header-unified';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -33,13 +33,8 @@ const Dashboard = () => {
   const [occupancyData, setOccupancyData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
 
-  // Log para verificar o estado atual dos participantes
-  console.log("Estado atual participantsData:", participantsData);
-
   useEffect(() => {
-    console.log("useEffect executado - dataLoaded:", dataLoaded);
     if (dataLoaded) {
-      console.log("Dados já carregados, pulando...");
       return;
     }
     
@@ -48,7 +43,6 @@ const Dashboard = () => {
         setLoading(true);
         
         // Reset explícito de todos os dados no início
-        console.log("=== RESETANDO TODOS OS DADOS ===");
         setEventosAtivos(0);
         setParticipationData([]);
         setCitiesData([]);
@@ -57,11 +51,9 @@ const Dashboard = () => {
         setChartData([]);
         setParticipantsData({ frequentes: 0, novos: 0 });
         setOccupancyData([]);
-        console.log("Dados resetados - participantsData:", { frequentes: 0, novos: 0 });
         
         const storedUser = localStorage.getItem("usuario");
         if (!storedUser) {
-          console.error("Usuário não encontrado na localStorage");
           setLoading(false);
           return;
         }
@@ -69,27 +61,18 @@ const Dashboard = () => {
         const userData = JSON.parse(storedUser);
         const usuarioId = userData.id || userData.id_usuario;
         
-        console.log("=== DEBUG DASHBOARD ===");
-        console.log("Dados do usuário:", userData);
-        console.log("ID do usuário extraído:", usuarioId);
-        console.log("=======================");
-        
         if (!usuarioId) {
-          console.error("ID do usuário não encontrado");
           setLoading(false);
           return;
         }
-
-        console.log("Carregando dados do dashboard para usuário:", usuarioId);
 
         try {
           const eventosAtivosData = await getEventosAtivosFuturos(usuarioId);
           if (eventosAtivosData !== null && eventosAtivosData !== undefined) {
             setEventosAtivos(eventosAtivosData);
-            console.log("Eventos ativos carregados:", eventosAtivosData);
           }
         } catch (error) {
-          console.log("Eventos ativos falharam:", error.message);
+          // Silenciar erro
         }
 
         try {
@@ -102,10 +85,9 @@ const Dashboard = () => {
               state: ''
             }));
             setCitiesData(formattedCities);
-            console.log("Top cidades carregadas:", formattedCities.length, "cidades");
           }
         } catch (error) {
-          console.log("Top cidades falharam:", error.message);
+          // Silenciar erro
         }
 
         try {
@@ -117,10 +99,9 @@ const Dashboard = () => {
               avaliacao: item.notaMedia
             }));
             setEventsRanking(formattedRanking);
-            console.log("Ranking eventos carregado:", formattedRanking.length, "eventos");
           }
         } catch (error) {
-          console.log("Ranking eventos falharam:", error.message);
+          // Silenciar erro
         }
 
         try {
@@ -132,48 +113,35 @@ const Dashboard = () => {
               color: item.quantidade > 5 ? '#10b981' : item.quantidade > 2 ? '#3b82f6' : '#6b7280'
             }));
             setWords(formattedWords);
-            console.log("Palavras carregadas:", formattedWords.length, "palavras");
           }
         } catch (error) {
-          console.log("Palavras comentários falharam:", error.message);
+          // Silenciar erro
         }
 
         try {
-          console.log("=== CHAMANDO API USUÁRIOS NOVOS/FREQUENTES ===");
-          console.log("Enviando usuarioId:", usuarioId);
           
           const usuariosData = await getUsuariosNovosFrequentes(usuarioId);
-          
-          console.log("Resposta completa da API:", usuariosData);
-          console.log("Tipo da resposta:", typeof usuariosData);
-          console.log("=== FIM DEBUG USUÁRIOS ===");
           
           // Verificar se a API retornou dados válidos E se realmente há participantes
           if (usuariosData && 
               typeof usuariosData === 'object' && 
               (usuariosData.Frequente > 0 || usuariosData.Novo > 0)) {
-            console.log("Dados válidos encontrados - aplicando:", usuariosData);
             setParticipantsData({
               frequentes: usuariosData.Frequente || 0,
               novos: usuariosData.Novo || 0
             });
           } else {
-            console.log("Sem dados válidos de usuários - mantendo valores vazios");
-            console.log("Motivo: usuariosData =", usuariosData);
             setParticipantsData({ frequentes: 0, novos: 0 });
           }
           
         } catch (error) {
-          console.log("Usuários novos/frequentes falharam:", error.message);
           setParticipantsData({ frequentes: 0, novos: 0 });
         }
 
         try {
           const participationDataFromAPI = await getInscricaoLimite(usuarioId);
-          console.log("Resposta inscrição vs limite:", participationDataFromAPI);
           
           if (participationDataFromAPI && participationDataFromAPI.length > 0) {
-            console.log("Dados de inscrição recebidos:", participationDataFromAPI.length, "eventos");
             
             const formattedParticipation = participationDataFromAPI.map((item, index) => ({
               name: item.evento,
@@ -185,30 +153,26 @@ const Dashboard = () => {
             }));
             
             setParticipationData(formattedParticipation);
-            console.log("Dados formatados e aplicados:", formattedParticipation);
           } else {
-            console.log("Dados de inscrição vazios ou nulos");
+            // Dados vazios
           }
         } catch (error) {
-          console.log("Erro inscrição vs limite:", error.message);
+          // Silenciar erro
         }
 
         try {
           const occupancyDataFromAPI = await getTaxaOcupacaoMedia(usuarioId);
           if (occupancyDataFromAPI && occupancyDataFromAPI.length > 0) {
             setOccupancyData(occupancyDataFromAPI);
-            console.log("Taxa de ocupação média carregada:", occupancyDataFromAPI.length, "meses");
           }
         } catch (error) {
-          console.log("Taxa de ocupação média falhou:", error.message);
+          // Silenciar erro
         }
 
         try {
           const tendenciasData = await getTendenciasAno(usuarioId);
-          console.log("Resposta tendências anuais:", tendenciasData);
           
           if (tendenciasData && tendenciasData.length > 0) {
-            console.log("Dados anuais recebidos:", tendenciasData.length, "anos");
             
             const formattedChart = tendenciasData
               .sort((a, b) => a.ano - b.ano) 
@@ -218,16 +182,15 @@ const Dashboard = () => {
               }));
             setChartData(formattedChart);
             setChartView('Anual');
-            console.log("Gráfico anual aplicado:", formattedChart);
           } else {
-            console.log("Dados anuais vazios ou nulos");
+            // Dados vazios
           }
         } catch (error) {
-          console.log("Erro tendências anuais:", error.message);
+          // Silenciar erro
         }
         
       } catch (error) {
-        console.error("Erro geral ao carregar dados do dashboard:", error);
+        // Silenciar erro geral
       } finally {
         setLoading(false);
         setDataLoaded(true);
@@ -249,8 +212,6 @@ const Dashboard = () => {
     ? Math.round(occupancyData.reduce((sum, item) => sum + parseFloat(item.taxaOcupacaoPercentual), 0) / occupancyData.length)
     : 0;
 
-  console.log("Taxa de ocupação calculada:", averageOccupancyRate, "occupancyData:", occupancyData);
-
   const monthlyOccupancyData = {};
   
   if (occupancyData.length > 0) {
@@ -269,11 +230,7 @@ const Dashboard = () => {
       if (mesIndex >= 0 && mesIndex < 12) {
         monthlyOccupancyData[meses[mesIndex]] = Math.round(parseFloat(item.taxaOcupacaoPercentual));
       }
-      
-      console.log(`API: ${mesString} -> Mês: ${meses[mesIndex]} -> Taxa: ${item.taxaOcupacaoPercentual}%`);
     });
-    
-    console.log("Dados mensais da API aplicados:", monthlyOccupancyData);
   } else {
     const meses = ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 
                    'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'];
@@ -281,15 +238,9 @@ const Dashboard = () => {
     meses.forEach(mes => {
       monthlyOccupancyData[mes] = 0;
     });
-    
-    console.log("Sem dados de ocupação - usando valores vazios:", monthlyOccupancyData);
   }
 
   const selectedMonthOccupancy = monthlyOccupancyData[selectedMonth] || 0;
-  
-  console.log(`Mês selecionado: ${selectedMonth}, Taxa: ${selectedMonthOccupancy}%`);
-  console.log("participationData atual:", participationData.length, "itens");
-  console.log("chartData atual:", chartData.length, "pontos");
 
   const handleFilter = async (filterType) => {
     try {
@@ -309,10 +260,8 @@ const Dashboard = () => {
       if (filterType === 'Semanal') {
         try {
           tendenciasData = await getTendenciasDia(usuarioId);
-          console.log("Resposta diárias:", tendenciasData);
           
           if (tendenciasData && tendenciasData.length > 0) {
-            console.log("Dados diários:", tendenciasData.length, "dias");
             
             const formattedChart = tendenciasData
               .sort((a, b) => new Date(a.dia) - new Date(b.dia))
@@ -322,22 +271,17 @@ const Dashboard = () => {
                 value: item.totalInscricoes
               }));
             setChartData(formattedChart);
-            console.log("Gráfico semanal aplicado:", formattedChart);
           } else {
-            console.log("Dados diários vazios");
             setChartData([]);
           }
         } catch (error) {
-          console.log("Erro tendências diárias:", error.message);
           setChartData([]);
         }
       } else if (filterType === 'Mensal') {
         try {
           tendenciasData = await getTendenciasMes(usuarioId);
-          console.log("Resposta mensais:", tendenciasData);
           
           if (tendenciasData && tendenciasData.length > 0) {
-            console.log("Dados mensais:", tendenciasData.length, "meses");
             
             const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
             const formattedChart = tendenciasData
@@ -347,22 +291,17 @@ const Dashboard = () => {
                 value: item.totalInscricoes
               }));
             setChartData(formattedChart);
-            console.log("Gráfico mensal aplicado:", formattedChart);
           } else {
-            console.log("Dados mensais vazios");
             setChartData([]);
           }
         } catch (error) {
-          console.log("Erro tendências mensais:", error.message);
           setChartData([]);
         }
       } else if (filterType === 'Anual') {
         try {
           tendenciasData = await getTendenciasAno(usuarioId);
-          console.log("Resposta anuais (filtro):", tendenciasData);
           
           if (tendenciasData && tendenciasData.length > 0) {
-            console.log("Dados anuais (filtro):", tendenciasData.length, "anos");
             const formattedChart = tendenciasData
               .sort((a, b) => a.ano - b.ano)
               .map(item => ({
@@ -370,18 +309,15 @@ const Dashboard = () => {
                 value: item.totalInscricoes
               }));
             setChartData(formattedChart);
-            console.log("Gráfico anual (filtro) aplicado:", formattedChart);
           } else {
-            console.log("Dados anuais (filtro) vazios");
             setChartData([]);
           }
         } catch (error) {
-          console.log("Erro tendências anuais (filtro):", error.message);
           setChartData([]);
         }
       }
     } catch (error) {
-      console.error("Erro ao filtrar dados:", error);
+      // Silenciar erro
     } finally {
       setLoading(false);
     }
@@ -401,12 +337,6 @@ const Dashboard = () => {
       </div>
     );
   };
-
-  // Log final antes da renderização
-  console.log("=== ESTADO FINAL ANTES DO RENDER ===");
-  console.log("participantsData no render:", participantsData);
-  console.log("frequentes:", participantsData.frequentes, "novos:", participantsData.novos);
-  console.log("===================================");
 
   return (
     <>

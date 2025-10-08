@@ -2,7 +2,7 @@ import "./agenda-aventureiro.css"
 import Homem from "../../assets/homem2.jpeg";
 import Mulher1 from "../../assets/mulher1.jpeg";
 import Trilha from "../../assets/cachoeiralago.jpg";
-import Header from "../../components/header/header-usuario";
+import Header from "../../components/header/header-unified";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";

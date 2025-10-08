@@ -1,7 +1,7 @@
 import React from "react";
 import './ver-guias.css';
 import leftArrow from "../../assets/left-arrow-green.png";
-import Header from "../../components/header/header";
+import Header from "../../components/header/header-unified";
 
 export default function VerGuias() {
 

@@ -1,0 +1,51 @@
+.evento-card {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  padding: 20px;
+  margin: 15px;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.evento-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+.evento-info h3 {
+  color: #0C513F;
+  margin: 0 0 10px 0;
+  font-size: 1.2rem;
+}
+
+.evento-descricao {
+  color: #666;
+  margin-bottom: 15px;
+  line-height: 1.4;
+}
+
+.evento-detalhes {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.dificuldade, .distancia {
+  background: #e9ecef;
+  padding: 5px 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  color: #495057;
+}
+
+.evento-local {
+  border-top: 1px solid #eee;
+  padding-top: 10px;
+}
+
+.evento-local p {
+  color: #666;
+  margin: 5px 0;
+  font-size: 0.9rem;
+}

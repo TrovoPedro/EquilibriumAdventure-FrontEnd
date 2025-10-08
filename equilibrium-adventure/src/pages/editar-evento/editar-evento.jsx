@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import Header from "../../components/header/header";
+import Header from "../../components/header/header-unified";
 import { maskCep, maskDistancia } from "../../utils/masks";
 import { scrollToTop } from "../../utils/scrollToTop";
 import { cadastrarEvento, buscarCep } from "../../services/chamadasAPIEvento";
