@@ -3,7 +3,7 @@ import Forms from '../../components/forms/forms';
 import './login.css';
 import routeUrls from "../../routes/routeUrls";
 import { useNavigate } from 'react-router-dom';
-import { loginUsuario, getInformacoesPerfil } from '../../services/api';
+import { loginUsuario, buscarInformacoesPerfil } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { useScore } from "../../context/ScoreContext";
 
@@ -27,12 +27,12 @@ const Login = () => {
       if (usuario.tipoUsuario === "AVENTUREIRO" && !usuario.primeiraVez) {
         try {
         console.log(usuario.id);
-          const informacoes = await getInformacoesPerfil(usuario.id);
+          const informacoes = await buscarInformacoesPerfil(usuario.id);
           console.log("Informações do perfil:", informacoes);
 
-          if (informacoes && informacoes.Nivel) {
-            salvarPontuacao(0, informacoes.Nivel);
-            console.log("Nível carregado:", informacoes.Nivel);
+          if (informacoes && informacoes.nivel) {
+            salvarPontuacao(informacoes.nivel);
+            console.log("Nível carregado:", informacoes.nivel);
           } else {
             console.log("Usuário sem nível registrado ainda (primeiro login).");
           }
