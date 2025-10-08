@@ -7,31 +7,31 @@ import EnderecoCard from "../../components/endereco-card/endereco-card";
 import ConfirmationPopup from "../../components/confirmation-popup/confirmation-popup";
 
 import { buscarCep } from "../../services/chamadasAPIEvento";
-import { 
+import {
 	editarInformacoesPerfil,
 	cadastrarInformacoesPessoais,
 	buscarPerfilCompleto,
 	cadastrarPerfilCompleto,
 	editarPerfilCompleto
 } from "../../services/apiInformacoesPessoais";
-import { 
+import {
 	buscarDadosUsuario
 } from "../../services/apiUsuario";
-import { 
-	validateUserData, 
-	validateFullName, 
-	validateCPF, 
-	validateRG, 
-	validateCEP, 
-	validateTelefone, 
+import {
+	validateUserData,
+	validateFullName,
+	validateCPF,
+	validateRG,
+	validateCEP,
+	validateTelefone,
 	validateEmergencyContact,
-	validateEmail 
+	validateEmail
 } from "../../utils/validators";
 import { validatePhone } from "../../utils/validatePhone";
-import { 
-	convertDateToBrazilian, 
-	convertDateToISO, 
-	validateDateFormat 
+import {
+	convertDateToBrazilian,
+	convertDateToISO,
+	validateDateFormat
 } from "../../utils/dateConversions";
 
 export default function InformacoesPessoais() {
@@ -46,7 +46,7 @@ export default function InformacoesPessoais() {
 		rg: "",
 		idiomas: "",
 		contatoEmergencia: "",
-	
+
 		rua: "",
 		cep: "",
 		cidade: "",
@@ -59,7 +59,7 @@ export default function InformacoesPessoais() {
 	const [errors, setErrors] = useState({});
 	const [loading, setLoading] = useState(false);
 	const [saving, setSaving] = useState(false);
-	const [usuarioId, setUsuarioId] = useState(null); 
+	const [usuarioId, setUsuarioId] = useState(null);
 	const [isEditMode, setIsEditMode] = useState(false);
 	const [showConfirmation, setShowConfirmation] = useState(false);
 	const [dadosOriginais, setDadosOriginais] = useState(null);
@@ -68,23 +68,23 @@ export default function InformacoesPessoais() {
 	useEffect(() => {
 		const obterUsuarioLogado = () => {
 			console.log("Verificando dados do usuário logado...");
-			
+
 			const usuarioLogadoString = sessionStorage.getItem("usuario");
-			
+
 			if (usuarioLogadoString) {
 				try {
 					const usuarioLogado = JSON.parse(usuarioLogadoString);
 					console.log("Usuario logado encontrado:", usuarioLogado);
-					
+
 					if (usuarioLogado && (usuarioLogado.idUsuario || usuarioLogado.id || usuarioLogado.email)) {
 						const idUsuario = usuarioLogado.idUsuario || usuarioLogado.id;
-						
+
 						if (idUsuario) {
 							console.log("ID do usuario:", idUsuario);
 							setUsuarioId(idUsuario);
 						} else {
 							console.log("Email nao encontrado, tentando descobrir ID...");
-							
+
 							if (usuarioLogado.email === "guilherme.loliveira@sptech.school") {
 								console.log("Usuario Guilherme identificado - usando ID 1");
 								setUsuarioId(1);
@@ -95,16 +95,16 @@ export default function InformacoesPessoais() {
 						}
 					} else {
 						console.error("Estrutura do usuario invalida:", usuarioLogado);
-						setUsuarioId(1); 
+						setUsuarioId(1);
 					}
 				} catch (parseError) {
 					console.error("Erro ao fazer parse dos dados do usuario:", parseError);
-					setUsuarioId(1); 
+					setUsuarioId(1);
 				}
 			} else {
 				console.error("Nenhum usuario encontrado no localStorage.");
 				console.log("Tentando buscar no sessionStorage...");
-				
+
 				const sessionUser = sessionStorage.getItem("usuario");
 				if (sessionUser) {
 					const usuarioLogado = JSON.parse(sessionUser);
@@ -120,9 +120,9 @@ export default function InformacoesPessoais() {
 		obterUsuarioLogado();
 	}, []);
 
-	
+
 	useEffect(() => {
-		
+
 		if (!usuarioId) {
 			console.log("Aguardando usuarioId da sessao...");
 			return;
@@ -132,7 +132,7 @@ export default function InformacoesPessoais() {
 			setLoading(true);
 			try {
 				console.log("Carregando dados do usuario ID:", usuarioId);
-				
+
 				let dadosUsuario = {};
 				try {
 					dadosUsuario = await buscarDadosUsuario(usuarioId);
@@ -144,19 +144,19 @@ export default function InformacoesPessoais() {
 				const usuarioLogadoString = sessionStorage.getItem("usuario");
 				let usuarioLS = {};
 				if (usuarioLogadoString) {
-					try { 
-						usuarioLS = JSON.parse(usuarioLogadoString) || {}; 
+					try {
+						usuarioLS = JSON.parse(usuarioLogadoString) || {};
 						console.log("Dados do localStorage:", usuarioLS);
-					} catch {}
+					} catch { }
 				}
-				
+
 				try {
 					const dados = await buscarPerfilCompleto(usuarioId);
 					console.log("Dados completos encontrados - MODO EDICAO", dados);
-					
+
 					setIsEditMode(true);
 					setDadosOriginais(dados);
-				
+
 					setFormData({
 						nome: dados.nome || dadosUsuario.nome || usuarioLS.nome || "",
 						email: dados.email || dadosUsuario.email || usuarioLS.email || "",
@@ -174,9 +174,9 @@ export default function InformacoesPessoais() {
 						numero: dados.endereco?.numero || "",
 						complemento: dados.endereco?.complemento || ""
 					});
-					
+
 					console.log("FormData montado para modo edicao");
-					
+
 				} catch (error) {
 					console.log("Dados nao encontrados - MODO CADASTRO");
 					console.error("Detalhes do erro:", error);
@@ -198,11 +198,11 @@ export default function InformacoesPessoais() {
 						numero: "",
 						complemento: ""
 					});
-					
+
 					setIsEditMode(false);
 					console.log("MODO DEFINIDO: CADASTRO");
 				}
-				
+
 			} catch (error) {
 				console.error("Erro geral ao carregar dados:", error);
 				alert("Erro ao carregar dados do usuário. Tente novamente.");
@@ -219,9 +219,9 @@ export default function InformacoesPessoais() {
 			...prev,
 			[name]: value
 		}));
-		
+
 		let fieldErrors = { ...errors };
-		
+
 		switch (name) {
 			case 'nome':
 				const nameValidation = validateFullName(value);
@@ -294,7 +294,7 @@ export default function InformacoesPessoais() {
 			default:
 				delete fieldErrors[name];
 		}
-		
+
 		setErrors(fieldErrors);
 	};
 
@@ -321,7 +321,7 @@ export default function InformacoesPessoais() {
 
 	const handleSubmit = async () => {
 		console.log("Iniciando handleSubmit...");
-		
+
 		const nameValidation = validateFullName(formData.nome);
 		if (!nameValidation.isValid) {
 			setErrors({ username: nameValidation.error });
@@ -343,178 +343,179 @@ export default function InformacoesPessoais() {
 		console.log("Modo:", isEditMode ? "EDICAO" : "CADASTRO");
 		setSaving(true);
 		try {
-		let dataFormatada = "";
-		if (formData.dataNascimento) {
-			try {
-				dataFormatada = convertDateToISO(formData.dataNascimento);
-			} catch (error) {
-				alert(error.message);
+			let dataFormatada = "";
+			if (formData.dataNascimento) {
+				try {
+					dataFormatada = convertDateToISO(formData.dataNascimento);
+				} catch (error) {
+					alert(error.message);
+					setSaving(false);
+					return;
+				}
+			}
+
+			const cpfDigits = (formData.cpf || "").replace(/\D/g, "");
+			const rgFormatted = (formData.rg || "").trim();
+			const telefoneUsuarioDigits = (formData.telefone || "").replace(/\D/g, "");
+			const contatoEmergenciaDigits = (formData.contatoEmergencia || "").replace(/\D/g, "");
+
+			const telefoneValidation = validateTelefone(formData.telefone);
+			if (!telefoneValidation.isValid) {
+				alert(telefoneValidation.error + " (DDD + número), apenas números.");
 				setSaving(false);
 				return;
 			}
-		}
+			const emergencyValidation = validateEmergencyContact(formData.contatoEmergencia);
+			if (!emergencyValidation.isValid) {
+				alert(emergencyValidation.error + " (DDD + número), apenas números.");
+				setSaving(false);
+				return;
+			}
 
-		const cpfDigits = (formData.cpf || "").replace(/\D/g, "");
-		const rgFormatted = (formData.rg || "").trim();
-		const telefoneUsuarioDigits = (formData.telefone || "").replace(/\D/g, "");
-		const contatoEmergenciaDigits = (formData.contatoEmergencia || "").replace(/\D/g, "");
+			const rgValidation = validateRG(formData.rg);
+			if (!rgValidation.isValid) {
+				alert(rgValidation.error + " (incluindo pontos e traços).");
+				setSaving(false);
+				return;
+			}
 
-		const telefoneValidation = validateTelefone(formData.telefone);
-		if (!telefoneValidation.isValid) {
-			alert(telefoneValidation.error + " (DDD + número), apenas números.");
-			setSaving(false);
-			return;
-		}
-		const emergencyValidation = validateEmergencyContact(formData.contatoEmergencia);
-		if (!emergencyValidation.isValid) {
-			alert(emergencyValidation.error + " (DDD + número), apenas números.");
-			setSaving(false);
-			return;
-		}
-
-		const rgValidation = validateRG(formData.rg);
-		if (!rgValidation.isValid) {
-			alert(rgValidation.error + " (incluindo pontos e traços).");
-			setSaving(false);
-			return;
-		}
-
-		const dadosInformacoesPessoais = {
-			dataNascimento: dataFormatada || "1990-01-01",
-			cpf: cpfDigits || "00000000000",
-			rg: rgFormatted || "00.000.000-0",
-			contatoEmergencia: contatoEmergenciaDigits || "11999999999",
-			relatorioAnamnese: dadosOriginais?.relatorioAnamnese || null,
-			idioma: formData.idiomas || "Português",
-			questionarioRespondido: dadosOriginais?.questionarioRespondido || false,
-			nivel: dadosOriginais?.nivel || "EXPLORADOR" // Garante que nunca seja null
-		};
-
-		console.log("Processando informacoes pessoais...");
-		console.log("Modo:", isEditMode ? "EDICAO" : "CADASTRO");
-		
-		if (isEditMode) {
-			console.log("Fazendo edicao do perfil completo...");
-			const dtoEdicao = {
-				nome: formData.nome || "",
-				email: formData.email || "",
-				telefoneContato: telefoneUsuarioDigits || "11999999999",
-				endereco: {
-					rua: formData.rua || "Rua Principal",
-					numero: formData.numero || "1",
-					complemento: formData.complemento || null,
-					bairro: formData.bairro || "Centro",
-					cidade: formData.cidade || "São Paulo",
-					estado: formData.estado || "SP",
-					cep: (formData.cep || "01000000").replace(/\D/g, "")
-				},
-				informacoes: {
-					dataNascimento: dadosInformacoesPessoais.dataNascimento,
-					cpf: cpfDigits || "00000000000",
-					rg: rgFormatted || "00.000.000-0",
-					contatoEmergencia: contatoEmergenciaDigits || "11999999999",
-					relatorioAnamnese: dadosOriginais?.relatorioAnamnese || null,
-					idioma: (formData.idiomas || "Português").trim(),
-					questionarioRespondido: dadosOriginais?.questionarioRespondido || false,
-					nivel: dadosOriginais?.nivel || "EXPLORADOR" // Garante que nunca seja null
-				}
+			const dadosInformacoesPessoais = {
+				dataNascimento: dataFormatada || "1990-01-01",
+				cpf: cpfDigits || "00000000000",
+				rg: rgFormatted || "00.000.000-0",
+				contatoEmergencia: contatoEmergenciaDigits || "11999999999",
+				relatorioAnamnese: dadosOriginais?.relatorioAnamnese || null,
+				idioma: formData.idiomas || "Português",
+				questionarioRespondido: dadosOriginais?.questionarioRespondido || false,
+				nivel: dadosOriginais?.nivel || "EXPLORADOR" // Garante que nunca seja null
 			};
 
-			console.log("=== DTO EDICAO COMPLETO ===");
-			console.log("dtoEdicao.informacoes.nivel:", dtoEdicao.informacoes.nivel);
-			console.log("JSON completo:", JSON.stringify(dtoEdicao, null, 2));
-			console.log("===========================");
+			console.log("Processando informacoes pessoais...");
+			console.log("Modo:", isEditMode ? "EDICAO" : "CADASTRO");
 
-			const resultado = await editarPerfilCompleto(usuarioId, dtoEdicao);
-			console.log("Perfil editado com sucesso");
-			try {
-				const dadosAtualizados = await buscarPerfilCompleto(usuarioId);
-				console.log("� Perfil recarregado após edição:", JSON.stringify(dadosAtualizados, null, 2));
-				setFormData(prev => ({
-					...prev,
-					nome: dadosAtualizados.nome || prev.nome,
-					email: dadosAtualizados.email || prev.email,
-					telefone: dadosAtualizados.telefoneContato || prev.telefone,
-					dataNascimento: convertDateToBrazilian(dadosAtualizados.dataNascimento),
-					cpf: dadosAtualizados.cpf || prev.cpf,
-					rg: dadosAtualizados.rg || prev.rg,
-					idiomas: dadosAtualizados.idioma || prev.idiomas,
-					contatoEmergencia: dadosAtualizados.contatoEmergencia || prev.contatoEmergencia,
-					rua: dadosAtualizados.endereco?.rua || prev.rua,
-					cep: dadosAtualizados.endereco?.cep || prev.cep,
-					cidade: dadosAtualizados.endereco?.cidade || prev.cidade,
-					estado: dadosAtualizados.endereco?.estado || prev.estado,
-					bairro: dadosAtualizados.endereco?.bairro || prev.bairro,
-					numero: dadosAtualizados.endereco?.numero || prev.numero,
-					complemento: dadosAtualizados.endereco?.complemento || prev.complemento
-				}));
-			} catch (e) {
-				console.warn("Nao foi possivel recarregar o perfil apos edicao.", e);
-			}
-			alert("Dados atualizados com sucesso!");
-		} else {
-			console.log("1. Fazendo CADASTRO (POST) do perfil completo...");
+			if (isEditMode) {
+				console.log("Fazendo edicao do perfil completo...");
+				const dtoEdicao = {
+					nome: formData.nome || "",
+					email: formData.email || "",
+					telefoneContato: telefoneUsuarioDigits || "11999999999",
+					endereco: {
+						id: dadosOriginais?.endereco?.id,
+						rua: formData.rua || "Rua Principal",
+						numero: formData.numero || "1",
+						complemento: formData.complemento || null,
+						bairro: formData.bairro || "Centro",
+						cidade: formData.cidade || "São Paulo",
+						estado: formData.estado || "SP",
+						cep: (formData.cep || "01000000").replace(/\D/g, "")
+					},
+					informacoes: {
+						dataNascimento: dadosInformacoesPessoais.dataNascimento,
+						cpf: cpfDigits || "00000000000",
+						rg: rgFormatted || "00.000.000-0",
+						contatoEmergencia: contatoEmergenciaDigits || "11999999999",
+						relatorioAnamnese: dadosOriginais?.relatorioAnamnese || null,
+						idioma: (formData.idiomas || "Português").trim(),
+						questionarioRespondido: dadosOriginais?.questionarioRespondido || false,
+						nivel: dadosOriginais?.nivel || "EXPLORADOR" // Garante que nunca seja null
+					}
+				};
 
-			const dtoCadastro = {
-				endereco: {
-					rua: formData.rua || "Rua Principal",
-					numero: formData.numero || "1",
-					complemento: formData.complemento || null,
-					bairro: formData.bairro || "Centro",
-					cidade: formData.cidade || "São Paulo",
-					estado: formData.estado || "SP",
-					cep: (formData.cep || "01000000").replace(/\D/g, "")
-				},
-				informacoes: {
-					dataNascimento: dadosInformacoesPessoais.dataNascimento,
-					cpf: cpfDigits || "00000000000",
-					rg: rgFormatted || "00.000.000-0",
-					contatoEmergencia: contatoEmergenciaDigits || "11999999999",
-					relatorioAnamnese: null,
-					idioma: (formData.idiomas || "Português").trim(),
-					questionarioRespondido: false,
-					nivel: dadosOriginais?.nivel || "EXPLORADOR" // Garante que nunca seja null
+				console.log("=== DTO EDICAO COMPLETO ===");
+				console.log("dtoEdicao.informacoes.nivel:", dtoEdicao.informacoes.nivel);
+				console.log("JSON completo:", JSON.stringify(dtoEdicao, null, 2));
+				console.log("===========================");
+
+				const resultado = await editarPerfilCompleto(usuarioId, dtoEdicao);
+				console.log("Perfil editado com sucesso");
+				try {
+					const dadosAtualizados = await buscarPerfilCompleto(usuarioId);
+					console.log("� Perfil recarregado após edição:", JSON.stringify(dadosAtualizados, null, 2));
+					setFormData(prev => ({
+						...prev,
+						nome: dadosAtualizados.nome || prev.nome,
+						email: dadosAtualizados.email || prev.email,
+						telefone: dadosAtualizados.telefoneContato || prev.telefone,
+						dataNascimento: convertDateToBrazilian(dadosAtualizados.dataNascimento),
+						cpf: dadosAtualizados.cpf || prev.cpf,
+						rg: dadosAtualizados.rg || prev.rg,
+						idiomas: dadosAtualizados.idioma || prev.idiomas,
+						contatoEmergencia: dadosAtualizados.contatoEmergencia || prev.contatoEmergencia,
+						rua: dadosAtualizados.endereco?.rua || prev.rua,
+						cep: dadosAtualizados.endereco?.cep || prev.cep,
+						cidade: dadosAtualizados.endereco?.cidade || prev.cidade,
+						estado: dadosAtualizados.endereco?.estado || prev.estado,
+						bairro: dadosAtualizados.endereco?.bairro || prev.bairro,
+						numero: dadosAtualizados.endereco?.numero || prev.numero,
+						complemento: dadosAtualizados.endereco?.complemento || prev.complemento
+					}));
+				} catch (e) {
+					console.warn("Nao foi possivel recarregar o perfil apos edicao.", e);
 				}
-			};
+				alert("Dados atualizados com sucesso!");
+			} else {
+				console.log("1. Fazendo CADASTRO (POST) do perfil completo...");
 
-			const resultado = await cadastrarPerfilCompleto(usuarioId, dtoCadastro);
-			console.log("Perfil cadastrado com sucesso");
+				const dtoCadastro = {
+					endereco: {
+						rua: formData.rua || "Rua Principal",
+						numero: formData.numero || "1",
+						complemento: formData.complemento || null,
+						bairro: formData.bairro || "Centro",
+						cidade: formData.cidade || "São Paulo",
+						estado: formData.estado || "SP",
+						cep: (formData.cep || "01000000").replace(/\D/g, "")
+					},
+					informacoes: {
+						dataNascimento: dadosInformacoesPessoais.dataNascimento,
+						cpf: cpfDigits || "00000000000",
+						rg: rgFormatted || "00.000.000-0",
+						contatoEmergencia: contatoEmergenciaDigits || "11999999999",
+						relatorioAnamnese: null,
+						idioma: (formData.idiomas || "Português").trim(),
+						questionarioRespondido: false,
+						nivel: dadosOriginais?.nivel || "EXPLORADOR" // Garante que nunca seja null
+					}
+				};
 
-			// Após cadastrar, vira modo edição e recarrega dados para refletir o salvo
-			setIsEditMode(true);
-			try {
-				const dadosAtualizados = await buscarPerfilCompleto(usuarioId);
-				console.log("Perfil recarregado apos cadastro");
-				setFormData(prev => ({
-					...prev,
-					nome: dadosAtualizados.nome || prev.nome,
-					email: dadosAtualizados.email || prev.email,
-					telefone: dadosAtualizados.telefoneContato || prev.telefone,
-					dataNascimento: convertDateToBrazilian(dadosAtualizados.dataNascimento),
-					cpf: dadosAtualizados.cpf || prev.cpf,
-					rg: dadosAtualizados.rg || prev.rg,
-					idiomas: dadosAtualizados.idioma || prev.idiomas,
-					contatoEmergencia: dadosAtualizados.contatoEmergencia || prev.contatoEmergencia,
-					rua: dadosAtualizados.endereco?.rua || prev.rua,
-					cep: dadosAtualizados.endereco?.cep || prev.cep,
-					cidade: dadosAtualizados.endereco?.cidade || prev.cidade,
-					estado: dadosAtualizados.endereco?.estado || prev.estado,
-					bairro: dadosAtualizados.endereco?.bairro || prev.bairro,
-					numero: dadosAtualizados.endereco?.numero || prev.numero,
-					complemento: dadosAtualizados.endereco?.complemento || prev.complemento
-				}));
-			} catch (e) {
-				console.warn("Nao foi possivel recarregar o perfil apos cadastro.", e);
+				const resultado = await cadastrarPerfilCompleto(usuarioId, dtoCadastro);
+				console.log("Perfil cadastrado com sucesso");
+
+				// Após cadastrar, vira modo edição e recarrega dados para refletir o salvo
+				setIsEditMode(true);
+				try {
+					const dadosAtualizados = await buscarPerfilCompleto(usuarioId);
+					console.log("Perfil recarregado apos cadastro");
+					setFormData(prev => ({
+						...prev,
+						nome: dadosAtualizados.nome || prev.nome,
+						email: dadosAtualizados.email || prev.email,
+						telefone: dadosAtualizados.telefoneContato || prev.telefone,
+						dataNascimento: convertDateToBrazilian(dadosAtualizados.dataNascimento),
+						cpf: dadosAtualizados.cpf || prev.cpf,
+						rg: dadosAtualizados.rg || prev.rg,
+						idiomas: dadosAtualizados.idioma || prev.idiomas,
+						contatoEmergencia: dadosAtualizados.contatoEmergencia || prev.contatoEmergencia,
+						rua: dadosAtualizados.endereco?.rua || prev.rua,
+						cep: dadosAtualizados.endereco?.cep || prev.cep,
+						cidade: dadosAtualizados.endereco?.cidade || prev.cidade,
+						estado: dadosAtualizados.endereco?.estado || prev.estado,
+						bairro: dadosAtualizados.endereco?.bairro || prev.bairro,
+						numero: dadosAtualizados.endereco?.numero || prev.numero,
+						complemento: dadosAtualizados.endereco?.complemento || prev.complemento
+					}));
+				} catch (e) {
+					console.warn("Nao foi possivel recarregar o perfil apos cadastro.", e);
+				}
+				alert("Dados cadastrados com sucesso!");
 			}
-			alert("Dados cadastrados com sucesso!");
-		}
-		
-		console.log("=== OPERAÇÃO COMPLETADA COM SUCESSO ===");
+
+			console.log("=== OPERAÇÃO COMPLETADA COM SUCESSO ===");
 		} catch (error) {
 			console.error("=== ERRO DETALHADO ===");
 			console.error("Tipo do erro:", typeof error);
 			console.error("Erro completo:", error);
-			
+
 			if (error.response) {
 				console.error("Status HTTP:", error.response.status);
 				console.error("Dados do erro:", JSON.stringify(error.response.data, null, 2));
@@ -524,7 +525,7 @@ export default function InformacoesPessoais() {
 			} else {
 				console.error("Mensagem do erro:", error.message);
 			}
-			
+
 			console.error("Error response data:", error.response?.data);
 			let serverMsg = 'Erro inesperado.';
 			if (error.response?.data?.erro) {
@@ -536,12 +537,12 @@ export default function InformacoesPessoais() {
 			} else if (error.message) {
 				serverMsg = error.message;
 			}
-			
+
 			if (serverMsg.includes('Validation failed')) {
 				console.error("Validation error detected. Full message:", serverMsg);
 				serverMsg = "Erro de validação nos dados. Verifique os campos obrigatórios e tamanhos permitidos.";
 			}
-			
+
 			alert(`Erro ao ${isEditMode ? 'atualizar' : 'cadastrar'} dados: ${serverMsg}`);
 		} finally {
 			setSaving(false);
@@ -549,37 +550,37 @@ export default function InformacoesPessoais() {
 	};
 
 	return (
-		<div className="editar-dados-container">  
+		<div className="editar-dados-container">
 			<CircleBackButton onClick={() => window.history.back()} />
 			<h1 className="titulo-editar-dados">Dados da Conta</h1>
-			<InfoPessoaisCard 
+			<InfoPessoaisCard
 				formData={formData}
 				onInputChange={handleInputChange}
 				errors={errors}
 			/>
-			<EnderecoCard 
+			<EnderecoCard
 				formData={formData}
 				onInputChange={handleInputChange}
 				onCepSearch={handleCepSearch}
 				loading={loading}
 				errors={errors}
 			/>
-			<button 
-				className="salvar-btn" 
+			<button
+				className="salvar-btn"
 				onClick={() => setShowConfirmation(true)}
 				disabled={loading || saving}
 			>
-				{saving ? 
-					(isEditMode ? "Atualizando..." : "Cadastrando...") : 
+				{saving ?
+					(isEditMode ? "Atualizando..." : "Cadastrando...") :
 					(isEditMode ? "Salvar Alterações" : "Cadastrar Dados")
 				}
 			</button>
-			
+
 			<ConfirmationPopup
 				isOpen={showConfirmation}
 				title={isEditMode ? "Confirmar Alterações" : "Confirmar Cadastro"}
-				message={isEditMode ? 
-					"Tem certeza que deseja salvar as alterações em seus dados pessoais?" : 
+				message={isEditMode ?
+					"Tem certeza que deseja salvar as alterações em seus dados pessoais?" :
 					"Tem certeza que deseja cadastrar seus dados pessoais?"
 				}
 				confirmText={isEditMode ? "Salvar" : "Cadastrar"}

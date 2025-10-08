@@ -24,8 +24,8 @@ export const loginUsuario = async (credentials) => {
 
 export const buscarInformacoesPerfil = async (usuarioId) => {
   try {
-    console.log("GET /informacoes-pessoais/perfil-info/", usuarioId);
-    const response = await api.get(`/informacoes-pessoais/perfil-info/${usuarioId}`);
+    console.log("GET /informacoes-pessoais/perfil-nivel/", usuarioId);
+    const response = await api.get(`/informacoes-pessoais/perfil-nivel/${usuarioId}`);
     console.log("Perfil completo recebido");
     const data = response.data;
     console.log("Dados do perfil completo:", data);
