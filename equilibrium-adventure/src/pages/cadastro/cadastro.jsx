@@ -5,18 +5,24 @@ import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
 import { cadastrarUsuario } from '../../services/api';
 import { validateUserData } from '../../utils/validators';
+import PopUpOk from '../../components/pop-up-ok/pop-up-ok';
+import PopUpErro from '../../components/pop-up-erro/pop-up-erro';
 
 const Cadastro = () => {
     const navigate = useNavigate();
     const title = "CADASTRAR";
     const text = "Entre aqui";
     const [error, setError] = useState(null);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     const handleSubmit = async (formData) => {
         const errors = validateUserData(formData);
 
         if (Object.keys(errors).length > 0) {
-            alert(Object.values(errors).join("\n"));
+            setErrorMessage(Object.values(errors).join("\n"));
+            setShowErrorPopup(true);
             return;
         }
         
@@ -31,11 +37,11 @@ const Cadastro = () => {
 
         try {
             await cadastrarUsuario(userData);
-            alert('Cadastro realizado com sucesso!');
-            navigate(routeUrls.LOGIN);
+            setShowSuccessPopup(true);
         } catch (error) {
             setError(error.erro || 'Erro ao realizar cadastro');
-            alert(error.erro || 'Erro ao realizar cadastro');
+            setErrorMessage(error.erro || 'Erro ao realizar cadastro');
+            setShowErrorPopup(true);
         }
     };
 
@@ -73,6 +79,28 @@ const Cadastro = () => {
             </div>
 
             <button className="chat-floating" aria-hidden>💬</button>
+            
+            {showSuccessPopup && (
+                <PopUpOk 
+                    title="Cadastro realizado!"
+                    message="Sua conta foi criada com sucesso! Redirecionando para o login..."
+                    onConfirm={() => {
+                        setShowSuccessPopup(false);
+                        navigate(routeUrls.LOGIN);
+                    }}
+                />
+            )}
+            
+            {showErrorPopup && (
+                <PopUpErro 
+                    title="Erro no cadastro!"
+                    message={errorMessage}
+                    onConfirm={() => {
+                        setShowErrorPopup(false);
+                        setErrorMessage('');
+                    }}
+                />
+            )}
         </div>
     );
 };
