@@ -20,8 +20,11 @@
     max-width: 1400px;
 }
 
-.card-guia {
-    width: 100%;
+.infos-adic-guia-page .card-guia {.infos-adic-guia-page .save-button:hover {
+    background: linear-gradient(135deg, #004d40, #00332e);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(0, 105, 92, 0.3);
+} width: 100%;
     height: 270px;
     display: flex;
     justify-content: start;
@@ -29,14 +32,14 @@
     gap: 50px;
 }
 
-.foto-guia {
+.infos-adic-guia-page .foto-guia {
     height: 75%;
     width: 15%;
     border-radius: 95px;
     border: none;
 }
 
-.foto-guia img {
+.infos-adic-guia-page .foto-guia img {
     width: 100%;
     height: 100%;
     border-radius: 95px;
@@ -44,7 +47,7 @@
     object-fit: cover;
 }
 
-.info-guia {
+.infos-adic-guia-page .info-guia {
     height: 50%;
     display: flex;
     flex-direction: column;
@@ -53,13 +56,13 @@
     gap: 20px;
 }
 
-.info-guia p:nth-child(1) {
+.infos-adic-guia-page .info-guia p:nth-child(1) {
     font-size: 42px;
     color: #0C513F;
     font-weight: lighter;
 }
 
-.info-guia p:nth-child(2) {
+.infos-adic-guia-page .info-guia p:nth-child(2) {
     font-size: 42px;
     color: #0C513F;
     font-weight: bold;
@@ -67,190 +70,372 @@
 
 .infos-adic-guia-page .cards-father {
     width: 100%;
-    height: 580px;
     display: flex;
-    align-items: end;
+    align-items: start;
     justify-content: space-between;
+    gap: 24px;
+    margin-top: 5%;
 }
 
 /* Novos estilos para Informações Pessoais */
-.card-info-guia {
-    height: 85%;
+.infos-adic-guia-page .card-info-guia {
+    height: 527px;
     width: 48.5%;
     display: flex;
     flex-direction: column;
     align-items: start;
     justify-content: space-between;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+    border-radius: 20px;
+    padding: 28px 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.infos-adic-guia-page .card-info-guia::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #336948, #226144, #0C513F);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.infos-adic-guia-page .card-info-guia:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+        0 24px 80px rgba(12, 81, 63, 0.15),
+        0 12px 32px rgba(0, 0, 0, 0.08),
+        inset 0 2px 0 rgba(255, 255, 255, 0.95);
+    border-color: rgba(51, 105, 72, 0.2);
+}
+
+.infos-adic-guia-page .card-info-guia:hover::before {
+    opacity: 1;
+}
+
+.infos-adic-guia-page .card-info-guia:hover h2::after {
+    width: 80px;
 }
 
 /* Header de informações pessoais com botão de voltar */
-.info-pessoais-header {
+.infos-adic-guia-page .info-pessoais-header {
     display: flex;
     align-items: center;
     gap: 15px;
-    margin-bottom: 20px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #E5F3F0;
 }
 
-.card-info-guia h2 {
-    font-size: 32px;
-    color: #6B7280;
-    font-weight: 500;
+.infos-adic-guia-page .card-info-guia h2 {
+    font-size: 28px;
+    color: #1F2937;
+    font-weight: 700;
     margin: 0;
+    position: relative;
 }
 
-.personal-info-card {
-    background-color: #E5E7EB;
-    height: 84%;
+.infos-adic-guia-page .card-info-guia h2::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #336948, #226144);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.infos-adic-guia-page .personal-info-card {
+    height: calc(100% - 80px);
     width: 100%;
-    border-radius: 15px;
+    border-radius: 16px;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 30px;
+    padding: 32px;
     box-sizing: border-box;
-    gap: 30px;
+    gap: 32px;
+    transition: all 0.3s ease;
 }
 
-.user-photo {
+.infos-adic-guia-page .personal-info-card:hover {
+    border-color: #00695c;
+    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.1);
+}
+
+.infos-adic-guia-page .user-photo {
     width: 160px;
     height: 160px;
     border-radius: 50%;
     overflow: hidden;
     flex-shrink: 0;
+    border: 4px solid #00695c;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.15);
+    transition: all 0.3s ease;
 }
 
-.user-photo img {
+.infos-adic-guia-page .user-photo:hover {
+    transform: scale(1.05);
+    border-color: #004d40;
+    box-shadow: 0 12px 32px rgba(16, 185, 129, 0.2);
+}
+
+.infos-adic-guia-page .user-photo img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
-.user-info-content {
+.infos-adic-guia-page .user-photo:hover img {
+    transform: scale(1.1);
+}
+
+.infos-adic-guia-page .user-info-content {
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: 30px;
+    gap: 24px;
     justify-content: center;
 }
 
-.user-info {
+.infos-adic-guia-page .user-info {
     text-align: left;
     margin: 0;
 }
 
-.user-info h3 {
-    font-size: 22px;
-    color: #1F2937;
-    font-weight: 600;
-    margin: 0 0 8px 0;
-    line-height: 1.2;
-}
-
-.user-role {
-    font-size: 20px;
+.infos-adic-guia-page .user-info h3 {
+    font-size: 24px;
     color: #1F2937;
     font-weight: 700;
-    margin: 0;
+    margin: 0 0 12px 0;
+    line-height: 1.2;
+    letter-spacing: -0.025em;
 }
 
-.edit-info-btn {
-    background-color: #004d40;
+.infos-adic-guia-page .user-role {
+    font-size: 16px;
+    color: #00695c;
+    font-weight: 600;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 4px 12px;
+    background: transparent;
+    border-radius: 20px;
+    display: inline-block;
+    background-color: #D1FAE5;
+}
+
+.infos-adic-guia-page .edit-info-btn {
+    background: linear-gradient(135deg, #336948, #2a5a3a);
     color: white;
     border: none;
-    padding: 16px 40px;
-    border-radius: 8px;
-    font-size: 18px;
+    padding: 14px 32px;
+    border-radius: 12px;
+    font-size: 15px;
     font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: all 0.3s ease;
     align-self: flex-start;
+    box-shadow: 0 4px 12px rgba(51, 105, 72, 0.2);
+    text-transform: none;
+    letter-spacing: 0.3px;
 }
 
-.edit-info-btn:hover {
-    background-color: #059669;
+.infos-adic-guia-page .edit-info-btn:hover {
+    background: linear-gradient(135deg, #2a5a3a, #1e4b2c);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(51, 105, 72, 0.3);
 }
 
 /* Próximo Eventos */
-.card-imagem {
-    height: 85%;
+.infos-adic-guia-page .card-imagem {
+    height: 527px;
     width: 48.5%;
     display: flex;
     flex-direction: column;
     align-items: start;
     justify-content: space-between;
-}
-
-.card-imagem h2 {
-    font-size: 32px;
-    color: #6B7280;
-    font-weight: 500;
-    margin: 0 0 20px 0;
-}
-
-.next-event-card {
-    background-color: #E5E7EB;
-    height: 84%;
-    width: 100%;
-    border-radius: 15px;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+    border-radius: 20px;
+    padding: 28px 24px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
     overflow: hidden;
-    transition: 0.4s ease;
 }
 
-.next-event-card:hover {
-    transform: translateY(-2px) scale(1.03);
+.infos-adic-guia-page .card-imagem::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #336948, #226144, #0C513F);
+    opacity: 0;
+    transition: opacity 0.3s ease;
 }
 
-.next-event-card img {
+.infos-adic-guia-page .card-imagem:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+        0 24px 80px rgba(12, 81, 63, 0.15),
+        0 12px 32px rgba(0, 0, 0, 0.08),
+        inset 0 2px 0 rgba(255, 255, 255, 0.95);
+    border-color: rgba(51, 105, 72, 0.2);
+}
+
+.infos-adic-guia-page .card-imagem:hover::before {
+    opacity: 1;
+}
+
+.infos-adic-guia-page .card-imagem:hover h2::after {
+    width: 80px;
+}
+
+.infos-adic-guia-page .card-imagem h2 {
+    font-size: 28px;
+    color: #1F2937;
+    font-weight: 700;
+    margin: 0 0 25px 0;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.infos-adic-guia-page .card-imagem h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #336948, #226144);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.infos-adic-guia-page .next-event-card {
+    background: linear-gradient(135deg, #f8fffe 0%, #f0fdf4 100%);
+    height: calc(100% - 80px);
+    width: 100%;
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    border: 2px solid #D1FAE5;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);
+}
+
+.infos-adic-guia-page .next-event-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    border-color: #00695c;
+    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15);
+}
+
+.infos-adic-guia-page .next-event-card img {
     height: 100%;
     width: 100%;
     object-fit: cover;
     cursor: pointer;
+    transition: transform 0.3s ease;
 }
 
-.next-event-card img {
-    height: 100%;
-    width: 100%;
-    object-fit: cover;
-    cursor: pointer;
+.infos-adic-guia-page .next-event-card:hover img {
+    transform: scale(1.05);
 }
 /* Cards de Eventos e Anamneses */
 .infos-adic-guia-page .cards-eventos {
     height: auto;
     margin-top: 40px;
-    border-radius: 15px;
+    border-radius: 20px;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
-    gap: 20px;
+    gap: 24px;
 }
 
-.eventos-anamnese-ativos {
-    background-color: #E5E7EB;
-    border-radius: 15px;
-    height: 420px;
+.infos-adic-guia-page .eventos-anamnese-ativos {
+    background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+    border-radius: 20px;
+    height: 460px;
     width: 48.5%;
     display: flex;
     flex-direction: column;
-    padding: 20px;
+    padding: 28px 24px;
     justify-content: flex-start;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
 }
 
-.eventos-anamnese-ativos h2 {
-    font-size: 32px;
-    color: #6B7280;
-    font-weight: 500;
-    margin: 0 0 40px 0;
+.infos-adic-guia-page .eventos-anamnese-ativos::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #336948, #226144, #0C513F);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.infos-adic-guia-page .eventos-anamnese-ativos:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+        0 24px 80px rgba(12, 81, 63, 0.15),
+        0 12px 32px rgba(0, 0, 0, 0.08),
+        inset 0 2px 0 rgba(255, 255, 255, 0.95);
+    border-color: rgba(51, 105, 72, 0.2);
+}
+
+.infos-adic-guia-page .eventos-anamnese-ativos:hover::before {
+    opacity: 1;
+}
+
+.infos-adic-guia-page .eventos-anamnese-ativos:hover h2::after {
+    width: 80px;
+}
+
+.infos-adic-guia-page .eventos-anamnese-ativos h2 {
+    font-size: 28px;
+    color: #1F2937;
+    font-weight: 700;
+    margin: 0 0 30px 0;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.infos-adic-guia-page .eventos-anamnese-ativos h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #336948, #226144);
+    border-radius: 2px;
+    transition: width 0.3s ease;
 }
 
 /* Espaçamento específico para eventos ativos */
-.eventos-anamnese-ativos:nth-child(2) h2 {
+.infos-adic-guia-page .eventos-anamnese-ativos:nth-child(2) h2 {
     margin: 0 0 20px 0;
 }
 
-.filtro-button-data {
+.infos-adic-guia-page .filtro-button-data {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -262,91 +447,174 @@
 
 .infos-adic-guia-page .button-add-data {
     width: 100%;
-    padding: 12px 24px;
-    font-size: 16px;
+    padding: 14px 24px;
+    font-size: 15px;
     font-weight: 600;
-    border-radius: 8px;
+    border-radius: 12px;
     color: white;
-    background-color: #004d40;
+    background: linear-gradient(135deg, #336948, #2a5a3a);
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(51, 105, 72, 0.2);
+    text-transform: none;
+    letter-spacing: 0.3px;
 }
 
 .infos-adic-guia-page .button-add-data:hover {
-    background-color: #059669;
+    background: linear-gradient(135deg, #2a5a3a, #1e4b2c);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(51, 105, 72, 0.3);
 }
 
 /* Container para Anamneses */
-.anamneses-container, .eventos-container {
+.infos-adic-guia-page .anamneses-container {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
     position: relative;
+    height: 320px;
+    width: 100%;
 }
 
-.anamneses-cards, .eventos-cards {
+.infos-adic-guia-page .eventos-container {
     display: flex;
-    gap: 15px;
+    align-items: center;
+    gap: 0;
+    position: relative;
+    height: 320px;
+    width: 100%;
+}
+
+.infos-adic-guia-page .anamneses-cards {
+    display: flex;
+    gap: 12px;
     flex: 1;
     overflow-x: auto;
+    overflow-y: hidden;
+    padding: 15px 5px;
+    height: 100%;
+    align-items: center;
     scroll-behavior: smooth;
-    padding: 10px 0;
 }
 
-.anamneses-cards::-webkit-scrollbar, .eventos-cards::-webkit-scrollbar {
-    display: none;
+.infos-adic-guia-page .eventos-cards {
+    display: flex;
+    gap: 12px;
+    flex: 1;
+    overflow: visible;
+    padding: 15px 5px;
+    height: 100%;
+    align-items: center;
+    justify-content: space-between;
 }
 
-.nav-arrow {
-    background: none;
-    border: none;
-    font-size: 24px;
-    color: #6B7280;
+
+
+.infos-adic-guia-page .anamneses-container .nav-arrow {
+    background: linear-gradient(135deg, #ffffff, #f9fafb);
+    border: 2px solid #E5E7EB;
+    font-size: 20px;
+    color: #00695c;
     cursor: pointer;
-    padding: 8px;
+    padding: 0;
     border-radius: 50%;
     transition: all 0.3s ease;
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    font-weight: 600;
 }
 
-.nav-arrow:hover {
-    background-color: #D1D5DB;
-    color: #374151;
+.infos-adic-guia-page .anamneses-container .nav-arrow:hover {
+    background: linear-gradient(135deg, #00695c, #004d40);
+    border-color: #00695c;
+    color: #ffffff;
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(0, 105, 92, 0.2);
+}
+
+.infos-adic-guia-page .eventos-container .nav-arrow {
+    display: none;
+}
+
+/* Scrollbar para anamneses */
+.infos-adic-guia-page .anamneses-cards::-webkit-scrollbar {
+    height: 8px;
+}
+
+.infos-adic-guia-page .anamneses-cards::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+.infos-adic-guia-page .anamneses-cards::-webkit-scrollbar-thumb {
+    background: #336948;
+    border-radius: 4px;
+}
+
+.infos-adic-guia-page .anamneses-cards::-webkit-scrollbar-thumb:hover {
+    background: #2a5a3a;
 }
 
 /* Cards de Anamnese */
-.anamnese-card {
+.infos-adic-guia-page .anamnese-card {
     background-color: white;
     border-radius: 12px;
     padding: 15px;
-    min-width: 200px;
-    max-width: 200px;
-    min-height: 160px;
-    cursor: pointer;
+    width: 180px;
+    min-height: 180px;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
 }
 
-.anamnese-card:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+.infos-adic-guia-page .anamnese-card:hover {
+    transform: translateY(-6px) scale(1.03);
+    box-shadow: 
+        0 12px 32px rgba(12, 81, 63, 0.12),
+        0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
-.anamnese-info {
+.infos-adic-guia-page .anamnese-info {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 15px;
+    cursor: pointer;
 }
 
-.anamnese-initial {
+.infos-adic-guia-page .anamnese-relatorio-btn {
+    background: linear-gradient(135deg, #336948, #2a5a3a);
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(51, 105, 72, 0.2);
+    width: 100%;
+    margin-top: auto;
+}
+
+.infos-adic-guia-page .anamnese-relatorio-btn:hover {
+    background: linear-gradient(135deg, #2a5a3a, #1e4b2c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(51, 105, 72, 0.3);
+}
+
+.infos-adic-guia-page .anamnese-initial {
     width: 50px;
     height: 50px;
     border-radius: 50%;
@@ -358,81 +626,105 @@
     font-size: 18px;
 }
 
-.anamnese-details {
+.infos-adic-guia-page .anamnese-details {
     text-align: center;
 }
 
-.anamnese-date, .evento-date {
-    font-size: 14px;
-    color: #6B7280;
+.infos-adic-guia-page .anamnese-date, .infos-adic-guia-page .evento-date {
+    font-size: 13px;
+    color: #336948;
     display: block;
     margin-bottom: 8px;
-    font-weight: 500;
-}
-
-.anamnese-details h4, .evento-info h4 {
-    font-size: 16px;
-    color: #1F2937;
-    margin: 0 0 8px 0;
     font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
 }
 
-.anamnese-tag, .evento-info-btn {
-    background-color: #D1FAE5;
-    color: #065F46;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
+.infos-adic-guia-page .anamnese-details h4, .infos-adic-guia-page .evento-info h4 {
+    font-size: 18px;
+    color: #1F2937;
+    margin: 0 0 12px 0;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.infos-adic-guia-page .anamnese-tag, .infos-adic-guia-page .evento-info-btn {
+    background: linear-gradient(135deg, #336948, #2a5a3a);
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 13px;
+    font-weight: 600;
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
     display: inline-block;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(51, 105, 72, 0.2);
 }
 
-.anamnese-tag:hover {
-    background-color: #A7F3D0;
+.infos-adic-guia-page .anamnese-tag:hover {
+    background: linear-gradient(135deg, #2a5a3a, #1e4b2c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(51, 105, 72, 0.3);
 }
 
-.evento-info-btn:hover {
-    background-color: #A7F3D0;
-    transform: translateY(-1px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+.infos-adic-guia-page .evento-info-btn:hover {
+    background: linear-gradient(135deg, #2a5a3a, #1e4b2c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(51, 105, 72, 0.3);
 }
 
 /* Cards de Evento */
-.evento-ativo-card {
+.infos-adic-guia-page .evento-ativo-card {
     background-color: white;
-    border-radius: 12px;
-    padding: 15px;
-    min-width: 200px;
-    max-width: 200px;
-    min-height: 160px;
+    border-radius: 16px;
+    padding: 0;
+    width: 100%;
+    max-width: 180px;
+    min-height: 280px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    flex-shrink: 0;
-}
-
-.evento-image {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+    flex: 1;
     overflow: hidden;
-    margin: 0 auto 15px auto;
-    flex-shrink: 0;
+    border: 1px solid #E5E7EB;
 }
 
-.evento-image img {
+.infos-adic-guia-page .evento-ativo-card:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 
+        0 16px 48px rgba(12, 81, 63, 0.12),
+        0 6px 24px rgba(0, 0, 0, 0.08);
+    border-color: rgba(51, 105, 72, 0.3);
+}
+
+.infos-adic-guia-page .evento-image {
+    width: 100%;
+    height: 140px;
+    overflow: hidden;
+    margin: 0;
+    flex-shrink: 0;
+    position: relative;
+}
+
+.infos-adic-guia-page .evento-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
+    transition: transform 0.3s ease;
 }
 
-.evento-info {
+.infos-adic-guia-page .evento-ativo-card:hover .evento-image img {
+    transform: scale(1.05);
+}
+
+.infos-adic-guia-page .evento-info {
     text-align: center;
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 8px;
+    gap: 12px;
+    padding: 20px 16px 16px 16px;
 }

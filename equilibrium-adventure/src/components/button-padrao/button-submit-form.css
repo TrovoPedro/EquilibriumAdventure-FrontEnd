@@ -1,0 +1,25 @@
+.btn-submit-form {
+    background: #226144;
+    color: #ffffff;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 40px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(34, 97, 68, 0.2);
+    transition: all 0.3s ease;
+    text-transform: none;
+    letter-spacing: 0.5px;
+}
+
+.btn-submit-form:hover {
+    background: #1a4d36;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(34, 97, 68, 0.3);
+}
+
+.btn-submit-form:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(34, 97, 68, 0.2);
+}

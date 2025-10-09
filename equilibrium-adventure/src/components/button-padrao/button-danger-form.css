@@ -1,0 +1,29 @@
+
+.btn-danger-form {
+    background: #a93226;
+    color: #ffffff;
+    font-family: inherit;
+    font-size: 1.2rem;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    padding: 16px 40px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(169, 50, 38, 0.2);
+    transition: all 0.3s ease;
+    text-transform: none;
+    letter-spacing: 0.5px;
+    /* Removed fixed width, height, and min-width to match green button size */
+    /* Removed flex, box-sizing, and white-space to match green button style */
+}
+
+.btn-danger-form:hover {
+    background: #8b2c1e;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(169, 50, 38, 0.3);
+}
+
+.btn-danger-form:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(169, 50, 38, 0.2);
+}

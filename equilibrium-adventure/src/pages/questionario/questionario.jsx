@@ -19,7 +19,6 @@ const Questionario = () => {
   const { salvarPontuacao } = useScore();
   const { usuario } = useAuth();
 
-  // Buscar perguntas no backend
   useEffect(() => {
     getPerguntas()
       .then((res) => {
@@ -32,25 +31,25 @@ const Questionario = () => {
       });
   }, []);
 
-  // Função para calcular a pontuação final e nível
-  const calcularNivel = (respostas) => {
-    const total = Object.values(respostas).reduce(
-      (acc, valor) => acc + Number(valor),
-      0
-    );
-
-    let nivelamento = "";
-    if (total <= 10) nivelamento = "Explorador";
-    else if (total <= 20) nivelamento = "Aventureiro";
-    else if (total <= 27) nivelamento = "Desbravador";
-    else nivelamento = "Desbravador";
-
-    return { total, nivelamento };
-  };
-
   const handleSubmitAnswers = async () => {
     try {
-      const respostasParaEnviar = Object.entries(answers).map(([perguntaId, alternativa]) => ({
+      if (!usuario || !usuario.id) {
+        alert("Por favor, faça login para enviar suas respostas.");
+        return;
+      }
+
+      // Cria um objeto com todas as respostas, incluindo a última selecionada
+      const todasRespostas = {
+        ...answers,
+        [questions[currentQuestionIndex].id]: selectedOption
+      };
+
+      if (Object.keys(todasRespostas).length !== questions.length) {
+        alert("Por favor, responda todas as questões antes de finalizar.");
+        return;
+      }
+
+      const respostasParaEnviar = Object.entries(todasRespostas).map(([perguntaId, alternativa]) => ({
         usuarioId: usuario.id,
         perguntaId: Number(perguntaId),
         alternativaEscolhida: Number(alternativa)
@@ -58,25 +57,49 @@ const Questionario = () => {
 
       await postRespostas(respostasParaEnviar);
 
-      const nivelCalculado = await calcularNivel(`/respostas/calcular-nivel/${usuario.id}`);
+      try {
+        const nivelCalculado = await calcularNivel(usuario.id);
 
-      setNivel(nivelCalculado.data);
+        // Se for uma string (enum Nivel do backend), converte para minúsculo
+        const nivelObtido = nivelCalculado.toLowerCase();
+        setNivel(nivelObtido);
+        
 
-      alert(`Respostas enviadas! Parabéns você é um ${nivelCalculado.data}`);
+        alert(`Parabéns! Você foi classificado como: ${nivelObtido}`);
 
-      salvarPontuacao(0, nivelCalculado.data);
+        salvarPontuacao(0, nivelObtido);
 
-      navigate(routeUrls.ESCOLHER_GUIA, {
-        state: { nivel: nivelCalculado.data }
-      });
+        navigate(routeUrls.ESCOLHER_GUIA, {
+          state: { nivel: nivelObtido }
+        });
 
-      setAnswers({});
-      setCurrentQuestionIndex(0);
-      setSelectedOption(null);
-      setTitleButton("Próxima Questão");
+        setAnswers({});
+        setCurrentQuestionIndex(0);
+        setSelectedOption(null);
+        setTitleButton("Próxima Questão");
+      } catch (calcError) {
+        console.error("Erro ao calcular nível:", calcError);
+        
+        // Verifica se é o erro específico de informações pessoais
+        if (calcError.message?.includes('Informações pessoais')) {
+          alert(calcError.message);
+          navigate('/perfil');
+          return;
+        }
+        
+        alert("Suas respostas foram salvas, mas houve um erro ao calcular seu nível. " +
+              "Por favor, verifique se suas informações pessoais estão preenchidas e tente novamente.");
+      }
     } catch (err) {
       console.error("Erro ao enviar respostas:", err);
-      alert("Falha ao enviar respostas.");
+      if (err.response) {
+        console.error("Detalhes do erro:", err.response.data);
+        alert(`Falha ao enviar respostas: ${err.response.data.message || 'Erro no servidor'}`);
+      } else if (err.request) {
+        alert("Não foi possível conectar ao servidor. Verifique sua conexão.");
+      } else {
+        alert("Erro ao enviar respostas. Por favor, tente novamente.");
+      }
     }
   };
   const handleOnClickNext = () => {
@@ -85,10 +108,12 @@ const Questionario = () => {
       return;
     }
 
-    setAnswers((prev) => ({
-      ...prev,
-      [questions[currentQuestionIndex].id]: selectedOption,
-    }));
+    // Atualiza as respostas com a seleção atual
+    const novasRespostas = {
+      ...answers,
+      [questions[currentQuestionIndex].id]: selectedOption
+    };
+    setAnswers(novasRespostas);
 
     if (currentQuestionIndex === questions.length - 1) {
       handleSubmitAnswers();

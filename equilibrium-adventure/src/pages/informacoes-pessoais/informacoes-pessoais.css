@@ -65,7 +65,7 @@ body {
 	box-shadow: 0 2px 8px rgba(34, 97, 68, 0.2);
 }
 
-/* Animations and Interactions */
+
 @keyframes slideInFromBottom {
 	0% {
 		opacity: 0;

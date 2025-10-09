@@ -22,7 +22,7 @@ import AgendaAventureiro from "../pages/agenda-aventureiro/agenda-aventureiro"
 import RelatorioAnamnese from "../pages/relatorio-anamnese/relatorio-anamnese"
 import AgendamentoAnamnese from '../pages/agendamento-anamnese/AgendamentoAnamnese';
 import DetalhesEvento from '../pages/detalhes-evento/DetalhesEvento';
-import Dashboard from "../pages/dashboard/Dashboard";
+import Dashboard from '../pages/dashboard/dashboard';
 
 export default function AppRoutes() {
   return (

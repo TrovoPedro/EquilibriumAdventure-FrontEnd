@@ -2,7 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 import "./CatalogoTrilhas.css";
-import Header from "../../components/header/header-usuario";
+import Header from "../../components/header/header-unified";
 import BotpressChat from "../../components/botpress-chat/BotpressChat";
 import catalogo1 from "../../assets/chile.jpg";
 import catalogo2 from "../../assets/amazonia.jpg";
@@ -59,9 +59,7 @@ const CatalogoTrilhas = () => {
   };
   
   const handleDetalhes = () => {
-    // Navegação para página de detalhes - pode ser personalizada conforme necessário
-    console.log("Navegar para detalhes da trilha");
-    // navigate(routeUrls.DETALHES_TRILHA); // Descomente quando a rota estiver definida
+    navigate(routeUrls.INSCRICAO_TRILHAS);
   };
   return (
     <>
