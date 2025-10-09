@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./questionario.css";
 import ButtonQuest from "../../components/button-questionario/button-questionario";
-import { getPerguntas, postRespostas, calcularNivel } from "../../services/apiAventureiro";
+import { getPerguntas, postRespostas, calcularNivel, inicializarPerguntas } from "../../services/apiAventureiro";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls"
 import { useScore } from "../../context/ScoreContext";
@@ -20,15 +20,19 @@ const Questionario = () => {
   const { usuario } = useAuth();
 
   useEffect(() => {
-    getPerguntas()
-      .then((res) => {
+    const carregarPerguntas = async () => {
+      try {
+        await inicializarPerguntas(); // 🔹 garante que perguntas sejam criadas se não existirem
+        const res = await getPerguntas();
         setQuestions(res.data);
+      } catch (err) {
+        console.error("Erro ao inicializar ou buscar perguntas:", err);
+      } finally {
         setLoading(false);
-      })
-      .catch((err) => {
-        console.error("Erro ao buscar perguntas:", err);
-        setLoading(false);
-      });
+      }
+    };
+
+    carregarPerguntas();
   }, []);
 
   const handleSubmitAnswers = async () => {
@@ -63,7 +67,7 @@ const Questionario = () => {
         // Se for uma string (enum Nivel do backend), converte para minúsculo
         const nivelObtido = nivelCalculado.toLowerCase();
         setNivel(nivelObtido);
-        
+
 
         alert(`Parabéns! Você foi classificado como: ${nivelObtido}`);
 
@@ -79,16 +83,16 @@ const Questionario = () => {
         setTitleButton("Próxima Questão");
       } catch (calcError) {
         console.error("Erro ao calcular nível:", calcError);
-        
+
         // Verifica se é o erro específico de informações pessoais
         if (calcError.message?.includes('Informações pessoais')) {
           alert(calcError.message);
           navigate('/perfil');
           return;
         }
-        
+
         alert("Suas respostas foram salvas, mas houve um erro ao calcular seu nível. " +
-              "Por favor, verifique se suas informações pessoais estão preenchidas e tente novamente.");
+          "Por favor, verifique se suas informações pessoais estão preenchidas e tente novamente.");
       }
     } catch (err) {
       console.error("Erro ao enviar respostas:", err);
