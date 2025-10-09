@@ -8,7 +8,7 @@ import { cadastrarEvento, buscarCep } from "../../services/chamadasAPIEvento";
 import { useAuth } from "../../context/AuthContext";
 import "./criar-evento.css";
 import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
-import ButtonCriarEvento from "../../components/button-eventos/button-criar-evento";
+import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 
 const CriarEvento = () => {
@@ -272,7 +272,7 @@ const CriarEvento = () => {
 
                     <div className="botoes">
                         <ButtonCancelarEvento title={"Cancelar"} />
-                        <ButtonCriarEvento title={"Criar evento"} />
+                        <ButtonSubmitForm title={"Criar evento"} type="submit" />
                     </div>
                 </form>
             </div>

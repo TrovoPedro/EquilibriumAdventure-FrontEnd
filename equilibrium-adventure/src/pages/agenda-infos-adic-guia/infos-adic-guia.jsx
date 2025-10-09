@@ -54,7 +54,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
     return (
     <>
       <Header />
-      <div className="infos-adic-guia-page">
+    <div className="infos-adic-guia-page" style={{ background: '#fff' }}>
         <div className="home-container">
         <div className="cards-father">
             <div className="card-info-guia">
