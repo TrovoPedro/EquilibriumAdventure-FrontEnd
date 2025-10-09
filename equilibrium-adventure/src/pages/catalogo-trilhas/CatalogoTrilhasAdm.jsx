@@ -3,7 +3,7 @@ import "./CatalogoTrilhas.css";
 import Header from "../../components/header/header-unified";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
-import { buscarEventosPorGuia, buscarEventosAtivosPorGuia } from "../../services/apiEvento";
+import { buscarEventosPorGuia, buscarEventosAtivosPorGuia, buscarImagemEvento } from "../../services/apiEvento";
 import { useAuth } from "../../context/AuthContext";
 import catalogo1 from "../../assets/img12-catalogo.jpg";
 
@@ -19,8 +19,8 @@ const CatalogoTrilhas = () => {
   const filtrarEventos = (eventos) => {
     const termo = termoPesquisa.toLowerCase().trim();
     if (!termo) return eventos;
-    
-    return eventos.filter(evento => 
+
+    return eventos.filter(evento =>
       evento.nome_evento?.toLowerCase().includes(termo) ||
       evento.descricao?.toLowerCase().includes(termo) ||
       evento.rua?.toLowerCase().includes(termo) ||
@@ -32,15 +32,22 @@ const CatalogoTrilhas = () => {
     let isMounted = true;
 
     const carregarEventos = async () => {
-      if (!usuario?.id) {
-        return;
-      }
+      if (!usuario?.id) return;
 
-      // Carregar eventos base
       try {
+        // 1️⃣ Carregar eventos base
         const eventosData = await buscarEventosPorGuia(usuario.id);
+
+        // 2️⃣ Para cada evento, tentar buscar imagem
+        const eventosComImagens = await Promise.all(
+          eventosData.map(async (evento) => {
+            const imagemUrl = await buscarImagemEvento(evento.id_evento);
+            return { ...evento, imagemUrl: imagemUrl || catalogo1 };
+          })
+        );
+
         if (isMounted) {
-          setEventosBase(eventosData);
+          setEventosBase(eventosComImagens);
           setError(prev => ({ ...prev, base: null }));
         }
       } catch (err) {
@@ -49,16 +56,23 @@ const CatalogoTrilhas = () => {
           setError(prev => ({ ...prev, base: "Erro ao carregar os eventos base." }));
         }
       } finally {
-        if (isMounted) {
-          setLoading(prev => ({ ...prev, base: false }));
-        }
+        if (isMounted) setLoading(prev => ({ ...prev, base: false }));
       }
 
-      // Carregar eventos ativos
       try {
+        // 3️⃣ Carregar eventos ativos
         const eventosAtivosData = await buscarEventosAtivosPorGuia(usuario.id);
+
+        // 4️⃣ Buscar imagens dos eventos ativos
+        const ativosComImagens = await Promise.all(
+          eventosAtivosData.map(async (evento) => {
+            const imagemUrl = await buscarImagemEvento(evento.id_evento);
+            return { ...evento, imagemUrl: imagemUrl || catalogo1 };
+          })
+        );
+
         if (isMounted) {
-          setEventosAtivos(eventosAtivosData);
+          setEventosAtivos(ativosComImagens);
           setError(prev => ({ ...prev, ativos: null }));
         }
       } catch (err) {
@@ -67,9 +81,7 @@ const CatalogoTrilhas = () => {
           setError(prev => ({ ...prev, ativos: "Erro ao carregar os eventos ativos." }));
         }
       } finally {
-        if (isMounted) {
-          setLoading(prev => ({ ...prev, ativos: false }));
-        }
+        if (isMounted) setLoading(prev => ({ ...prev, ativos: false }));
       }
     };
 
@@ -79,6 +91,7 @@ const CatalogoTrilhas = () => {
       isMounted = false;
     };
   }, [usuario]);
+
 
   const handleOnClick = (action, eventoId) => {
     if (action === "ativar") {
@@ -103,9 +116,9 @@ const CatalogoTrilhas = () => {
               <p>Bora ver como estão seus eventos?</p>
             </div>
             <div className="search-box">
-              <input 
-                type="text" 
-                placeholder="Pesquisar eventos..." 
+              <input
+                type="text"
+                placeholder="Pesquisar eventos..."
                 className="pesquisar-trilha"
                 value={termoPesquisa}
                 onChange={(e) => setTermoPesquisa(e.target.value)}
@@ -116,7 +129,7 @@ const CatalogoTrilhas = () => {
 
         {/* Seção de eventos ativos */}
         <section className="anuncios-trilhas">
-          <h2 className="anuncios-titulo" style={{textAlign: 'left'}}>Eventos Ativos</h2>
+          <h2 className="anuncios-titulo" style={{ textAlign: 'left' }}>Eventos Ativos</h2>
           {loading.ativos && <p className="loading-text">Carregando eventos ativos...</p>}
           {error.ativos && <p className="error-text">{error.ativos}</p>}
           {!loading.ativos && !error.ativos && (
@@ -125,7 +138,12 @@ const CatalogoTrilhas = () => {
                 filtrarEventos(eventosAtivos).map((evento) => (
                   <div className="anuncio-card" key={`ativo-${evento.id_evento}`}>
                     <div className="anuncio-img-wrap">
-                      <img src={evento.imagem || catalogo1} alt={evento.titulo} className="anuncio-img" />
+                      <img
+                        src={evento.imagemUrl || catalogo1}
+                        alt={evento.nome_evento}
+                        className="anuncio-img"
+                        onError={(e) => (e.target.src = catalogo1)}
+                      />
                     </div>
                     <div className="anuncio-info">
                       <span className="anuncio-local">{evento.rua}</span>
@@ -163,7 +181,12 @@ const CatalogoTrilhas = () => {
                 filtrarEventos(eventosBase).map((evento) => (
                   <div className="anuncio-card" key={`base-${evento.id_evento}`}>
                     <div className="anuncio-img-wrap">
-                      <img src={evento.imagem || catalogo1} alt={evento.titulo} className="anuncio-img" />
+                      <img
+                        src={evento.imagemUrl || catalogo1}
+                        alt={evento.nome_evento}
+                        className="anuncio-img"
+                        onError={(e) => (e.target.src = catalogo1)}
+                      />
                     </div>
                     <div className="anuncio-info">
                       <h3 className="anuncio-titulo">{evento.nome_evento}</h3>

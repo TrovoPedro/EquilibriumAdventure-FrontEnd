@@ -19,7 +19,7 @@ export const buscarEventosPorGuia = async (id) => {
 
 export const buscarEventosAtivosPorGuia = async (id) => {
   try {
-    const response = await api.get(`/guia/ativos/guia/${id}`);
+    const response = await api.get(`guia/ativos/guia/${id}`);
     return response.data;
   } catch (error) {
     if (error.response?.status === 404) {
@@ -27,5 +27,15 @@ export const buscarEventosAtivosPorGuia = async (id) => {
     }
     console.error('Erro ao buscar eventos ativos:', error);
     throw error;
+  }
+};
+
+export const buscarImagemEvento = async (id) => {
+  try {
+    const response = await api.get(`/guia/${id}/imagem`, { responseType: 'blob' });
+    return URL.createObjectURL(response.data);
+  } catch (error) {
+    console.error("Erro ao buscar imagem do evento:", error);
+    return null;
   }
 };
