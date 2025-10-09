@@ -1,0 +1,18 @@
+/* Personalização do botão de erro do SweetAlert2 */
+.swal2-confirm-error {
+    background-color: #d32f2f !important;
+    border: none !important;
+    cursor: pointer !important;
+    border-radius: 8px !important;
+    padding: 12px 24px !important;
+    font-weight: 600 !important;
+    font-size: 16px !important;
+    transition: all 0.3s ease !important;
+    color: white !important;
+}
+
+.swal2-confirm-error:hover {
+    background-color: #b71c1c !important;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(211, 47, 47, 0.3);
+}
