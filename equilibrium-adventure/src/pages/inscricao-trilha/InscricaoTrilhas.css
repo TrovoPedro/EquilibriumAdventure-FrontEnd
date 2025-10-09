@@ -1,3 +1,29 @@
+.inscricao-trilha-alerta {
+  animation: fadeInAviso 0.8s ease;
+}
+
+@keyframes fadeInAviso {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* Mensagem de alerta para experiência necessária */
+.inscricao-trilha-alerta {
+  background: #fdf3c3;
+  border-radius: 10px;
+  color: #7a6a2b;
+  font-size: 20px;
+  font-weight: 500;
+  padding: 20px 24px;
+  margin-bottom: 18px;
+  border: none;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
 /* Estilos para a tela de inscrição de trilhas, baseada na imagem fornecida */
 .inscricao-trilha-container {
   max-width: 1100px;
@@ -19,9 +45,10 @@
 .inscricao-trilha-header {
   display: flex;
   gap: 40px;
+
   padding: 0;
   align-items: flex-start;
-  margin-bottom: 48px;
+  margin: 32px 0 32px 0;
 }
 
 .inscricao-trilha-header img {
@@ -34,35 +61,98 @@
 
 .inscricao-trilha-info {
   flex: 1;
-  background: #f5f5f5;
-  border-radius: 14px;
-  padding: 32px 32px 32px 32px;
-  font-size: 22px;
+  background: linear-gradient(135deg, #f7f9fa 0%, #f2f4f7 100%);
+  border-radius: 20px;
+  padding: 36px 40px 36px 40px;
+  font-size: 20px;
   display: flex;
   flex-direction: column;
   gap: 18px;
   min-height: 380px;
   height: 380px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  box-shadow: 0 6px 24px rgba(45,70,54,0.10);
   align-items: flex-start;
   justify-content: center;
+  border: 1px solid #e3e9e6;
 }
-
+/* Títulos e textos internos do card */
 .inscricao-trilha-info b {
-  color: #2d4636;
+  color: #226144;
+  font-weight: 700;
+  font-size: 21px;
+  margin-right: 8px;
+  letter-spacing: 0.3px;
+  display: inline-block;
+}
+.inscricao-trilha-info span {
+  color: #222;
+  font-size: 20px;
+  line-height: 1.6;
+  margin-bottom: 0px;
+  font-family: 'Segoe UI', Arial, sans-serif;
+}
+.inscricao-trilha-info .descricao {
+  color: #333;
+  font-size: 19px;
+  font-weight: 400;
+  margin-top: 10px;
+  line-height: 1.7;
+  font-family: 'Segoe UI', Arial, sans-serif;
 }
 
+
+/* Formulário visual de dados da trilha */
+/* Formulário visual de dados da trilha aprimorado */
 .inscricao-trilha-dados {
   display: flex;
-  flex-wrap: wrap;
-  gap: 24px 60px;
-  background: #f5f5f5;
-  border-radius: 14px;
-  margin: 0 0 48px 0;
-  padding: 32px 32px 16px 32px;
-  font-size: 20px;
-  justify-content: flex-start;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  flex-direction: column;
+  gap: 22px;
+  background: linear-gradient(135deg, #f7f9fa 0%, #f2f4f7 100%);
+  border-radius: 20px;
+  margin: 0 0 36px 0;
+  padding: 36px 40px 24px 40px;
+  font-size: 18px;
+  box-shadow: 0 6px 24px rgba(45,70,54,0.10);
+  border: 1px solid #e3e9e6;
+}
+.inscricao-trilha-form-row {
+  display: flex;
+  gap: 36px;
+  margin-bottom: 12px;
+}
+.inscricao-trilha-form-group {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 180px;
+  max-width: 240px;
+}
+.inscricao-trilha-form-group label {
+  font-weight: 700;
+  color: #2d4636;
+  margin-bottom: 6px;
+  font-size: 18px;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+}
+.inscricao-trilha-form-group input {
+  background: #f8fafc;
+  border: 1.5px solid #d1dbe3;
+  border-radius: 10px;
+  padding: 12px 16px;
+  font-size: 16px;
+  color: #222;
+  font-weight: 500;
+  outline: none;
+  margin-bottom: 2px;
+  box-shadow: 0 1px 4px rgba(45,70,54,0.04);
+  transition: border 0.2s;
+}
+.inscricao-trilha-form-group input:disabled {
+  color: #222;
+  opacity: 1;
+  background: #f8fafc;
+  cursor: not-allowed;
 }
 
 .inscricao-trilha-dados span {
@@ -70,32 +160,30 @@
   display: block;
 }
 
-.inscricao-trilha-btn {
-    /* Estilos existentes */
-}
-
-.inscricao-trilha-btn.disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-    opacity: 0.7;
-}
 
 .inscricao-trilha-btn {
   width: 100%;
-  margin: 0 0 48px 0;
-  background: #2d4636;
+  margin: 32px 0 32px 0;
+  background: #395042;
   color: #fff;
   border: none;
-  border-radius: 10px;
-  padding: 20px 0;
-  font-size: 26px;
+  border-radius: 12px;
+  padding: 18px 0;
+  font-size: 1.35rem;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.2s;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  text-align: center;
+  letter-spacing: 0.5px;
+}
+.inscricao-trilha-btn.disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+  opacity: 0.7;
 }
 .inscricao-trilha-btn:active {
-  background: #1b2c1e;
+  background: #223026;
 }
 
 .inscricao-trilha-comentarios {
@@ -130,11 +218,19 @@
   background: #2d4636;
   color: #fff;
   border: none;
-  border-radius: 8px;
-  padding: 14px 32px;
-  font-size: 18px;
+  border-radius: 10px;
+  padding: 14px 0;
+  font-size: 20px;
+  font-weight: 700;
   cursor: pointer;
-  font-weight: 600;
+  width: 160px;
+  transition: background 0.2s;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  letter-spacing: 0.5px;
+  outline: none;
+}
+.inscricao-trilha-form button:active {
+  background: #1b2c1e;
 }
 
 .inscricao-trilha-mapa {

@@ -4,6 +4,7 @@ import Header from "../../components/header/header-unified";
 import "./ativar-evento.css";
 import leftArrow from "../../assets/left-arrow-green.png";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
+import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
 import routeUrls from "../../routes/routeUrls";
 
 export default function AtivarEvento() {
@@ -149,7 +150,7 @@ export default function AtivarEvento() {
               </div>
             </div>
             <div className="form-row form-row-end">
-              <button className="ativar-evento-btn" type="submit">Ativar Evento</button>
+              <ButtonSubmitForm title="Ativar Evento" type="submit" />
             </div>
         </form>
       </div>
