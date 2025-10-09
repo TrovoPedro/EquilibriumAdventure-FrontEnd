@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 import "./header.css";
-import imgAdmin from "../../assets/beneficiario.png";
-import imgAventureiro from "../../assets/mulher1.jpeg";
+import imgDefault from "../../assets/imagem-do-usuario.png";
 import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
 import { useGuide } from "../../context/GuideContext";
+import axios from "axios";
 
 const Header = () => {
   const navigate = useNavigate();
@@ -15,92 +15,130 @@ const Header = () => {
   const { resetarEscolhaGuia } = useGuide();
   const { usuario, logout } = useAuth();
   const tipoUsuario = usuario?.tipoUsuario;
+  const idUsuario = usuario?.id;
+
+  const [avatarUrl, setAvatarUrl] = useState(null);
 
   const resetarDados = () => {
     resetarPontuacao();
     resetarEscolhaGuia();
   };
 
+  // 🔹 Busca imagem do usuário logado ao carregar o Header
+  useEffect(() => {
+    const buscarImagemUsuario = async () => {
+      if (!idUsuario) return;
+
+      try {
+        const response = await axios.get(
+          `http://localhost:8080/informacoes/${idUsuario}/imagem`,
+          { responseType: "blob" }
+        );
+
+        // Transforma blob em URL de imagem
+        const imageUrl = URL.createObjectURL(response.data);
+        setAvatarUrl(imageUrl);
+      } catch (error) {
+        console.error("Erro ao carregar imagem do usuário:", error);
+        setAvatarUrl(null); // fallback padrão será usado
+      }
+    };
+
+    buscarImagemUsuario();
+  }, [idUsuario]);
+
   // Configurações específicas para cada tipo de usuário
   const userConfigs = {
     ADMINISTRADOR: {
-      avatar: imgAdmin,
+      defaultAvatar: imgDefault,
       menuItems: [
         { label: "HOME", route: routeUrls.CATALOGO_TRILHAS_ADM },
         { label: "CRIAR EVENTO", route: routeUrls.CRIAR_EVENTO },
         { label: "DASHBOARD", route: routeUrls.DASHBOARD },
         { label: "NOVO GUIA", route: routeUrls.ADICIONAR_GUIA },
       ],
-      agendaRoute: routeUrls.INFOS_ADICIONAIS_GUIA
+      agendaRoute: routeUrls.INFOS_ADICIONAIS_GUIA,
     },
     GUIA: {
-      avatar: imgAdmin,
+      defaultAvatar: imgDefault,
       menuItems: [
         { label: "HOME", route: routeUrls.CATALOGO_TRILHAS_ADM },
         { label: "CRIAR EVENTO", route: routeUrls.CRIAR_EVENTO },
         { label: "DASHBOARD", route: routeUrls.DASHBOARD },
       ],
-      agendaRoute: routeUrls.INFOS_ADICIONAIS_GUIA
+      agendaRoute: routeUrls.INFOS_ADICIONAIS_GUIA,
     },
     AVENTUREIRO: {
-      avatar: imgAventureiro,
+      defaultAvatar: imgDefault,
       menuItems: [
         { label: "HOME", route: routeUrls.CATALOGO_TRILHA },
         { label: "MAIS PESQUISADOS", route: "#" },
         { label: "TRILHAS", route: "#" },
       ],
-      agendaRoute: routeUrls.AGENDA_AVENTUREIRO
-    }
+      agendaRoute: routeUrls.AGENDA_AVENTUREIRO,
+    },
   };
 
-  // Pega a configuração do usuário atual ou usa a configuração do aventureiro como padrão
+  // Pega configuração do usuário atual ou usa a do aventureiro
   const currentConfig = userConfigs[tipoUsuario] || userConfigs.AVENTUREIRO;
 
   return (
     <header className="header">
+      {/* 🖼️ Imagem do usuário */}
       <div className="header-left" onClick={() => navigate(currentConfig.agendaRoute)}>
         <img
-          src={currentConfig.avatar}
+          src={avatarUrl || currentConfig.defaultAvatar}
           alt="Usuário"
           className="header-avatar"
+          onError={(e) => (e.target.src = currentConfig.defaultAvatar)}
         />
       </div>
 
+      {/* 🧭 Menu principal */}
       <nav className={`header-center ${menuOpen ? "open" : ""}`}>
         <ul>
           {currentConfig.menuItems.map((item, index) => (
-            <li key={index} onClick={() => {
-              setMenuOpen(false);
-              navigate(item.route);
-            }}>
+            <li
+              key={index}
+              onClick={() => {
+                setMenuOpen(false);
+                navigate(item.route);
+              }}
+            >
               {item.label}
             </li>
           ))}
         </ul>
       </nav>
 
-      {/* Menu lateral para mobile */}
+      {/* 📱 Menu lateral (mobile) */}
       <nav className={`header-side-menu ${menuOpen ? "open" : ""}`}>
         <button
           className="close-menu"
           aria-label="Fechar menu"
           onClick={() => setMenuOpen(false)}
-        >✕</button>
+        >
+          ✕
+        </button>
         <ul>
           {currentConfig.menuItems.map((item, index) => (
-            <li key={index} onClick={() => {
-              setMenuOpen(false);
-              navigate(item.route);
-            }}>
+            <li
+              key={index}
+              onClick={() => {
+                setMenuOpen(false);
+                navigate(item.route);
+              }}
+            >
               {item.label}
             </li>
           ))}
         </ul>
       </nav>
 
+      {/* ⚙️ Botões da direita */}
       <div className="header-right">
-        <button 
-          className="agendar" 
+        <button
+          className="agendar"
           onClick={() => navigate(currentConfig.agendaRoute)}
         >
           AGENDA
@@ -117,6 +155,7 @@ const Header = () => {
         </button>
       </div>
 
+      {/* 🍔 Menu mobile */}
       <button
         className="hamburger-menu"
         aria-label="Abrir menu"
