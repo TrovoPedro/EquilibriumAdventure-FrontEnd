@@ -22,12 +22,14 @@ import AgendaAventureiro from "../pages/agenda-aventureiro/agenda-aventureiro"
 import RelatorioAnamnese from "../pages/relatorio-anamnese/relatorio-anamnese"
 import AgendamentoAnamnese from '../pages/agendamento-anamnese/AgendamentoAnamnese';
 import DetalhesEvento from '../pages/detalhes-evento/DetalhesEvento';
+import Dashboard from "../pages/dashboard/Dashboard";
 
 export default function AppRoutes() {
   return (
     <Routes>
       <Route path={routeUrls.AGENDAMENTO_ANAMNESE} element={<AgendamentoAnamnese />} />"
       <Route path={routeUrls.LOGIN} element={<Login />} />
+      <Route path={routeUrls.DASHBOARD} element={<Dashboard />} />
       <Route path={routeUrls.CRIAR_EVENTO} element={<CriarEvento/>}/>
       <Route path={routeUrls.EDITAR_EVENTO} element={<EditarEvento/>}/>
       <Route path={routeUrls.HOME} element={<Home/>}></Route>
