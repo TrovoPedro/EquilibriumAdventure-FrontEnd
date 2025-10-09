@@ -59,9 +59,7 @@ const CatalogoTrilhas = () => {
   };
   
   const handleDetalhes = () => {
-    // Navegação para página de detalhes - pode ser personalizada conforme necessário
-    console.log("Navegar para detalhes da trilha");
-    // navigate(routeUrls.DETALHES_TRILHA); // Descomente quando a rota estiver definida
+    navigate(routeUrls.INSCRICAO_TRILHAS);
   };
   return (
     <>
