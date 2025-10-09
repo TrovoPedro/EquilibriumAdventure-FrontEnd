@@ -15,20 +15,17 @@ import CriarInformacoesAdicionaisGuia from "../pages/agenda-infos-adic-guia/info
 import CatalogoTrilhasAdm from "../pages/catalogo-trilhas/CatalogoTrilhasAdm"
 import InscricaoTrilhas from "../pages/inscricao-trilha/InscricaoTrilha"
 import AdicionarGuia from "../pages/adicionar-guia/adicionar-guia"
-import Listaconvites from "../pages/lista-convites/lista-convites"
 import EscolhaDataCard from "../pages/escolher-data/escolher-data"
 import VerGuias from "../pages/ver-guias/ver-guias"
 import DadosGuia from "../pages/dados-guia/dados-guia"
 import AgendaAventureiro from "../pages/agenda-aventureiro/agenda-aventureiro"
 import RelatorioAnamnese from "../pages/relatorio-anamnese/relatorio-anamnese"
-import ConviteAventureiro from '../pages/convite-aventureiro/ConviteAventureiro';
 import AgendamentoAnamnese from '../pages/agendamento-anamnese/AgendamentoAnamnese';
 import DetalhesEvento from '../pages/detalhes-evento/DetalhesEvento';
 
 export default function AppRoutes() {
   return (
     <Routes>
-      <Route path={routeUrls.CONVITE_AVENTUREIRO} element={<ConviteAventureiro />} />
       <Route path={routeUrls.AGENDAMENTO_ANAMNESE} element={<AgendamentoAnamnese />} />"
       <Route path={routeUrls.LOGIN} element={<Login />} />
       <Route path={routeUrls.CRIAR_EVENTO} element={<CriarEvento/>}/>
@@ -42,7 +39,6 @@ export default function AppRoutes() {
       <Route path={routeUrls.DADOS_CLIENTE} element={<DadosCliente/>}></Route>
       <Route path={routeUrls.ATIVAR_EVENTO} element={<AtivarEvento/>}></Route>
       <Route path={routeUrls.ADICIONAR_GUIA} element={<AdicionarGuia/>}></Route>
-      <Route path={routeUrls.LISTA_CONVITES} element={<Listaconvites/>}></Route>
       <Route path={routeUrls.CRIAR_EVENTO} element={<CriarEvento />} />
       <Route path={routeUrls.EDITAR_EVENTO} element={<EditarEvento />} />
       <Route path={routeUrls.HOME} element={<Home />}></Route>
@@ -58,7 +54,6 @@ export default function AppRoutes() {
       <Route path={routeUrls.DADOS_CLIENTE} element={<DadosCliente />}></Route>
       <Route path={routeUrls.ATIVAR_EVENTO} element={<AtivarEvento />}></Route>
       <Route path={routeUrls.ADICIONAR_GUIA} element={<AdicionarGuia />}></Route>
-      <Route path={routeUrls.LISTA_CONVITES} element={<Listaconvites />}></Route>
       <Route path={routeUrls.ESCOLHER_DATA} element={<EscolhaDataCard />}></Route>
       <Route path={routeUrls.VER_GUIAS} element={<VerGuias />}></Route>
       <Route path={routeUrls.DADOS_GUIA} element={<DadosGuia />}></Route>
