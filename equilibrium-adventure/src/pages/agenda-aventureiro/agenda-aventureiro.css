@@ -361,7 +361,7 @@
   content: '';
   position: absolute;
   bottom: -3px;
-  left: 28px;
+  left: 0;
   width: 60px;
   height: 3px;
   background: linear-gradient(90deg, #336948, #226144);
@@ -369,7 +369,10 @@
   transition: width 0.3s ease;
 }
 
-.agenda-aventureiro-card-info:hover .agenda-aventureiro-card-title::after,
+.agenda-aventureiro-card-agenda:hover .agenda-aventureiro-card-title::after,
+.agenda-aventureiro-historico-container:hover .agenda-aventureiro-card-title::after {
+  width: 80px;
+}
 
 
 
