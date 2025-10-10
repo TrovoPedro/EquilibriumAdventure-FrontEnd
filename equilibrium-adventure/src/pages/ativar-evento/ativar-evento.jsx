@@ -6,21 +6,37 @@ import leftArrow from "../../assets/left-arrow-green.png";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
 import routeUrls from "../../routes/routeUrls";
+import { useEffect } from "react";
+import { useParams } from "react-router-dom";
+import { ativarEvento } from "../../services/chamadasAPIEvento";
+import dayjs from "dayjs";
+import swal from "sweetalert2";
 
 export default function AtivarEvento() {
+  const { id } = useParams();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (id) {
+      setFormData(prev => ({ ...prev, evento: id }));
+    }
+  }, [id]);
+
   const [formData, setFormData] = useState({
-    horaInicio: '',
-    horaFim: '',
-    duracao: '',
-    preco: '',
-    limiteInscritos: '',
-    dataEvento: '',
-    categoria: ''
+    horaInicio: null,
+    horaFim: null,
+    duracao: null,
+    limiteInscritos: null,
+    dataEvento: null,
+    categoria: '',
+    preco: null,
+    evento: id ?? null
   });
 
   const handleChange = (e) => {
+
     const { name, value } = e.target;
+    console.log(name, value);
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -29,8 +45,38 @@ export default function AtivarEvento() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Aqui você pode adicionar a lógica para enviar os dados
-    console.log('Dados do formulário:', formData);
+
+    if (!formData.horaInicio || !formData.horaFim || !formData.duracao || !formData.limiteInscritos || !formData.dataEvento || !formData.categoria || !formData.preco) {
+      swal.fire({
+        title: "Erro!",
+        text: "Por favor, preencha todos os campos obrigatórios.",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
+      return;
+    }
+
+    const ativarEvento = () => {
+      return ativarEvento(formData);
+    };
+    
+    if (ativarEvento) {
+      swal.fire({
+        title: "Sucesso!",
+        text: "Evento ativado com sucesso.",
+        icon: "success",
+        confirmButtonText: "OK"
+      }).then(() => {
+        navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+      });
+    } else {
+      swal.fire({
+        title: "Erro!",
+        text: "Ocorreu um erro ao ativar o evento. Tente novamente.",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
+    }
   };
 
   const handleBack = () => {
