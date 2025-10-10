@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCloudUploadAlt } from "react-icons/fa";
-import Header from "../../components/header/header";
+import Header from "../../components/header/header-unified";
 import { maskCep, maskDistancia } from "../../utils/masks";
 import { scrollToTop } from "../../utils/scrollToTop";
 import { cadastrarEvento, buscarCep } from "../../services/chamadasAPIEvento";
 import "./editar-evento.css";
 import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
-import ButtonCriarEvento from "../../components/button-eventos/button-criar-evento";
+import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import routeUrls from "../../routes/routeUrls";
 
@@ -287,7 +287,7 @@ const CriarEvento = () => {
 
                     <div className="botoes">
                         <ButtonCancelarEvento title={"Cancelar"}></ButtonCancelarEvento>
-                        <ButtonCriarEvento title={"Criar evento"}></ButtonCriarEvento>
+                        <ButtonSubmitForm title={"Criar evento"} type="submit"></ButtonSubmitForm>
                     </div>
                 </form>
             </div>

@@ -9,9 +9,7 @@ import {
 	formatarDataParaInput, 
 	formatarDataParaExibicao, 
 	formatarData, 
-	formatarHora,
-	obterDataAtualFormatada,
-	obterHoraAtualFormatada
+	formatarHora
 } from "../../utils/dateValidations";
 
 export default function DadosCliente() {
@@ -104,13 +102,31 @@ export default function DadosCliente() {
 			setLoading(true);
 			console.log("Carregando dados do cliente ID:", usuarioIdFixo);
 			
-			const dados = await buscarPerfilCompleto(usuarioIdFixo);
-			console.log("Dados recebidos com sucesso");
+			let dadosCliente = null;
 			
-			setDadosCliente(dados);
+			try {
+				const dados = await buscarPerfilCompleto(usuarioIdFixo);
+				console.log("Dados completos recebidos:", dados);
+				dadosCliente = dados;
+			} catch (error) {
+				console.log("Perfil completo não encontrado, buscando dados básicos");
+				
+				try {
+					const { buscarDadosUsuario } = await import("../../services/apiUsuario");
+					const dadosBasicos = await buscarDadosUsuario(usuarioIdFixo);
+					console.log("Dados básicos recebidos:", dadosBasicos);
+					dadosCliente = dadosBasicos;
+				} catch (userError) {
+					console.error("Erro ao buscar dados básicos:", userError);
+					setErro("Nenhum dado do cliente encontrado");
+					return;
+				}
+			}
+			
+			setDadosCliente(dadosCliente);
 			
 		} catch (error) {
-			console.error("Erro ao carregar dados:", error.message);
+			console.error("Erro geral ao carregar dados:", error);
 			setErro("Erro ao carregar dados do cliente");
 		} finally {
 			setLoading(false);
@@ -200,7 +216,7 @@ export default function DadosCliente() {
 				formData={{
 					nome: dadosCliente?.nome || "",
 					email: dadosCliente?.email || "",
-					telefone: dadosCliente?.telefoneContato || dadosCliente?.telefone || "",
+					telefone: dadosCliente?.telefoneContato || dadosCliente?.telefone_contato || dadosCliente?.telefone || "",
 					dataNascimento: formatarDataParaExibicao(dadosCliente?.dataNascimento),
 					cpf: dadosCliente?.cpf || "",
 					rg: dadosCliente?.rg || "",
@@ -232,13 +248,13 @@ export default function DadosCliente() {
 					<div className="dados-card-group">
 						<label>Data</label>
 						<div className="dados-card-display">
-							{agendamentoData ? formatarData(agendamentoData.dataDisponivel) : obterDataAtualFormatada()}
+							{agendamentoData ? formatarData(agendamentoData.dataDisponivel) : "Não agendado"}
 						</div>
 					</div>
 					<div className="dados-card-group">
 						<label>Hora</label>
 						<div className="dados-card-display">
-							{agendamentoData ? formatarHora(agendamentoData.dataDisponivel) : obterHoraAtualFormatada()}
+							{agendamentoData ? formatarHora(agendamentoData.dataDisponivel) : "Não agendado"}
 						</div>
 					</div>
 				</div>

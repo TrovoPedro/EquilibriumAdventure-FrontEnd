@@ -2,7 +2,9 @@ import "./agenda-aventureiro.css"
 import Homem from "../../assets/homem2.jpeg";
 import Mulher1 from "../../assets/mulher1.jpeg";
 import Trilha from "../../assets/cachoeiralago.jpg";
-import Header from "../../components/header/header-usuario";
+import Header from "../../components/header/header-unified";
+import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
+import ButtonDangerForm from "../../components/button-padrao/button-danger-form";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
@@ -31,7 +33,7 @@ const CriarAgendaAventureiro = () => {
                                     <h3>Juliana Lima</h3>
                                     <span className="user-role">Aventureira</span>
                                 </div>
-                                <button className="edit-info-btn">Mais Informações</button>
+                                <ButtonSubmitForm title="Mais Informações" type="button" onClick={() => navigate(routeUrls.INFORMACOES_PESSOAIS)} />
                             </div>
                         </div>
                     </div>
@@ -53,8 +55,8 @@ const CriarAgendaAventureiro = () => {
                                     <span className="agenda-aventureiro-item-date">15/10/2024</span>
                                 </div>
                                 <div className="agenda-aventureiro-item-actions">
-                                    <button className="agenda-aventureiro-btn-info">Mais Informações</button>
-                                    <button className="agenda-aventureiro-btn-cancel">Cancelar Inscrição</button>
+                                    <ButtonSubmitForm title="Mais Informações" type="button" />
+                                    <ButtonDangerForm title="Cancelar Inscrição" type="button" />
                                 </div>
                             </div>
 
@@ -64,21 +66,11 @@ const CriarAgendaAventureiro = () => {
                                     <span className="agenda-aventureiro-item-date">22/10/2024</span>
                                 </div>
                                 <div className="agenda-aventureiro-item-actions">
-                                    <button className="agenda-aventureiro-btn-info">Mais Informações</button>
-                                    <button className="agenda-aventureiro-btn-cancel">Cancelar Inscrição</button>
+                                    <ButtonSubmitForm title="Mais Informações" type="button" />
+                                    <ButtonDangerForm title="Cancelar Inscrição" type="button" />
                                 </div>
                             </div>
 
-                            <div className="agenda-aventureiro-item">
-                                <div className="agenda-aventureiro-item-info">
-                                    <span className="agenda-aventureiro-item-name">Trilha do Lago</span>
-                                    <span className="agenda-aventureiro-item-date">28/10/2024</span>
-                                </div>
-                                <div className="agenda-aventureiro-item-actions">
-                                    <button className="agenda-aventureiro-btn-info">Mais Informações</button>
-                                    <button className="agenda-aventureiro-btn-cancel">Cancelar Inscrição</button>
-                                </div>
-                            </div>
 
                             <div className="agenda-aventureiro-item">
                                 <div className="agenda-aventureiro-item-info">
@@ -86,8 +78,8 @@ const CriarAgendaAventureiro = () => {
                                     <span className="agenda-aventureiro-item-date">05/11/2024</span>
                                 </div>
                                 <div className="agenda-aventureiro-item-actions">
-                                    <button className="agenda-aventureiro-btn-info">Mais Informações</button>
-                                    <button className="agenda-aventureiro-btn-cancel">Cancelar Conversa</button>
+                                    <ButtonSubmitForm title="Mais Informações" type="button" />
+                                    <ButtonDangerForm title="Cancelar Conversa" type="button" />
                                 </div>
                             </div>
 
@@ -97,8 +89,8 @@ const CriarAgendaAventureiro = () => {
                                     <span className="agenda-aventureiro-item-date">12/11/2024</span>
                                 </div>
                                 <div className="agenda-aventureiro-item-actions">
-                                    <button className="agenda-aventureiro-btn-info">Mais Informações</button>
-                                    <button className="agenda-aventureiro-btn-cancel">Cancelar Conversa</button>
+                                    <ButtonSubmitForm title="Mais Informações" type="button" />
+                                    <ButtonDangerForm title="Cancelar Conversa" type="button" />
                                 </div>
                             </div>
 
@@ -108,8 +100,8 @@ const CriarAgendaAventureiro = () => {
                                     <span className="agenda-aventureiro-item-date">18/11/2024</span>
                                 </div>
                                 <div className="agenda-aventureiro-item-actions">
-                                    <button className="agenda-aventureiro-btn-info">Mais Informações</button>
-                                    <button className="agenda-aventureiro-btn-cancel">Cancelar Inscrição</button>
+                                    <ButtonSubmitForm title="Mais Informações" type="button" />
+                                    <ButtonDangerForm title="Cancelar Inscrição" type="button" />
                                 </div>
                             </div>
                         </div>

@@ -238,7 +238,7 @@
 }
 
 .infos-adic-guia-page .edit-info-btn {
-    background: linear-gradient(135deg, #00695c, #004d40);
+    background: linear-gradient(135deg, #336948, #2a5a3a);
     color: white;
     border: none;
     padding: 14px 32px;
@@ -248,15 +248,15 @@
     cursor: pointer;
     transition: all 0.3s ease;
     align-self: flex-start;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+    box-shadow: 0 4px 12px rgba(51, 105, 72, 0.2);
     text-transform: none;
     letter-spacing: 0.3px;
 }
 
 .infos-adic-guia-page .edit-info-btn:hover {
-    background: linear-gradient(135deg, #004d40, #00332e);
+    background: linear-gradient(135deg, #2a5a3a, #1e4b2c);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 6px 20px rgba(51, 105, 72, 0.3);
 }
 
 /* Próximo Eventos */
@@ -452,19 +452,19 @@
     font-weight: 600;
     border-radius: 12px;
     color: white;
-    background: linear-gradient(135deg, #00695c, #004d40);
+    background: linear-gradient(135deg, #336948, #2a5a3a);
     border: none;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(0, 105, 92, 0.2);
+    box-shadow: 0 4px 12px rgba(51, 105, 72, 0.2);
     text-transform: none;
     letter-spacing: 0.3px;
 }
 
 .infos-adic-guia-page .button-add-data:hover {
-    background: linear-gradient(135deg, #004d40, #00332e);
+    background: linear-gradient(135deg, #2a5a3a, #1e4b2c);
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(0, 105, 92, 0.3);
+    box-shadow: 0 6px 20px rgba(51, 105, 72, 0.3);
 }
 
 /* Container para Anamneses */
@@ -552,12 +552,12 @@
 }
 
 .infos-adic-guia-page .anamneses-cards::-webkit-scrollbar-thumb {
-    background: #00695c;
+    background: #336948;
     border-radius: 4px;
 }
 
 .infos-adic-guia-page .anamneses-cards::-webkit-scrollbar-thumb:hover {
-    background: #004d40;
+    background: #2a5a3a;
 }
 
 /* Cards de Anamnese */
@@ -566,11 +566,14 @@
     border-radius: 12px;
     padding: 15px;
     width: 180px;
-    min-height: 160px;
-    cursor: pointer;
+    min-height: 180px;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 15px;
 }
 
 .infos-adic-guia-page .anamnese-card:hover {
@@ -585,6 +588,30 @@
     flex-direction: column;
     align-items: center;
     gap: 15px;
+    cursor: pointer;
+}
+
+.infos-adic-guia-page .anamnese-relatorio-btn {
+    background: linear-gradient(135deg, #336948, #2a5a3a);
+    color: #ffffff;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: none;
+    letter-spacing: 0.3px;
+    box-shadow: 0 2px 8px rgba(51, 105, 72, 0.2);
+    width: 100%;
+    margin-top: auto;
+}
+
+.infos-adic-guia-page .anamnese-relatorio-btn:hover {
+    background: linear-gradient(135deg, #2a5a3a, #1e4b2c);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(51, 105, 72, 0.3);
 }
 
 .infos-adic-guia-page .anamnese-initial {
@@ -605,7 +632,7 @@
 
 .infos-adic-guia-page .anamnese-date, .infos-adic-guia-page .evento-date {
     font-size: 13px;
-    color: #00695c;
+    color: #336948;
     display: block;
     margin-bottom: 8px;
     font-weight: 600;
@@ -622,7 +649,7 @@
 }
 
 .infos-adic-guia-page .anamnese-tag, .infos-adic-guia-page .evento-info-btn {
-    background: linear-gradient(135deg, #00695c, #004d40);
+    background: linear-gradient(135deg, #336948, #2a5a3a);
     color: #ffffff;
     padding: 10px 20px;
     border-radius: 25px;
@@ -634,19 +661,19 @@
     display: inline-block;
     text-transform: none;
     letter-spacing: 0.3px;
-    box-shadow: 0 2px 8px rgba(16, 185, 129, 0.2);
+    box-shadow: 0 2px 8px rgba(51, 105, 72, 0.2);
 }
 
 .infos-adic-guia-page .anamnese-tag:hover {
-    background: linear-gradient(135deg, #004d40, #00332e);
+    background: linear-gradient(135deg, #2a5a3a, #1e4b2c);
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 16px rgba(51, 105, 72, 0.3);
 }
 
 .infos-adic-guia-page .evento-info-btn:hover {
-    background: linear-gradient(135deg, #004d40, #00332e);
+    background: linear-gradient(135deg, #2a5a3a, #1e4b2c);
     transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 4px 16px rgba(51, 105, 72, 0.3);
 }
 
 /* Cards de Evento */

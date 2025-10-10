@@ -1,10 +1,10 @@
 import "./relatorio-anamnese.css"
-import Header from "../../components/header/header";
 import { gerarRelatorioAnamnese } from "../../services/chamadasAPIAgenda";
 import { buscarUsuarioPorId } from "../../services/api";
 import { data, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import useGoBack from "../../utils/useGoBack";
+import Header from "../../components/header/header-unified";
 
 const RelatorioAnamnese = () => {
 

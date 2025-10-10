@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import "./infos-adic-guia.css";
-import Header from "../../components/header/header";
+import Header from "../../components/header/header-unified";
 import Beneficiario from "../../assets/beneficiario.png";
 import Trilha from "../../assets/cachoeiralago.jpg";
 import ButtonAlterar from "../../components/button-padrao/button-alterar"
@@ -54,7 +54,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
     return (
     <>
       <Header />
-      <div className="infos-adic-guia-page">
+    <div className="infos-adic-guia-page" style={{ background: '#fff' }}>
         <div className="home-container">
         <div className="cards-father">
             <div className="card-info-guia">
@@ -89,43 +89,49 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                     <button className="nav-arrow nav-left" onClick={() => scrollLeft('anamneses-cards')}>‹</button>
                     
                     <div className="anamneses-cards">
-                        <div className="anamnese-card" onClick={() => handleOnClickCard()}>
-                            <div className="anamnese-info">
+                        <div className="anamnese-card">
+                            <div className="anamnese-info" onClick={() => handleOnClickCard()}>
                                 <div className="anamnese-initial" style={{ backgroundColor: "#9c27b0" }}>
                                     C
                                 </div>
                                 <div className="anamnese-details">
                                     <span className="anamnese-date">Oct 15 , 10:00</span>
                                     <h4>Carolina Andrade</h4>
-                                    
                                 </div>
                             </div>
+                            <button className="anamnese-relatorio-btn" onClick={handleOnClickRelatorio}>
+                                Relatório
+                            </button>
                         </div>
 
-                        <div className="anamnese-card" onClick={() => handleOnClickCard()}>
-                            <div className="anamnese-info">
+                        <div className="anamnese-card">
+                            <div className="anamnese-info" onClick={() => handleOnClickCard()}>
                                 <div className="anamnese-initial" style={{ backgroundColor: "#26c6da" }}>
                                     J
                                 </div>
                                 <div className="anamnese-details">
                                     <span className="anamnese-date">Oct 18 , 11:30</span>
                                     <h4>João Ribeiro</h4>
-                                    
                                 </div>
                             </div>
+                            <button className="anamnese-relatorio-btn" onClick={handleOnClickRelatorio}>
+                                Relatório
+                            </button>
                         </div>
 
-                        <div className="anamnese-card" onClick={() => handleOnClickCard()}>
-                            <div className="anamnese-info">
+                        <div className="anamnese-card">
+                            <div className="anamnese-info" onClick={() => handleOnClickCard()}>
                                 <div className="anamnese-initial" style={{ backgroundColor: "#f44336" }}>
                                     L
                                 </div>
                                 <div className="anamnese-details">
                                     <span className="anamnese-date">Oct 20 , 12:00</span>
                                     <h4>Leandro Alves</h4>
-                                    
                                 </div>
                             </div>
+                            <button className="anamnese-relatorio-btn" onClick={handleOnClickRelatorio}>
+                                Relatório
+                            </button>
                         </div>
                     </div>
                     

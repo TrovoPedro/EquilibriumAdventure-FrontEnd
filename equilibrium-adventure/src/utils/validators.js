@@ -124,9 +124,6 @@ export const validateEmail = (email) => {
         return { isValid: false, error: "Email deve ter formato válido" };
     }
     
-    if (!email.endsWith('.com')) {
-        return { isValid: false, error: "Email deve terminar com .com" };
-    }
     
     return { isValid: true, error: "" };
 };

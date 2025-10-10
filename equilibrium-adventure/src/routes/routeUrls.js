@@ -2,7 +2,7 @@ const routeUrls = {
     HOME: '/',
     LOGIN: '/login',
     CRIAR_EVENTO: '/criar-evento',
-    EDITAR_EVENTO: '/editar-evento',
+    EDITAR_EVENTO: '/editar-evento/:id',
     CADASTRO: '/cadastro',
     DASHBOARD: '/dashboard',
     ESCOLHER_GUIA: '/escolher-guia',
@@ -10,12 +10,11 @@ const routeUrls = {
     QUESTIONARIO: '/questionario',
     INFORMACOES_PESSOAIS: '/informacoes-pessoais',
     DADOS_CLIENTE: '/dados-cliente',
-    ATIVAR_EVENTO: '/ativar-evento',
+    ATIVAR_EVENTO: '/ativar-evento/:id',
     CRIAR_INFOS_ADIC_GUIA: '/infos-adic-guia',
     CATALOGO_TRILHAS_ADM: '/catalogo-trilhas-adm',
     INSCRICAO_TRILHAS: '/inscricao-trilhas',
     ADICIONAR_GUIA: '/adicionar-guia',
-    LISTA_CONVITES: '/lista-convites',
     VER_GUIAS:'/ver-guias',
     ESCOLHER_DATA: '/escolher-data',
     AGENDA_GUIA: '/agenda-guia',
@@ -24,9 +23,8 @@ const routeUrls = {
     DADOS_GUIA: '/dados-guia',
     AGENDA_AVENTUREIRO: '/agenda-aventureiro',
     RELATORIO_ANAMNESE: '/relatorio-anamnese',
-    CONVITE_AVENTUREIRO: '/convite-aventureiro',
     AGENDAMENTO_ANAMNESE: '/agendamento-anamnese',
-    DETALHES_EVENTO: '/detalhes-evento',
+    DETALHES_EVENTO: `/detalhes-evento/${':id'}`,
 };
 
 export default routeUrls;

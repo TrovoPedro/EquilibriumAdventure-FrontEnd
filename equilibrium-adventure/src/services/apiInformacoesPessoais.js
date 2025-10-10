@@ -4,15 +4,46 @@ const api = axios.create({
   baseURL: "http://localhost:8080"
 });
 
+// Interceptor para requests
+api.interceptors.request.use(
+  (config) => {
+    console.log(`API Request: ${config.method?.toUpperCase()} ${config.url}`);
+    return config;
+  },
+  (error) => {
+    console.error('Request interceptor error:', error);
+    return Promise.reject(error);
+  }
+);
+
+// Interceptor para responses
+api.interceptors.response.use(
+  (response) => {
+    console.log(`API Response: ${response.config.method?.toUpperCase()} ${response.config.url} - Status: ${response.status}`);
+    return response;
+  },
+  (error) => {
+    console.error('Response interceptor error:', {
+      status: error.response?.status,
+      url: error.config?.url,
+      method: error.config?.method,
+      data: error.response?.data
+    });
+    return Promise.reject(error);
+  }
+);
+
 // Cadastrar/atualizar informações pessoais com imagem
 export const cadastrarInformacoesPessoais = async (id, dadosUsuario, imagemUsuario = null) => {
   try {
     console.log("Cadastrando informacoes pessoais - ID:", id);
+    console.log("Dados do usuario:", dadosUsuario);
     
     const formData = new FormData();
     formData.append("usuario", JSON.stringify(dadosUsuario));
     
     if (imagemUsuario) {
+      console.log("Imagem anexada:", imagemUsuario.name || 'sem nome');
       formData.append("imagem", imagemUsuario);
     }
 
@@ -23,18 +54,15 @@ export const cadastrarInformacoesPessoais = async (id, dadosUsuario, imagemUsuar
       },
     });
 
-    console.log("Resposta recebida com sucesso");
+    console.log("Resposta recebida com sucesso:", response.data);
     return response.data;
   } catch (error) {
-    console.error("ERRO - cadastrarInformacoesPessoais:", error.message);
-    
-    if (error.response) {
-      console.error("Status HTTP:", error.response.status);
-      console.error("Response status:", error.response.status);
-      console.error("Response headers:", error.response.headers);
-    } else if (error.request) {
-      console.error("Request data:", error.request);
-    }
+    console.error("ERRO - cadastrarInformacoesPessoais:", {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+      config: error.config
+    });
     
     throw error;
   }
@@ -47,17 +75,32 @@ export const buscarPerfilCompleto = async (usuarioId) => {
     const response = await api.get(`/informacoes-pessoais/perfil-info/${usuarioId}`);
     console.log("Perfil completo recebido");
     const data = response.data;
-    // Tratar respostas vazias/invalidas do backend ("", null, {}, [])
+    
+    // Verificar se a resposta é válida
+    if (!data) {
+      const err = new Error("Perfil completo não encontrado");
+      err.code = "PERFIL_NAO_ENCONTRADO";
+      throw err;
+    }
+    
+    // Verificar se é um objeto vazio (mas não tratar como erro se tiver estrutura básica)
     const isEmptyObject = data && typeof data === 'object' && !Array.isArray(data) && Object.keys(data).length === 0;
-    if (data === "" || data == null || isEmptyObject) {
-      const err = new Error("Perfil completo não encontrado ou vazio");
+    if (data === "" || isEmptyObject) {
+      const err = new Error("Perfil completo está vazio");
       err.code = "PERFIL_VAZIO";
       throw err;
     }
+    
     return data;
   } catch (error) {
     console.error("Erro ao buscar perfil completo:", error);
-    throw error.response?.data || error.message;
+    // Se for erro 404, significa que o perfil não existe
+    if (error.response?.status === 404) {
+      const err = new Error("Perfil não encontrado");
+      err.code = "PERFIL_NAO_ENCONTRADO";
+      throw err;
+    }
+    throw error.response?.data || error;
   }
 };
 
