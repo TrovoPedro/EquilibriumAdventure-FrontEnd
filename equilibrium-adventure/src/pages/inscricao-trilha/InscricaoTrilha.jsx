@@ -1,5 +1,6 @@
 import "./InscricaoTrilhas.css";
 import Header from "../../components/header/header-unified";
+import CircleBackButton from "../../components/circle-back-button/circle-back-button";
 import trilhaImg from "../../assets/cachoeiralago.jpg";
 import MapaTrilha from "../../components/mapa-trilha/MapaTrilha";
 import React, { useState, useEffect } from "react";
@@ -15,6 +16,10 @@ const comentariosIniciais = [
 ];
 
 const InscricaoTrilhasLimitado = ({ idEvento, nivelNecessario }) => {
+	// Rolar para o topo ao entrar na tela
+	useEffect(() => {
+		window.scrollTo({ top: 0, behavior: 'smooth' });
+	}, []);
 	const [comentarios, setComentarios] = useState(comentariosIniciais);
 	const [novoComentario, setNovoComentario] = useState("");
 	const [inscrito, setInscrito] = useState(false);
@@ -66,8 +71,9 @@ const InscricaoTrilhasLimitado = ({ idEvento, nivelNecessario }) => {
 	};
 
 	return (
-		<div className="inscricao-trilha-container">
+		<div className="inscricao-trilha-container" style={{position: 'relative'}}>
 			<Header />
+			<CircleBackButton onClick={() => navigate(-1)} />
 			<span className="inscricao-trilha-header-separator"></span>
 			<div className="inscricao-trilha-header">
 				<img src={trilhaImg} alt="Trilha Pedra do Baú" />
@@ -79,31 +85,46 @@ const InscricaoTrilhasLimitado = ({ idEvento, nivelNecessario }) => {
 				</div>
 			</div>
 
-			<div className="inscricao-trilha-dados">
-				<span><b>Distância:</b> 15km</span>
-				<span><b>Categoria:</b> Escalada</span>
-				<span><b>Preço:</b> R$100,00</span>
-				<span><b>Hora de Início:</b> 08:00</span>
-				<span><b>Hora de Fim:</b> 12:00</span>
-				<span><b>Duração Estimada:</b> 4h</span>
-				<span><b>Quantidade de Inscritos:</b> 8</span>
-				<span><b>Limite de Inscritos:</b> 10</span>
-			</div>
+			<form className="inscricao-trilha-dados" autoComplete="off">
+				<div className="inscricao-trilha-form-row">
+					<div className="inscricao-trilha-form-group">
+						<label>Distância:</label>
+						<input type="text" value="15km" disabled />
+					</div>
+					<div className="inscricao-trilha-form-group">
+						<label>Categoria:</label>
+						<input type="text" value="Escalada" disabled />
+					</div>
+					<div className="inscricao-trilha-form-group">
+						<label>Preço:</label>
+						<input type="text" value="R$100,00" disabled />
+					</div>
+					<div className="inscricao-trilha-form-group">
+						<label>Hora de Início:</label>
+						<input type="text" value="08:00" disabled />
+					</div>
+				</div>
+				<div className="inscricao-trilha-form-row">
+					<div className="inscricao-trilha-form-group">
+						<label>Hora de Fim:</label>
+						<input type="text" value="12:00" disabled />
+					</div>
+					<div className="inscricao-trilha-form-group">
+						<label>Duração Estimada:</label>
+						<input type="text" value="4h" disabled />
+					</div>
+					<div className="inscricao-trilha-form-group">
+						<label>Quantidade de Inscritos:</label>
+						<input type="text" value="8" disabled />
+					</div>
+					<div className="inscricao-trilha-form-group">
+						<label>Limite de Inscritos:</label>
+						<input type="text" value="10" disabled />
+					</div>
+				</div>
+			</form>
 
-					{!nivelSuficiente && (
-						<div style={{
-							margin: '24px 0 8px 0',
-							padding: '16px',
-							background: '#fff3cd',
-							border: '1px solid #ffeeba',
-							borderRadius: '8px',
-							color: '#856404',
-							fontSize: '18px',
-							fontWeight: 500
-						}}>
-							Você ainda não possui a experiência necessária para realizar esta trilha. Para liberar seu acesso, agende uma conversa com um dos nossos guias.
-						</div>
-					)}
+					{/* Mensagem de alerta removida conforme solicitado */}
 					<button 
 						className={`inscricao-trilha-btn ${inscrito ? 'disabled' : ''}`}
 						onClick={() => {

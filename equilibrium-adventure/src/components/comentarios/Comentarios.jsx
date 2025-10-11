@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import ButtonSubmitForm from '../button-padrao/button-submit-form';
 import './Comentarios.css';
 
 const Comentarios = ({ comentariosIniciais = [], onEnviarComentario }) => {
@@ -45,9 +46,7 @@ const Comentarios = ({ comentariosIniciais = [], onEnviarComentario }) => {
           maxLength={120}
           className="comentario-input"
         />
-        <button type="submit" className="comentario-btn">
-          Enviar
-        </button>
+        <ButtonSubmitForm type="submit" title="Enviar" />
       </form>
     </div>
   );
