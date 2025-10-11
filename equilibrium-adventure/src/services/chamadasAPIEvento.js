@@ -1,4 +1,5 @@
 import axios from "axios";
+import dayjs from "dayjs";
 
 // Função para ler o conteúdo completo de um arquivo
 async function lerConteudoArquivo(arquivo) {
@@ -154,4 +155,47 @@ export async function buscarCep(cep) {
     const data = await response.json();
     if (data.erro) throw new Error("CEP não encontrado");
     return data;
+}
+
+
+export async function ativarEvento(formDataValues) {
+  try {
+
+    const horaInicio = `${formDataValues.horaInicio}:00`
+    const horaFinal = `${formDataValues.horaFim}:00`
+
+
+
+
+    console.log("horaInicio formatada:", horaInicio);
+    console.log("horaFim formatada:", horaFinal);
+
+    const dataAtivacao = dayjs().format("YYYY-MM-DD");
+
+    const eventoId = formDataValues.evento ?? formDataValues.idEvento ?? formDataValues.id;
+
+    const payload = {
+      horaInicio,
+      horaFinal: horaFinal,
+      tempoEstimado: formDataValues.duracao ? parseFloat(formDataValues.duracao) : null,
+      limiteInscritos: formDataValues.limiteInscritos ? parseInt(formDataValues.limiteInscritos, 10) : null,
+      dataAtivacao,
+      tipo: formDataValues.categoria,
+      estado: "NAO_INICIADO",
+      preco: formDataValues.preco ? parseFloat(formDataValues.preco) : null,
+      eventoId: eventoId ? parseInt(eventoId, 10) : null
+    };
+
+    console.log("ativarEvento payload:", payload);
+
+    const response = await axios.post(
+      `http://localhost:8080/adiministrador/cadastrar-evento-ativo`, 
+      payload
+    );
+
+    return true;
+  } catch (error) {
+    console.error("Erro:", error.response?.data || error.message);
+    return false;
+  }
 }
