@@ -5,6 +5,9 @@ import { data, useNavigate } from "react-router-dom";
 import { useEffect, useState } from 'react';
 import useGoBack from "../../utils/useGoBack";
 import Header from "../../components/header/header-unified";
+import Header from "../../components/header/header-unified";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const RelatorioAnamnese = () => {
 

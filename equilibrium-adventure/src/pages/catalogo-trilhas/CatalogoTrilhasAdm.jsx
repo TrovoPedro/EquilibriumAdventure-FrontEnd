@@ -35,10 +35,8 @@ const CatalogoTrilhas = () => {
       if (!usuario?.id) return;
 
       try {
-        // 1️⃣ Carregar eventos base
         const eventosData = await buscarEventosPorGuia(usuario.id);
 
-        // 2️⃣ Para cada evento, tentar buscar imagem
         const eventosComImagens = await Promise.all(
           eventosData.map(async (evento) => {
             const imagemUrl = await buscarImagemEvento(evento.id_evento);
@@ -60,10 +58,8 @@ const CatalogoTrilhas = () => {
       }
 
       try {
-        // 3️⃣ Carregar eventos ativos
         const eventosAtivosData = await buscarEventosAtivosPorGuia(usuario.id);
 
-        // 4️⃣ Buscar imagens dos eventos ativos
         const ativosComImagens = await Promise.all(
           eventosAtivosData.map(async (evento) => {
             const imagemUrl = await buscarImagemEvento(evento.id_evento);

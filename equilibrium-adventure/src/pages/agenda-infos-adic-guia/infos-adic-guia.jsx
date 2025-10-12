@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./infos-adic-guia.css";
 import Header from "../../components/header/header-unified";
-import Beneficiario from "../../assets/beneficiario.png";
+import defaultAvatar from "../../assets/imagem-do-usuario-grande.png";
 import Trilha from "../../assets/cachoeiralago.jpg";
 import ButtonAlterar from "../../components/button-padrao/button-alterar"
 import Evento1 from "../../assets/cachoeiralago.jpg";
@@ -11,26 +11,33 @@ import EscolhaDataCard from "../escolher-data/escolher-data";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
+import { buscarImagemUsuario } from "../../services/apiUsuario";
+import { useAuth } from "../../context/AuthContext";
 
 const CriarInformacoesAdicionaisGuia = (title, onClick) => {
     const [showEscolherData, setShowEscolherData] = useState(false);
     const titulo = "Salvar Alterações";
     const redirect = useNavigate();
+    const { usuario, logout } = useAuth();
+    const idUsuario = usuario?.id;
+    const [avatarUrl, setAvatarUrl] = useState(null);
+    const tipoUsuario = usuario?.tipoUsuario;
+    const nomeUsuario = usuario?.nome;
 
     const handleBack = () => {
-        redirect(-1); // Volta para a página anterior
+        redirect(-1);
     };
 
     const handleOnClickRelatorio = () => {
-       redirect(routeUrls.RELATORIO_ANAMNESE);
+        redirect(routeUrls.RELATORIO_ANAMNESE);
     }
 
     const handleOnClickMaisInfo = () => {
-         redirect(routeUrls.INSCRICAO_TRILHAS);
+        redirect(routeUrls.INSCRICAO_TRILHAS);
     }
 
     const handleOnClickCard = () => {
-         redirect(routeUrls.DADOS_CLIENTE);
+        redirect(routeUrls.DADOS_CLIENTE);
     }
 
     const handleEditInfo = () => {
@@ -51,162 +58,176 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
         }
     };
 
+    useEffect(() => {
+        const buscaImagem = async () => {
+            if (!idUsuario) return;
+            const url = await buscarImagemUsuario(idUsuario);
+            setAvatarUrl(url);
+        };
+
+        buscaImagem();
+    }, [idUsuario]);
+
     return (
-    <>
-      <Header />
-    <div className="infos-adic-guia-page" style={{ background: '#fff' }}>
-        <div className="home-container">
-        <div className="cards-father">
-            <div className="card-info-guia">
-                <div className="info-pessoais-header">
-                    <ButtonBack onClick={handleBack} />
-                    <h2>Informações Pessoais</h2>
-                </div>
-                <div className="personal-info-card">
-                    <div className="user-photo">
-                        <img src={Beneficiario} alt="Foto do usuário"/>
-                    </div>
-                    <div className="user-info-content">
-                        <div className="user-info">
-                            <h3>Edgar de Mendonça Oliveira</h3>
-                            <span className="user-role">Administrador</span>
-                        </div>
-                        <button className="edit-info-btn" onClick={handleEditInfo}>Editar Informações</button>
-                    </div>
-                </div>
-            </div>
-            <div className="card-imagem">
-                <h2>Próximo Evento</h2>
-                <div className="next-event-card">
-                    <img src={Trilha} alt="EVENTO"/>
-                </div>
-            </div>
-        </div>
-        <div className="cards-eventos">
-            <div className="eventos-anamnese-ativos">
-                <h2>Próximas Anamneses</h2>
-                <div className="anamneses-container">
-                    <button className="nav-arrow nav-left" onClick={() => scrollLeft('anamneses-cards')}>‹</button>
-                    
-                    <div className="anamneses-cards">
-                        <div className="anamnese-card">
-                            <div className="anamnese-info" onClick={() => handleOnClickCard()}>
-                                <div className="anamnese-initial" style={{ backgroundColor: "#9c27b0" }}>
-                                    C
+        <>
+            <Header />
+            <div className="infos-adic-guia-page" style={{ background: '#fff' }}>
+                <div className="home-container">
+                    <div className="cards-father">
+                        <div className="card-info-guia">
+                            <div className="info-pessoais-header">
+                                <ButtonBack onClick={handleBack} />
+                                <h2>Informações Pessoais</h2>
+                            </div>
+                            <div className="personal-info-card">
+                                <div className="user-photo">
+                                    <img
+                                        src={avatarUrl || defaultAvatar}
+                                        alt="Imagem Usuário"
+                                        onError={(e) => (e.target.src = defaultAvatar)}
+                                    />
                                 </div>
-                                <div className="anamnese-details">
-                                    <span className="anamnese-date">Oct 15 , 10:00</span>
-                                    <h4>Carolina Andrade</h4>
+                                <div className="user-info-content">
+                                    <div className="user-info">
+                                        <h3>{nomeUsuario}</h3>
+                                        <span className="user-role">{tipoUsuario}</span>
+                                    </div>
+                                    <button className="edit-info-btn" onClick={handleEditInfo}>Editar Informações</button>
                                 </div>
                             </div>
-                            <button className="anamnese-relatorio-btn" onClick={handleOnClickRelatorio}>
-                                Relatório
-                            </button>
                         </div>
-
-                        <div className="anamnese-card">
-                            <div className="anamnese-info" onClick={() => handleOnClickCard()}>
-                                <div className="anamnese-initial" style={{ backgroundColor: "#26c6da" }}>
-                                    J
-                                </div>
-                                <div className="anamnese-details">
-                                    <span className="anamnese-date">Oct 18 , 11:30</span>
-                                    <h4>João Ribeiro</h4>
-                                </div>
+                        <div className="card-imagem">
+                            <h2>Próximo Evento</h2>
+                            <div className="next-event-card">
+                                <img src={Trilha} alt="EVENTO" />
                             </div>
-                            <button className="anamnese-relatorio-btn" onClick={handleOnClickRelatorio}>
-                                Relatório
-                            </button>
-                        </div>
-
-                        <div className="anamnese-card">
-                            <div className="anamnese-info" onClick={() => handleOnClickCard()}>
-                                <div className="anamnese-initial" style={{ backgroundColor: "#f44336" }}>
-                                    L
-                                </div>
-                                <div className="anamnese-details">
-                                    <span className="anamnese-date">Oct 20 , 12:00</span>
-                                    <h4>Leandro Alves</h4>
-                                </div>
-                            </div>
-                            <button className="anamnese-relatorio-btn" onClick={handleOnClickRelatorio}>
-                                Relatório
-                            </button>
                         </div>
                     </div>
-                    
-                    <button className="nav-arrow nav-right" onClick={() => scrollRight('anamneses-cards')}>›</button>
-                </div>
-                
-                <div className="filtro-button-data">
-                    <button
-                        className="button-add-data"
-                        onClick={() => setShowEscolherData(true)}
-                    >
-                        Adicionar datas
-                    </button>
-                </div>
-            </div>
+                    <div className="cards-eventos">
+                        <div className="eventos-anamnese-ativos">
+                            <h2>Próximas Anamneses</h2>
+                            <div className="anamneses-container">
+                                <button className="nav-arrow nav-left" onClick={() => scrollLeft('anamneses-cards')}>‹</button>
 
-            <div className="eventos-anamnese-ativos">
-                <h2>Eventos Ativos</h2>
-                <div className="eventos-container">
-                    <button className="nav-arrow nav-left" onClick={() => scrollLeft('eventos-cards')}>‹</button>
-                    
-                    <div className="eventos-cards">
-                        <div className="evento-ativo-card">
-                            <div className="evento-image">
-                                <img src={Evento1} alt="EVENTO"/>
+                                <div className="anamneses-cards">
+                                    <div className="anamnese-card">
+                                        <div className="anamnese-info" onClick={() => handleOnClickCard()}>
+                                            <div className="anamnese-initial" style={{ backgroundColor: "#9c27b0" }}>
+                                                C
+                                            </div>
+                                            <div className="anamnese-details">
+                                                <span className="anamnese-date">Oct 15 , 10:00</span>
+                                                <h4>Carolina Andrade</h4>
+                                            </div>
+                                        </div>
+                                        <button className="anamnese-relatorio-btn" onClick={handleOnClickRelatorio}>
+                                            Relatório
+                                        </button>
+                                    </div>
+
+                                    <div className="anamnese-card">
+                                        <div className="anamnese-info" onClick={() => handleOnClickCard()}>
+                                            <div className="anamnese-initial" style={{ backgroundColor: "#26c6da" }}>
+                                                J
+                                            </div>
+                                            <div className="anamnese-details">
+                                                <span className="anamnese-date">Oct 18 , 11:30</span>
+                                                <h4>João Ribeiro</h4>
+                                            </div>
+                                        </div>
+                                        <button className="anamnese-relatorio-btn" onClick={handleOnClickRelatorio}>
+                                            Relatório
+                                        </button>
+                                    </div>
+
+                                    <div className="anamnese-card">
+                                        <div className="anamnese-info" onClick={() => handleOnClickCard()}>
+                                            <div className="anamnese-initial" style={{ backgroundColor: "#f44336" }}>
+                                                L
+                                            </div>
+                                            <div className="anamnese-details">
+                                                <span className="anamnese-date">Oct 20 , 12:00</span>
+                                                <h4>Leandro Alves</h4>
+                                            </div>
+                                        </div>
+                                        <button className="anamnese-relatorio-btn" onClick={handleOnClickRelatorio}>
+                                            Relatório
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <button className="nav-arrow nav-right" onClick={() => scrollRight('anamneses-cards')}>›</button>
                             </div>
-                            <div className="evento-info">
-                                <span className="evento-date">Nov 13 , 17:00</span>
-                                <h4>Cachoeira</h4>
-                                <button onClick={() => handleOnClickMaisInfo()} className="evento-info-btn">
-                                    Mais Informações
+
+                            <div className="filtro-button-data">
+                                <button
+                                    className="button-add-data"
+                                    onClick={() => setShowEscolherData(true)}
+                                >
+                                    Adicionar datas
                                 </button>
                             </div>
                         </div>
 
-                        <div className="evento-ativo-card">
-                            <div className="evento-image">
-                                <img src={Evento2} alt="EVENTO"/>
-                            </div>
-                            <div className="evento-info">
-                                <span className="evento-date">Nov 19 , 14:30</span>
-                                <h4>Montanha</h4>
-                                <button onClick={() => handleOnClickMaisInfo()} className="evento-info-btn">
-                                    Mais Informações
-                                </button>
-                            </div>
-                        </div>
+                        <div className="eventos-anamnese-ativos">
+                            <h2>Eventos Ativos</h2>
+                            <div className="eventos-container">
+                                <button className="nav-arrow nav-left" onClick={() => scrollLeft('eventos-cards')}>‹</button>
 
-                        <div className="evento-ativo-card ">
-                            <div className="evento-image">
-                                <img src={Evento3} alt="EVENTO"/>
-                            </div>
-                            <div className="evento-info">
-                                <span className="evento-date">Nov 24 , 18:00</span>
-                                <h4>Trilha</h4>
-                                <button onClick={() => handleOnClickMaisInfo()} className="evento-info-btn">
-                                    Mais Informações
-                                </button>
+                                <div className="eventos-cards">
+                                    <div className="evento-ativo-card">
+                                        <div className="evento-image">
+                                            <img src={Evento1} alt="EVENTO" />
+                                        </div>
+                                        <div className="evento-info">
+                                            <span className="evento-date">Nov 13 , 17:00</span>
+                                            <h4>Cachoeira</h4>
+                                            <button onClick={() => handleOnClickMaisInfo()} className="evento-info-btn">
+                                                Mais Informações
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="evento-ativo-card">
+                                        <div className="evento-image">
+                                            <img src={Evento2} alt="EVENTO" />
+                                        </div>
+                                        <div className="evento-info">
+                                            <span className="evento-date">Nov 19 , 14:30</span>
+                                            <h4>Montanha</h4>
+                                            <button onClick={() => handleOnClickMaisInfo()} className="evento-info-btn">
+                                                Mais Informações
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div className="evento-ativo-card ">
+                                        <div className="evento-image">
+                                            <img src={Evento3} alt="EVENTO" />
+                                        </div>
+                                        <div className="evento-info">
+                                            <span className="evento-date">Nov 24 , 18:00</span>
+                                            <h4>Trilha</h4>
+                                            <button onClick={() => handleOnClickMaisInfo()} className="evento-info-btn">
+                                                Mais Informações
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <button className="nav-arrow nav-right" onClick={() => scrollRight('eventos-cards')}>›</button>
                             </div>
                         </div>
                     </div>
-                    
-                    <button className="nav-arrow nav-right" onClick={() => scrollRight('eventos-cards')}>›</button>
+                    {showEscolherData && (
+                        <EscolhaDataCard
+                            onClose={() => setShowEscolherData(false)}
+                            fkAventureiro={null}
+                        />
+                    )}
                 </div>
             </div>
-        </div>
-        {showEscolherData && (
-            <EscolhaDataCard
-                onClose={() => setShowEscolherData(false)}
-                fkAventureiro={null}
-            />
-        )}
-      </div>
-      </div>
-    </>
+        </>
     )
 }
 export default CriarInformacoesAdicionaisGuia

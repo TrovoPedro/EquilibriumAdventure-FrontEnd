@@ -18,7 +18,7 @@ export const buscarDadosUsuario = async (id) => {
 
 export async function buscarImagemUsuario(idUsuario) {
   try {
-    const response = await api.get(`/informacoes-pessoais/${idUsuario}/imagem`, {
+    const response = await api.get(`/usuarios/imagem/${idUsuario}`, {
       responseType: "blob",
     });
 

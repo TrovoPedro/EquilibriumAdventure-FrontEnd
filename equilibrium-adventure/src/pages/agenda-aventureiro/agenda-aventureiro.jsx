@@ -1,6 +1,7 @@
+import React, { useState, useEffect } from "react";
 import "./agenda-aventureiro.css"
 import Homem from "../../assets/homem2.jpeg";
-import Mulher1 from "../../assets/mulher1.jpeg";
+import defaultAvatar from "../../assets/imagem-do-usuario-grande.png";
 import Trilha from "../../assets/cachoeiralago.jpg";
 import Header from "../../components/header/header-unified";
 import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
@@ -8,9 +9,30 @@ import ButtonDangerForm from "../../components/button-padrao/button-danger-form"
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
+import { buscarImagemUsuario } from "../../services/apiUsuario";
+import { useAuth } from "../../context/AuthContext";
 
 const CriarAgendaAventureiro = () => {
     const navigate = useNavigate();
+    const { usuario, logout } = useAuth();
+    const idUsuario = usuario?.id;
+    const [avatarUrl, setAvatarUrl] = useState(null);
+    const tipoUsuario = usuario?.tipoUsuario;
+    const nomeUsuario = usuario?.nome;
+
+    const handleBack = () => {
+        redirect(-1);
+    };
+
+    useEffect(() => {
+        const buscaImagem = async () => {
+            if (!idUsuario) return;
+            const url = await buscarImagemUsuario(idUsuario);
+            setAvatarUrl(url);
+        };
+
+        buscaImagem();
+    }, [idUsuario]);
 
     return (
         <>
@@ -26,12 +48,16 @@ const CriarAgendaAventureiro = () => {
                         </div>
                         <div className="personal-info-card">
                             <div className="user-photo">
-                                <img src={Mulher1} alt="Foto do usuário"/>
+                                <img
+                                    src={avatarUrl || defaultAvatar}
+                                    alt="Imagem Usuário"
+                                    onError={(e) => (e.target.src = defaultAvatar)}
+                                />
                             </div>
                             <div className="user-info-content">
                                 <div className="user-info">
-                                    <h3>Juliana Lima</h3>
-                                    <span className="user-role">Aventureira</span>
+                                    <h3>{nomeUsuario}</h3>
+                                    <span className="user-role">{tipoUsuario}</span>
                                 </div>
                                 <ButtonSubmitForm title="Mais Informações" type="button" onClick={() => navigate(routeUrls.INFORMACOES_PESSOAIS)} />
                             </div>
@@ -40,7 +66,7 @@ const CriarAgendaAventureiro = () => {
                     <div className="card-imagem">
                         <h2>Próximo Evento</h2>
                         <div className="next-event-card">
-                            <img src={Trilha} alt="EVENTO"/>
+                            <img src={Trilha} alt="EVENTO" />
                         </div>
                     </div>
                 </div>

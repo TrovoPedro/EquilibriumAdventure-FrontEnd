@@ -6,6 +6,7 @@ import imgDefault from "../../assets/imagem-do-usuario.png";
 import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
 import { useGuide } from "../../context/GuideContext";
+import { buscarImagemUsuario } from "../../services/apiUsuario";
 import axios from "axios";
 
 const Header = () => {
@@ -24,30 +25,16 @@ const Header = () => {
     resetarEscolhaGuia();
   };
 
-  // 🔹 Busca imagem do usuário logado ao carregar o Header
   useEffect(() => {
-    const buscarImagemUsuario = async () => {
+    const buscaImagemHeader = async () => {
       if (!idUsuario) return;
-
-      try {
-        const response = await axios.get(
-          `http://localhost:8080/informacoes/${idUsuario}/imagem`,
-          { responseType: "blob" }
-        );
-
-        // Transforma blob em URL de imagem
-        const imageUrl = URL.createObjectURL(response.data);
-        setAvatarUrl(imageUrl);
-      } catch (error) {
-        console.error("Erro ao carregar imagem do usuário:", error);
-        setAvatarUrl(null); // fallback padrão será usado
-      }
+      const url = await buscarImagemUsuario(idUsuario);
+      setAvatarUrl(url);
     };
 
-    buscarImagemUsuario();
+    buscaImagemHeader();
   }, [idUsuario]);
 
-  // Configurações específicas para cada tipo de usuário
   const userConfigs = {
     ADMINISTRADOR: {
       defaultAvatar: imgDefault,
