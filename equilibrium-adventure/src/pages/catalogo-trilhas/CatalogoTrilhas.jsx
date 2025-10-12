@@ -1,66 +1,57 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 import "./CatalogoTrilhas.css";
 import Header from "../../components/header/header-unified";
 import BotpressChat from "../../components/botpress-chat/BotpressChat";
-import catalogo1 from "../../assets/chile.jpg";
-import catalogo2 from "../../assets/amazonia.jpg";
-import catalogo3 from "../../assets/montanha.jpg";
-import catalogo4 from "../../assets/pordosol.jpg";
-import catalogo5 from "../../assets/cachoeira.jpg";
-import catalogo6 from "../../assets/pedra.jpg";
-import catalogo7 from "../../assets/caminhoarvores.jpg";
-import catalogo8 from "../../assets/cachoeiralago.jpg";
-
-const trilhas = [
-  { img: catalogo1, alt: "Trilha montanha" },
-  { img: catalogo2, alt: "Trilha nascente" },
-  { img: catalogo3, alt: "Trilha bike" },
-  { img: catalogo4, alt: "Trilha deserto" },
-  { img: catalogo5, alt: "Trilha cachoeira" },
-];
-
-// Agora cada anúncio usa uma imagem diferente do assets (6 a 13):
-const anuncios = [
-  {
-    img: catalogo6,
-    local: "Minas Gerais",
-    titulo: "Trilha da Serra do Cipó",
-    descricao: "Explore cachoeiras e montanhas em um dos destinos mais bonitos de MG.",
-    preco: "R$120",
-    nota: 4.8,
-    reviews: 320,
-  },
-  {
-    img: catalogo7,
-    local: "Chapada Diamantina",
-    titulo: "Caminho das Águas Claras",
-    descricao: "Aventura por rios cristalinos e paisagens de tirar o fôlego.",
-    preco: "R$150",
-    nota: 4.9,
-    reviews: 210,
-  },
-  {
-    img: catalogo8,
-    local: "Petrópolis",
-    titulo: "Trilha do Imperador",
-    descricao: "História e natureza em um só passeio pelas montanhas do RJ.",
-    preco: "R$100",
-    nota: 4.7,
-    reviews: 180,
-  },
-];
+import catalogoFallback from "../../assets/chile.jpg"; // imagem padrão
+import { buscarEventosAtivosPorGuia, buscarImagemEvento } from "../../services/apiEvento";
+import { useGuide } from "../../context/GuideContext"
 
 const CatalogoTrilhas = () => {
   const navigate = useNavigate();
-  const handleSaibaMais = () => {
-    navigate(routeUrls.INSCRICAO_TRILHAS);
-  };
-  
-  const handleDetalhes = () => {
-    navigate(routeUrls.INSCRICAO_TRILHAS);
-  };
+  const { guiaSelecionado } = useGuide();
+  const [trilhas, setTrilhas] = useState([]);
+  const [loading, setLoading] = useState({ trilhas: true, anuncios: true });
+  const [error, setError] = useState({ trilhas: null, anuncios: null });
+
+  useEffect(() => {
+    let isMounted = true;
+
+    const carregarTrilhas = async () => {
+      try {
+        const trilhasData = await buscarEventosAtivosPorGuia(guiaSelecionado?.id || 0);
+        const trilhasComImagens = await Promise.all(
+          trilhasData.map(async (trilha) => {
+            const imagemUrl = await buscarImagemEvento(trilha.id_evento);
+            return { ...trilha, imagemUrl: imagemUrl || catalogoFallback };
+          })
+        );
+
+        if (isMounted) {
+          setTrilhas(trilhasComImagens);
+          setError((prev) => ({ ...prev, trilhas: null }));
+        }
+      } catch (err) {
+        console.error("Erro ao carregar trilhas:", err);
+        if (isMounted)
+          setError((prev) => ({ ...prev, trilhas: "Erro ao carregar trilhas." }));
+      } finally {
+        if (isMounted)
+          setLoading((prev) => ({ ...prev, trilhas: false }));
+      }
+    };
+
+    carregarTrilhas();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
+
+  const handleSaibaMais = (eventoId) => navigate(`${routeUrls.INSCRICAO_TRILHAS}/${eventoId}`);
+  const handleDetalhes = (eventoId) => navigate(`${routeUrls.INSCRICAO_TRILHAS}/${eventoId}`);
+
   return (
     <>
       <BotpressChat />
@@ -74,7 +65,11 @@ const CatalogoTrilhas = () => {
               <p>Bora achar sua próxima trilha?</p>
             </div>
             <div className="search-box">
-              <input type="text" placeholder="Escreva aqui" className="pesquisar-trilha" />
+              <input
+                type="text"
+                placeholder="Escreva aqui"
+                className="pesquisar-trilha"
+              />
               <button>Procurar</button>
             </div>
           </div>
@@ -83,46 +78,81 @@ const CatalogoTrilhas = () => {
         {/* Seção de destinos */}
         <section className="destinos">
           <h2>Destinos que você vai amar conhecer</h2>
-          <div className="destinos-grid">
-            {trilhas.map((trilha, idx) => (
-              <div className={`destino-card destino-img${idx + 1}`} key={idx}>
-                <img src={trilha.img} alt={trilha.alt} className="destino-img" loading="lazy" />
-                <div className="destino-overlay">
-                  <button className="destino-detalhes-btn" onClick={handleDetalhes}>
-                    Detalhes
-                  </button>
+          {loading.trilhas ? (
+            <p>Carregando trilhas...</p>
+          ) : error.trilhas ? (
+            <p className="erro-msg">{error.trilhas}</p>
+          ) : (
+            <div className="destinos-grid">
+              {trilhas.map((trilha) => (
+                <div className="destino-card" key={trilha.id_evento}>
+                  <img
+                    src={trilha.imagemUrl}
+                    alt={trilha.nome}
+                    className="destino-img"
+                    loading="lazy"
+                  />
+                  <div className="destino-overlay">
+                    <button
+                      className="destino-detalhes-btn"
+                      onClick={() => handleDetalhes(trilha.id_evento
+                      )}
+                    >
+                      Detalhes
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
 
-        {/* Seção de anúncios de trilhas */}
+        {/* Seção de anúncios */}
         <section className="anuncios-trilhas">
           <h2 className="anuncios-titulo">Um mundo de opções para você escolher</h2>
-          <div className="anuncios-grid">
-            {anuncios.map((anuncio, idx) => (
-              <div className="anuncio-card" key={idx}>
-                <div className="anuncio-img-wrap">
-                  <img src={anuncio.img} alt={anuncio.titulo} className="anuncio-img" loading="lazy" />
-                </div>
-                <div className="anuncio-info">
-                  <span className="anuncio-local">{anuncio.local}</span>
-                  <h3 className="anuncio-titulo">{anuncio.titulo}</h3>
-                  <p className="anuncio-desc">{anuncio.descricao}</p>
-                  <div className="anuncio-footer">
-                    <span className="anuncio-preco">{anuncio.preco}<span className="anuncio-preco-unidade">/pessoa</span></span>
-                    <div className="anuncio-btn-group">
-                      <button className="anuncio-btn" onClick={handleSaibaMais}>Saiba Mais</button>
+          {loading.trilhas ? (
+            <p>Carregando anúncios...</p>
+          ) : error.trilhas ? (
+            <p className="erro-msg">{error.trilhas}</p>
+          ) : (
+            <div className="anuncios-grid">
+              {trilhas.map((trilha) => (
+                <div className="anuncio-card" key={trilha.id_evento}>
+                  <div className="anuncio-img-wrap">
+                    <img
+                      src={trilha.imagemUrl}
+                      alt={trilha.titulo}
+                      className="anuncio-img"
+                      loading="lazy"
+                    />
+                  </div>
+                  <div className="anuncio-info">
+                    <span className="anuncio-local">{trilha.rua}</span>
+                    <h3 className="anuncio-titulo">{trilha.nome_evento}</h3>
+                    <p className="anuncio-desc">{trilha.descricao}</p>
+                    <div className="anuncio-footer">
+                      <span className="anuncio-preco">
+                        {trilha.preco}
+                        <span className="anuncio-preco-unidade">/pessoa</span>
+                      </span>
+                      <div className="anuncio-btn-group">
+                        <button
+                          className="anuncio-btn"
+                          onClick={() => handleSaibaMais(trilha.id_evento)}
+                        >
+                          Saiba Mais
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          )}
         </section>
       </div>
     </>
   );
 };
+
 export default CatalogoTrilhas;

@@ -1,5 +1,7 @@
 import "./relatorio-anamnese.css"
 import Header from "../../components/header/header-unified";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const RelatorioAnamnese = () => {
 

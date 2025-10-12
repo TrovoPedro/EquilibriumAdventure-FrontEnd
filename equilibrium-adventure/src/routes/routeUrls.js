@@ -13,7 +13,7 @@ const routeUrls = {
     ATIVAR_EVENTO: '/ativar-evento/:id',
     CRIAR_INFOS_ADIC_GUIA: '/infos-adic-guia',
     CATALOGO_TRILHAS_ADM: '/catalogo-trilhas-adm',
-    INSCRICAO_TRILHAS: '/inscricao-trilhas',
+    INSCRICAO_TRILHAS: '/inscricao-trilhas/:id',
     ADICIONAR_GUIA: '/adicionar-guia',
     VER_GUIAS:'/ver-guias',
     ESCOLHER_DATA: '/escolher-data',

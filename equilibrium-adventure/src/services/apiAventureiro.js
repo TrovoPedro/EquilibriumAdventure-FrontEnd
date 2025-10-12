@@ -66,3 +66,13 @@ export const calcularNivel = async (usuarioId) => {
     throw error;
   }
 };
+
+export const inicializarPerguntas = async () => {
+  try {
+    const response = await api.get('/perguntas/inicializar');
+    return response.status; // deve retornar 204 se não houver conteúdo
+  } catch (error) {
+    console.error('Erro ao inicializar perguntas:', error);
+    throw error;
+  }
+};
