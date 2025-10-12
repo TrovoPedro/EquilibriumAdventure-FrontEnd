@@ -49,8 +49,12 @@ const CatalogoTrilhas = () => {
     };
   }, []);
 
-  const handleSaibaMais = (eventoId) => navigate(`${routeUrls.INSCRICAO_TRILHAS}/${eventoId}`);
-  const handleDetalhes = (eventoId) => navigate(`${routeUrls.INSCRICAO_TRILHAS}/${eventoId}`);
+  const handleSaibaMais = (eventoId) => {
+      navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', eventoId));
+  };
+  const handleDetalhes = (eventoId) => {
+      navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', eventoId));
+  };
 
   return (
     <>
