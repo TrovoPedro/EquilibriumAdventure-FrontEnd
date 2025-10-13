@@ -174,5 +174,59 @@ export const cadastrarPerfilCompleto = async (usuarioId, dtoCadastro) => {
   }
 };
 
+// Atualizar apenas a imagem do usuário
+export const atualizarImagemUsuario = async (usuarioId, imagemUsuario) => {
+  try {
+    console.log("PATCH /usuarios/", usuarioId, "/imagem");
+    
+    const formData = new FormData();
+    formData.append("imagem", imagemUsuario);
+
+    const response = await api.patch(`/usuarios/${usuarioId}/imagem`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    console.log("Imagem atualizada com sucesso:", response.data);
+    return response.data;
+  } catch (error) {
+    console.error("ERRO - atualizarImagemUsuario:", {
+      message: error.message,
+      status: error.response?.status,
+      data: error.response?.data,
+      config: error.config
+    });
+    
+    throw error;
+  }
+};
+
+// Buscar imagem do usuário
+export const buscarImagemUsuario = async (usuarioId) => {
+  try {
+    console.log("GET /usuarios/", usuarioId, "/imagem");
+    
+    const response = await api.get(`/usuarios/${usuarioId}/imagem`, {
+      responseType: 'blob'
+    });
+
+    console.log("Imagem do usuário recebida");
+    return URL.createObjectURL(response.data);
+  } catch (error) {
+    console.error("ERRO - buscarImagemUsuario:", {
+      message: error.message,
+      status: error.response?.status
+    });
+    
+    // Se for 404, significa que não há imagem
+    if (error.response?.status === 404) {
+      return null;
+    }
+    
+    throw error;
+  }
+};
+
 
 export default api;
