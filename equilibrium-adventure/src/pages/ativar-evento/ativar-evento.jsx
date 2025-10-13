@@ -36,7 +36,6 @@ export default function AtivarEvento() {
   const handleChange = (e) => {
 
     const { name, value } = e.target;
-    console.log(name, value);
     setFormData(prev => ({
       ...prev,
       [name]: value
@@ -50,6 +49,26 @@ export default function AtivarEvento() {
       swal.fire({
         title: "Erro!",
         text: "Por favor, preencha todos os campos obrigatórios.",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
+      return;
+    }
+
+    if (formData.horaInicio >= formData.horaFim) {
+      swal.fire({
+        title: "Erro!",
+        text: "A hora de início deve ser anterior à hora de fim.",
+        icon: "error",
+        confirmButtonText: "OK"
+      });
+      return;
+    }
+
+    if (formData.dataEvento < dayjs().format("YYYY-MM-DD")) {
+      swal.fire({
+        title: "Erro!",
+        text: "A data do evento não pode ser anterior à data atual.",
         icon: "error",
         confirmButtonText: "OK"
       });
