@@ -1,12 +1,24 @@
-import React from "react";
+import React, { useState } from "react";
 import "./info-pessoais-card.css";
 import { maskTelefone } from "../../utils/maskTelefone";
 import { maskCPF } from "../../utils/maskCpf";
 import { maskData } from "../../utils/maskData";
 import { maskRG } from "../../utils/maskRg";
 import { validatePhone } from "../../utils/validatePhone";
+import imagemPadraoUsuario from "../../assets/imagem-do-usuario.png";
 
-export default function InfoPessoaisCard({ formData, onInputChange, errors, readOnly = false }) {
+export default function InfoPessoaisCard({ 
+  formData, 
+  onInputChange, 
+  errors, 
+  readOnly = false,
+  imagemPerfil,
+  previewImagem,
+  imagemAtual,
+  onImageUpload,
+  onRemoveImage
+}) {
+  const [showSuccessAnimation, setShowSuccessAnimation] = useState(false);
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     let maskedValue = value;
@@ -51,9 +63,93 @@ export default function InfoPessoaisCard({ formData, onInputChange, errors, read
     onInputChange(name, maskedValue);
   };
 
+  // Função para lidar com o upload da imagem e ativar animação
+  const handleImageUploadWithAnimation = (event) => {
+    onImageUpload(event);
+    
+    setShowSuccessAnimation(true);
+    
+    setTimeout(() => {
+      setShowSuccessAnimation(false);
+    }, 2000);
+  };
+
   return (
     <form className="form-section" autoComplete="off">
       <h2>1 - Informações Pessoais</h2>
+      
+      {/* Seção de Upload de Imagem de Perfil */}
+      {!readOnly && (
+        <div className={`profile-image-section ${showSuccessAnimation ? 'success' : ''}`}>
+          <div className="profile-image-container">
+            <div className={`profile-image-preview ${(previewImagem || imagemAtual) && showSuccessAnimation ? 'image-uploaded' : ''}`}>
+              {previewImagem ? (
+                <div className="image-preview">
+                  <img src={previewImagem} alt="Preview da imagem" className="preview-img" />
+                  <button 
+                    type="button" 
+                    className="remove-image-btn"
+                    onClick={onRemoveImage}
+                    title="Remover imagem"
+                  >
+                    ×
+                  </button>
+                </div>
+              ) : imagemAtual ? (
+                <div className="image-preview">
+                  <img src={imagemAtual} alt="Imagem atual do usuário" className="preview-img" />
+                  <button 
+                    type="button" 
+                    className="remove-image-btn"
+                    onClick={onRemoveImage}
+                    title="Remover imagem"
+                  >
+                    ×
+                  </button>
+                </div>
+              ) : (
+                <div className="image-placeholder">
+                  <img src={imagemPadraoUsuario} alt="Imagem padrão" className="default-img" />
+                  <div className="upload-overlay">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M14.2647 15.9377L12.5473 14.2346C12.2326 13.9202 11.7244 13.9202 11.4098 14.2346L9.69238 15.9377" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      <path d="M12 21V14.5" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                      <path d="M20 16V10.5C20 9.05719 20 8.33579 19.6642 7.75989C19.3284 7.18398 18.6648 6.82186 17.3376 6.09762L15.5136 5.07907C13.9911 4.23346 13.2298 3.81065 12 3.81065C10.7702 3.81065 10.0089 4.23346 8.48638 5.07907L6.66239 6.09762C5.33517 6.82186 4.67157 7.18398 4.33579 7.75989C4 8.33579 4 9.05719 4 10.5V16C4 18.8284 4 20.2426 4.87868 21.1213C5.75736 22 7.17157 22 10 22H14C16.8284 22 18.2426 22 19.1213 21.1213C20 20.2426 20 18.8284 20 16Z" stroke="currentColor" strokeWidth="2"/>
+                    </svg>
+                  </div>
+                </div>
+              )}
+            </div>
+            <div className="profile-image-controls">
+              <input
+                type="file"
+                id="profile-image-upload"
+                accept="image/jpeg,image/jpg,image/png,image/webp"
+                onChange={handleImageUploadWithAnimation}
+                className="hidden-file-input"
+              />
+              <label htmlFor="profile-image-upload" className={`upload-btn ${showSuccessAnimation ? 'success' : ''}`}>
+                {showSuccessAnimation ? (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                ) : (
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M21 15V19C21 20.1046 20.1046 21 19 21H5C3.89543 21 3 20.1046 3 19V15" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M7 10L12 15L17 10" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    <path d="M12 15V3" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                )}
+                {showSuccessAnimation ? 'Foto Anexada!' : 'Escolher Foto'}
+              </label>
+              <span className={`upload-hint ${showSuccessAnimation ? 'success' : ''}`}>
+                {showSuccessAnimation ? '✓ Imagem pronta para envio!' : 'JPG, PNG ou WebP • Máx 5MB'}
+              </span>
+            </div>
+          </div>
+        </div>
+      )}
+
       <div className="form-grid">
         <div className="info-pessoais__form-group">
           <label htmlFor="nome">Nome:</label>

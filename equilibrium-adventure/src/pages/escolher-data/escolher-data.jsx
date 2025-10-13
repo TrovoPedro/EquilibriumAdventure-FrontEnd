@@ -4,7 +4,7 @@ import "dayjs/locale/pt-br";
 import updateLocale from "dayjs/plugin/updateLocale";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
+import { DateCalendar, PickersDay } from "@mui/x-date-pickers";
 import {
   Button,
   Card,
@@ -13,43 +13,48 @@ import {
   Box,
   MenuItem,
   Select,
-  IconButton
+  IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 
 import "../escolher-data/escolher-data.css";
-import { buscarDatasDisponiveis, agendarAnamnese } from "../../services/chamadasAPIAgenda";
+import { listarAgenda, adicionarDisponibilidade } from "../../services/chamadasAPIAgenda";
 
 dayjs.extend(updateLocale);
 dayjs.updateLocale("pt-br", { weekStart: 1 });
 dayjs.locale("pt-br");
 
-export default function EscolhaDataCard({ onClose, fkAventureiro }) {
+export default function EscolhaDataCard({ onClose, fkGuia = 1 }) {
   const [value, setValue] = React.useState(null);
   const [hora, setHora] = React.useState("");
-  const [datasDisponiveis, setDatasDisponiveis] = React.useState([]);
+  const [datasExistentes, setDatasExistentes] = React.useState([]);
   const [horariosDisponiveis, setHorariosDisponiveis] = React.useState([]);
 
   React.useEffect(() => {
     async function fetchDatas() {
       try {
-        const datas = await buscarDatasDisponiveis();
-        console.log("Datas do backend:", datas);
-        setDatasDisponiveis(datas);
-        if (datas.length > 0) setValue(dayjs(datas[0].dataDisponivel));
+        const datas = await listarAgenda();
+        setDatasExistentes(datas.map(d => d.dataDisponivel));
+        console.log("Datas existentes:", datas.map(d => d.dataDisponivel)); // <-- Adicione isto
       } catch (err) {
-        alert("Erro ao buscar datas disponíveis.");
+        alert("Erro ao buscar datas já cadastradas.");
+        console.error(err);
       }
     }
     fetchDatas();
   }, []);
 
   React.useEffect(() => {
-    if (value) {
-      const horarios = ["09:00 - 10:00", "10:30 - 11:30", "12:00 - 13:00"];
-      setHorariosDisponiveis(horarios);
+    const horarios = [];
+    let horaAtual = dayjs().hour(9).minute(0).second(0);
+    const horaFinal = dayjs().hour(17).minute(0).second(0);
+
+    while (horaAtual.isBefore(horaFinal)) {
+      horarios.push(horaAtual.format("HH:mm"));
+      horaAtual = horaAtual.add(30, "minute");
     }
-  }, [value]);
+    setHorariosDisponiveis(horarios);
+  }, []);
 
   const handleClose = () => onClose();
 
@@ -59,34 +64,111 @@ export default function EscolhaDataCard({ onClose, fkAventureiro }) {
       return;
     }
 
-    const dataSelecionada = datasDisponiveis.find(d =>
-      dayjs(d.dataDisponivel).isSame(value, "day")
-    );
-
-    if (!dataSelecionada) {
-      alert("Data não encontrada!");
-      return;
-    }
-
     try {
-      await agendarAnamnese({
-        dataId: dataSelecionada.idAgenda,
-        aventureiroId: 1,
-        horario: hora
+      const dataHoraISO = dayjs(value)
+        .hour(parseInt(hora.split(":")[0]))
+        .minute(parseInt(hora.split(":")[1]))
+        .second(0)
+        .format("YYYY-MM-DDTHH:mm:ss");
+
+      await adicionarDisponibilidade({
+        fkGuia,
+        dataDisponivel: dataHoraISO,
       });
 
-      alert("Agendamento realizado!");
+      alert("Disponibilidade adicionada!");
       handleClose();
     } catch (err) {
-      console.error("Erro ao agendar:", err);
-      alert("Erro ao agendar: " + (err.response?.data || err.message));
+      console.error(err);
+      alert("Erro ao adicionar disponibilidade: " + (err.response?.data || err.message));
     }
   };
+
+  const renderDay = (day, _selectedDates, pickersDayProps) => {
+    const diaAtual = dayjs(day).format("YYYY-MM-DD");
+    const existe = datasExistentes.some(d => {
+      const diaExistente = dayjs(d).format("YYYY-MM-DD");
+      return diaExistente === diaAtual;
+    });
+
+    if (existe) {
+      console.log("Desabilitando dia:", diaAtual);
+    }
+
+    return (
+      <PickersDay
+        {...pickersDayProps}
+        disabled={existe}
+        sx={{
+          borderRadius: "50%",
+          backgroundColor: existe
+            ? "#e0e0e0"
+            : pickersDayProps.selected
+            ? "#226144"
+            : undefined,
+          color: existe
+            ? "#999"
+            : pickersDayProps.selected
+            ? "#fff"
+            : undefined,
+          "&:hover": {
+            backgroundColor: existe
+              ? "#ccc"
+              : pickersDayProps.selected
+              ? "#1a4d35"
+              : "#f0f0f0",
+          },
+        }}
+      />
+    );
+  };
+
+  function CustomPickersDay(props) {
+    const { day, datasExistentes, selected, ...other } = props;
+    const diaAtual = dayjs(day).format("YYYY-MM-DD");
+    const existe = datasExistentes.some(d => dayjs(d).format("YYYY-MM-DD") === diaAtual);
+
+    return (
+      <PickersDay
+        {...other}
+        day={day}
+        selected={selected}
+        disabled={existe}
+        sx={{
+          borderRadius: "50%",
+          backgroundColor: existe
+            ? "#e0e0e0"
+            : selected
+            ? "#27ae60"
+            : undefined,
+          color: existe
+            ? "#999"
+            : selected
+            ? "#fff"
+            : undefined,
+          "&:hover": {
+            backgroundColor: existe
+              ? "#ccc"
+              : selected
+              ? "#219150"
+              : "#f0f0f0",
+          },
+          "&.Mui-selected": {
+            backgroundColor: "#27ae60 !important",
+            color: "#fff",
+          },
+          "&.Mui-selected:hover": {
+            backgroundColor: "#219150 !important",
+          },
+        }}
+      />
+    );
+  }
 
   return (
     <div
       className="overlay"
-      style={{ position: "fixed", zIndex: 2000, overflow: "visible" }}
+      style={{ position: "fixed", zIndex: 2000 }}
       onClick={(e) => e.target.classList.contains("overlay") && handleClose()}
     >
       <Card className="card-escolha" style={{ position: "relative", zIndex: 2100 }}>
@@ -98,29 +180,24 @@ export default function EscolhaDataCard({ onClose, fkAventureiro }) {
           </Box>
 
           <Typography variant="h6" align="center" style={{ marginBottom: 8, color: "#226144" }}>
-            Adicione uma data que você esteja disponível:
+            Escolha uma data:
           </Typography>
 
           <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
             <DateCalendar
               value={value}
-              onChange={setValue}
-              dayOfWeekFormatter={day => day.format("ddd")}
-              shouldDisableDate={date =>
-                datasDisponiveis.length > 0
-                  ? !datasDisponiveis.some(d => dayjs(d.dataDisponivel).isSame(date, "day"))
-                  : true
-              }
-              sx={{
-                "& .MuiPickersDay-root.Mui-selected, .MuiPickersDay-root.Mui-selected:hover": {
-                  backgroundColor: "#226144",
-                },
+              onChange={(newValue) => newValue && setValue(newValue)}
+              dayOfWeekFormatter={(day) => day.format("ddd")}
+              slots={{
+                day: (props) => (
+                  <CustomPickersDay {...props} datasExistentes={datasExistentes} />
+                ),
               }}
             />
           </LocalizationProvider>
 
           <Typography variant="h6" align="center" style={{ marginTop: 16, marginBottom: 8, color: "#226144" }}>
-            Adicione um horário que você esteja disponível:
+            Escolha um horário:
           </Typography>
 
           <Box mt={1} mb={2}>
@@ -131,15 +208,14 @@ export default function EscolhaDataCard({ onClose, fkAventureiro }) {
               onChange={(e) => setHora(e.target.value)}
               MenuProps={{
                 disablePortal: true,
-                PaperProps: {
-                  style: { zIndex: 9999, minWidth: 220 },
-                },
+                container: document.body,
+                PaperProps: { style: { minWidth: 220, zIndex: 3000 } },
               }}
             >
               <MenuItem value="">
                 <em>Escolher Horário</em>
               </MenuItem>
-              {horariosDisponiveis.map(h => (
+              {horariosDisponiveis.map((h) => (
                 <MenuItem key={h} value={h}>
                   {h}
                 </MenuItem>
@@ -159,9 +235,7 @@ export default function EscolhaDataCard({ onClose, fkAventureiro }) {
                 padding: "12px 24px",
                 minWidth: "140px",
                 boxShadow: "0 2px 8px rgba(34,97,68,0.13)",
-                "&:hover": {
-                  backgroundColor: "#1a4d35"
-                }
+                "&:hover": { backgroundColor: "#1a4d35" },
               }}
               onClick={handleSave}
             >
@@ -178,13 +252,11 @@ export default function EscolhaDataCard({ onClose, fkAventureiro }) {
                 padding: "12px 24px",
                 minWidth: "140px",
                 boxShadow: "0 2px 8px rgba(34,97,68,0.13)",
-                "&:hover": {
-                  backgroundColor: "#1a4d35"
-                }
+                "&:hover": { backgroundColor: "#1a4d35" },
               }}
-              onClick={handleSave}
+              onClick={handleClose}
             >
-              Ver calendário
+              Ver Calendário
             </Button>
           </Box>
         </CardContent>
