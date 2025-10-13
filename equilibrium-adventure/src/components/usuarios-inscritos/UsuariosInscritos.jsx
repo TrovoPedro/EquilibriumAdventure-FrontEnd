@@ -1,4 +1,6 @@
 import React from 'react';
+import ButtonSubmitForm from '../button-padrao/button-submit-form';
+import ButtonDangerForm from '../button-padrao/button-danger-form';
 import './UsuariosInscritos.css';
 
 const UsuariosInscritos = ({ usuarios, onAprovar, onNegar }) => {
@@ -10,18 +12,14 @@ const UsuariosInscritos = ({ usuarios, onAprovar, onNegar }) => {
           <div key={index} className="usuario-card">
             <span className="usuario-nome">{usuario.nome}</span>
             <div className="usuario-acoes">
-              <button 
-                className="btn-aprovar"
+              <ButtonSubmitForm 
                 onClick={() => onAprovar(usuario.id)}
-              >
-                Detalhes
-              </button>
-              <button 
-                className="btn-negar"
+                title="Detalhes"
+              />
+              <ButtonDangerForm 
                 onClick={() => onNegar(usuario.id)}
-              >
-                Deletar
-              </button>
+                title="Deletar"
+              />
             </div>
           </div>
         ))}

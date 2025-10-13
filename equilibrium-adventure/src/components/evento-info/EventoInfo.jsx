@@ -1,5 +1,7 @@
 import React from 'react';
+import ButtonSubmitForm from '../button-padrao/button-submit-form';
 import './EventoInfo.css';
+import CircleBackButton from '../circle-back-button/circle-back-button';
 
 const EventoInfo = ({ 
   evento, 
@@ -7,8 +9,16 @@ const EventoInfo = ({
   onChange,
   editavel = false 
 }) => {
+  // Função para voltar
+  const handleVoltar = () => {
+    window.history.back();
+  };
+
   return (
     <div className="evento-info-container">
+      <div className="evento-info-top-bar">
+        <CircleBackButton onClick={handleVoltar} />
+      </div>
       <div className="evento-header">
         <div className="evento-imagem">
           <img src={evento.imagem} alt={evento.titulo} />
@@ -100,9 +110,7 @@ const EventoInfo = ({
 
       {editavel && (
         <div className="evento-acoes">
-          <button className="btn-salvar" onClick={onSalvar}>
-            Salvar Alterações
-          </button>
+          <ButtonSubmitForm onClick={onSalvar} title="Salvar Alterações" />
         </div>
       )}
     </div>
