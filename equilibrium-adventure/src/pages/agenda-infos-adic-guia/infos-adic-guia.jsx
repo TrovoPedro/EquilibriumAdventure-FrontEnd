@@ -97,9 +97,9 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                             </div>
                         </div>
                         <div className="card-imagem">
-                            <h2>Próximo Evento</h2>
+                            <h2>Próxima Trilha</h2>
                             <div className="next-event-card">
-                                <img src={Trilha} alt="EVENTO" />
+                                <img src={Trilha} alt="Próxima Trilha" style={{ cursor: 'pointer' }} onClick={handleOnClickMaisInfo} />
                             </div>
                         </div>
                     </div>
@@ -183,7 +183,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                                             <span className="evento-date">Nov 13 , 17:00</span>
                                             <h4>Cachoeira</h4>
                                             <button onClick={() => handleOnClickMaisInfo()} className="evento-info-btn">
-                                                Mais Informações
+                                                Informações
                                             </button>
                                         </div>
                                     </div>
@@ -196,7 +196,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                                             <span className="evento-date">Nov 19 , 14:30</span>
                                             <h4>Montanha</h4>
                                             <button onClick={() => handleOnClickMaisInfo()} className="evento-info-btn">
-                                                Mais Informações
+                                                Informações
                                             </button>
                                         </div>
                                     </div>
@@ -209,7 +209,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                                             <span className="evento-date">Nov 24 , 18:00</span>
                                             <h4>Trilha</h4>
                                             <button onClick={() => handleOnClickMaisInfo()} className="evento-info-btn">
-                                                Mais Informações
+                                                Informações
                                             </button>
                                         </div>
                                     </div>

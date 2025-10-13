@@ -108,7 +108,7 @@ export default function Guias() {
         <div className="guia-depoimento">
           <p>"{guias[guiaAtual].depoimento}"</p>
           <span>
-            — {guias[guiaAtual].nome}, {guias[guiaAtual].cidade}
+            — {guias[guiaAtual].nome}
           </span>
         </div>
         <button onClick={proximoGuia} className='guia-proximo'>Ver próximo guia</button>

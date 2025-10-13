@@ -197,6 +197,11 @@
   box-shadow: 0 6px 20px rgba(51, 105, 72, 0.3);
 }
 
+/* Botão Mais Informações na seção de informações pessoais */
+.personal-info-card .btn-submit-form {
+  white-space: nowrap;
+}
+
 /* Próximo Eventos */
 .card-imagem {
   height: 527px;
@@ -612,7 +617,7 @@
   top: 0;
   bottom: 0;
   width: 4px;
-  background: linear-gradient(135deg, #10b981, #059669);
+  background: #0C513F;
   opacity: 0;
   transition: all 0.3s ease;
   border-radius: 0 2px 2px 0;

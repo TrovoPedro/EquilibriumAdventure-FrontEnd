@@ -26,6 +26,7 @@ const Comentarios = ({ comentariosIniciais = [], onEnviarComentario }) => {
 
   return (
     <div className="comentarios-container">
+      <h3>Comentários</h3>
       <div className="lista-comentarios">
         {comentarios.map((comentario, index) => (
           <div key={index} className="comentario-card">

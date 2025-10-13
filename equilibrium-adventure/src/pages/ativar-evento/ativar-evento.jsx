@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/header/header-unified";
 import "./ativar-evento.css";
-import leftArrow from "../../assets/left-arrow-green.png";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
 import routeUrls from "../../routes/routeUrls";
@@ -11,10 +10,16 @@ import { useParams } from "react-router-dom";
 import { ativarEvento } from "../../services/chamadasAPIEvento";
 import dayjs from "dayjs";
 import swal from "sweetalert2";
+import { scrollToTopSmooth } from "../../utils/scrollToTop";
 
 export default function AtivarEvento() {
   const { id } = useParams();
   const navigate = useNavigate();
+
+  // Garante que o usuário sempre veja o topo ao entrar na tela
+  useEffect(() => {
+    scrollToTopSmooth();
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -194,7 +199,7 @@ export default function AtivarEvento() {
               </div>
             </div>
             <div className="form-row">
-              <div className="form-group form-group-full">
+              <div className="form-group form-group-categoria">
                 <label htmlFor="categoria">Categoria:</label>
                 <select 
                   id="categoria"

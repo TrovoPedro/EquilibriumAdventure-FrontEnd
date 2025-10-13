@@ -148,15 +148,13 @@ const InscricaoTrilhasLimitado = ({ idEvento, nivelNecessario }) => {
 				}}
 			/>
 
-			   <div style={{ margin: '40px 0 8px 0' }}>
-				   <b style={{ color: '#2d4636', fontWeight: 500, fontSize: 22 }}>
-					   O que esperar da sua próxima trilha:
-				   </b>
+			   <div className="card inscricao-trilha-mapa">
+				   <h3>Mapa da Trilha</h3>
+				   <MapaTrilha 
+					   gpxFile="/assets/gpx-files/trilha-cachoeira-dos-grampos-fumaca.gpx"
+					   altura="450px"
+				   />
 			   </div>
-			   <MapaTrilha 
-				   gpxFile="/assets/gpx-files/trilha-cachoeira-dos-grampos-fumaca.gpx"
-				   altura="450px"
-			   />
 		</div>
 	);
 };
