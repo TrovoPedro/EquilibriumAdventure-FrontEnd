@@ -56,11 +56,11 @@ export default function AtivarEvento() {
       return;
     }
 
-    const ativarEvento = () => {
-      return ativarEvento(formData);
-    };
-    
-    if (ativarEvento) {
+    ativarEvento(formData).then(handleResponse);
+  };
+
+  const handleResponse = (response) => {
+    if (response) {
       swal.fire({
         title: "Sucesso!",
         text: "Evento ativado com sucesso.",

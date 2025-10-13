@@ -52,14 +52,18 @@ const Dashboard = () => {
         setParticipantsData({ frequentes: 0, novos: 0 });
         setOccupancyData([]);
         
-        const storedUser = localStorage.getItem("usuario");
-        if (!storedUser) {
-          setLoading(false);
-          return;
-        }
+        // Usar o usuário do contexto primeiro, senão sessionStorage
+        let usuarioId = null;
         
-        const userData = JSON.parse(storedUser);
-        const usuarioId = userData.id || userData.id_usuario;
+        if (usuario && usuario.id) {
+          usuarioId = usuario.id;
+        } else {
+          const storedUser = sessionStorage.getItem("usuario");
+          if (storedUser) {
+            const userData = JSON.parse(storedUser);
+            usuarioId = userData.id || userData.id_usuario;
+          }
+        }
         
         if (!usuarioId) {
           setLoading(false);

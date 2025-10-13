@@ -5,6 +5,7 @@ import CircleBackButton from "../../components/circle-back-button/circle-back-bu
 import InfoPessoaisCard from "../../components/info-pessoais-card/info-pessoais-card";
 import EnderecoCard from "../../components/endereco-card/endereco-card";
 import ConfirmationPopup from "../../components/confirmation-popup/confirmation-popup";
+import imagemPadraoUsuario from "../../assets/imagem-do-usuario.png";
 
 import { buscarCep } from "../../services/chamadasAPIEvento";
 import {
@@ -12,10 +13,12 @@ import {
 	cadastrarInformacoesPessoais,
 	buscarPerfilCompleto,
 	cadastrarPerfilCompleto,
-	editarPerfilCompleto
+	editarPerfilCompleto,
+	atualizarImagemUsuario
 } from "../../services/apiInformacoesPessoais";
 import {
-	buscarDadosUsuario
+	buscarDadosUsuario,
+	buscarImagemUsuario
 } from "../../services/apiUsuario";
 import {
 	validateUserData,
@@ -63,6 +66,9 @@ export default function InformacoesPessoais() {
 	const [isEditMode, setIsEditMode] = useState(false);
 	const [showConfirmation, setShowConfirmation] = useState(false);
 	const [dadosOriginais, setDadosOriginais] = useState(null);
+	const [imagemPerfil, setImagemPerfil] = useState(null);
+	const [previewImagem, setPreviewImagem] = useState(null);
+	const [imagemAtual, setImagemAtual] = useState(null);
 
 	// Obter ID do usuário logado da sessão
 	useEffect(() => {
@@ -176,6 +182,16 @@ export default function InformacoesPessoais() {
 					});
 
 					console.log("FormData montado para modo edicao");
+
+					// Carregar imagem do usuário
+					try {
+						const imagemUrl = await buscarImagemUsuario(usuarioId);
+						setImagemAtual(imagemUrl);
+						console.log("Imagem do usuário carregada");
+					} catch (imageError) {
+						console.log("Nenhuma imagem encontrada para o usuário ou erro ao carregar:", imageError);
+						setImagemAtual(null);
+					}
 
 				} catch (error) {
 					console.log("Dados nao encontrados - MODO CADASTRO");
@@ -319,6 +335,51 @@ export default function InformacoesPessoais() {
 		}
 	};
 
+	const handleImageUpload = (event) => {
+		const file = event.target.files[0];
+		console.log("handleImageUpload chamado, file:", file);
+		
+		if (file) {
+			console.log("Arquivo selecionado:", file.name, "Tamanho:", file.size, "Tipo:", file.type);
+			
+			// Validar tipo de arquivo
+			const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+			if (!allowedTypes.includes(file.type)) {
+				alert('Por favor, selecione apenas arquivos de imagem (JPEG, PNG, WebP)');
+				return;
+			}
+			
+			// Validar tamanho do arquivo (máximo 5MB)
+			const maxSize = 5 * 1024 * 1024; // 5MB em bytes
+			if (file.size > maxSize) {
+				alert('A imagem deve ter no máximo 5MB');
+				return;
+			}
+			
+			setImagemPerfil(file);
+			console.log("imagemPerfil state atualizado com o arquivo");
+			
+			// Criar preview da imagem
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				setPreviewImagem(e.target.result);
+				console.log("Preview da imagem criado");
+			};
+			reader.readAsDataURL(file);
+		}
+	};
+
+	const removeImage = () => {
+		setImagemPerfil(null);
+		setPreviewImagem(null);
+		setImagemAtual(null);
+		// Limpar o input file
+		const fileInput = document.getElementById('image-upload');
+		if (fileInput) {
+			fileInput.value = '';
+		}
+	};
+
 	const handleSubmit = async () => {
 		console.log("Iniciando handleSubmit...");
 
@@ -428,6 +489,36 @@ export default function InformacoesPessoais() {
 
 				const resultado = await editarPerfilCompleto(usuarioId, dtoEdicao);
 				console.log("Perfil editado com sucesso");
+				
+				// Se houver imagem, atualizar separadamente
+				console.log("Verificando se há imagem para upload. imagemPerfil:", imagemPerfil);
+				if (imagemPerfil) {
+					try {
+						console.log("Atualizando imagem do usuário...");
+						console.log("usuarioId:", usuarioId);
+						console.log("imagemPerfil:", imagemPerfil);
+						await atualizarImagemUsuario(usuarioId, imagemPerfil);
+						console.log("Imagem atualizada com sucesso!");
+						
+						// Recarregar a imagem atualizada do servidor
+						try {
+							const novaImagemUrl = await buscarImagemUsuario(usuarioId);
+							setImagemAtual(novaImagemUrl);
+						} catch (e) {
+							console.error("Erro ao recarregar imagem:", e);
+						}
+						
+						// Limpar estados de upload após sucesso
+						setImagemPerfil(null);
+						setPreviewImagem(null);
+					} catch (imageError) {
+						console.error("Erro ao atualizar imagem:", imageError);
+						alert("Dados salvos, mas houve erro ao atualizar a imagem. Tente novamente.");
+					}
+				} else {
+					console.log("Nenhuma imagem selecionada para upload");
+				}
+				
 				try {
 					const dadosAtualizados = await buscarPerfilCompleto(usuarioId);
 					console.log("� Perfil recarregado após edição:", JSON.stringify(dadosAtualizados, null, 2));
@@ -480,6 +571,30 @@ export default function InformacoesPessoais() {
 
 				const resultado = await cadastrarPerfilCompleto(usuarioId, dtoCadastro);
 				console.log("Perfil cadastrado com sucesso");
+
+				// Se houver imagem, atualizar separadamente
+				if (imagemPerfil) {
+					try {
+						console.log("Atualizando imagem do usuário após cadastro...");
+						await atualizarImagemUsuario(usuarioId, imagemPerfil);
+						console.log("Imagem atualizada com sucesso!");
+						
+						// Recarregar a imagem atualizada do servidor
+						try {
+							const novaImagemUrl = await buscarImagemUsuario(usuarioId);
+							setImagemAtual(novaImagemUrl);
+						} catch (e) {
+							console.error("Erro ao recarregar imagem:", e);
+						}
+						
+						// Limpar estados de upload após sucesso
+						setImagemPerfil(null);
+						setPreviewImagem(null);
+					} catch (imageError) {
+						console.error("Erro ao atualizar imagem:", imageError);
+						alert("Dados salvos, mas houve erro ao atualizar a imagem. Tente novamente.");
+					}
+				}
 
 				// Após cadastrar, vira modo edição e recarrega dados para refletir o salvo
 				setIsEditMode(true);
@@ -553,10 +668,17 @@ export default function InformacoesPessoais() {
 		<div className="editar-dados-container">
 			<CircleBackButton onClick={() => window.history.back()} />
 			<h1 className="titulo-editar-dados">Dados da Conta</h1>
+			
 			<InfoPessoaisCard
 				formData={formData}
 				onInputChange={handleInputChange}
 				errors={errors}
+				// Props para o upload de imagem
+				imagemPerfil={imagemPerfil}
+				previewImagem={previewImagem}
+				imagemAtual={imagemAtual}
+				onImageUpload={handleImageUpload}
+				onRemoveImage={removeImage}
 			/>
 			<EnderecoCard
 				formData={formData}
