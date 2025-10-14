@@ -50,10 +50,24 @@ const CatalogoTrilhas = () => {
   }, []);
 
   const handleSaibaMais = (eventoId) => {
-      navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', eventoId));
+    navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', eventoId));
   };
   const handleDetalhes = (eventoId) => {
-      navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', eventoId));
+    navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', eventoId));
+  };
+
+  const [termoPesquisa, setTermoPesquisa] = useState("");
+
+  const filtrarEventos = (eventos) => {
+    const termo = termoPesquisa.toLowerCase().trim();
+    if (!termo) return eventos; // se não tiver pesquisa, retorna todos
+
+    return eventos.filter(evento =>
+      evento.nome_evento?.toLowerCase().includes(termo) ||
+      evento.descricao?.toLowerCase().includes(termo) ||
+      evento.rua?.toLowerCase().includes(termo) ||
+      evento.nivel_dificuldade?.toLowerCase().includes(termo)
+    );
   };
 
   return (
@@ -71,10 +85,11 @@ const CatalogoTrilhas = () => {
             <div className="search-box">
               <input
                 type="text"
-                placeholder="Escreva aqui"
+                placeholder="Pesquisar eventos..."
                 className="pesquisar-trilha"
+                value={termoPesquisa}
+                onChange={(e) => setTermoPesquisa(e.target.value)}
               />
-              <button>Procurar</button>
             </div>
           </div>
         </div>
@@ -88,25 +103,28 @@ const CatalogoTrilhas = () => {
             <p className="erro-msg">{error.trilhas}</p>
           ) : (
             <div className="destinos-grid">
-              {trilhas.map((trilha) => (
-                <div className="destino-card" key={trilha.id_evento}>
-                  <img
-                    src={trilha.imagemUrl}
-                    alt={trilha.nome}
-                    className="destino-img"
-                    loading="lazy"
-                  />
-                  <div className="destino-overlay">
-                    <button
-                      className="destino-detalhes-btn"
-                      onClick={() => handleDetalhes(trilha.id_evento
-                      )}
-                    >
-                      Detalhes
-                    </button>
+              {filtrarEventos(trilhas).length > 0 ? (
+                filtrarEventos(trilhas).slice(0, 5).map((trilha) => (
+                  <div className="destino-card" key={trilha.id_evento}>
+                    <img
+                      src={trilha.imagemUrl}
+                      alt={trilha.nome}
+                      className="destino-img"
+                      loading="lazy"
+                    />
+                    <div className="destino-overlay">
+                      <button
+                        className="destino-detalhes-btn"
+                        onClick={() => handleDetalhes(trilha.id_evento)}
+                      >
+                        Detalhes
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <span className="no-events-text">Nenhum destino encontrado para sua pesquisa.</span>
+              )}
             </div>
           )}
         </section>
@@ -120,38 +138,42 @@ const CatalogoTrilhas = () => {
             <p className="erro-msg">{error.trilhas}</p>
           ) : (
             <div className="anuncios-grid">
-              {trilhas.map((trilha) => (
-                <div className="anuncio-card" key={trilha.id_evento}>
-                  <div className="anuncio-img-wrap">
-                    <img
-                      src={trilha.imagemUrl}
-                      alt={trilha.titulo}
-                      className="anuncio-img"
-                      loading="lazy"
-                    />
-                  </div>
-                  <div className="anuncio-info">
-                    <span className="anuncio-local">{trilha.rua}</span>
-                    <h3 className="anuncio-titulo">{trilha.nome_evento}</h3>
-                    <p className="anuncio-desc">{trilha.descricao}</p>
-                    <div className="anuncio-footer">
-                      <span className="anuncio-preco">
-                        {trilha.preco}
-                        <span className="anuncio-preco-unidade">/pessoa</span>
-                      </span>
-                      <div className="anuncio-btn-group">
-                        <button
-                          className="anuncio-btn"
-                          onClick={() => handleSaibaMais(trilha.id_evento)}
-                        >
-                          Saiba Mais
-                        </button>
+              {filtrarEventos(trilhas).length > 0 ? (
+                filtrarEventos(trilhas).map((trilha) => (
+                  <div className="anuncio-card" key={trilha.id_evento}>
+                    <div className="anuncio-img-wrap">
+                      <img
+                        src={trilha.imagemUrl}
+                        alt={trilha.titulo}
+                        className="anuncio-img"
+                        loading="lazy"
+                      />
+                    </div>
+                    <div className="anuncio-info">
+                      <span className="anuncio-local">{trilha.rua}</span>
+                      <h3 className="anuncio-titulo">{trilha.nome_evento}</h3>
+                      <p className="anuncio-desc">{trilha.descricao}</p>
+                      <div className="anuncio-footer">
+                        <span className="anuncio-preco">
+                          {trilha.preco}<span className="anuncio-preco-unidade">/pessoa</span>
+                        </span>
+                        <div className="anuncio-btn-group">
+                          <button
+                            className="anuncio-btn"
+                            onClick={() => handleSaibaMais(trilha.id_evento)}
+                          >
+                            Saiba Mais
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <span className="no-events-text">Nenhum anúncio encontrado para sua pesquisa.</span>
+              )}
             </div>
+
           )}
         </section>
       </div>
