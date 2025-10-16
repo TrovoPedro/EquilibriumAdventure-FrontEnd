@@ -27,25 +27,21 @@ async function lerConteudoArquivo(arquivo) {
     });
 }
 
-// Função para validar se o conteúdo é um GPX válido
 function validarGPX(conteudoXML) {
     try {
         const parser = new DOMParser();
         const doc = parser.parseFromString(conteudoXML, 'application/xml');
 
-        // Verificar se há erros de parsing
         const parserError = doc.querySelector('parsererror');
         if (parserError) {
             return false;
         }
 
-        // Verificar se é um arquivo GPX (deve ter o elemento raiz <gpx>)
         const gpxElement = doc.documentElement;
         if (!gpxElement || gpxElement.tagName.toLowerCase() !== 'gpx') {
             return false;
         }
 
-        // Verificar se tem pelo menos uma trilha (track) ou waypoint
         const tracks = doc.querySelectorAll('trk');
         const waypoints = doc.querySelectorAll('wpt');
         const routes = doc.querySelectorAll('rte');
@@ -61,20 +57,13 @@ function validarGPX(conteudoXML) {
     }
 }
 
-// Função para comprimir GPX removendo espaços e comentários desnecessários
 function comprimirGPX(gpxContent) {
     return gpxContent
-        // Remover comentários XML
         .replace(/<!--[\s\S]*?-->/g, '')
-        // Remover quebras de linha e espaços múltiplos entre tags
         .replace(/>\s+</g, '><')
-        // Remover espaços no início e fim de linhas
         .replace(/^\s+|\s+$/gm, '')
-        // Remover linhas vazias
         .replace(/\n\s*\n/g, '\n')
-        // Remover espaços antes de fechamento de tags
         .replace(/\s+>/g, '>')
-        // Comprimir espaços em atributos (manter apenas um espaço)
         .replace(/\s+/g, ' ')
         .trim();
 }
@@ -83,13 +72,11 @@ export async function cadastrarEvento(formDataValues, navigate, usuarioId) {
     try {
         const formData = new FormData();
 
-        // Ler o conteúdo do arquivo GPX se existir
         let conteudoGpx = null;
         if (formDataValues.trilha) {
             try {
                 conteudoGpx = await lerConteudoArquivo(formDataValues.trilha);
 
-                // Comprimir o GPX removendo espaços e quebras de linha desnecessárias
                 conteudoGpx = comprimirGPX(conteudoGpx);
 
             } catch (error) {
@@ -105,7 +92,7 @@ export async function cadastrarEvento(formDataValues, navigate, usuarioId) {
             distancia_km: formDataValues.distancia
                 ? parseFloat(formDataValues.distancia.replace(" km", ""))
                 : 0,
-            responsavel: usuarioId, // <--- aqui passa o ID do usuário logado
+            responsavel: usuarioId, 
             endereco: {
                 rua: formDataValues.rua || "",
                 numero: formDataValues.numero || "",
@@ -115,7 +102,7 @@ export async function cadastrarEvento(formDataValues, navigate, usuarioId) {
                 estado: formDataValues.estado || "",
                 cep: formDataValues.cep || ""
             },
-            caminho_arquivo_evento: conteudoGpx // <--- Agora salva o conteúdo GPX comprimido
+            caminho_arquivo_evento: conteudoGpx 
         };
 
         formData.append(
@@ -182,12 +169,21 @@ export const editarEvento = async (eventoData, eventoId) => {
     try {
         const formData = new FormData();
 
-        // Processar arquivo GPX se presente
         let conteudoGpx = null;
+        let trilhaFileToAppend = null; 
         if (eventoData.trilha) {
             try {
-                conteudoGpx = await lerConteudoArquivo(eventoData.trilha);
-                conteudoGpx = comprimirGPX(conteudoGpx);
+                if (typeof File !== 'undefined' && eventoData.trilha instanceof File) {
+                    trilhaFileToAppend = eventoData.trilha;
+                } else if (typeof eventoData.trilha === 'object' && eventoData.trilha.content) {
+                    conteudoGpx = eventoData.trilha.content;
+                } else if (typeof eventoData.trilha === 'string') {
+                    conteudoGpx = eventoData.trilha;
+                }
+
+                if (conteudoGpx) {
+                    conteudoGpx = comprimirGPX(conteudoGpx);
+                }
             } catch (error) {
                 alert("Erro ao processar arquivo GPX: " + error.message);
                 return false;
@@ -240,11 +236,28 @@ export const editarEvento = async (eventoData, eventoId) => {
             new Blob([JSON.stringify(eventoDTO)], { type: "application/json" })
         );
 
+        
         if (eventoData.imagem) {
-            formData.append("imagem", eventoData.imagem);
+            if (typeof File !== 'undefined' && eventoData.imagem instanceof File) {
+                formData.append("imagem", eventoData.imagem);
+            } else if (eventoId) {
+                try {
+                    const resp = await axios.get(`http://localhost:8080/guia/${eventoId}/imagem`, { responseType: 'blob' });
+                    const mime = resp.data.type || 'application/octet-stream';
+                    const ext = mime.split('/')[1] ? mime.split('/')[1].split(';')[0] : 'jpg';
+                    const filename = (eventoData.imagem && eventoData.imagem.name) ? eventoData.imagem.name : `imagem-${eventoId}.${ext}`;
+                    formData.append('imagem', resp.data, filename);
+                } catch (err) {
+                    console.warn('Não foi possível recuperar imagem do servidor para reenvio:', err.message || err);
+                }
+            }
         }
 
-        // determinar enderecoId: preferir eventoData.endereco.id, depois enderecoInput.id
+        if (trilhaFileToAppend) {
+            formData.append('trilha', trilhaFileToAppend);
+        } else if (conteudoGpx) {
+        }
+
         const enderecoId = (eventoData.endereco && eventoData.endereco.id) || enderecoInput.id || eventoData.enderecoId || null;
         if (!enderecoId) {
             throw new Error("enderecoId não informado para editarEvento");
@@ -304,4 +317,4 @@ export async function ativarEvento(formDataValues) {
         console.error("Erro:", error.response?.data || error.message);
         return false;
     }
-}
+}   
