@@ -285,6 +285,53 @@
   background: #1b2c1e;
 }
 
+.endereco-row {
+  display: flex;
+  flex-wrap: wrap;  
+}
+
+.full-width {
+  width: 100%;
+  display: block;
+}
+
+.full-width input {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  color: #333;
+  font-size: 0.95rem;
+}
+
+.full-width input:disabled {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+/* Mantém o mesmo estilo dos outros inputs */
+.endereco-unico {
+  width: 100%;
+}
+
+.endereco-input {
+  width: 100%;
+  min-width: 790px;
+  max-width: 800px; /* 👈 aumenta a largura apenas deste input */
+  padding: 10px 12px;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+  background-color: #f9f9f9;
+  font-size: 0.95rem;
+  color: #333;
+  box-sizing: border-box;
+}
+
+/* Centraliza o campo, opcional */
+.endereco-unico input {
+  display: block;
+  margin-right: auto;
+}
 
 /* removido bloco duplicado de .inscricao-trilha-mapa e regras relacionadas */
 

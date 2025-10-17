@@ -39,3 +39,25 @@ export const buscarImagemEvento = async (id) => {
     return null;
   }
 };
+
+export const buscarEventoPorId = async (id) => {
+  try {
+    const response = await api.get(`/guia/buscar-evento-especifico/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar evento:", error);
+    throw error;
+  }
+};
+
+export const buscarGpx = async (id) => {
+  try {
+    const response = await api.get(`/guia/${id}/gpx`, {
+      responseType: 'text',
+    });
+    return response.data; 
+  } catch (error) {
+    console.error("Erro ao buscar GPX do evento:", error);
+    throw error;
+  }
+};

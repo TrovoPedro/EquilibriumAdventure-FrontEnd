@@ -226,3 +226,28 @@
         0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
+.comentario-header {
+  display: flex;
+  justify-content: space-between; /* nome à esquerda, data à direita */
+  align-items: center; /* alinha verticalmente */
+  margin-bottom: 8px;
+}
+
+.comentario-autor {
+  font-weight: 700;
+  color: #226144;
+  font-size: 1rem;
+}
+
+.comentario-data {
+  font-size: 0.85rem;
+  color: #888; /* cor mais clara para diferenciar */
+}
+
+.comentario-vazio {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  padding: 16px 0;
+}
+
