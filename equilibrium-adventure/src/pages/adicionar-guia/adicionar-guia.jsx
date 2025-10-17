@@ -26,7 +26,6 @@ export default function AdicionarGuia() {
         if (files && files[0]) {
             const file = files[0];
 
-            // revoke previous preview if any
             if (previewUrl) {
                 URL.revokeObjectURL(previewUrl);
             }
@@ -52,9 +51,11 @@ export default function AdicionarGuia() {
 
         const cadastrar = async () => {
             try {
-                console.log("Enviando dados do guia:", formData);
+                if (!formData.nome || !formData.email || !formData.senha || !formData.descricao) {
+                    alert("Por favor, preencha todos os campos obrigatórios.");
+                    return;
+                }
                 const response = await cadastrarGuia(formData);
-                console.log("Guia registrado:", response);
                 if (response) {
                     navigate(routeUrls.CATALOGO_TRILHAS_ADM);
                 }
@@ -67,7 +68,6 @@ export default function AdicionarGuia() {
         cadastrar();
     };
 
-    // cleanup preview URL on unmount
     useEffect(() => {
         return () => {
             if (previewUrl) URL.revokeObjectURL(previewUrl);
