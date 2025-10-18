@@ -154,6 +154,9 @@ const CatalogoTrilhas = () => {
                       <h3 className="anuncio-titulo">{trilha.nome_evento}</h3>
                       <p className="anuncio-desc">{trilha.descricao}</p>
                       <div className="anuncio-footer">
+                        <div className="anuncio-detalhes">
+                          {trilha.data_ativacao && <span>Data: {new Date(trilha.data_ativacao).toLocaleDateString('pt-BR')}</span>}
+                        </div>
                         <span className="anuncio-preco">
                           {trilha.preco}<span className="anuncio-preco-unidade">/pessoa</span>
                         </span>

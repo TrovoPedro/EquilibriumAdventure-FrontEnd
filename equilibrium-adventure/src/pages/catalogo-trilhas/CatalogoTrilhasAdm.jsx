@@ -147,6 +147,7 @@ const CatalogoTrilhas = () => {
                       <p className="anuncio-desc">{evento.descricao}</p>
                       <div className="anuncio-footer">
                         <div className="anuncio-detalhes">
+                          {evento.data_ativacao && <span>Data: {new Date(evento.data_ativacao).toLocaleDateString('pt-BR')}</span>}
                           <span>Dificuldade: {evento.nivel_dificuldade}</span>
                           <span>Distância: {evento.distancia_km}km</span>
                           <span>Horário: {evento.hora_inicio} - {evento.hora_final}</span>
