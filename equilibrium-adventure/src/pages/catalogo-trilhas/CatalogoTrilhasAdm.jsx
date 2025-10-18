@@ -95,7 +95,11 @@ const CatalogoTrilhas = () => {
     } else if (action === "editar") {
       navigate(routeUrls.EDITAR_EVENTO.replace(':id', eventoId));
     } else if (action === "detalhes") {
-      navigate(routeUrls.DETALHES_EVENTO.replace(':id', eventoId));
+      const eventoSelecionado = eventosAtivos.find(ev => ev.id_evento === eventoId);
+      if (eventoSelecionado && eventoSelecionado.id_ativacao) {
+        sessionStorage.setItem('ativacaoSelecionadaId', eventoSelecionado.id_ativacao);
+        navigate(routeUrls.DETALHES_EVENTO.replace(':id', eventoSelecionado.id_ativacao));
+      }
     }
   };
 
@@ -147,7 +151,7 @@ const CatalogoTrilhas = () => {
                       <p className="anuncio-desc">{evento.descricao}</p>
                       <div className="anuncio-footer">
                         <div className="anuncio-detalhes">
-                          {evento.data_ativacao && <span>Data: {new Date(evento.data_ativacao).toLocaleDateString('pt-BR')}</span>}
+                          {evento.data_ativacao && <span>Data: {evento.data_ativacao.split('-').reverse().join('/')}</span>}
                           <span>Dificuldade: {evento.nivel_dificuldade}</span>
                           <span>Distância: {evento.distancia_km}km</span>
                           <span>Horário: {evento.hora_inicio} - {evento.hora_final}</span>
