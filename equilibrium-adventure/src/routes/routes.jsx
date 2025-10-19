@@ -60,7 +60,7 @@ export default function AppRoutes() {
       <Route path={routeUrls.VER_GUIAS} element={<VerGuias />}></Route>
       <Route path={routeUrls.DADOS_GUIA} element={<DadosGuia />}></Route>
       <Route path={routeUrls.AGENDA_AVENTUREIRO} element={<AgendaAventureiro/>}></Route>
-      <Route path={routeUrls.RELATORIO_ANAMNESE} element={<RelatorioAnamnese/>}></Route>
+  <Route path="/relatorio-anamnese/:id" element={<RelatorioAnamnese/>}></Route>
       <Route path={routeUrls.DETALHES_EVENTO} element={<DetalhesEvento />} />
     </Routes>
   )
