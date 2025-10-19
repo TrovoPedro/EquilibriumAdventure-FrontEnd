@@ -40,7 +40,7 @@ const InscricaoTrilhasLimitado = () => {
         const eventoData = await buscarEventoAtivoPorId(id);
 
         if (eventoData.length > 0) {
-          const ativacao = eventoData[0]; // pega a primeira ativação
+          const ativacao = eventoData[0];
           setEvento({
             idAtivacao: ativacao.idAtivacao,
             nome: ativacao.evento?.nome || "",
