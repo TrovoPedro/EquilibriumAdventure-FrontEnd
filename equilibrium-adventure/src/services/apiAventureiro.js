@@ -1,10 +1,10 @@
 import axios from "axios";
 
-// cria uma instância com a URL base
 const api = axios.create({
   baseURL: "http://localhost:8080",
 });
 
+// Perguntas
 export const getPerguntas = async () => {
   try {
     const response = await api.get('/perguntas/listar');
@@ -24,7 +24,18 @@ export const getPerguntas = async () => {
   }
 };
 
+// Inscrições do usuário
+export const buscarInscricoesPorUsuario = async (usuarioId) => {
+  try {
+    const response = await api.get(`/inscricoes/agenda/${usuarioId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar inscrições:", error);
+    return [];
+  }
+};
 
+// Respostas
 export const postRespostas = async (respostas) => {
   try {
     const response = await api.post('/respostas-aventureiro/salvar', respostas);
@@ -35,26 +46,24 @@ export const postRespostas = async (respostas) => {
   }
 };
 
+// Calcular nível
 export const calcularNivel = async (usuarioId) => {
   try {
-    // Envia um objeto vazio no corpo da requisição POST
     const response = await api.post(`/respostas-aventureiro/calcular-nivel/${usuarioId}`, {});
     
     if (response.data === null) {
       throw new Error('Nível não pôde ser calculado');
     }
 
-    // Se a resposta for um enum Nivel, será uma string
     if (typeof response.data === 'string') {
       return response.data;
     }
 
-    // Se for um objeto contendo o nível
     if (response.data.nivel) {
       return response.data.nivel;
     }
 
-    return 'EXPLORADOR'; // valor padrão
+    return 'EXPLORADOR';
   } catch (error) {
     if (error.response?.status === 500) {
       const message = error.response.data?.message || 'Erro interno do servidor';
@@ -67,6 +76,7 @@ export const calcularNivel = async (usuarioId) => {
   }
 };
 
+// Inicializar perguntas
 export const inicializarPerguntas = async () => {
   try {
     const response = await api.get('/perguntas/inicializar');
