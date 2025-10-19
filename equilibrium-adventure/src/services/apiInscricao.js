@@ -3,12 +3,11 @@ import axios from "axios";
 const api = axios.create({
   baseURL: "http://localhost:8080",
 });
-
-export const verificarInscricao = async (idAventureiro, idEvento) => {
+export const verificarInscricao = async (idAventureiro, idAtivacao) => {
   try {
     const response = await api.post(`inscricoes/verificar`, {
       idAventureiro,
-      idEvento
+      idAtivacao
     });
     return response.data; // { jaInscrito: true/false }
   } catch (error) {
@@ -17,18 +16,18 @@ export const verificarInscricao = async (idAventureiro, idEvento) => {
   }
 };
 
-export const criarInscricao = async (eventoId, usuarioId) => {
-  const response = await api.post(`/inscricoes/ativacaoEvento/${eventoId}/usuario/${usuarioId}`);
+export const criarInscricao = async (idAtivacao, usuarioId) => {
+  const response = await api.post(`/inscricoes/ativacaoEvento/${idAtivacao}/usuario/${usuarioId}`);
   return response.data;
 };
 
-export const cancelarInscricao = async (idAventureiro,  idEvento) => {
+export const cancelarInscricao = async (idAventureiro, idAtivacao) => {
   try {
     const response = await api.delete(
-      `inscricoes/cancelar-inscricao/${idAventureiro}/${ idEvento}`
+      `inscricoes/cancelar-inscricao/${idAventureiro}/${idAtivacao}`
     );
     return response.data; // Mensagem de sucesso do back
   } catch (error) {
     throw error.response?.data || "Erro ao cancelar inscrição";
   }
-}
+};

@@ -50,9 +50,19 @@ export const buscarEventoPorId = async (id) => {
   }
 };
 
-export const buscarGpx = async (id) => {
+export const buscarEventoAtivoPorId = async (id) => {
   try {
-    const response = await api.get(`/guia/${id}/gpx`, {
+    const response = await api.get(`/guia/buscar-evento-ativo-especifico/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar evento:", error);
+    throw error;
+  }
+};
+
+export const buscarGpx = async (ativacaoId) => {
+  try {
+    const response = await api.get(`guia/ativacao/${ativacaoId}/gpx`, {
       responseType: 'text',
     });
     return response.data; 

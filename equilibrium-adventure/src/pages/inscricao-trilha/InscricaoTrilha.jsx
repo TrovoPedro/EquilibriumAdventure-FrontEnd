@@ -7,14 +7,13 @@ import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Comentarios from '../../components/comentarios/Comentarios';
-import routeUrls from "../../routes/routeUrls";
-import { buscarImagemEvento, buscarEventoPorId, buscarGpx } from "../../services/apiEvento";
+import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx } from "../../services/apiEvento";
 import trilhaImg from "../../assets/cachoeiralago.jpg";
-import { listarComentariosPorEvento, adicionarComentario } from '../../services/apiComentario';
+import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
 import { verificarInscricao, criarInscricao, cancelarInscricao } from "../../services/apiInscricao";
 
 const InscricaoTrilhasLimitado = () => {
-  const { id } = useParams(); // Pega o ID da URL
+  const { id } = useParams(); // ID do evento
   const [evento, setEvento] = useState(null);
   const [imagemEvento, setImagemEvento] = useState(null);
   const [gpxData, setGpxData] = useState(null);
@@ -30,16 +29,15 @@ const InscricaoTrilhasLimitado = () => {
     'Desbravador': 3
   };
 
-  // Scroll para o topo ao abrir a tela
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Buscar evento
+  // Buscar evento e ativação
   useEffect(() => {
     const carregarEvento = async () => {
       try {
-        const eventoData = await buscarEventoPorId(id);
+        const eventoData = await buscarEventoAtivoPorId(id);
 
         if (eventoData.length > 0) {
           const ativacao = eventoData[0]; // pega a primeira ativação
@@ -74,40 +72,34 @@ const InscricaoTrilhasLimitado = () => {
     carregarEvento();
   }, [id]);
 
-  // Buscar comentários
+  // Carregar comentários
   const carregarComentarios = async () => {
-    try {
-      if (id) {
-        const comentariosData = await listarComentariosPorEvento(id);
-        setComentarios(comentariosData);
-      }
-    } catch (error) {
-      console.error("Erro ao carregar comentários:", error);
+    if (id) {
+      const comentariosData = await listarComentariosPorAtivacao(id);
+      setComentarios(comentariosData);
     }
   };
 
   useEffect(() => {
+  if (id) {
     carregarComentarios();
-  }, [id]);
+  }
+}, [id]);
 
-  // Enviar comentário
+
   const handleEnviarComentario = async (comentarioObj) => {
-    try {
-      const comentarioCriado = await adicionarComentario({
-        texto: comentarioObj.texto,
-        idUsuario: usuario.id,
-        idAtivacaoEvento: id
-      });
+    const comentarioCriado = await adicionarComentario({
+      texto: comentarioObj.texto,
+      idUsuario: usuario.id,
+      idAtivacaoEvento: id // ⚠ aqui mudou
+    });
 
-      // Atualiza os comentários imediatamente
-      setComentarios(prev => [...prev, {
-        nome: comentarioCriado.nomeUsuario,
-        texto: comentarioCriado.texto
-      }]);
-    } catch (error) {
-      console.error("Erro ao enviar comentário:", error);
-    }
+    setComentarios(prev => [...prev, {
+      nome: comentarioCriado.nomeUsuario,
+      texto: comentarioCriado.texto
+    }]);
   };
+
 
   // Buscar GPX
   useEffect(() => {
@@ -122,12 +114,12 @@ const InscricaoTrilhasLimitado = () => {
     carregarGpx();
   }, [id]);
 
-  // Checar inscrição sempre que o componente monta
+  // Checar inscrição
   const checarInscricao = async () => {
     try {
-      if (usuario?.id && id) {
-        const data = await verificarInscricao(usuario.id, id);
-        setInscrito(data.jaInscrito); // true ou false
+      if (usuario?.id && evento?.idAtivacao) {
+        const data = await verificarInscricao(usuario.id, evento.idAtivacao);
+        setInscrito(data.jaInscrito);
       }
     } catch (error) {
       console.error("Erro ao verificar inscrição:", error);
@@ -136,16 +128,15 @@ const InscricaoTrilhasLimitado = () => {
 
   useEffect(() => {
     checarInscricao();
-    // Limpa ao desmontar para garantir estado correto ao voltar
     return () => setInscrito(false);
-  }, [usuario?.id, id]);
+  }, [usuario?.id, evento?.idAtivacao]);
 
   // Cancelar inscrição
   const handleCancelarInscricao = async () => {
     if (!window.confirm("Tem certeza que deseja cancelar sua inscrição?")) return;
 
     try {
-      await cancelarInscricao(usuario.id, id);
+      await cancelarInscricao(usuario.id, evento.idAtivacao);
       alert("Inscrição cancelada com sucesso!");
       setInscrito(false);
     } catch (error) {
@@ -164,12 +155,10 @@ const InscricaoTrilhasLimitado = () => {
   // Inscrever usuário
   const handleInscrever = async () => {
     try {
-      await criarInscricao(id, usuario.id);
+      await criarInscricao(evento.idAtivacao, usuario.id);
       alert("Inscrição realizada com sucesso!");
       setInscrito(true);
 
-      // Recarrega comentários e inscrição imediatamente
-      await carregarComentarios();
       await checarInscricao();
     } catch (error) {
       console.error("Erro ao fazer inscrição:", error);
