@@ -119,7 +119,7 @@ const CatalogoTrilhas = () => {
                     <div className="destino-overlay">
                       <button
                         className="destino-detalhes-btn"
-                        onClick={() => handleDetalhes(trilha.id_evento)}
+                       onClick={() => handleSaibaMais(trilha.id_evento)}
                       >
                         Detalhes
                       </button>

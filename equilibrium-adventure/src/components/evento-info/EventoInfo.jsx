@@ -2,6 +2,7 @@ import React from 'react';
 import ButtonSubmitForm from '../button-padrao/button-submit-form';
 import './EventoInfo.css';
 import CircleBackButton from '../circle-back-button/circle-back-button';
+import ButtonDangerForm from '../button-padrao/button-danger-form';
 
 const EventoInfo = ({ 
   evento, 
@@ -111,6 +112,7 @@ const EventoInfo = ({
       {editavel && (
         <div className="evento-acoes">
           <ButtonSubmitForm onClick={onSalvar} title="Salvar Alterações" />
+          <ButtonDangerForm onClick={onSalvar} title={'Excluir Evento'}></ButtonDangerForm>
         </div>
       )}
     </div>
