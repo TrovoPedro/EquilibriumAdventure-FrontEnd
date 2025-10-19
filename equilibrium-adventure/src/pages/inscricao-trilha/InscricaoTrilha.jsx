@@ -11,7 +11,7 @@ import routeUrls from "../../routes/routeUrls";
 import { buscarImagemEvento, buscarEventoPorId, buscarGpx } from "../../services/apiEvento";
 import trilhaImg from "../../assets/cachoeiralago.jpg";
 import { listarComentariosPorEvento, adicionarComentario } from '../../services/apiComentario';
-import { verificarInscricao, criarInscricao } from "../../services/apiInscricao";
+import { verificarInscricao, criarInscricao, cancelarInscricao } from "../../services/apiInscricao";
 
 const InscricaoTrilhasLimitado = () => {
   const { id } = useParams(); // Pega o ID da URL
@@ -30,13 +30,12 @@ const InscricaoTrilhasLimitado = () => {
     'Desbravador': 3
   };
 
-
   // Scroll para o topo ao abrir a tela
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
 
-  // Buscar evento e integrar campos do backend
+  // Buscar evento
   useEffect(() => {
     const carregarEvento = async () => {
       try {
@@ -75,20 +74,23 @@ const InscricaoTrilhasLimitado = () => {
     carregarEvento();
   }, [id]);
 
-  useEffect(() => {
-    const carregarComentarios = async () => {
-      try {
-        if (id) {
-          const comentariosData = await listarComentariosPorEvento(id);
-          setComentarios(comentariosData);
-        }
-      } catch (error) {
-        console.error("Erro ao carregar comentários:", error);
+  // Buscar comentários
+  const carregarComentarios = async () => {
+    try {
+      if (id) {
+        const comentariosData = await listarComentariosPorEvento(id);
+        setComentarios(comentariosData);
       }
-    };
-    carregarComentarios();
-  }, [evento]);
+    } catch (error) {
+      console.error("Erro ao carregar comentários:", error);
+    }
+  };
 
+  useEffect(() => {
+    carregarComentarios();
+  }, [id]);
+
+  // Enviar comentário
   const handleEnviarComentario = async (comentarioObj) => {
     try {
       const comentarioCriado = await adicionarComentario({
@@ -96,6 +98,8 @@ const InscricaoTrilhasLimitado = () => {
         idUsuario: usuario.id,
         idAtivacaoEvento: id
       });
+
+      // Atualiza os comentários imediatamente
       setComentarios(prev => [...prev, {
         nome: comentarioCriado.nomeUsuario,
         texto: comentarioCriado.texto
@@ -105,10 +109,11 @@ const InscricaoTrilhasLimitado = () => {
     }
   };
 
+  // Buscar GPX
   useEffect(() => {
     const carregarGpx = async () => {
       try {
-        const gpx = await buscarGpx(id); // id do evento
+        const gpx = await buscarGpx(id);
         setGpxData(gpx);
       } catch (error) {
         console.error(error);
@@ -117,35 +122,57 @@ const InscricaoTrilhasLimitado = () => {
     carregarGpx();
   }, [id]);
 
-  useEffect(() => {
-    const checarInscricao = async () => {
-      try {
-        if (usuario?.id_usuario && id) {
-          const data = await verificarInscricao(usuario.id_usuario, id);
-          setInscrito(data.jaInscrito); // true ou false
-        }
-      } catch (error) {
-        console.error("Erro ao verificar inscrição:", error);
+  // Checar inscrição sempre que o componente monta
+  const checarInscricao = async () => {
+    try {
+      if (usuario?.id && id) {
+        const data = await verificarInscricao(usuario.id, id);
+        setInscrito(data.jaInscrito); // true ou false
       }
-    };
-    checarInscricao();
-  }, [usuario, id]);
+    } catch (error) {
+      console.error("Erro ao verificar inscrição:", error);
+    }
+  };
 
+  useEffect(() => {
+    checarInscricao();
+    // Limpa ao desmontar para garantir estado correto ao voltar
+    return () => setInscrito(false);
+  }, [usuario?.id, id]);
+
+  // Cancelar inscrição
+  const handleCancelarInscricao = async () => {
+    if (!window.confirm("Tem certeza que deseja cancelar sua inscrição?")) return;
+
+    try {
+      await cancelarInscricao(usuario.id, id);
+      alert("Inscrição cancelada com sucesso!");
+      setInscrito(false);
+    } catch (error) {
+      console.error("Erro ao cancelar inscrição:", error);
+      alert(error.message || "Erro ao cancelar inscrição. Tente novamente.");
+    }
+  };
+
+  // Verifica se usuário pode participar
   const podeParticipar = () => {
     const nivelUsuario = nivelOrdem[nivel] || 0;
     const nivelTrilha = nivelOrdem[evento.nivel_dificuldade] || 0;
     return nivelUsuario >= nivelTrilha;
   };
 
+  // Inscrever usuário
   const handleInscrever = async () => {
     try {
       await criarInscricao(id, usuario.id);
       alert("Inscrição realizada com sucesso!");
       setInscrito(true);
+
+      // Recarrega comentários e inscrição imediatamente
+      await carregarComentarios();
+      await checarInscricao();
     } catch (error) {
       console.error("Erro ao fazer inscrição:", error);
-
-      // Mostra mensagens vindas do backend
       if (error.response && error.response.data) {
         alert(error.response.data.message || error.response.data);
       } else {
@@ -154,7 +181,6 @@ const InscricaoTrilhasLimitado = () => {
     }
   };
 
-  // Mostrar loading enquanto não carrega o evento
   if (!evento) return <p>Carregando evento...</p>;
 
   return (
@@ -169,7 +195,6 @@ const InscricaoTrilhasLimitado = () => {
           <div><b>Nível:</b> {evento.nivel_dificuldade}</div>
           <div><b>Data:</b> {evento.dataAtivacao ? new Date(evento.dataAtivacao).toLocaleDateString() : "N/A"}</div>
           <div><b>Descrição:</b> {evento.descricao}</div>
-
         </div>
       </div>
 
@@ -222,9 +247,12 @@ const InscricaoTrilhasLimitado = () => {
       </form >
 
       <button
-        className={`inscricao-trilha-btn ${inscrito ? 'disabled' : ''}`}
+        className={`inscricao-trilha-btn ${inscrito ? 'btn-cancelar' : 'btn-inscrever'}`}
         onClick={() => {
-          if (inscrito) return;
+          if (inscrito) {
+            handleCancelarInscricao();
+            return;
+          }
 
           if (!podeParticipar()) {
             alert("Seu nível atual não permite participar dessa trilha!");
@@ -233,12 +261,9 @@ const InscricaoTrilhasLimitado = () => {
 
           handleInscrever();
         }}
-        disabled={inscrito}
       >
-        {inscrito ? 'Já Inscrito' : 'Se Inscrever'}
+        {inscrito ? 'Cancelar inscrição' : 'Se Inscrever'}
       </button>
-
-
 
       <Comentarios comentariosIniciais={comentarios} onEnviarComentario={handleEnviarComentario} />
 

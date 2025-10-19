@@ -9,11 +9,11 @@ export const listarComentariosPorEvento = async (idAtivacaoEvento) => {
   return response.data; // já é um array de ComentarioResponseDTO
 };
 
-export const adicionarComentario = async ({ texto, idUsuario, idAtivacaoEvento }) => {
+export const adicionarComentario = async ({ texto, idUsuario, idEvento }) => {
   const response = await api.post('/comentarios/adicionar', {
     texto,
-    fk_usuario: idUsuario,
-    fk_ativacao_evento: idAtivacaoEvento
+    idUsuario,
+    idEvento  
   });
   return response.data; // ComentarioResponseDTO
 };

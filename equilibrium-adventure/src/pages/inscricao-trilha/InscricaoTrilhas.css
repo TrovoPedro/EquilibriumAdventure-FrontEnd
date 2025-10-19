@@ -333,6 +333,24 @@
   margin-right: auto;
 }
 
+.inscricao-trilha-btn {
+  padding: 12px 20px;
+  font-size: 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-cancelar {
+  background-color: #9c1d2a; /* vermelho */
+}
+
+.btn-cancelar:hover {
+  background-color: #9c1d2a;
+}
+
 /* removido bloco duplicado de .inscricao-trilha-mapa e regras relacionadas */
 
 @media (max-width: 900px) {
