@@ -2,18 +2,30 @@ import Header from "../../components/header/header-unified";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
 import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./relatorio-anamnese.css";
+
+// Funções mock para evitar tela branca
+async function buscarUsuarioPorId(id) {
+  // Simula busca de usuário
+  return { nome: `Usuário ${id}` };
+}
+
+async function gerarRelatorioAnamnese({ userId, relatorio }) {
+  // Simula geração de relatório
+  return { userId, relatorio };
+}
 
 const RelatorioAnamnese = () => {
   const [nome, setNome] = useState("");
   const [relatorio, setRelatorio] = useState("");
-  const [userId, setUserId] = useState(10);
   const navigate = useNavigate();
+  const { id } = useParams();
+  const userId = id ? Number(id) : null;
 
   const handleExibirNome = async () => {
     try {
-      const userId = 10; // Substitua pelo ID do usuário
+      if (!userId) return;
       const usuario = await buscarUsuarioPorId(userId);
       setNome(usuario.nome);
     } catch (error) {
@@ -23,13 +35,13 @@ const RelatorioAnamnese = () => {
 
   useEffect(() => {
     handleExibirNome();
-  }, []);
+  }, [userId]);
 
   const handleSalvarRelatorio = async () => {
     try {
+      if (!userId) throw new Error("fkAventureiro não encontrado na URL");
       console.log("userId:", userId);
       console.log("relatorio:", relatorio);
-      setUserId(10);
       const data = await gerarRelatorioAnamnese({ userId, relatorio });
       alert("Relatório salvo com sucesso!");
       console.log("Relatório salvo:", data);

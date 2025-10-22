@@ -1,12 +1,11 @@
 import "./InscricaoTrilhas.css";
 import Header from "../../components/header/header-unified";
 import CircleBackButton from "../../components/circle-back-button/circle-back-button";
-import trilhaImg from "../../assets/cachoeiralago.jpg";
 import MapaTrilha from "../../components/mapa-trilha/MapaTrilha";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Comentarios from '../../components/comentarios/Comentarios';
 import PopUpAviso from "../../components/pop-up-aviso/pop-up-aviso";
 import routeUrls from "../../routes/routeUrls";

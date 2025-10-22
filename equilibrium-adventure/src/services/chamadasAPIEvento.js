@@ -164,11 +164,7 @@ export async function ativarEvento(formDataValues) {
     const horaInicio = `${formDataValues.horaInicio}:00`
     const horaFinal = `${formDataValues.horaFim}:00`
 
-
-
-
-
-    const dataAtivacao = dayjs().format("YYYY-MM-DD");
+    const dataAtivacao = formDataValues.dataEvento || dayjs().format("YYYY-MM-DD");
 
     const eventoId = formDataValues.evento ?? formDataValues.idEvento ?? formDataValues.id;
 
@@ -184,6 +180,8 @@ export async function ativarEvento(formDataValues) {
       eventoId: eventoId ? parseInt(eventoId, 10) : null
     };
 
+    console.log("=== DEBUG: Payload final sendo enviado ===");
+    console.log("payload:", payload);
 
     const response = await axios.post(
       `http://localhost:8080/adiministrador/cadastrar-evento-ativo`, 
