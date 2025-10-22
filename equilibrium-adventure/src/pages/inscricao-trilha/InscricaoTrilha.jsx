@@ -8,6 +8,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
 import { useNavigate } from "react-router-dom";
 import Comentarios from '../../components/comentarios/Comentarios';
+import PopUpAviso from "../../components/pop-up-aviso/pop-up-aviso";
 import routeUrls from "../../routes/routeUrls";
 
 const comentariosIniciais = [
@@ -23,6 +24,7 @@ const InscricaoTrilhasLimitado = ({ idEvento, nivelNecessario }) => {
 	const [comentarios, setComentarios] = useState(comentariosIniciais);
 	const [novoComentario, setNovoComentario] = useState("");
 	const [inscrito, setInscrito] = useState(false);
+	const [showAvisoAnamnese, setShowAvisoAnamnese] = useState(false);
 	const { usuario } = useAuth();
 	const { nivel } = useScore();
 	const navigate = useNavigate();
@@ -132,12 +134,12 @@ const InscricaoTrilhasLimitado = ({ idEvento, nivelNecessario }) => {
 							if (nivelSuficiente) {
 								handleInscrever();
 							} else {
-								navigate(routeUrls.AGENDAR_ANAMNESE);
+								setShowAvisoAnamnese(true);
 							}
 						}}
 						disabled={inscrito}
 					>
-						{inscrito ? 'Já Inscrito' : nivelSuficiente ? 'Se Inscrever' : 'Agendar Anamnese'}
+						{inscrito ? 'Já Inscrito' : nivelSuficiente ? 'Se Inscrever' : 'Inscrever-se na Trilha'}
 					</button>
 
 			<Comentarios 
@@ -155,6 +157,25 @@ const InscricaoTrilhasLimitado = ({ idEvento, nivelNecessario }) => {
 					   altura="450px"
 				   />
 			   </div>
+
+			   {/* Popup de aviso para anamnese */}
+			   {showAvisoAnamnese && (
+				   <PopUpAviso
+					   title="Nível Insuficiente!"
+					   message="Para garantir que sua experiência seja confortável e segura,
+					    		recomendamos agendar uma conversa com um guia."
+					   showCancelButton={true}
+					   confirmButtonText="Agendar Anamnese"
+					   cancelButtonText="Voltar"
+					   onConfirm={() => {
+						   setShowAvisoAnamnese(false);
+						   navigate(routeUrls.AGENDAMENTO_ANAMNESE);
+					   }}
+					   onCancel={() => {
+						   setShowAvisoAnamnese(false);
+					   }}
+				   />
+			   )}
 		</div>
 	);
 };

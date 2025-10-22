@@ -6,6 +6,8 @@ import Header from "../../components/header/header-unified";
 import { maskCep, maskDistancia } from "../../utils/masks";
 import { cadastrarEvento, buscarCep } from "../../services/chamadasAPIEvento";
 import { useAuth } from "../../context/AuthContext";
+import PopUpOk from "../../components/pop-up-ok/pop-up-ok";
+import PopUpErro from "../../components/pop-up-erro/pop-up-erro";
 import "./criar-evento.css";
 import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
 import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
@@ -27,6 +29,11 @@ const CriarEvento = () => {
         imagem: null,
         trilha: null
     });
+
+    // Estados para controlar os popups
+    const [showPopupSucesso, setShowPopupSucesso] = useState(false);
+    const [showPopupErro, setShowPopupErro] = useState(false);
+    const [mensagemErro, setMensagemErro] = useState("");
 
     const navigate = useNavigate();
     const { usuario } = useAuth(); // pegando usuário logado
@@ -61,7 +68,8 @@ const CriarEvento = () => {
                     estado: data.uf || ""
                 }));
             } catch (err) {
-                alert(err.message);
+                setMensagemErro(err.message);
+                setShowPopupErro(true);
             }
         }
     };
@@ -69,12 +77,20 @@ const CriarEvento = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!usuario || !usuario.id) {
-            alert("Usuário não logado. Faça login novamente.");
+            setMensagemErro("Usuário não logado. Faça login novamente.");
+            setShowPopupErro(true);
             return;
         }
 
         // Passando o ID do usuário logado como responsável
-        await cadastrarEvento(formData, navigate, usuario.id);
+        const sucesso = await cadastrarEvento(formData, navigate, usuario.id);
+        
+        if (sucesso) {
+            setShowPopupSucesso(true);
+        } else {
+            setMensagemErro("Erro ao cadastrar evento. Tente novamente.");
+            setShowPopupErro(true);
+        }
     };
 
     return (
@@ -275,6 +291,27 @@ const CriarEvento = () => {
                         <ButtonSubmitForm title={"Criar evento"} type="submit" />
                     </div>
                 </form>
+
+                {/* Popup de sucesso */}
+                {showPopupSucesso && (
+                    <PopUpOk
+                        title="Sucesso!"
+                        message="Evento cadastrado com sucesso!"
+                        onConfirm={() => {
+                            setShowPopupSucesso(false);
+                            navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+                        }}
+                    />
+                )}
+
+                {/* Popup de erro */}
+                {showPopupErro && (
+                    <PopUpErro
+                        title="Erro!"
+                        message={mensagemErro}
+                        onConfirm={() => setShowPopupErro(false)}
+                    />
+                )}
             </div>
         </div>
     );
