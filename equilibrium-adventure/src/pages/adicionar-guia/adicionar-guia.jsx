@@ -57,7 +57,7 @@ export default function AdicionarGuia() {
                 }
                 const response = await cadastrarGuia(formData);
                 if (response) {
-                    
+
                     navigate(routeUrls.CATALOGO_TRILHAS_ADM);
                 }
             } catch (error) {
@@ -103,7 +103,6 @@ export default function AdicionarGuia() {
                                         className="preview-img"
                                     />
                                 ) : formData.imagem ? (
-                                    // if imagem is a string (rare) show it directly
                                     <img src={formData.imagem} alt="Pré-visualização" className="preview-img" />
                                 ) : (
                                     <div className="upload-placeholder">
