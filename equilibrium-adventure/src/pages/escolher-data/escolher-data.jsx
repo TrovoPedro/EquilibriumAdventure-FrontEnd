@@ -16,15 +16,20 @@ import {
   IconButton,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
+import { useAuth } from "../../context/AuthContext"; // ✅ Importa o contexto
 
 import "../escolher-data/escolher-data.css";
-import { listarAgenda, adicionarDisponibilidade } from "../../services/chamadasAPIAgenda";
+import {
+  listarAgenda,
+  adicionarDisponibilidade,
+} from "../../services/chamadasAPIAgenda";
 
 dayjs.extend(updateLocale);
 dayjs.updateLocale("pt-br", { weekStart: 1 });
 dayjs.locale("pt-br");
 
-export default function EscolhaDataCard({ onClose, fkGuia = 1 }) {
+export default function EscolhaDataCard({ onClose }) {
+  const { usuario } = useAuth(); // ✅ Pega o usuário logado
   const [value, setValue] = React.useState(null);
   const [hora, setHora] = React.useState("");
   const [datasExistentes, setDatasExistentes] = React.useState([]);
@@ -34,8 +39,8 @@ export default function EscolhaDataCard({ onClose, fkGuia = 1 }) {
     async function fetchDatas() {
       try {
         const datas = await listarAgenda();
-        setDatasExistentes(datas.map(d => d.dataDisponivel));
-        console.log("Datas existentes:", datas.map(d => d.dataDisponivel)); // <-- Adicione isto
+        setDatasExistentes(datas.map((d) => d.dataDisponivel));
+        console.log("Datas existentes:", datas.map((d) => d.dataDisponivel));
       } catch (err) {
         alert("Erro ao buscar datas já cadastradas.");
         console.error(err);
@@ -64,6 +69,11 @@ export default function EscolhaDataCard({ onClose, fkGuia = 1 }) {
       return;
     }
 
+    if (!usuario || !usuario.id) {
+      alert("Usuário não logado. Faça login novamente.");
+      return;
+    }
+
     try {
       const dataHoraISO = dayjs(value)
         .hour(parseInt(hora.split(":")[0]))
@@ -72,7 +82,7 @@ export default function EscolhaDataCard({ onClose, fkGuia = 1 }) {
         .format("YYYY-MM-DDTHH:mm:ss");
 
       await adicionarDisponibilidade({
-        fkGuia,
+        fkGuia: usuario.id, // ✅ passa o ID do usuário logado
         dataDisponivel: dataHoraISO,
       });
 
@@ -80,53 +90,19 @@ export default function EscolhaDataCard({ onClose, fkGuia = 1 }) {
       handleClose();
     } catch (err) {
       console.error(err);
-      alert("Erro ao adicionar disponibilidade: " + (err.response?.data || err.message));
+      alert(
+        "Erro ao adicionar disponibilidade: " +
+          (err.response?.data || err.message)
+      );
     }
-  };
-
-  const renderDay = (day, _selectedDates, pickersDayProps) => {
-    const diaAtual = dayjs(day).format("YYYY-MM-DD");
-    const existe = datasExistentes.some(d => {
-      const diaExistente = dayjs(d).format("YYYY-MM-DD");
-      return diaExistente === diaAtual;
-    });
-
-    if (existe) {
-      console.log("Desabilitando dia:", diaAtual);
-    }
-
-    return (
-      <PickersDay
-        {...pickersDayProps}
-        disabled={existe}
-        sx={{
-          borderRadius: "50%",
-          backgroundColor: existe
-            ? "#e0e0e0"
-            : pickersDayProps.selected
-            ? "#226144"
-            : undefined,
-          color: existe
-            ? "#999"
-            : pickersDayProps.selected
-            ? "#fff"
-            : undefined,
-          "&:hover": {
-            backgroundColor: existe
-              ? "#ccc"
-              : pickersDayProps.selected
-              ? "#1a4d35"
-              : "#f0f0f0",
-          },
-        }}
-      />
-    );
   };
 
   function CustomPickersDay(props) {
     const { day, datasExistentes, selected, ...other } = props;
     const diaAtual = dayjs(day).format("YYYY-MM-DD");
-    const existe = datasExistentes.some(d => dayjs(d).format("YYYY-MM-DD") === diaAtual);
+    const existe = datasExistentes.some(
+      (d) => dayjs(d).format("YYYY-MM-DD") === diaAtual
+    );
 
     return (
       <PickersDay
@@ -141,11 +117,7 @@ export default function EscolhaDataCard({ onClose, fkGuia = 1 }) {
             : selected
             ? "#27ae60"
             : undefined,
-          color: existe
-            ? "#999"
-            : selected
-            ? "#fff"
-            : undefined,
+          color: existe ? "#999" : selected ? "#fff" : undefined,
           "&:hover": {
             backgroundColor: existe
               ? "#ccc"
@@ -171,7 +143,10 @@ export default function EscolhaDataCard({ onClose, fkGuia = 1 }) {
       style={{ position: "fixed", zIndex: 2000 }}
       onClick={(e) => e.target.classList.contains("overlay") && handleClose()}
     >
-      <Card className="card-escolha" style={{ position: "relative", zIndex: 2100 }}>
+      <Card
+        className="card-escolha"
+        style={{ position: "relative", zIndex: 2100 }}
+      >
         <CardContent>
           <Box display="flex" justifyContent="flex-end">
             <IconButton size="small" onClick={handleClose}>
@@ -179,24 +154,42 @@ export default function EscolhaDataCard({ onClose, fkGuia = 1 }) {
             </IconButton>
           </Box>
 
-          <Typography variant="h6" align="center" style={{ marginBottom: 8, color: "#226144" }}>
+          <Typography
+            variant="h6"
+            align="center"
+            style={{ marginBottom: 8, color: "#226144" }}
+          >
             Escolha uma data:
           </Typography>
 
-          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+          <LocalizationProvider
+            dateAdapter={AdapterDayjs}
+            adapterLocale="pt-br"
+          >
             <DateCalendar
               value={value}
               onChange={(newValue) => newValue && setValue(newValue)}
               dayOfWeekFormatter={(day) => day.format("ddd")}
               slots={{
                 day: (props) => (
-                  <CustomPickersDay {...props} datasExistentes={datasExistentes} />
+                  <CustomPickersDay
+                    {...props}
+                    datasExistentes={datasExistentes}
+                  />
                 ),
               }}
             />
           </LocalizationProvider>
 
-          <Typography variant="h6" align="center" style={{ marginTop: 16, marginBottom: 8, color: "#226144" }}>
+          <Typography
+            variant="h6"
+            align="center"
+            style={{
+              marginTop: 16,
+              marginBottom: 8,
+              color: "#226144",
+            }}
+          >
             Escolha um horário:
           </Typography>
 
@@ -241,6 +234,7 @@ export default function EscolhaDataCard({ onClose, fkGuia = 1 }) {
             >
               Salvar Data
             </Button>
+
             <Button
               variant="contained"
               sx={{

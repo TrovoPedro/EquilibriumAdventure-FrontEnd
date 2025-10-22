@@ -57,6 +57,7 @@ export default function AdicionarGuia() {
                 }
                 const response = await cadastrarGuia(formData);
                 if (response) {
+                    
                     navigate(routeUrls.CATALOGO_TRILHAS_ADM);
                 }
             } catch (error) {

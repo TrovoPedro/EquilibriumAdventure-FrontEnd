@@ -4,7 +4,7 @@ import routeUrls from "../../routes/routeUrls";
 import "./CatalogoTrilhas.css";
 import Header from "../../components/header/header-unified";
 import BotpressChat from "../../components/botpress-chat/BotpressChat";
-import catalogoFallback from "../../assets/chile.jpg"; // imagem padrão
+import catalogoFallback from "../../assets/img12-catalogo.jpg"; // imagem padrão
 import { buscarEventosAtivosPorGuia, buscarImagemEvento } from "../../services/apiEvento";
 import { useGuide } from "../../context/GuideContext"
 
@@ -53,7 +53,11 @@ const CatalogoTrilhas = () => {
     navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', eventoId));
   };
   const handleDetalhes = (eventoId) => {
-    navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', eventoId));
+    const trilhaSelecionada = trilhas.find(trilha => trilha.id_evento === eventoId);
+    if (trilhaSelecionada && trilhaSelecionada.id_ativacao) {
+      sessionStorage.setItem('ativacaoSelecionadaId', trilhaSelecionada.id_ativacao);
+      navigate(routeUrls.DETALHES_EVENTO.replace(':id', trilhaSelecionada.id_ativacao));
+    }
   };
 
   const [termoPesquisa, setTermoPesquisa] = useState("");
@@ -115,7 +119,7 @@ const CatalogoTrilhas = () => {
                     <div className="destino-overlay">
                       <button
                         className="destino-detalhes-btn"
-                        onClick={() => handleDetalhes(trilha.id_evento)}
+                       onClick={() => handleSaibaMais(trilha.id_evento)}
                       >
                         Detalhes
                       </button>
@@ -154,6 +158,9 @@ const CatalogoTrilhas = () => {
                       <h3 className="anuncio-titulo">{trilha.nome_evento}</h3>
                       <p className="anuncio-desc">{trilha.descricao}</p>
                       <div className="anuncio-footer">
+                        <div className="anuncio-detalhes">
+                          {trilha.data_ativacao && <span>Data: {trilha.data_ativacao.split('-').reverse().join('/')}</span>}
+                        </div>
                         <span className="anuncio-preco">
                           {trilha.preco}<span className="anuncio-preco-unidade">/pessoa</span>
                         </span>

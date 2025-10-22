@@ -1,6 +1,5 @@
 import axios from "axios";
 
-// cria uma instância com a URL base
 const api = axios.create({
   baseURL: "http://localhost:8080",
 });
@@ -12,7 +11,7 @@ export const getPerguntas = async () => {
       id: pergunta.id,
       title: 'Questão',
       question: pergunta.textoPergunta,
-      options: pergunta.alternativas.map((alt, index) => ({
+      options: pergunta.alternativas.map((alt) => ({
         texto: alt.first,
         valor: alt.second
       }))
@@ -24,6 +23,30 @@ export const getPerguntas = async () => {
   }
 };
 
+export const buscarInscricoesPorUsuario = async (usuarioId) => {
+  try {
+    const response = await api.get(`/inscricoes/agenda/${usuarioId}`);
+    return response.data;
+  } catch (error) {
+    console.error(error);
+    return [];
+  }
+};
+
+export const buscarHistoricoPorUsuario = async (usuarioId) => {
+  try {
+    const response = await api.get(`/inscricoes/agenda/historico/${usuarioId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar histórico:", error);
+    return [];
+  }
+};
+
+export const cancelarInscricao = async (idAventureiro, idEvento) => {
+  const response = await api.delete(`/inscricoes/cancelar-inscricao/${idAventureiro}/${idEvento}`);
+  return response.data;
+};
 
 export const postRespostas = async (respostas) => {
   try {
@@ -37,24 +60,21 @@ export const postRespostas = async (respostas) => {
 
 export const calcularNivel = async (usuarioId) => {
   try {
-    // Envia um objeto vazio no corpo da requisição POST
     const response = await api.post(`/respostas-aventureiro/calcular-nivel/${usuarioId}`, {});
     
     if (response.data === null) {
       throw new Error('Nível não pôde ser calculado');
     }
 
-    // Se a resposta for um enum Nivel, será uma string
     if (typeof response.data === 'string') {
       return response.data;
     }
 
-    // Se for um objeto contendo o nível
     if (response.data.nivel) {
       return response.data.nivel;
     }
 
-    return 'EXPLORADOR'; // valor padrão
+    return 'EXPLORADOR';
   } catch (error) {
     if (error.response?.status === 500) {
       const message = error.response.data?.message || 'Erro interno do servidor';
@@ -70,7 +90,7 @@ export const calcularNivel = async (usuarioId) => {
 export const inicializarPerguntas = async () => {
   try {
     const response = await api.get('/perguntas/inicializar');
-    return response.status; // deve retornar 204 se não houver conteúdo
+    return response.status;
   } catch (error) {
     console.error('Erro ao inicializar perguntas:', error);
     throw error;

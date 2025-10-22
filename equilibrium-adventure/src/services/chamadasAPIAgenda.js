@@ -12,7 +12,7 @@ export async function buscarDatasDisponiveis() {
   }
 }
 
-export async function adicionarDisponibilidade({ fkGuia = 1, dataDisponivel }) {
+export async function adicionarDisponibilidade({ fkGuia, dataDisponivel }) {
   try {
     const response = await axios.post(`${BASE_URL_AGENDAS}`, {
       fkGuia,
@@ -20,7 +20,10 @@ export async function adicionarDisponibilidade({ fkGuia = 1, dataDisponivel }) {
     });
     return response.data;
   } catch (err) {
-    console.error("Erro ao adicionar disponibilidade:", err.response?.data || err.message);
+    console.error(
+      "Erro ao adicionar disponibilidade:",
+      err.response?.data || err.message
+    );
     throw err;
   }
 }

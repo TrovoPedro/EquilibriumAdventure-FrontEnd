@@ -21,7 +21,7 @@ export const cadastrarGuia = async (formData) => {
             fd.append("imagem", formData.imagem);
         }
 
-        const response = await axios.post("http://localhost:8080/adiministrador/cadastrar-guia", fd, {
+        const response = await axios.post("http://localhost:8080/administrador/cadastrar-guia", fd, {
             headers: { "Content-Type": "multipart/form-data" }
         });
 
