@@ -419,15 +419,7 @@
 }
 
 .infos-adic-guia-page .eventos-anamnese-ativos h2::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 60px;
-    height: 3px;
-    background: linear-gradient(90deg, #336948, #226144);
-    border-radius: 2px;
-    transition: width 0.3s ease;
+    display: none;
 }
 
 /* Espaçamento específico para eventos ativos */
@@ -441,8 +433,9 @@
     align-items: center;
     gap: 15px;
     width: 100%;
-    margin-top: 40px;
-    padding-top: 20px;
+    margin-top: 10px;
+    padding-top: 0px;
+    margin-bottom: 32px; /* Espaço extra abaixo do botão */
 }
 
 .infos-adic-guia-page .button-add-data {
@@ -479,11 +472,12 @@
 
 .infos-adic-guia-page .eventos-container {
     display: flex;
-    align-items: center;
-    gap: 0;
+    align-items: flex-start;
+    gap: 12px;
     position: relative;
-    height: 320px;
+    height: 450px;
     width: 100%;
+    padding-top: 5px;
 }
 
 .infos-adic-guia-page .anamneses-cards {
@@ -502,11 +496,12 @@
     display: flex;
     gap: 12px;
     flex: 1;
-    overflow: visible;
-    padding: 15px 5px;
+    overflow-x: auto;
+    overflow-y: hidden;
+    padding: 5px 5px 15px 5px;
     height: 100%;
-    align-items: center;
-    justify-content: space-between;
+    align-items: flex-start;
+    scroll-behavior: smooth;
 }
 
 
@@ -538,7 +533,30 @@
 }
 
 .infos-adic-guia-page .eventos-container .nav-arrow {
-    display: none;
+    background: linear-gradient(135deg, #ffffff, #f9fafb);
+    border: 2px solid #E5E7EB;
+    font-size: 20px;
+    color: #00695c;
+    cursor: pointer;
+    padding: 0;
+    border-radius: 50%;
+    transition: all 0.3s ease;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    font-weight: 600;
+    align-self: center;
+}
+
+.infos-adic-guia-page .eventos-container .nav-arrow:hover {
+    background: linear-gradient(135deg, #00695c, #004d40);
+    border-color: #00695c;
+    color: #ffffff;
+    transform: scale(1.1);
+    box-shadow: 0 4px 16px rgba(0, 105, 92, 0.2);
 }
 
 /* Scrollbar para anamneses */
@@ -557,6 +575,25 @@
 }
 
 .infos-adic-guia-page .anamneses-cards::-webkit-scrollbar-thumb:hover {
+    background: #2a5a3a;
+}
+
+/* Scrollbar para eventos */
+.infos-adic-guia-page .eventos-cards::-webkit-scrollbar {
+    height: 8px;
+}
+
+.infos-adic-guia-page .eventos-cards::-webkit-scrollbar-track {
+    background: #f1f5f9;
+    border-radius: 4px;
+}
+
+.infos-adic-guia-page .eventos-cards::-webkit-scrollbar-thumb {
+    background: #336948;
+    border-radius: 4px;
+}
+
+.infos-adic-guia-page .eventos-cards::-webkit-scrollbar-thumb:hover {
     background: #2a5a3a;
 }
 
@@ -681,28 +718,22 @@
     background-color: white;
     border-radius: 16px;
     padding: 0;
-    width: 100%;
-    max-width: 180px;
-    min-height: 280px;
+    width: 200px;
+    min-width: 200px;
+    height: 320px;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
-    flex: 1;
+    flex-shrink: 0;
     overflow: hidden;
     border: 1px solid #E5E7EB;
 }
 
-.infos-adic-guia-page .evento-ativo-card:hover {
-    transform: translateY(-8px) scale(1.03);
-    box-shadow: 
-        0 16px 48px rgba(12, 81, 63, 0.12),
-        0 6px 24px rgba(0, 0, 0, 0.08);
-    border-color: rgba(51, 105, 72, 0.3);
-}
+
 
 .infos-adic-guia-page .evento-image {
     width: 100%;
-    height: 140px;
+    height: 120px;
     overflow: hidden;
     margin: 0;
     flex-shrink: 0;

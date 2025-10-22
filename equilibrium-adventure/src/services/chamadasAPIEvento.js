@@ -80,7 +80,7 @@ export async function cadastrarEvento(formDataValues, navigate, usuarioId) {
                 conteudoGpx = comprimirGPX(conteudoGpx);
 
             } catch (error) {
-                alert("Erro ao processar arquivo GPX: " + error.message);
+                console.error("Erro ao processar arquivo GPX: " + error.message);
                 return false;
             }
         }
@@ -125,8 +125,8 @@ export async function cadastrarEvento(formDataValues, navigate, usuarioId) {
         );
 
         if (response.data.success) {
-            alert("Evento cadastrado com sucesso!");
-            navigate("/catalogo-trilhas-adm");
+            console.log("Evento cadastrado com sucesso!");
+            // Não navegar aqui, deixar o componente lidar com isso
             return true;
         } else {
             throw new Error(response.data.message || "Erro ao cadastrar evento.");
@@ -290,7 +290,7 @@ export async function ativarEvento(formDataValues) {
 
 
 
-        const dataAtivacao = dayjs().format("YYYY-MM-DD");
+        const dataAtivacao = dayjs(formDataValues.dataEvento).format("YYYY-MM-DD");
 
         const eventoId = formDataValues.evento ?? formDataValues.idEvento ?? formDataValues.id;
 
@@ -306,9 +306,11 @@ export async function ativarEvento(formDataValues) {
             eventoId: eventoId ? parseInt(eventoId, 10) : null
         };
 
+    console.log("=== DEBUG: Payload final sendo enviado ===");
+    console.log("payload:", payload);
 
         const response = await axios.post(
-            `http://localhost:8080/adiministrador/cadastrar-evento-ativo`,
+            `http://localhost:8080/administrador/cadastrar-evento-ativo`,
             payload
         );
 

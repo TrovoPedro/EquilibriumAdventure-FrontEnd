@@ -22,7 +22,7 @@ const routeUrls = {
     ESCOLHER_DATA: '/escolher-data',
     DADOS_GUIA: '/dados-guia',
     AGENDA_AVENTUREIRO: '/agenda-aventureiro',
-    RELATORIO_ANAMNESE: '/relatorio-anamnese',
+    RELATORIO_ANAMNESE: '/relatorio-anamnese/:id',
     AGENDAMENTO_ANAMNESE: '/agendamento-anamnese',
     DETALHES_EVENTO: `/detalhes-evento/${':id'}`,
 };

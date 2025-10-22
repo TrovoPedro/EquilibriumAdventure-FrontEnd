@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import "./agenda-aventureiro.css"
-import Homem from "../../assets/homem2.jpeg";
+import "./agenda-aventureiro.css";
 import defaultAvatar from "../../assets/imagem-do-usuario-grande.png";
 import Trilha from "../../assets/cachoeiralago.jpg";
 import Header from "../../components/header/header-unified";
@@ -9,195 +8,170 @@ import ButtonDangerForm from "../../components/button-padrao/button-danger-form"
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
+import { buscarInscricoesPorUsuario, cancelarInscricao, buscarHistoricoPorUsuario } from "../../services/apiAventureiro";
 import { buscarImagemUsuario } from "../../services/apiUsuario";
 import { useAuth } from "../../context/AuthContext";
 
 const CriarAgendaAventureiro = () => {
-    const navigate = useNavigate();
-    const { usuario, logout } = useAuth();
-    const idUsuario = usuario?.id;
-    const [avatarUrl, setAvatarUrl] = useState(null);
-    const tipoUsuario = usuario?.tipoUsuario;
-    const nomeUsuario = usuario?.nome;
+  const navigate = useNavigate();
+  const { usuario } = useAuth();
+  const idUsuario = usuario?.id;
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [agenda, setAgenda] = useState([]);
+  const [historico, setHistorico] = useState([]);
+  const tipoUsuario = usuario?.tipoUsuario;
+  const nomeUsuario = usuario?.nome;
 
-    const handleBack = () => {
-        redirect(-1);
+  const handleBack = () => navigate(-1);
+
+  useEffect(() => {
+    const buscaImagem = async () => {
+      if (!idUsuario) return;
+      const url = await buscarImagemUsuario(idUsuario);
+      setAvatarUrl(url);
     };
+    buscaImagem();
+  }, [idUsuario]);
 
-    useEffect(() => {
-        const buscaImagem = async () => {
-            if (!idUsuario) return;
-            const url = await buscarImagemUsuario(idUsuario);
-            setAvatarUrl(url);
-        };
+  useEffect(() => {
+    const carregarAgenda = async () => {
+      if (!idUsuario) return;
+      try {
+        const data = await buscarInscricoesPorUsuario(idUsuario);
+        const agendaFormatada = data.map((item) => ({
+          idEvento: item.idAtivacaoEvento,
+          nomeEvento: item.nomeEvento ?? "Sem nome",
+          dataAtivacao: item.dataAtivacao ? new Date(item.dataAtivacao) : undefined
+        }));
+        setAgenda(agendaFormatada);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    carregarAgenda();
+  }, [idUsuario]);
 
-        buscaImagem();
-    }, [idUsuario]);
+  useEffect(() => {
+    const carregarHistorico = async () => {
+      if (!idUsuario) return;
+      try {
+        const data = await buscarHistoricoPorUsuario(idUsuario);
+        const historicoFormatado = data.map((item) => ({
+          idEvento: item.idAtivacaoEvento,
+          nomeEvento: item.nomeEvento ?? "Sem nome",
+          dataAtivacao: item.dataAtivacao ? new Date(item.dataAtivacao) : undefined
+        }));
+        setHistorico(historicoFormatado);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    carregarHistorico();
+  }, [idUsuario]);
 
-    return (
-        <>
-            <Header />
-            <div className="agenda-aventureiro-container">
+  const handleCancelar = async (idEvento) => {
+    try {
+      await cancelarInscricao(idUsuario, idEvento);
+      setAgenda(prev => prev.filter(item => item.idEvento !== idEvento));
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao cancelar inscrição!");
+    }
+  };
 
+  const formatarData = (dataString) => {
+    if (!dataString) return "";
+    const data = new Date(dataString);
+    if (isNaN(data)) return "";
+    const dia = String(data.getDate()).padStart(2, "0");
+    const mes = String(data.getMonth() + 1).padStart(2, "0");
+    const ano = data.getFullYear();
+    return `${dia}/${mes}/${ano}`;
+  };
 
-                <div className="agenda-aventureiro-cards">
-                    <div className="card-info-guia">
-                        <div className="info-pessoais-header">
-                            <ButtonBack onClick={() => navigate(routeUrls.CATALOGO_TRILHA)} />
-                            <h2>Informações Pessoais</h2>
-                        </div>
-                        <div className="personal-info-card">
-                            <div className="user-photo">
-                                <img
-                                    src={avatarUrl || defaultAvatar}
-                                    alt="Imagem Usuário"
-                                    onError={(e) => (e.target.src = defaultAvatar)}
-                                />
-                            </div>
-                            <div className="user-info-content">
-                                <div className="user-info">
-                                    <h3>{nomeUsuario}</h3>
-                                    <span className="user-role">{tipoUsuario}</span>
-                                </div>
-                                <ButtonSubmitForm title="Mais Informações" type="button" onClick={() => navigate(routeUrls.INFORMACOES_PESSOAIS)} />
-                            </div>
-                        </div>
-                    </div>
-                    <div className="card-imagem">
-                        <h2>Próximo Evento</h2>
-                        <div className="next-event-card">
-                            <img src={Trilha} alt="EVENTO" />
-                        </div>
-                    </div>
-                </div>
-
-                <div className="agenda-aventureiro-section">
-                    <div className="agenda-aventureiro-card-agenda">
-                        <h3 className="agenda-aventureiro-card-title">Minha Agenda</h3>
-                        <div className="agenda-aventureiro-list">
-                            <div className="agenda-aventureiro-item">
-                                <div className="agenda-aventureiro-item-info">
-                                    <span className="agenda-aventureiro-item-name">Trilha da Cachoeira</span>
-                                    <span className="agenda-aventureiro-item-date">15/10/2024</span>
-                                </div>
-                                <div className="agenda-aventureiro-item-actions">
-                                    <ButtonSubmitForm title="Mais Informações" type="button" />
-                                    <ButtonDangerForm title="Cancelar Inscrição" type="button" />
-                                </div>
-                            </div>
-
-                            <div className="agenda-aventureiro-item">
-                                <div className="agenda-aventureiro-item-info">
-                                    <span className="agenda-aventureiro-item-name">Trilha das Montanhas</span>
-                                    <span className="agenda-aventureiro-item-date">22/10/2024</span>
-                                </div>
-                                <div className="agenda-aventureiro-item-actions">
-                                    <ButtonSubmitForm title="Mais Informações" type="button" />
-                                    <ButtonDangerForm title="Cancelar Inscrição" type="button" />
-                                </div>
-                            </div>
-
-
-                            <div className="agenda-aventureiro-item">
-                                <div className="agenda-aventureiro-item-info">
-                                    <span className="agenda-aventureiro-item-name">Conversa com Guia Carlos</span>
-                                    <span className="agenda-aventureiro-item-date">05/11/2024</span>
-                                </div>
-                                <div className="agenda-aventureiro-item-actions">
-                                    <ButtonSubmitForm title="Mais Informações" type="button" />
-                                    <ButtonDangerForm title="Cancelar Conversa" type="button" />
-                                </div>
-                            </div>
-
-                            <div className="agenda-aventureiro-item">
-                                <div className="agenda-aventureiro-item-info">
-                                    <span className="agenda-aventureiro-item-name">Conversa com Guia Ana</span>
-                                    <span className="agenda-aventureiro-item-date">12/11/2024</span>
-                                </div>
-                                <div className="agenda-aventureiro-item-actions">
-                                    <ButtonSubmitForm title="Mais Informações" type="button" />
-                                    <ButtonDangerForm title="Cancelar Conversa" type="button" />
-                                </div>
-                            </div>
-
-                            <div className="agenda-aventureiro-item">
-                                <div className="agenda-aventureiro-item-info">
-                                    <span className="agenda-aventureiro-item-name">Trilha Noturna</span>
-                                    <span className="agenda-aventureiro-item-date">18/11/2024</span>
-                                </div>
-                                <div className="agenda-aventureiro-item-actions">
-                                    <ButtonSubmitForm title="Mais Informações" type="button" />
-                                    <ButtonDangerForm title="Cancelar Inscrição" type="button" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div className="agenda-aventureiro-historico">
-                    <div className="agenda-aventureiro-historico-container">
-                        <h3 className="agenda-aventureiro-card-title">Histórico</h3>
-                        <div className="agenda-aventureiro-historico-list">
-                            <div className="agenda-aventureiro-historico-item">
-                                <div className="agenda-aventureiro-historico-info">
-                                    <span className="agenda-aventureiro-item-name">Trilha dos Pinheiros</span>
-                                    <span className="agenda-aventureiro-item-date">15/09/2024</span>
-                                    <span className="agenda-aventureiro-item-guide">Guia: Pedro</span>
-                                </div>
-                            </div>
-
-                            <div className="agenda-aventureiro-historico-item">
-                                <div className="agenda-aventureiro-historico-info">
-                                    <span className="agenda-aventureiro-item-name">Trilha da Serra</span>
-                                    <span className="agenda-aventureiro-item-date">22/09/2024</span>
-                                    <span className="agenda-aventureiro-item-guide">Guia: Pedro</span>
-                                </div>
-                            </div>
-
-                            <div className="agenda-aventureiro-historico-item">
-                                <div className="agenda-aventureiro-historico-info">
-                                    <span className="agenda-aventureiro-item-name">Trilha do Vale</span>
-                                    <span className="agenda-aventureiro-item-date">28/09/2024</span>
-                                    <span className="agenda-aventureiro-item-guide">Guia: Pedro</span>
-                                </div>
-                            </div>
-
-                            <div className="agenda-aventureiro-historico-item">
-                                <div className="agenda-aventureiro-historico-info">
-                                    <span className="agenda-aventureiro-item-name">Conversa sobre equipamentos</span>
-                                    <span className="agenda-aventureiro-item-date">05/09/2024</span>
-                                    <span className="agenda-aventureiro-item-guide">Guia: Ronaldo</span>
-                                </div>
-                            </div>
-
-                            <div className="agenda-aventureiro-historico-item">
-                                <div className="agenda-aventureiro-historico-info">
-                                    <span className="agenda-aventureiro-item-name">Conversa sobre segurança</span>
-                                    <span className="agenda-aventureiro-item-date">12/09/2024</span>
-                                    <span className="agenda-aventureiro-item-guide">Guia: Ronaldo</span>
-                                </div>
-                            </div>
-
-                            <div className="agenda-aventureiro-historico-item">
-                                <div className="agenda-aventureiro-historico-info">
-                                    <span className="agenda-aventureiro-item-name">Trilha da Pedra Grande</span>
-                                    <span className="agenda-aventureiro-item-date">18/08/2024</span>
-                                    <span className="agenda-aventureiro-item-guide">Guia: Ronaldo</span>
-                                </div>
-                            </div>
-
-                            <div className="agenda-aventureiro-historico-item">
-                                <div className="agenda-aventureiro-historico-info">
-                                    <span className="agenda-aventureiro-item-name">Trilha do Rio</span>
-                                    <span className="agenda-aventureiro-item-date">25/08/2024</span>
-                                    <span className="agenda-aventureiro-item-guide">Guia: Pedro</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+  return (
+    <>
+      <Header />
+      <div className="agenda-aventureiro-container">
+        <div className="agenda-aventureiro-cards">
+          <div className="card-info-guia">
+            <div className="info-pessoais-header">
+              <ButtonBack onClick={handleBack} />
+              <h2>Informações Pessoais</h2>
             </div>
-        </>
-    )
-}
-export default CriarAgendaAventureiro
+            <div className="personal-info-card">
+              <div className="user-photo">
+                <img
+                  src={avatarUrl || defaultAvatar}
+                  alt="Imagem Usuário"
+                  onError={(e) => (e.target.src = defaultAvatar)}
+                />
+              </div>
+              <div className="user-info-content">
+                <div className="user-info">
+                  <h3>{nomeUsuario}</h3>
+                  <span className="user-role">{tipoUsuario}</span>
+                </div>
+                <ButtonSubmitForm
+                  title="Mais Informações"
+                  type="button"
+                  onClick={() => navigate(routeUrls.INFORMACOES_PESSOAIS)}
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="agenda-aventureiro-section">
+          <div className="agenda-aventureiro-card-agenda">
+            <h3 className="agenda-aventureiro-card-title">Minha Agenda</h3>
+            <div className="agenda-aventureiro-list">
+              {agenda.length > 0 ? (
+                agenda.map((item) => (
+                  <div key={item.idEvento} className="agenda-aventureiro-item">
+                    <div className="agenda-aventureiro-item-info">
+                      <span className="agenda-aventureiro-item-name">{item.nomeEvento}</span>
+                      <span className="agenda-aventureiro-item-date">{formatarData(item.dataAtivacao)}</span>
+                    </div>
+                    <div className="agenda-aventureiro-item-actions">
+                      <ButtonSubmitForm title="Mais Informações" type="button" />
+                      <ButtonDangerForm
+                        title="Cancelar Inscrição"
+                        type="button"
+                        onClick={() => handleCancelar(item.idEvento)}
+                      />
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>Nenhum evento futuro encontrado.</p>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className="agenda-aventureiro-historico">
+          <div className="agenda-aventureiro-historico-container">
+            <h3 className="agenda-aventureiro-card-title">Histórico</h3>
+            <div className="agenda-aventureiro-historico-list">
+              {historico.length > 0 ? (
+                historico.map((item) => (
+                  <div key={item.idEvento} className="agenda-aventureiro-historico-item">
+                    <div className="agenda-aventureiro-historico-info">
+                      <span className="agenda-aventureiro-item-name">{item.nomeEvento}</span>
+                      <span className="agenda-aventureiro-item-date">{formatarData(item.dataAtivacao)}</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>Nenhum histórico encontrado.</p>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default CriarAgendaAventureiro;
