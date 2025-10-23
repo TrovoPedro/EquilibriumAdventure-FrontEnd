@@ -16,7 +16,6 @@ export default function AtivarEvento() {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  // Garante que o usuário sempre veja o topo ao entrar na tela
   useEffect(() => {
     scrollToTopSmooth();
   }, []);

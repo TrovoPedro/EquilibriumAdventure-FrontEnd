@@ -167,6 +167,7 @@ const EditarEvento = () => {
         if (name === "cep") newValue = maskCep(value);
         if (name === "distancia") newValue = maskDistancia(value);
 
+
         const enderecoFields = ['cep', 'rua', 'numero', 'complemento', 'bairro', 'cidade', 'estado'];
 
         if (enderecoFields.includes(name)) {
@@ -189,6 +190,28 @@ const EditarEvento = () => {
                     ...formData,
                     imagem: file 
                 });
+            } else if (name === 'trilha' && files && files[0]) {
+                // Ler conteúdo do arquivo .gpx como texto e armazenar nome + conteúdo
+                const file = files[0];
+                const reader = new FileReader();
+                reader.onload = () => {
+                    const text = reader.result;
+                    setFormData({
+                        ...formData,
+                        trilha: {
+                            name: file.name || `trilha-${Date.now()}.gpx`,
+                            content: text
+                        }
+                    });
+                };
+                reader.onerror = (err) => {
+                    console.error('Erro ao ler arquivo .gpx:', err);
+                    setFormData({
+                        ...formData,
+                        trilha: file
+                    });
+                };
+                reader.readAsText(file);
             } else {
                 setFormData({
                     ...formData,
