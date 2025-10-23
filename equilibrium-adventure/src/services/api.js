@@ -22,6 +22,16 @@ export const loginUsuario = async (credentials) => {
   }
 };
 
+// buscar usuario por id
+export const buscarUsuarioPorId = async (id) => {
+  try {
+    const response = await api.get(`/usuarios/buscar/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
 export const buscarInformacoesPerfil = async (usuarioId) => {
   try {
     console.log("GET /informacoes-pessoais/perfil-nivel/", usuarioId);
