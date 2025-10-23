@@ -22,7 +22,6 @@ const InscricaoTrilhasLimitado = () => {
   const { usuario } = useAuth();
   const { nivel } = useScore();
   const navigate = useNavigate();
-
   const nivelOrdem = {
     'Explorador': 1,
     'Aventureiro': 2,
@@ -59,12 +58,13 @@ const InscricaoTrilhasLimitado = () => {
             tipo: ativacao.tipo,
             estado: ativacao.estado,
           });
+
+          const imagemUrl = await buscarImagemEvento(ativacao.evento.idEvento);
+          setImagemEvento(imagemUrl || null);
+          console.log("Evento carregado:", ativacao);
         } else {
           console.error("Nenhuma ativação encontrada para este evento");
         }
-
-        const imagemUrl = await buscarImagemEvento(id);
-        setImagemEvento(imagemUrl);
       } catch (error) {
         console.error("Erro ao carregar evento:", error);
       }
@@ -81,10 +81,10 @@ const InscricaoTrilhasLimitado = () => {
   };
 
   useEffect(() => {
-  if (id) {
-    carregarComentarios();
-  }
-}, [id]);
+    if (id) {
+      carregarComentarios();
+    }
+  }, [id]);
 
 
   const handleEnviarComentario = async (comentarioObj) => {
@@ -101,19 +101,21 @@ const InscricaoTrilhasLimitado = () => {
   };
 
 
-  // Buscar GPX
   useEffect(() => {
     const carregarGpx = async () => {
+      if (!evento?.idAtivacao) return;
+
       try {
-        const gpx = await buscarGpx(id);
+        const gpx = await buscarGpx(evento.idAtivacao); // ✅ usa idAtivacao
         setGpxData(gpx);
       } catch (error) {
-        console.error(error);
+        console.error("Erro ao carregar GPX:", error);
       }
-    };
-    carregarGpx();
-  }, [id]);
 
+    };
+
+    carregarGpx();
+  }, [evento]);
   // Checar inscrição
   const checarInscricao = async () => {
     try {
