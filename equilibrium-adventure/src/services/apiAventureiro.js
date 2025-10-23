@@ -4,7 +4,6 @@ const api = axios.create({
   baseURL: "http://localhost:8080",
 });
 
-// Perguntas
 export const getPerguntas = async () => {
   try {
     const response = await api.get('/perguntas/listar');
@@ -12,7 +11,7 @@ export const getPerguntas = async () => {
       id: pergunta.id,
       title: 'Questão',
       question: pergunta.textoPergunta,
-      options: pergunta.alternativas.map((alt, index) => ({
+      options: pergunta.alternativas.map((alt) => ({
         texto: alt.first,
         valor: alt.second
       }))
@@ -24,18 +23,31 @@ export const getPerguntas = async () => {
   }
 };
 
-// Inscrições do usuário
 export const buscarInscricoesPorUsuario = async (usuarioId) => {
   try {
     const response = await api.get(`/inscricoes/agenda/${usuarioId}`);
     return response.data;
   } catch (error) {
-    console.error("Erro ao buscar inscrições:", error);
+    console.error(error);
     return [];
   }
 };
 
-// Respostas
+export const buscarHistoricoPorUsuario = async (usuarioId) => {
+  try {
+    const response = await api.get(`/inscricoes/agenda/historico/${usuarioId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar histórico:", error);
+    return [];
+  }
+};
+
+export const cancelarInscricao = async (idAventureiro, idEvento) => {
+  const response = await api.delete(`/inscricoes/cancelar-inscricao/${idAventureiro}/${idEvento}`);
+  return response.data;
+};
+
 export const postRespostas = async (respostas) => {
   try {
     const response = await api.post('/respostas-aventureiro/salvar', respostas);
@@ -45,7 +57,7 @@ export const postRespostas = async (respostas) => {
     throw error;
   }
 };
-// Calcular nível
+
 export const calcularNivel = async (usuarioId) => {
   try {
     const response = await api.post(`/respostas-aventureiro/calcular-nivel/${usuarioId}`, {});
@@ -74,11 +86,10 @@ export const calcularNivel = async (usuarioId) => {
   }
 };
 
-// Inicializar perguntas
 export const inicializarPerguntas = async () => {
   try {
     const response = await api.get('/perguntas/inicializar');
-    return response.status; // deve retornar 204 se não houver conteúdo
+    return response.status;
   } catch (error) {
     console.error('Erro ao inicializar perguntas:', error);
     throw error;

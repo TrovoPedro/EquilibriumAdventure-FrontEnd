@@ -14,3 +14,11 @@
 .button-questionario:hover {
      background-color: #245535;
 }
+
+.button-questionario-back {
+    background-color: #c92a2a;
+}
+
+.button-questionario-back:hover {
+    background-color: #a61e1e;
+}

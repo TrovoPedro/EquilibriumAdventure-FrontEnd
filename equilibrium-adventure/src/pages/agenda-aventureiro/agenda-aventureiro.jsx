@@ -8,7 +8,7 @@ import ButtonDangerForm from "../../components/button-padrao/button-danger-form"
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
-import { buscarInscricoesPorUsuario } from "../../services/apiAventureiro";
+import { buscarInscricoesPorUsuario, cancelarInscricao, buscarHistoricoPorUsuario } from "../../services/apiAventureiro";
 import { buscarImagemUsuario } from "../../services/apiUsuario";
 import { useAuth } from "../../context/AuthContext";
 
@@ -18,13 +18,13 @@ const CriarAgendaAventureiro = () => {
   const idUsuario = usuario?.id;
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [agenda, setAgenda] = useState([]);
+  const [historico, setHistorico] = useState([]);
   const tipoUsuario = usuario?.tipoUsuario;
   const nomeUsuario = usuario?.nome;
 
   const handleBack = () => navigate(-1);
 
   useEffect(() => {
-    // Busca avatar
     const buscaImagem = async () => {
       if (!idUsuario) return;
       const url = await buscarImagemUsuario(idUsuario);
@@ -34,29 +34,55 @@ const CriarAgendaAventureiro = () => {
   }, [idUsuario]);
 
   useEffect(() => {
-    // Busca agenda futura
     const carregarAgenda = async () => {
       if (!idUsuario) return;
       try {
         const data = await buscarInscricoesPorUsuario(idUsuario);
-        // Mapeia arrays para objetos legíveis
-        const agendaFormatada = data.map(item => ({
-          nomeEvento: item[0] || "Sem nome",
-          dataAtivacao: item[1] || null
+        const agendaFormatada = data.map((item) => ({
+          idEvento: item.idAtivacaoEvento,
+          nomeEvento: item.nomeEvento ?? "Sem nome",
+          dataAtivacao: item.dataAtivacao ? new Date(item.dataAtivacao) : undefined
         }));
-        console.log("Inscrições recebidas: ", agendaFormatada);
         setAgenda(agendaFormatada);
       } catch (error) {
-        console.error("Erro ao buscar inscrições:", error);
+        console.error(error);
       }
     };
     carregarAgenda();
   }, [idUsuario]);
 
+  useEffect(() => {
+    const carregarHistorico = async () => {
+      if (!idUsuario) return;
+      try {
+        const data = await buscarHistoricoPorUsuario(idUsuario);
+        const historicoFormatado = data.map((item) => ({
+          idEvento: item.idAtivacaoEvento,
+          nomeEvento: item.nomeEvento ?? "Sem nome",
+          dataAtivacao: item.dataAtivacao ? new Date(item.dataAtivacao) : undefined
+        }));
+        setHistorico(historicoFormatado);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    carregarHistorico();
+  }, [idUsuario]);
+
+  const handleCancelar = async (idEvento) => {
+    try {
+      await cancelarInscricao(idUsuario, idEvento);
+      setAgenda(prev => prev.filter(item => item.idEvento !== idEvento));
+    } catch (error) {
+      console.error(error);
+      alert("Erro ao cancelar inscrição!");
+    }
+  };
+
   const formatarData = (dataString) => {
     if (!dataString) return "";
-    const data = new Date(dataString); // transforma ISO string em Date
-    if (isNaN(data)) return ""; // evita NaN
+    const data = new Date(dataString);
+    if (isNaN(data)) return "";
     const dia = String(data.getDate()).padStart(2, "0");
     const mes = String(data.getMonth() + 1).padStart(2, "0");
     const ano = data.getFullYear();
@@ -67,7 +93,6 @@ const CriarAgendaAventureiro = () => {
     <>
       <Header />
       <div className="agenda-aventureiro-container">
-
         <div className="agenda-aventureiro-cards">
           <div className="card-info-guia">
             <div className="info-pessoais-header">
@@ -95,30 +120,26 @@ const CriarAgendaAventureiro = () => {
               </div>
             </div>
           </div>
-
-          <div className="card-imagem">
-            <h2>Próximo Evento</h2>
-            <div className="next-event-card">
-              <img src={Trilha} alt="EVENTO" />
-            </div>
-          </div>
         </div>
 
-        {/* Agenda futura dinâmica */}
         <div className="agenda-aventureiro-section">
           <div className="agenda-aventureiro-card-agenda">
             <h3 className="agenda-aventureiro-card-title">Minha Agenda</h3>
             <div className="agenda-aventureiro-list">
               {agenda.length > 0 ? (
-                agenda.map((item, index) => (
-                  <div key={index} className="agenda-aventureiro-item">
+                agenda.map((item) => (
+                  <div key={item.idEvento} className="agenda-aventureiro-item">
                     <div className="agenda-aventureiro-item-info">
                       <span className="agenda-aventureiro-item-name">{item.nomeEvento}</span>
                       <span className="agenda-aventureiro-item-date">{formatarData(item.dataAtivacao)}</span>
                     </div>
                     <div className="agenda-aventureiro-item-actions">
                       <ButtonSubmitForm title="Mais Informações" type="button" />
-                      <ButtonDangerForm title="Cancelar Inscrição" type="button" />
+                      <ButtonDangerForm
+                        title="Cancelar Inscrição"
+                        type="button"
+                        onClick={() => handleCancelar(item.idEvento)}
+                      />
                     </div>
                   </div>
                 ))
@@ -129,36 +150,25 @@ const CriarAgendaAventureiro = () => {
           </div>
         </div>
 
-        {/* Histórico estático */}
         <div className="agenda-aventureiro-historico">
           <div className="agenda-aventureiro-historico-container">
             <h3 className="agenda-aventureiro-card-title">Histórico</h3>
             <div className="agenda-aventureiro-historico-list">
-              <div className="agenda-aventureiro-historico-item">
-                <div className="agenda-aventureiro-historico-info">
-                  <span className="agenda-aventureiro-item-name">Trilha dos Pinheiros</span>
-                  <span className="agenda-aventureiro-item-date">15/09/2024</span>
-                  <span className="agenda-aventureiro-item-guide">Guia: Pedro</span>
-                </div>
-              </div>
-              <div className="agenda-aventureiro-historico-item">
-                <div className="agenda-aventureiro-historico-info">
-                  <span className="agenda-aventureiro-item-name">Trilha da Serra</span>
-                  <span className="agenda-aventureiro-item-date">22/09/2024</span>
-                  <span className="agenda-aventureiro-item-guide">Guia: Pedro</span>
-                </div>
-              </div>
-              <div className="agenda-aventureiro-historico-item">
-                <div className="agenda-aventureiro-historico-info">
-                  <span className="agenda-aventureiro-item-name">Trilha do Vale</span>
-                  <span className="agenda-aventureiro-item-date">28/09/2024</span>
-                  <span className="agenda-aventureiro-item-guide">Guia: Pedro</span>
-                </div>
-              </div>
+              {historico.length > 0 ? (
+                historico.map((item) => (
+                  <div key={item.idEvento} className="agenda-aventureiro-historico-item">
+                    <div className="agenda-aventureiro-historico-info">
+                      <span className="agenda-aventureiro-item-name">{item.nomeEvento}</span>
+                      <span className="agenda-aventureiro-item-date">{formatarData(item.dataAtivacao)}</span>
+                    </div>
+                  </div>
+                ))
+              ) : (
+                <p>Nenhum histórico encontrado.</p>
+              )}
             </div>
           </div>
         </div>
-
       </div>
     </>
   );

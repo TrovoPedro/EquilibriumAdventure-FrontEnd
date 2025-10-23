@@ -27,16 +27,13 @@ const EventoInfo = ({
         <div className="evento-detalhes">
           <div className="campo-info-titulo">
             <label>Título:</label>
-            {editavel ? (
-              <input
-                className='input-titulo'
-                type="text"
-                value={evento.titulo}
-                onChange={(e) => onChange('titulo', e.target.value)}
-              />
-            ) : (
-              <span>{evento.titulo}</span>
-            )}
+            <input
+              className='input-titulo'
+              type="text"
+              value={evento.titulo}
+              disabled
+              readOnly
+            />
           </div>
           
           <div className="campos-linha">
@@ -52,17 +49,16 @@ const EventoInfo = ({
                 <span>{evento.data}</span>
               )}
             </div>
-            
             <div className="campo-info">
-              <label>Endereço:</label>
+              <label>Hora Fim:</label>
               {editavel ? (
                 <input
-                  type="text"
-                  value={evento.endereco}
-                  onChange={(e) => onChange('endereco', e.target.value)}
+                  type="time"
+                  value={evento.horaFim}
+                  onChange={(e) => onChange('horaFim', e.target.value)}
                 />
               ) : (
-                <span>{evento.endereco}</span>
+                <span>{evento.horaFim}</span>
               )}
             </div>
           </div>
@@ -80,7 +76,6 @@ const EventoInfo = ({
                 <span>{evento.horaInicio}</span>
               )}
             </div>
-            
             <div className="campo-info">
               <label>Limite de Inscritos:</label>
               {editavel ? (
@@ -97,16 +92,63 @@ const EventoInfo = ({
         </div>
       </div>
 
-      <div className="evento-descricao">
-        <label>Descrição do Evento:</label>
-        {editavel ? (
-          <textarea
-            value={evento.descricao}
-            onChange={(e) => onChange('descricao', e.target.value)}
-          />
-        ) : (
-          <p>{evento.descricao}</p>
-        )}
+      <div className="campos-linha" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', marginTop: '2.5rem', justifyContent: 'center', width: '100%' }}>
+  <div className="campo-info" style={{ width: '500px' }}>
+          <label style={{ marginBottom: '0.5rem', fontWeight: 'bold', color: '#226144', fontSize: '1.1rem' }}>CATEGORIA:</label>
+          {editavel ? (
+            <select
+              style={{ height: '48px', borderRadius: '10px', border: '1px solid #d1e7dd', padding: '0 1rem', fontSize: '1.1rem', width: '100%' }}
+              value={evento.categoria}
+              onChange={(e) => onChange('categoria', e.target.value)}
+              required
+            >
+              <option value="">Selecione uma categoria</option>
+              <option value="cachoeira">Cachoeira</option>
+              <option value="montanhismo">Montanhismo</option>
+              <option value="trilha">Trilha</option>
+              <option value="rapel">Rapel</option>
+              <option value="escalada">Escalada</option>
+              <option value="camping">Camping</option>
+              <option value="outros">Outros</option>
+            </select>
+          ) : (
+            <span>{evento.categoria}</span>
+          )}
+        </div>
+  <div className="campo-info" style={{ width: '500px' }}>
+          <label style={{ marginBottom: '0.5rem', fontWeight: 'bold', color: '#226144', fontSize: '1.1rem' }}>DURAÇÃO (HORAS):</label>
+          {editavel ? (
+            <input
+              type="number"
+              style={{ height: '48px', borderRadius: '10px', border: '1px solid #d1e7dd', padding: '0 1rem', fontSize: '1.1rem', width: '100%' }}
+              value={evento.duracao}
+              onChange={(e) => onChange('duracao', e.target.value)}
+              min="1"
+              max="24"
+              placeholder="4"
+              required
+            />
+          ) : (
+            <span>{evento.duracao}</span>
+          )}
+        </div>
+  <div className="campo-info" style={{ width: '500px' }}>
+          <label style={{ marginBottom: '0.5rem', fontWeight: 'bold', color: '#226144', fontSize: '1.1rem' }}>PREÇO (R$):</label>
+          {editavel ? (
+            <input
+              type="number"
+              style={{ height: '48px', borderRadius: '10px', border: '1px solid #d1e7dd', padding: '0 1rem', fontSize: '1.1rem', width: '100%' }}
+              value={evento.preco}
+              onChange={(e) => onChange('preco', e.target.value)}
+              min="0"
+              step="0.01"
+              placeholder="100.00"
+              required
+            />
+          ) : (
+            <span>{evento.preco}</span>
+          )}
+        </div>
       </div>
 
       {editavel && (
