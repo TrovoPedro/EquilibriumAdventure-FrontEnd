@@ -132,6 +132,22 @@ const Questionario = () => {
     }
   };
 
+  const handleOnClickBack = () => {
+    if (currentQuestionIndex > 0) {
+      // Salva a resposta atual antes de voltar (se houver)
+      if (selectedOption !== null) {
+        setAnswers({
+          ...answers,
+          [questions[currentQuestionIndex].id]: selectedOption
+        });
+      }
+
+      setCurrentQuestionIndex((prev) => prev - 1);
+      setSelectedOption(answers[questions[currentQuestionIndex - 1].id] || null);
+      setTitleButton("Próxima Questão");
+    }
+  };
+
   const handleNavigatorClick = (index) => {
     if (Object.keys(answers).length >= index) {
       setCurrentQuestionIndex(index);
@@ -151,7 +167,7 @@ const Questionario = () => {
     <div className="questionario-wrapper">
       <div className="questionario-container">
         <div className="questionario-content">
-          <h2>{questions[currentQuestionIndex].title}</h2>
+          <h2>Questão {currentQuestionIndex + 1}</h2>
           <p className="question-text">
             {questions[currentQuestionIndex].question}
           </p>
@@ -171,7 +187,12 @@ const Questionario = () => {
             ))}
           </div>
 
-          <ButtonQuest title={titleButton} onClick={handleOnClickNext} />
+          <div className="button-container">
+            {currentQuestionIndex > 0 && (
+              <ButtonQuest title="Voltar" onClick={handleOnClickBack} isBackButton />
+            )}
+            <ButtonQuest title={titleButton} onClick={handleOnClickNext} />
+          </div>
         </div>
 
         <div className="question-navigator">
