@@ -1,8 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 
 * {
-    padding: 0;
-    margin: 0;
+	box-sizing: border-box;
+	padding: 0;
+	margin: 0;
 }
 
 .h1-title {
@@ -30,42 +31,39 @@
 }
 
 .ativar-evento-page {
-    width: 100%;
-    min-height: 100vh;
-    background: #f6f7f8;
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    overflow-x: hidden;
-    padding: 110px 20px 70px 20px;
+	width: 100%;
+	min-height: 100vh;
+	background: #f6f7f8;
+	display: flex;
+	justify-content: center;
+	align-items: flex-start;
+	overflow-x: hidden;
+	padding: 110px 20px 70px 20px;
 }
 
 /* Container principal */
 
 .ativar-evento-container {
-    width: 100%;
-    max-width: 1400px;
-    margin: 0 auto;
-    padding: 0;
-    background: transparent;
-    min-height: auto;
-    box-sizing: border-box;
+	width: 100%;
+	max-width: 1400px;
+	margin: 0 auto;
+	padding: 0 16px;
+	background: transparent;
+	min-height: auto;
 }
 
 /* Formulário */
 
 .ativar-evento-container form {
-    background: #ffffff;
-    padding: 50px 60px;
-    border-radius: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    box-shadow: 0 4px 20px rgba(34, 97, 68, 0.1);
-    border: 1px solid rgba(34, 97, 68, 0.1);
-    max-width: 1400px;
-    margin: 0 auto;
-    width: 95%;
+	background: #ffffff;
+	padding: 40px 32px;
+	border-radius: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 24px;
+	box-shadow: 0 4px 20px rgba(34, 97, 68, 0.1);
+	border: 1px solid rgba(34, 97, 68, 0.1);
+	width: 100%;
 }
 
 /* Formulário em grid */
@@ -77,22 +75,23 @@
 
 .form-row {
 	display: grid;
-	grid-template-columns: 1fr 1fr 1fr;
+	grid-template-columns: repeat(3, 1fr);
 	gap: 32px;
 	align-items: start;
-	margin-bottom: 12px;
+	margin-bottom: 8px;
 }
 
 .form-group {
 	display: flex;
 	flex-direction: column;
 	min-width: 0;
-	margin-bottom: 16px;
+	margin-bottom: 8px;
 }
 
-.form-group-full {
-	grid-column: 1 / -1;
-}
+.form-group-full { grid-column: 1 / -1; }
+/* Em linhas com 3 campos, cada grupo ocupa 1 coluna igualmente */
+.form-row.form-row-mixed .form-group,
+.form-row.form-row-mixed .form-group-small { grid-column: auto; }
 
 /* Labels e inputs */
 
@@ -109,16 +108,41 @@
 .ativar-evento-form select {
 	border: 2px solid #e0e0e0;
 	border-radius: 12px;
-	padding: 16px 20px;
-	font-size: 1.1rem;
+	padding: 14px 16px;
+	font-size: 1rem;
 	outline: none;
 	background: #ffffff;
 	transition: all 0.3s ease;
 	font-family: inherit;
 	color: #333;
-	height: 56px;
-	box-sizing: border-box;
+	height: 48px;
+	width: 100%;
 }
+
+/* Normaliza inputs de data e hora para manter o mesmo tamanho e estilo */
+.ativar-evento-form input[type="date"],
+.ativar-evento-form input[type="time"] {
+	-webkit-appearance: none;
+	appearance: none;
+	background-color: #ffffff;
+	border: 2px solid #e0e0e0;
+	border-radius: 12px;
+	padding: 14px 16px;
+	height: 48px;
+}
+
+/* Ajustes finos do conteúdo interno do input date/time no WebKit */
+.ativar-evento-form input[type="date"]::-webkit-datetime-edit,
+.ativar-evento-form input[type="time"]::-webkit-datetime-edit {
+	padding: 0;
+}
+.ativar-evento-form input[type="date"]::-webkit-calendar-picker-indicator,
+.ativar-evento-form input[type="time"]::-webkit-calendar-picker-indicator {
+	cursor: pointer;
+	opacity: 0.8;
+}
+.ativar-evento-form input[type="time"]::-webkit-clear-button,
+.ativar-evento-form input[type="time"]::-webkit-inner-spin-button { display: none; }
 
 .ativar-evento-form input:focus,
 .ativar-evento-form select:focus {
@@ -142,15 +166,31 @@
 }
 
 /* Input com largura reduzida mantendo altura padrão */
-.input-largura-reduzida {
-	width: 180px !important;
-	max-width: 180px !important;
+/* Tamanhos dos inputs (desktop) aproximando a referência da imagem */
+@media (min-width: 769px) {
+	/* Todos os campos da grade de 3 colunas com largura aumentada */
+	.ativar-evento-form .form-group input,
+	.ativar-evento-form .form-group select { max-width: 380px; }
+
+	.ativar-evento-form .form-group-small input,
+	.ativar-evento-form .form-group-small select { max-width: 380px; }
+
+	.ativar-evento-form .form-group-full input,
+	.ativar-evento-form .form-group-full select { max-width: 100%; }
+
+	.ativar-evento-form .form-group-categoria select { max-width: 380px; }
+
+	/* Campo com largura reduzida acompanha a padronização */
+	.input-largura-reduzida { max-width: 380px !important; }
 }
+
+/* Em telas pequenas os inputs ocupam toda a largura disponível */
+.input-largura-reduzida { width: 100% !important; }
 
 .form-row-end {
 	display: flex;
 	justify-content: flex-end;
-	margin-top: 16px;
+	margin-top: 8px;
 }
 
 .ativar-evento-btn {
@@ -190,23 +230,8 @@
 
 /* Responsividade */
 @media (max-width: 1024px) {
-	.ativar-evento-container form {
-		margin: 0 20px;
-		padding: 32px 24px;
-	}
-	
-	.form-row {
-		grid-template-columns: 1fr 1fr;
-		gap: 20px;
-	}
-	
-	.ativar-evento-form {
-		gap: 20px;
-	}
-	
-	.form-group {
-		margin-bottom: 12px;
-	}
+	.ativar-evento-container form { padding: 32px 24px; }
+	.form-row { grid-template-columns: repeat(2, 1fr); gap: 20px; }
 }
 
 @media (max-width: 768px) {
@@ -224,15 +249,9 @@
 		font-size: 24px;
 	}
 	
-	.ativar-evento-container form {
-		padding: 30px 20px;
-		width: 90%;
-	}
-	
-	.form-row {
-		grid-template-columns: 1fr;
-		gap: 20px;
-	}
+	.ativar-evento-container form { padding: 28px 20px; }
+	.form-row { grid-template-columns: 1fr; gap: 16px; }
+	.form-group, .form-group-small, .form-group-full { grid-column: 1 / -1; }
 	
 	.ativar-evento-form {
 		gap: 20px;
@@ -253,10 +272,9 @@
 		font-size: 16px; /* Evita zoom no iOS */
 	}
 	
-	.input-largura-reduzida {
-		width: 140px !important;
-		max-width: 140px !important;
-	}
+	.input-largura-reduzida { width: 100% !important; max-width: 100% !important; }
+	
+
 	
 	.ativar-evento-btn {
 		font-size: 1.1rem;
@@ -264,10 +282,7 @@
 		width: 100%;
 	}
 	
-	.form-row-end {
-		justify-content: stretch;
-		margin-top: 20px;
-	}
+	.form-row-end { justify-content: stretch; margin-top: 16px; }
 }
 
 @media (max-width: 480px) {
@@ -284,25 +299,9 @@
 		font-size: 20px;
 	}
 	
-	.ativar-evento-container form {
-		padding: 20px 15px;
-		width: 95%;
-	}
-	
-	.ativar-evento-form {
-		gap: 16px;
-	}
-	
-	.form-group {
-		margin-bottom: 12px;
-	}
-	
-	.form-row {
-		gap: 16px;
-	}
-	
-	.input-largura-reduzida {
-		width: 120px !important;
-		max-width: 120px !important;
-	}
+	.ativar-evento-container form { padding: 20px 16px; }
+	.ativar-evento-form { gap: 16px; }
+	.form-group { margin-bottom: 12px; }
+	.form-row { gap: 12px; grid-template-columns: 1fr; }
+	.input-largura-reduzida { width: 100% !important; max-width: 100% !important; }
 }

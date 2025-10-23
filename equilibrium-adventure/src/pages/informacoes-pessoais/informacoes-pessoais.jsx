@@ -1,10 +1,13 @@
 
 import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import "./informacoes-pessoais.css";
 import CircleBackButton from "../../components/circle-back-button/circle-back-button";
 import InfoPessoaisCard from "../../components/info-pessoais-card/info-pessoais-card";
 import EnderecoCard from "../../components/endereco-card/endereco-card";
-import ConfirmationPopup from "../../components/confirmation-popup/confirmation-popup";
+import PopUpOk from "../../components/pop-up-ok/pop-up-ok";
+import PopUpErro from "../../components/pop-up-erro/pop-up-erro";
+import imagemPadraoUsuario from "../../assets/imagem-do-usuario.png";
 
 import { buscarCep } from "../../services/chamadasAPIEvento";
 import {
@@ -12,10 +15,12 @@ import {
 	cadastrarInformacoesPessoais,
 	buscarPerfilCompleto,
 	cadastrarPerfilCompleto,
-	editarPerfilCompleto
+	editarPerfilCompleto,
+	atualizarImagemUsuario
 } from "../../services/apiInformacoesPessoais";
 import {
-	buscarDadosUsuario
+	buscarDadosUsuario,
+	buscarImagemUsuario
 } from "../../services/apiUsuario";
 import {
 	validateUserData,
@@ -61,8 +66,47 @@ export default function InformacoesPessoais() {
 	const [saving, setSaving] = useState(false);
 	const [usuarioId, setUsuarioId] = useState(null);
 	const [isEditMode, setIsEditMode] = useState(false);
-	const [showConfirmation, setShowConfirmation] = useState(false);
+	
+	// Estados para controlar os novos popups
+	const [showPopupSucesso, setShowPopupSucesso] = useState(false);
+	const [showPopupErro, setShowPopupErro] = useState(false);
+	const [mensagemPopup, setMensagemPopup] = useState("");
+	
 	const [dadosOriginais, setDadosOriginais] = useState(null);
+	const [imagemPerfil, setImagemPerfil] = useState(null);
+	const [previewImagem, setPreviewImagem] = useState(null);
+	const [imagemAtual, setImagemAtual] = useState(null);
+
+	const navigate = useNavigate();
+
+	// Função para determinar a tela anterior baseada no tipo de usuário
+	const handleNavigateBack = () => {
+		const usuarioLogadoString = sessionStorage.getItem("usuario");
+		if (usuarioLogadoString) {
+			try {
+				const usuarioLogado = JSON.parse(usuarioLogadoString);
+				
+				// Verificar o tipo de usuário e navegar para a tela correspondente
+				if (usuarioLogado.tipo === 'GUIA' || usuarioLogado.userType === 'GUIA') {
+					// Para guias, voltar para o dashboard ou catálogo de trilhas
+					navigate('/catalogo-trilhas-adm');
+				} else if (usuarioLogado.tipo === 'AVENTUREIRO' || usuarioLogado.userType === 'AVENTUREIRO') {
+					// Para aventureiros, voltar para a home
+					navigate('/');
+				} else {
+					// Fallback - voltar para a página anterior
+					navigate(-1);
+				}
+			} catch (error) {
+				console.error("Erro ao processar dados do usuário:", error);
+				// Em caso de erro, apenas volta para a página anterior
+				navigate(-1);
+			}
+		} else {
+			// Se não há usuário logado, volta para login
+			navigate('/login');
+		}
+	};
 
 	// Obter ID do usuário logado da sessão
 	useEffect(() => {
@@ -177,6 +221,16 @@ export default function InformacoesPessoais() {
 
 					console.log("FormData montado para modo edicao");
 
+					// Carregar imagem do usuário
+					try {
+						const imagemUrl = await buscarImagemUsuario(usuarioId);
+						setImagemAtual(imagemUrl);
+						console.log("Imagem do usuário carregada");
+					} catch (imageError) {
+						console.log("Nenhuma imagem encontrada para o usuário ou erro ao carregar:", imageError);
+						setImagemAtual(null);
+					}
+
 				} catch (error) {
 					console.log("Dados nao encontrados - MODO CADASTRO");
 					console.error("Detalhes do erro:", error);
@@ -205,7 +259,8 @@ export default function InformacoesPessoais() {
 
 			} catch (error) {
 				console.error("Erro geral ao carregar dados:", error);
-				alert("Erro ao carregar dados do usuário. Tente novamente.");
+				setMensagemPopup("Erro ao carregar dados do usuário. Tente novamente.");
+				setShowPopupErro(true);
 			} finally {
 				setLoading(false);
 			}
@@ -312,10 +367,58 @@ export default function InformacoesPessoais() {
 				}));
 			} catch (error) {
 				console.error("Erro ao buscar CEP:", error);
-				alert("CEP não encontrado. Verifique o número digitado.");
+				setMensagemPopup("CEP não encontrado. Verifique o número digitado.");
+				setShowPopupErro(true);
 			} finally {
 				setLoading(false);
 			}
+		}
+	};
+
+	const handleImageUpload = (event) => {
+		const file = event.target.files[0];
+		console.log("handleImageUpload chamado, file:", file);
+		
+		if (file) {
+			console.log("Arquivo selecionado:", file.name, "Tamanho:", file.size, "Tipo:", file.type);
+			
+			// Validar tipo de arquivo
+			const allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+			if (!allowedTypes.includes(file.type)) {
+				setMensagemPopup('Por favor, selecione apenas arquivos de imagem (JPEG, PNG, WebP)');
+				setShowPopupErro(true);
+				return;
+			}
+			
+			// Validar tamanho do arquivo (máximo 5MB)
+			const maxSize = 5 * 1024 * 1024; // 5MB em bytes
+			if (file.size > maxSize) {
+				setMensagemPopup('A imagem deve ter no máximo 5MB');
+				setShowPopupErro(true);
+				return;
+			}
+			
+			setImagemPerfil(file);
+			console.log("imagemPerfil state atualizado com o arquivo");
+			
+			// Criar preview da imagem
+			const reader = new FileReader();
+			reader.onload = (e) => {
+				setPreviewImagem(e.target.result);
+				console.log("Preview da imagem criado");
+			};
+			reader.readAsDataURL(file);
+		}
+	};
+
+	const removeImage = () => {
+		setImagemPerfil(null);
+		setPreviewImagem(null);
+		setImagemAtual(null);
+		// Limpar o input file
+		const fileInput = document.getElementById('image-upload');
+		if (fileInput) {
+			fileInput.value = '';
 		}
 	};
 
@@ -332,7 +435,8 @@ export default function InformacoesPessoais() {
 		const emailValidation = validateEmail(formData.email);
 		if (!emailValidation.isValid) {
 			setErrors({ email: emailValidation.error });
-			alert(emailValidation.error);
+			setMensagemPopup(emailValidation.error);
+			setShowPopupErro(true);
 			setSaving(false);
 			return;
 		}
@@ -348,7 +452,8 @@ export default function InformacoesPessoais() {
 				try {
 					dataFormatada = convertDateToISO(formData.dataNascimento);
 				} catch (error) {
-					alert(error.message);
+					setMensagemPopup(error.message);
+					setShowPopupErro(true);
 					setSaving(false);
 					return;
 				}
@@ -361,20 +466,23 @@ export default function InformacoesPessoais() {
 
 			const telefoneValidation = validateTelefone(formData.telefone);
 			if (!telefoneValidation.isValid) {
-				alert(telefoneValidation.error + " (DDD + número), apenas números.");
+				setMensagemPopup(telefoneValidation.error + " (DDD + número), apenas números.");
+				setShowPopupErro(true);
 				setSaving(false);
 				return;
 			}
 			const emergencyValidation = validateEmergencyContact(formData.contatoEmergencia);
 			if (!emergencyValidation.isValid) {
-				alert(emergencyValidation.error + " (DDD + número), apenas números.");
+				setMensagemPopup(emergencyValidation.error + " (DDD + número), apenas números.");
+				setShowPopupErro(true);
 				setSaving(false);
 				return;
 			}
 
 			const rgValidation = validateRG(formData.rg);
 			if (!rgValidation.isValid) {
-				alert(rgValidation.error + " (incluindo pontos e traços).");
+				setMensagemPopup(rgValidation.error + " (incluindo pontos e traços).");
+				setShowPopupErro(true);
 				setSaving(false);
 				return;
 			}
@@ -428,6 +536,37 @@ export default function InformacoesPessoais() {
 
 				const resultado = await editarPerfilCompleto(usuarioId, dtoEdicao);
 				console.log("Perfil editado com sucesso");
+				
+				// Se houver imagem, atualizar separadamente
+				console.log("Verificando se há imagem para upload. imagemPerfil:", imagemPerfil);
+				if (imagemPerfil) {
+					try {
+						console.log("Atualizando imagem do usuário...");
+						console.log("usuarioId:", usuarioId);
+						console.log("imagemPerfil:", imagemPerfil);
+						await atualizarImagemUsuario(usuarioId, imagemPerfil);
+						console.log("Imagem atualizada com sucesso!");
+						
+						// Recarregar a imagem atualizada do servidor
+						try {
+							const novaImagemUrl = await buscarImagemUsuario(usuarioId);
+							setImagemAtual(novaImagemUrl);
+						} catch (e) {
+							console.error("Erro ao recarregar imagem:", e);
+						}
+						
+					// Limpar estados de upload após sucesso
+					setImagemPerfil(null);
+					setPreviewImagem(null);
+				} catch (imageError) {
+					console.error("Erro ao atualizar imagem:", imageError);
+					setMensagemPopup("Dados salvos, mas houve erro ao atualizar a imagem. Tente novamente.");
+					setShowPopupErro(true);
+				}
+				} else {
+					console.log("Nenhuma imagem selecionada para upload");
+				}
+				
 				try {
 					const dadosAtualizados = await buscarPerfilCompleto(usuarioId);
 					console.log("� Perfil recarregado após edição:", JSON.stringify(dadosAtualizados, null, 2));
@@ -452,7 +591,8 @@ export default function InformacoesPessoais() {
 				} catch (e) {
 					console.warn("Nao foi possivel recarregar o perfil apos edicao.", e);
 				}
-				alert("Dados atualizados com sucesso!");
+				setMensagemPopup("Dados adicionados com sucesso!");
+				setShowPopupSucesso(true);
 			} else {
 				console.log("1. Fazendo CADASTRO (POST) do perfil completo...");
 
@@ -481,6 +621,31 @@ export default function InformacoesPessoais() {
 				const resultado = await cadastrarPerfilCompleto(usuarioId, dtoCadastro);
 				console.log("Perfil cadastrado com sucesso");
 
+				// Se houver imagem, atualizar separadamente
+				if (imagemPerfil) {
+					try {
+						console.log("Atualizando imagem do usuário após cadastro...");
+						await atualizarImagemUsuario(usuarioId, imagemPerfil);
+						console.log("Imagem atualizada com sucesso!");
+						
+						// Recarregar a imagem atualizada do servidor
+						try {
+							const novaImagemUrl = await buscarImagemUsuario(usuarioId);
+							setImagemAtual(novaImagemUrl);
+						} catch (e) {
+							console.error("Erro ao recarregar imagem:", e);
+						}
+						
+						// Limpar estados de upload após sucesso
+						setImagemPerfil(null);
+						setPreviewImagem(null);
+					} catch (imageError) {
+						console.error("Erro ao atualizar imagem:", imageError);
+						setMensagemPopup("Dados salvos, mas houve erro ao atualizar a imagem. Tente novamente.");
+						setShowPopupErro(true);
+					}
+				}
+
 				// Após cadastrar, vira modo edição e recarrega dados para refletir o salvo
 				setIsEditMode(true);
 				try {
@@ -507,7 +672,8 @@ export default function InformacoesPessoais() {
 				} catch (e) {
 					console.warn("Nao foi possivel recarregar o perfil apos cadastro.", e);
 				}
-				alert("Dados cadastrados com sucesso!");
+				setMensagemPopup("Dados cadastrados com sucesso!");
+				setShowPopupSucesso(true);
 			}
 
 			console.log("=== OPERAÇÃO COMPLETADA COM SUCESSO ===");
@@ -543,7 +709,8 @@ export default function InformacoesPessoais() {
 				serverMsg = "Erro de validação nos dados. Verifique os campos obrigatórios e tamanhos permitidos.";
 			}
 
-			alert(`Erro ao ${isEditMode ? 'atualizar' : 'cadastrar'} dados: ${serverMsg}`);
+			setMensagemPopup(`Erro ao ${isEditMode ? 'atualizar' : 'cadastrar'} dados: ${serverMsg}`);
+			setShowPopupErro(true);
 		} finally {
 			setSaving(false);
 		}
@@ -553,10 +720,17 @@ export default function InformacoesPessoais() {
 		<div className="editar-dados-container">
 			<CircleBackButton onClick={() => window.history.back()} />
 			<h1 className="titulo-editar-dados">Dados da Conta</h1>
+			
 			<InfoPessoaisCard
 				formData={formData}
 				onInputChange={handleInputChange}
 				errors={errors}
+				// Props para o upload de imagem
+				imagemPerfil={imagemPerfil}
+				previewImagem={previewImagem}
+				imagemAtual={imagemAtual}
+				onImageUpload={handleImageUpload}
+				onRemoveImage={removeImage}
 			/>
 			<EnderecoCard
 				formData={formData}
@@ -567,7 +741,7 @@ export default function InformacoesPessoais() {
 			/>
 			<button
 				className="salvar-btn"
-				onClick={() => setShowConfirmation(true)}
+				onClick={handleSubmit}
 				disabled={loading || saving}
 			>
 				{saving ?
@@ -576,21 +750,26 @@ export default function InformacoesPessoais() {
 				}
 			</button>
 
-			<ConfirmationPopup
-				isOpen={showConfirmation}
-				title={isEditMode ? "Confirmar Alterações" : "Confirmar Cadastro"}
-				message={isEditMode ?
-					"Tem certeza que deseja salvar as alterações em seus dados pessoais?" :
-					"Tem certeza que deseja cadastrar seus dados pessoais?"
-				}
-				confirmText={isEditMode ? "Salvar" : "Cadastrar"}
-				cancelText="Cancelar"
-				onConfirm={() => {
-					setShowConfirmation(false);
-					handleSubmit();
-				}}
-				onCancel={() => setShowConfirmation(false)}
-			/>
+			{/* Popup de sucesso */}
+			{showPopupSucesso && (
+				<PopUpOk
+					title="Sucesso!"
+					message={mensagemPopup}
+					onConfirm={() => {
+						setShowPopupSucesso(false);
+						handleNavigateBack();
+					}}
+				/>
+			)}
+
+			{/* Popup de erro */}
+			{showPopupErro && (
+				<PopUpErro
+					title="Erro!"
+					message={mensagemPopup}
+					onConfirm={() => setShowPopupErro(false)}
+				/>
+			)}
 		</div>
 	);
 }

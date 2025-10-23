@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./infos-adic-guia.css";
 import Header from "../../components/header/header-unified";
+import { listarAnamnesesPorResponsavel } from "../../services/apiAnamnese";
 import defaultAvatar from "../../assets/imagem-do-usuario-grande.png";
 import Trilha from "../../assets/cachoeiralago.jpg";
 import ButtonAlterar from "../../components/button-padrao/button-alterar"
@@ -13,8 +14,11 @@ import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 import { buscarImagemUsuario } from "../../services/apiUsuario";
 import { useAuth } from "../../context/AuthContext";
+import { buscarEventosAtivosPorGuia, buscarImagemEvento } from "../../services/apiEvento";
+import catalogoFallback from "../../assets/img12-catalogo.jpg";
 
 const CriarInformacoesAdicionaisGuia = (title, onClick) => {
+    const [anamneses, setAnamneses] = useState([]);
     const [showEscolherData, setShowEscolherData] = useState(false);
     const titulo = "Salvar Alterações";
     const redirect = useNavigate();
@@ -23,6 +27,9 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
     const [avatarUrl, setAvatarUrl] = useState(null);
     const tipoUsuario = usuario?.tipoUsuario;
     const nomeUsuario = usuario?.nome;
+    const [eventosAtivos, setEventosAtivos] = useState([]);
+    const [proximoEvento, setProximoEvento] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     const handleBack = () => {
         redirect(-1);
@@ -32,8 +39,21 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
         redirect(routeUrls.RELATORIO_ANAMNESE);
     }
 
-    const handleOnClickMaisInfo = () => {
-        redirect(routeUrls.INSCRICAO_TRILHAS);
+    const handleOnClickMaisInfo = (eventoId = null) => {
+        if (eventoId) {
+            const eventoSelecionado = eventosAtivos.find(ev => ev.id_evento === eventoId);
+            if (eventoSelecionado && eventoSelecionado.id_ativacao) {
+                sessionStorage.setItem('ativacaoSelecionadaId', eventoSelecionado.id_ativacao);
+                redirect(`/detalhes-evento/${eventoSelecionado.id_ativacao}`);
+            }
+        }
+    }
+
+    const handleOnClickProximoEvento = () => {
+        if (proximoEvento?.id_ativacao) {
+            sessionStorage.setItem('ativacaoSelecionadaId', proximoEvento.id_ativacao);
+            redirect(`/detalhes-evento/${proximoEvento.id_ativacao}`);
+        }
     }
 
     const handleOnClickCard = () => {
@@ -58,15 +78,67 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
         }
     };
 
+    const scrollEventosLeft = () => {
+        const container = document.querySelector('.eventos-cards');
+        if (container) {
+            container.scrollBy({ left: -300, behavior: 'smooth' });
+        }
+    };
+
+    const scrollEventosRight = () => {
+        const container = document.querySelector('.eventos-cards');
+        if (container) {
+            container.scrollBy({ left: 300, behavior: 'smooth' });
+        }
+    };
+
     useEffect(() => {
+        const carregarAnamneses = async () => {
+            if (usuario?.id) {
+                try {
+                    const lista = await listarAnamnesesPorResponsavel(usuario.id);
+                    setAnamneses(lista);
+                } catch (error) {
+                    setAnamneses([]);
+                }
+            }
+        };
         const buscaImagem = async () => {
             if (!idUsuario) return;
             const url = await buscarImagemUsuario(idUsuario);
             setAvatarUrl(url);
         };
 
+        const carregarEventos = async () => {
+            if (usuario?.id) {
+                try {
+                    const eventosData = await buscarEventosAtivosPorGuia(usuario.id);
+                    
+                    const eventosComImagens = await Promise.all(
+                        eventosData.map(async (evento) => {
+                            const imagemUrl = await buscarImagemEvento(evento.id_evento);
+                            return { ...evento, imagemUrl: imagemUrl || catalogoFallback };
+                        })
+                    );
+
+                    const eventosOrdenados = eventosComImagens.sort((a, b) => 
+                        new Date(a.data_ativacao) - new Date(b.data_ativacao)
+                    );
+
+                    setEventosAtivos(eventosOrdenados);
+                    setProximoEvento(eventosOrdenados[0] || null);
+                } catch (error) {
+                    setEventosAtivos([]);
+                    setProximoEvento(null);
+                }
+            }
+            setLoading(false);
+        };
+
         buscaImagem();
-    }, [idUsuario]);
+        carregarEventos();
+    carregarAnamneses();
+    }, [idUsuario, usuario?.id]);
 
     return (
         <>
@@ -97,9 +169,37 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                             </div>
                         </div>
                         <div className="card-imagem">
-                            <h2>Próximo Evento</h2>
+                            <h2>Próxima Trilha</h2>
                             <div className="next-event-card">
-                                <img src={Trilha} alt="EVENTO" />
+                                {loading ? (
+                                    <>
+                                        <img src={catalogoFallback} alt="Carregando..." />
+                                        <div className="next-event-info">
+                                            <span>Carregando...</span>
+                                        </div>
+                                    </>
+                                ) : proximoEvento ? (
+                                    <>
+                                        <img 
+                                            src={proximoEvento.imagemUrl || catalogoFallback} 
+                                            alt={proximoEvento.nome_evento} 
+                                            style={{ cursor: 'pointer' }} 
+                                            onClick={handleOnClickProximoEvento} 
+                                        />
+                                        <div className="next-event-info">
+                                            <h3>{proximoEvento.nome_evento}</h3>
+                                            <span>{proximoEvento.data_ativacao.split('-').reverse().join('/')} às {proximoEvento.hora_inicio}</span>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <>
+                                        <img src={catalogoFallback} alt="Nenhum evento ativo" />
+                                        <div className="next-event-info">
+                                            <h3>Nenhum evento ativo</h3>
+                                            <span>Não há eventos programados no momento</span>
+                                        </div>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
@@ -110,50 +210,44 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                                 <button className="nav-arrow nav-left" onClick={() => scrollLeft('anamneses-cards')}>‹</button>
 
                                 <div className="anamneses-cards">
-                                    <div className="anamnese-card">
-                                        <div className="anamnese-info" onClick={() => handleOnClickCard()}>
-                                            <div className="anamnese-initial" style={{ backgroundColor: "#9c27b0" }}>
-                                                C
-                                            </div>
-                                            <div className="anamnese-details">
-                                                <span className="anamnese-date">Oct 15 , 10:00</span>
-                                                <h4>Carolina Andrade</h4>
-                                            </div>
-                                        </div>
-                                        <button className="anamnese-relatorio-btn" onClick={handleOnClickRelatorio}>
-                                            Relatório
-                                        </button>
-                                    </div>
-
-                                    <div className="anamnese-card">
-                                        <div className="anamnese-info" onClick={() => handleOnClickCard()}>
-                                            <div className="anamnese-initial" style={{ backgroundColor: "#26c6da" }}>
-                                                J
-                                            </div>
-                                            <div className="anamnese-details">
-                                                <span className="anamnese-date">Oct 18 , 11:30</span>
-                                                <h4>João Ribeiro</h4>
-                                            </div>
-                                        </div>
-                                        <button className="anamnese-relatorio-btn" onClick={handleOnClickRelatorio}>
-                                            Relatório
-                                        </button>
-                                    </div>
-
-                                    <div className="anamnese-card">
-                                        <div className="anamnese-info" onClick={() => handleOnClickCard()}>
-                                            <div className="anamnese-initial" style={{ backgroundColor: "#f44336" }}>
-                                                L
-                                            </div>
-                                            <div className="anamnese-details">
-                                                <span className="anamnese-date">Oct 20 , 12:00</span>
-                                                <h4>Leandro Alves</h4>
-                                            </div>
-                                        </div>
-                                        <button className="anamnese-relatorio-btn" onClick={handleOnClickRelatorio}>
-                                            Relatório
-                                        </button>
-                                    </div>
+                                    {anamneses.length > 0 ? (
+                                        anamneses
+                                            .filter(anamnese => {
+                                                const dataAgendada = new Date(anamnese.dataDisponivel);
+                                                const agora = new Date();
+                                                // Só exibe se ainda não passou 1 hora da data/hora agendada
+                                                return agora.getTime() <= dataAgendada.getTime() + 60 * 60 * 1000;
+                                            })
+                                            .map((anamnese, idx) => {
+                                                const nome = anamnese.nomeAventureiro || "?";
+                                                const inicial = nome.charAt(0).toUpperCase();
+                                                const dataObj = new Date(anamnese.dataDisponivel);
+                                                const dataFormatada = `${dataObj.toLocaleDateString()} , ${dataObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                                                const cores = ["#9c27b0", "#26c6da", "#f44336", "#ff9800", "#4caf50"];
+                                                const handleRelatorioClick = () => {
+                                                    sessionStorage.setItem('fkAventureiro', anamnese.fkAventureiro);
+                                                    redirect(`/relatorio-anamnese/${anamnese.fkAventureiro}`);
+                                                };
+                                                return (
+                                                    <div className="anamnese-card" key={`${anamnese.id}-${idx}`}>
+                                                        <div className="anamnese-info" onClick={() => handleOnClickCard()}>
+                                                            <div className="anamnese-initial" style={{ backgroundColor: cores[idx % cores.length] }}>
+                                                                {inicial}
+                                                            </div>
+                                                            <div className="anamnese-details">
+                                                                <span className="anamnese-date">{dataFormatada}</span>
+                                                                <h4>{nome}</h4>
+                                                            </div>
+                                                        </div>
+                                                        <button className="anamnese-relatorio-btn" onClick={handleRelatorioClick}>
+                                                            Relatório
+                                                        </button>
+                                                    </div>
+                                                );
+                                            })
+                                    ) : (
+                                        <span className="no-events-text">Nenhuma anamnese encontrada.</span>
+                                    )}
                                 </div>
 
                                 <button className="nav-arrow nav-right" onClick={() => scrollRight('anamneses-cards')}>›</button>
@@ -172,50 +266,56 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                         <div className="eventos-anamnese-ativos">
                             <h2>Eventos Ativos</h2>
                             <div className="eventos-container">
-                                <button className="nav-arrow nav-left" onClick={() => scrollLeft('eventos-cards')}>‹</button>
+                                <button className="nav-arrow nav-left" onClick={scrollEventosLeft}>‹</button>
 
                                 <div className="eventos-cards">
-                                    <div className="evento-ativo-card">
-                                        <div className="evento-image">
-                                            <img src={Evento1} alt="EVENTO" />
+                                    {loading ? (
+                                        <>
+                                            <div className="evento-ativo-card">
+                                                <div className="evento-image">
+                                                    <img src={catalogoFallback} alt="Carregando..." />
+                                                </div>
+                                                <div className="evento-info">
+                                                    <span className="evento-date">Carregando...</span>
+                                                    <h4>Carregando...</h4>
+                                                    <button className="evento-info-btn">Informações</button>
+                                                </div>
+                                            </div>
+                                        </>
+                                    ) : eventosAtivos.length > 0 ? (
+                                        eventosAtivos.map((evento) => (
+                                            <div className="evento-ativo-card" key={evento.id_evento}>
+                                                <div className="evento-image" onClick={() => handleOnClickMaisInfo(evento.id_evento)} style={{ cursor: 'pointer' }}>
+                                                    <img src={evento.imagemUrl || catalogoFallback} alt={evento.nome_evento} />
+                                                </div>
+                                                <div className="evento-info">
+                                                    <span className="evento-date">
+                                                        {evento.data_ativacao.split('-').reverse().join('/')} , {evento.hora_inicio}
+                                                    </span>
+                                                    <h4>{evento.nome_evento}</h4>
+                                                    <button onClick={() => handleOnClickMaisInfo(evento.id_evento)} className="evento-info-btn">
+                                                        Informações
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        ))
+                                    ) : (
+                                        <div className="no-eventos-message">
+                                            <div className="evento-ativo-card">
+                                                <div className="evento-image">
+                                                    <img src={catalogoFallback} alt="Nenhum evento" />
+                                                </div>
+                                                <div className="evento-info">
+                                                    <span className="evento-date">Sem eventos</span>
+                                                    <h4>Nenhum evento ativo</h4>
+                                                    <p>Não há eventos programados no momento</p>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div className="evento-info">
-                                            <span className="evento-date">Nov 13 , 17:00</span>
-                                            <h4>Cachoeira</h4>
-                                            <button onClick={() => handleOnClickMaisInfo()} className="evento-info-btn">
-                                                Mais Informações
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div className="evento-ativo-card">
-                                        <div className="evento-image">
-                                            <img src={Evento2} alt="EVENTO" />
-                                        </div>
-                                        <div className="evento-info">
-                                            <span className="evento-date">Nov 19 , 14:30</span>
-                                            <h4>Montanha</h4>
-                                            <button onClick={() => handleOnClickMaisInfo()} className="evento-info-btn">
-                                                Mais Informações
-                                            </button>
-                                        </div>
-                                    </div>
-
-                                    <div className="evento-ativo-card ">
-                                        <div className="evento-image">
-                                            <img src={Evento3} alt="EVENTO" />
-                                        </div>
-                                        <div className="evento-info">
-                                            <span className="evento-date">Nov 24 , 18:00</span>
-                                            <h4>Trilha</h4>
-                                            <button onClick={() => handleOnClickMaisInfo()} className="evento-info-btn">
-                                                Mais Informações
-                                            </button>
-                                        </div>
-                                    </div>
+                                    )}
                                 </div>
 
-                                <button className="nav-arrow nav-right" onClick={() => scrollRight('eventos-cards')}>›</button>
+                                <button className="nav-arrow nav-right" onClick={scrollEventosRight}>›</button>
                             </div>
                         </div>
                     </div>

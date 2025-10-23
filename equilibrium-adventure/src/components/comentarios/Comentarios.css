@@ -1,28 +1,131 @@
 .comentarios-container {
-    background-color: #fff;
-    border-radius: 8px;
-    padding: 20px;
-    margin: 20px 0 40px 0;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 
+        0 20px 40px rgba(0, 0, 0, 0.1),
+        0 1px 3px rgba(0, 0, 0, 0.05),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    padding: 40px 36px 32px 36px;
+    margin: 0 0 24px 0;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    position: relative;
+    overflow: hidden;
+}
+
+.comentarios-container h3 {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #1e3a1e;
+    margin-bottom: 28px;
+    text-align: left;
+    letter-spacing: 0.3px;
+        position: relative;
+}
+
+/* Barra de destaque no topo do card */
+.comentarios-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #336948, #226144, #0C513F);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.comentarios-container:hover::before {
+    opacity: 1;
+}
+
+/* Sublinhado do título */
+.comentarios-container h3::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #336948, #226144);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.comentarios-container:hover h3::after {
+    width: 80px;
+}
+
+.comentarios-container {
+    max-height: 600px;
+    overflow-y: auto;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    max-height: none;
+    min-height: 340px;
 }
 
 .lista-comentarios {
+    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 16px;
     margin-bottom: 20px;
+    /* Exibir exatamente 3 cards por vez: 3 * 110px + 2 * 16px (gaps) = 362px */
+    max-height: 362px;
+    overflow-y: auto;
+    padding-right: 8px;
+    scrollbar-width: thin;
+    scrollbar-color: #c1d4c1 #f8fffe;
+}
+
+.lista-comentarios::-webkit-scrollbar {
+    width: 6px;
+    background: #f8fffe;
+    border-radius: 8px;
+}
+.lista-comentarios::-webkit-scrollbar-thumb {
+    background: #c1d4c1;
+    border-radius: 8px;
 }
 
 .comentario-card {
-    background-color: #f8f9fa;
-    border-radius: 8px;
-    padding: 16px;
-    transition: all 0.3s ease;
+    background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
+    border-radius: 14px;
+    border: none;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+    position: relative;
+    overflow: hidden;
+    padding: 16px 20px;
+    animation: slideIn 0.3s ease-out;
+    /* Altura fixa por card para caber 3 por vez */
+    min-height: 110px;
+    max-height: 110px;
+    display: flex;
+    flex-direction: column;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .comentario-card:hover {
-    background-color: #f0f0f0;
-    transform: translateY(-2px);
+    border-color: #c1d4c1;
+    background: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.04),
+        0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .comentario-header {
@@ -30,56 +133,121 @@
 }
 
 .comentario-autor {
-    font-weight: 600;
-    color: #336948;
-    font-size: 16px;
+    font-weight: 700;
+    color: #226144;
+    font-size: 1rem;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    letter-spacing: 0.2px;
 }
 
 .comentario-texto {
-    color: #333;
-    font-size: 14px;
-    line-height: 1.5;
+    color: #2c3e2c;
+    font-size: 0.95rem;
+    line-height: 1.6;
     margin: 0;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    font-weight: 400;
+    /* Limitar texto para não ultrapassar a altura do card */
+    display: -webkit-box;
+    line-clamp: 3;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    white-space: normal;
 }
 
 .comentario-form {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    background: #fff;
+    padding-top: 12px;
+    z-index: 2;
     display: flex;
-    gap: 12px;
-    margin-top: 20px;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+    .comentario-form {
+        flex-direction: column;
+        gap: 16px;
+    }
+    
+    .comentario-form .btn-submit-form {
+        align-self: flex-end;
+        min-width: 120px;
+    }
+    
+    .comentario-card {
+        padding: 16px 20px;
+    }
 }
 
 .comentario-input {
     flex: 1;
-    padding: 12px;
-    border: 2px solid #ddd;
-    border-radius: 8px;
-    font-size: 14px;
-    transition: all 0.3s ease;
+    padding: 16px 20px;
+    border: 2px solid #e1e8e1;
+    border-radius: 14px;
+    font-size: 1rem;
+    background: #ffffff;
+    color: #2c3e2c;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    font-weight: 500;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.04),
+        0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .comentario-input:focus {
-    border-color: #336948;
+    border-color: #489465;
     outline: none;
-    box-shadow: 0 0 0 2px rgba(51, 105, 72, 0.1);
-}
-
-.comentario-btn {
-    padding: 12px 24px;
-    background-color: #336948;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.comentario-btn:hover {
-    background-color: #245234;
+    background: #ffffff;
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.04),
+        0 0 0 4px rgba(72, 148, 101, 0.1),
+        0 4px 12px rgba(72, 148, 101, 0.15);
     transform: translateY(-1px);
 }
 
-.comentario-btn:active {
-    transform: translateY(0);
+.comentario-input::placeholder {
+    color: #8a9d8a;
+    font-weight: 400;
 }
+
+.comentario-input:hover {
+    border-color: #c1d4c1;
+    background: #ffffff;
+    transform: translateY(-1px);
+    box-shadow: 
+        inset 0 2px 4px rgba(0, 0, 0, 0.04),
+        0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.comentario-header {
+  display: flex;
+  justify-content: space-between; /* nome à esquerda, data à direita */
+  align-items: center; /* alinha verticalmente */
+  margin-bottom: 8px;
+}
+
+.comentario-autor {
+  font-weight: 700;
+  color: #226144;
+  font-size: 1rem;
+}
+
+.comentario-data {
+  font-size: 0.85rem;
+  color: #888; /* cor mais clara para diferenciar */
+}
+
+.comentario-vazio {
+  text-align: center;
+  color: #888;
+  font-style: italic;
+  padding: 16px 0;
+}
+

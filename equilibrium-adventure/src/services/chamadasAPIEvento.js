@@ -93,7 +93,7 @@ export async function cadastrarEvento(formDataValues, navigate, usuarioId) {
                 conteudoGpx = comprimirGPX(conteudoGpx);
                 
             } catch (error) {
-                alert("Erro ao processar arquivo GPX: " + error.message);
+                console.error("Erro ao processar arquivo GPX: " + error.message);
                 return false;
             }
         }
@@ -138,8 +138,8 @@ export async function cadastrarEvento(formDataValues, navigate, usuarioId) {
         );
 
         if (response.data.success) {
-            alert("Evento cadastrado com sucesso!");
-            navigate("/catalogo-trilhas-adm");
+            console.log("Evento cadastrado com sucesso!");
+            // Não navegar aqui, deixar o componente lidar com isso
             return true;
         } else {
             throw new Error(response.data.message || "Erro ao cadastrar evento.");
@@ -164,13 +164,7 @@ export async function ativarEvento(formDataValues) {
     const horaInicio = `${formDataValues.horaInicio}:00`
     const horaFinal = `${formDataValues.horaFim}:00`
 
-
-
-
-    console.log("horaInicio formatada:", horaInicio);
-    console.log("horaFim formatada:", horaFinal);
-
-    const dataAtivacao = dayjs().format("YYYY-MM-DD");
+    const dataAtivacao = formDataValues.dataEvento || dayjs().format("YYYY-MM-DD");
 
     const eventoId = formDataValues.evento ?? formDataValues.idEvento ?? formDataValues.id;
 
@@ -186,7 +180,8 @@ export async function ativarEvento(formDataValues) {
       eventoId: eventoId ? parseInt(eventoId, 10) : null
     };
 
-    console.log("ativarEvento payload:", payload);
+    console.log("=== DEBUG: Payload final sendo enviado ===");
+    console.log("payload:", payload);
 
     const response = await axios.post(
       `http://localhost:8080/adiministrador/cadastrar-evento-ativo`, 

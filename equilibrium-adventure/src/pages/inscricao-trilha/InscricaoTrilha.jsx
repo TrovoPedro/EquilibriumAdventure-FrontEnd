@@ -1,13 +1,13 @@
 import "./InscricaoTrilhas.css";
 import Header from "../../components/header/header-unified";
 import CircleBackButton from "../../components/circle-back-button/circle-back-button";
-import trilhaImg from "../../assets/cachoeiralago.jpg";
 import MapaTrilha from "../../components/mapa-trilha/MapaTrilha";
 import React, { useState, useEffect } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import Comentarios from '../../components/comentarios/Comentarios';
+import PopUpAviso from "../../components/pop-up-aviso/pop-up-aviso";
 import routeUrls from "../../routes/routeUrls";
 
 const comentariosIniciais = [
@@ -23,6 +23,7 @@ const InscricaoTrilhasLimitado = ({ idEvento, nivelNecessario }) => {
 	const [comentarios, setComentarios] = useState(comentariosIniciais);
 	const [novoComentario, setNovoComentario] = useState("");
 	const [inscrito, setInscrito] = useState(false);
+	const [showAvisoAnamnese, setShowAvisoAnamnese] = useState(false);
 	const { usuario } = useAuth();
 	const { nivel } = useScore();
 	const navigate = useNavigate();
@@ -132,12 +133,12 @@ const InscricaoTrilhasLimitado = ({ idEvento, nivelNecessario }) => {
 							if (nivelSuficiente) {
 								handleInscrever();
 							} else {
-								navigate(routeUrls.AGENDAR_ANAMNESE);
+								setShowAvisoAnamnese(true);
 							}
 						}}
 						disabled={inscrito}
 					>
-						{inscrito ? 'Já Inscrito' : nivelSuficiente ? 'Se Inscrever' : 'Agendar Anamnese'}
+						{inscrito ? 'Já Inscrito' : nivelSuficiente ? 'Se Inscrever' : 'Inscrever-se na Trilha'}
 					</button>
 
 			<Comentarios 
@@ -148,15 +149,32 @@ const InscricaoTrilhasLimitado = ({ idEvento, nivelNecessario }) => {
 				}}
 			/>
 
-			   <div style={{ margin: '40px 0 8px 0' }}>
-				   <b style={{ color: '#2d4636', fontWeight: 500, fontSize: 22 }}>
-					   O que esperar da sua próxima trilha:
-				   </b>
+			   <div className="card inscricao-trilha-mapa">
+				   <h3>Mapa da Trilha</h3>
+				   <MapaTrilha 
+					   gpxFile="/assets/gpx-files/trilha-cachoeira-dos-grampos-fumaca.gpx"
+					   altura="450px"
+				   />
 			   </div>
-			   <MapaTrilha 
-				   gpxFile="/assets/gpx-files/trilha-cachoeira-dos-grampos-fumaca.gpx"
-				   altura="450px"
-			   />
+
+			   {/* Popup de aviso para anamnese */}
+			   {showAvisoAnamnese && (
+				   <PopUpAviso
+					   title="Nível Insuficiente!"
+					   message="Para garantir que sua experiência seja confortável e segura,
+					    		recomendamos agendar uma conversa com um guia."
+					   showCancelButton={true}
+					   confirmButtonText="Agendar Anamnese"
+					   cancelButtonText="Voltar"
+					   onConfirm={() => {
+						   setShowAvisoAnamnese(false);
+						   navigate(routeUrls.AGENDAMENTO_ANAMNESE);
+					   }}
+					   onCancel={() => {
+						   setShowAvisoAnamnese(false);
+					   }}
+				   />
+			   )}
 		</div>
 	);
 };
