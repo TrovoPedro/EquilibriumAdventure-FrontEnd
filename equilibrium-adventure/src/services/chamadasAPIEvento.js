@@ -125,8 +125,6 @@ export async function cadastrarEvento(formDataValues, navigate, usuarioId) {
         );
 
         if (response.data.success) {
-            console.log("Evento cadastrado com sucesso!");
-            // Não navegar aqui, deixar o componente lidar com isso
             return true;
         } else {
             throw new Error(response.data.message || "Erro ao cadastrar evento.");
@@ -146,7 +144,7 @@ export async function buscarCep(cep) {
 
 export async function buscarDadosEvento(params) {
     try {
-        const response = await axios.get(`http://localhost:8080/adiministrador/buscar-evento-base-especifico/${params.id}`);
+        const response = await axios.get(`http://localhost:8080/administrador/buscar-evento-base-especifico/${params.id}`);
         return response.data;
     } catch (error) {
         console.error("Erro ao buscar dados do evento:", error);
@@ -157,7 +155,7 @@ export async function buscarDadosEvento(params) {
 
 export async function buscarenderecoEvento(enderecoId) {
     try {
-        const response = await axios.get(`http://localhost:8080/adiministrador/buscar-endereco-evento-especifico/${enderecoId}`);
+        const response = await axios.get(`http://localhost:8080/administrador/buscar-endereco-evento-especifico/${enderecoId}`);
         return response.data;
     } catch (error) {
         console.error("Erro ao buscar endereço do evento:", error);
@@ -190,7 +188,6 @@ export const editarEvento = async (eventoData, eventoId) => {
             }
         }
 
-        // Tentar obter usuarioId do localStorage (fallback seguro)
         let usuarioId = null;
         try {
             const usuario = JSON.parse(sessionStorage.getItem("usuario"));
@@ -199,7 +196,6 @@ export const editarEvento = async (eventoData, eventoId) => {
             usuarioId = null;
         }
 
-        // Normalizar nomes de campo (aceitar tanto 'titulo' quanto 'nome', etc.)
         const nome = eventoData.nome || eventoData.titulo || "";
         const descricao = eventoData.descricao || "";
         const nivel = eventoData.nivel_dificuldade || eventoData.dificuldade || "";
@@ -209,7 +205,6 @@ export const editarEvento = async (eventoData, eventoId) => {
                 ? parseFloat(String(eventoData.distancia).replace(" km", ""))
                 : 0;
 
-        // Endereço pode vir aninhado em eventoData.endereco ou nos campos raiz
         const enderecoInput = eventoData.endereco || {};
         const enderecoObj = {
             rua: enderecoInput.rua || eventoData.rua || "",
@@ -306,8 +301,6 @@ export async function ativarEvento(formDataValues) {
             eventoId: eventoId ? parseInt(eventoId, 10) : null
         };
 
-    console.log("=== DEBUG: Payload final sendo enviado ===");
-    console.log("payload:", payload);
 
         const response = await axios.post(
             `http://localhost:8080/administrador/cadastrar-evento-ativo`,
