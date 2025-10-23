@@ -10,21 +10,25 @@ import { useState, useEffect } from "react";
 import "./relatorio-anamnese.css";
 
 const RelatorioAnamnese = () => {
-  const [nome, setNome] = useState("");
-  const [relatorio, setRelatorio] = useState("");
   const navigate = useNavigate();
-  const { id } = useParams("id");
-  const userId = id ? Number(id) : null;
+  const goBack = useGoBack();
+  const { userId } = useParams();
 
-  const handleExibirNome = async () => {
-    try {
-      if (!userId) return;
-      const usuario = await buscarUsuarioPorId(userId);
-      setNome(usuario.nome);
-    } catch (error) {
-      console.error("Erro ao buscar usuário:", error);
-    }
-  };
+
+    const handleExibirNome = async () => {
+        try {
+            const usuarioLocal = userId;
+            const userId = usuarioLocal ? JSON.parse(usuarioLocal).id : null;
+            const usuario = await buscarUsuarioPorId(userId);
+            setNome(usuario.nome);
+        } catch (error) {
+            console.error("Erro ao buscar usuário:", error);
+        }
+    };
+
+    useEffect(() => {
+        handleExibirNome();
+    }, []);
 
   useEffect(() => {
     handleExibirNome();
