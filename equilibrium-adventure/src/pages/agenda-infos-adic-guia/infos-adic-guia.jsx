@@ -40,13 +40,8 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
     }
 
     const handleOnClickMaisInfo = (eventoId = null) => {
-        if (eventoId) {
-            const eventoSelecionado = eventosAtivos.find(ev => ev.id_evento === eventoId);
-            if (eventoSelecionado && eventoSelecionado.id_ativacao) {
-                sessionStorage.setItem('ativacaoSelecionadaId', eventoSelecionado.id_ativacao);
-                redirect(`/detalhes-evento/${eventoSelecionado.id_ativacao}`);
-            }
-        }
+        // Redireciona para a tela de dados do guia conforme solicitado
+        redirect(routeUrls.DADOS_GUIA);
     }
 
     const handleOnClickProximoEvento = () => {
@@ -61,7 +56,8 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
     }
 
     const handleEditInfo = () => {
-        redirect(routeUrls.INFORMACOES_PESSOAIS);
+        // Redireciona para a tela de Dados do Guia (editar dados do guia)
+        redirect(routeUrls.DADOS_GUIA);
     }
 
     const scrollLeft = (containerId) => {
@@ -283,8 +279,8 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                                             </div>
                                         </>
                                     ) : eventosAtivos.length > 0 ? (
-                                        eventosAtivos.map((evento) => (
-                                            <div className="evento-ativo-card" key={evento.id_evento}>
+                                        eventosAtivos.map((evento, idx) => (
+                                            <div className="evento-ativo-card" key={`${evento.id_evento}-${evento.id_ativacao || idx}`}>
                                                 <div className="evento-image" onClick={() => handleOnClickMaisInfo(evento.id_evento)} style={{ cursor: 'pointer' }}>
                                                     <img src={evento.imagemUrl || catalogoFallback} alt={evento.nome_evento} />
                                                 </div>

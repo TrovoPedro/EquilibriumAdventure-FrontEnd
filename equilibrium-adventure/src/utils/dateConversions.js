@@ -3,12 +3,21 @@ export const convertDateToBrazilian = (dateISO) => {
     
     try {
         if (dateISO.includes("/")) return dateISO;
-        
+        if (dateISO.includes('T')) {
+            const data = new Date(dateISO);
+            const dia = data.getUTCDate().toString().padStart(2, '0');
+            const mes = (data.getUTCMonth() + 1).toString().padStart(2, '0');
+            const ano = data.getUTCFullYear();
+            return `${dia}/${mes}/${ano}`;
+        }
+        if (/^\d{4}-\d{2}-\d{2}$/.test(dateISO)) {
+            return dateISO.split('-').reverse().join('/');
+        }
+
         const data = new Date(dateISO);
         const dia = data.getDate().toString().padStart(2, '0');
         const mes = (data.getMonth() + 1).toString().padStart(2, '0');
         const ano = data.getFullYear();
-        
         return `${dia}/${mes}/${ano}`;
     } catch (error) {
         console.error("Erro ao formatar data:", error);

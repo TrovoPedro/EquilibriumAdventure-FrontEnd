@@ -135,8 +135,8 @@ const CatalogoTrilhas = () => {
           {!loading.ativos && !error.ativos && (
             <div className="anuncios-grid">
               {filtrarEventos(eventosAtivos).length > 0 ? (
-                filtrarEventos(eventosAtivos).map((evento) => (
-                  <div className="anuncio-card" key={`ativo-${evento.id_evento}`}>
+                filtrarEventos(eventosAtivos).map((evento, idx) => (
+                  <div className="anuncio-card" key={`ativo-${evento.id_evento}-${evento.id_ativacao || idx}`}>
                     <div className="anuncio-img-wrap">
                       <img
                         src={evento.imagemUrl || catalogo1}
@@ -179,8 +179,8 @@ const CatalogoTrilhas = () => {
           {!loading.base && !error.base && (
             <div className="anuncios-grid">
               {filtrarEventos(eventosBase).length > 0 ? (
-                filtrarEventos(eventosBase).map((evento) => (
-                  <div className="anuncio-card" key={`base-${evento.id_evento}`}>
+                filtrarEventos(eventosBase).map((evento, idx) => (
+                  <div className="anuncio-card" key={`base-${evento.id_evento}-${idx}`}>
                     <div className="anuncio-img-wrap">
                       <img
                         src={evento.imagemUrl || catalogo1}

@@ -92,10 +92,7 @@ export default function AdicionarGuia() {
                     </div>
                     <div className="adicionar-guia-side-column">
                         <div className="adicionar-guia-imagem">
-                            <div
-                                className="upload-box"
-                                onClick={() => document.getElementById("upload-input").click()}
-                            >
+                            <label htmlFor="upload-input" className="upload-box">
                                 {previewUrl ? (
                                     <img
                                         src={previewUrl}
@@ -110,7 +107,7 @@ export default function AdicionarGuia() {
                                         <p>Clique ou arraste uma imagem aqui</p>
                                     </div>
                                 )}
-                            </div>
+                            </label>
                             <input
                                 type="file"
                                 id="upload-input"

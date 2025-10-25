@@ -232,19 +232,17 @@ export const editarEvento = async (eventoData, eventoId) => {
         );
 
         
+    // Append image if user selected a new File or if we previously loaded
+    // the existing image blob (to preserve it when submitting updates).
         if (eventoData.imagem) {
+            // Case: user selected a File
             if (typeof File !== 'undefined' && eventoData.imagem instanceof File) {
                 formData.append("imagem", eventoData.imagem);
-            } else if (eventoId) {
-                try {
-                    const resp = await axios.get(`http://localhost:8080/guia/${eventoId}/imagem`, { responseType: 'blob' });
-                    const mime = resp.data.type || 'application/octet-stream';
-                    const ext = mime.split('/')[1] ? mime.split('/')[1].split(';')[0] : 'jpg';
-                    const filename = (eventoData.imagem && eventoData.imagem.name) ? eventoData.imagem.name : `imagem-${eventoId}.${ext}`;
-                    formData.append('imagem', resp.data, filename);
-                } catch (err) {
-                    console.warn('Não foi possível recuperar imagem do servidor para reenvio:', err.message || err);
-                }
+            } else if (typeof eventoData.imagem === 'object' && eventoData.imagem.blob) {
+                // append blob (from previously fetched server image)
+                const blob = eventoData.imagem.blob;
+                const filename = eventoData.imagem.name || `imagem-${eventoId || 'evento'}.jpg`;
+                formData.append('imagem', blob, filename);
             }
         }
 

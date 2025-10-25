@@ -3,6 +3,7 @@ import Header from "../../components/header/header-unified";
 import CircleBackButton from "../../components/circle-back-button/circle-back-button";
 import MapaTrilha from "../../components/mapa-trilha/MapaTrilha";
 import React, { useState, useEffect } from "react";
+import { convertDateToBrazilian } from "../../utils/dateConversions";
 import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -184,7 +185,7 @@ const InscricaoTrilhasLimitado = () => {
         <div className="inscricao-trilha-info">
           <div><b>Título:</b> {evento.nome}</div>
           <div><b>Nível:</b> {evento.nivel_dificuldade}</div>
-          <div><b>Data:</b> {evento.dataAtivacao ? new Date(evento.dataAtivacao).toLocaleDateString() : "N/A"}</div>
+          <div><b>Data:</b> {evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"}</div>
           <div><b>Descrição:</b> {evento.descricao}</div>
         </div>
       </div>
@@ -216,7 +217,7 @@ const InscricaoTrilhasLimitado = () => {
           </div>
           <div className="inscricao-trilha-form-group">
             <label>Data:</label>
-            <input type="text" value={evento.dataAtivacao ? new Date(evento.dataAtivacao).toLocaleDateString() : "N/A"} disabled />
+            <input type="text" value={evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"} disabled />
           </div>
         </div>
 

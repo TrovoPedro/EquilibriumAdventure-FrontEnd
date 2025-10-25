@@ -11,6 +11,7 @@ import routeUrls from "../../routes/routeUrls";
 import { buscarInscricoesPorUsuario, cancelarInscricao, buscarHistoricoPorUsuario } from "../../services/apiAventureiro";
 import { buscarImagemUsuario } from "../../services/apiUsuario";
 import { useAuth } from "../../context/AuthContext";
+import { convertDateToBrazilian } from "../../utils/dateConversions";
 
 const CriarAgendaAventureiro = () => {
   const navigate = useNavigate();
@@ -41,7 +42,8 @@ const CriarAgendaAventureiro = () => {
         const agendaFormatada = data.map((item) => ({
           idEvento: item.idAtivacaoEvento,
           nomeEvento: item.nomeEvento ?? "Sem nome",
-          dataAtivacao: item.dataAtivacao ? new Date(item.dataAtivacao) : undefined
+          // keep original string and format later to avoid timezone shifts
+          dataAtivacao: item.dataAtivacao
         }));
         setAgenda(agendaFormatada);
       } catch (error) {
@@ -59,7 +61,7 @@ const CriarAgendaAventureiro = () => {
         const historicoFormatado = data.map((item) => ({
           idEvento: item.idAtivacaoEvento,
           nomeEvento: item.nomeEvento ?? "Sem nome",
-          dataAtivacao: item.dataAtivacao ? new Date(item.dataAtivacao) : undefined
+          dataAtivacao: item.dataAtivacao
         }));
         setHistorico(historicoFormatado);
       } catch (error) {
@@ -80,13 +82,7 @@ const CriarAgendaAventureiro = () => {
   };
 
   const formatarData = (dataString) => {
-    if (!dataString) return "";
-    const data = new Date(dataString);
-    if (isNaN(data)) return "";
-    const dia = String(data.getDate()).padStart(2, "0");
-    const mes = String(data.getMonth() + 1).padStart(2, "0");
-    const ano = data.getFullYear();
-    return `${dia}/${mes}/${ano}`;
+    return convertDateToBrazilian(dataString);
   };
 
   return (

@@ -40,6 +40,16 @@ export const buscarImagemEvento = async (id) => {
   }
 };
 
+export const buscarImagemEventoBlob = async (id) => {
+  try {
+    const response = await api.get(`/guia/${id}/imagem`, { responseType: 'blob' });
+    return response.data; // Blob or null
+  } catch (error) {
+    console.error("Erro ao buscar imagem do evento (blob):", error);
+    return null;
+  }
+};
+
 export const buscarEventoPorId = async (id) => {
   try {
     const response = await api.get(`/guia/buscar-evento-especifico/${id}`);

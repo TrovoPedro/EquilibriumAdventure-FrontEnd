@@ -7,30 +7,58 @@ import useGoBack from "../../utils/useGoBack";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import { atualizarGuia } from "../../services/apiGuia";
+import { buscarDadosUsuario, buscarImagemUsuario } from "../../services/apiUsuario";
 
 export default function DadosGuia() {
     const navigate = useNavigate();
     const goBack = useGoBack();
     const { usuario } = useAuth();
-    const idUsuario = usuario?.id;
+    // aceita objetos de usuário que tenham either `id` ou `id_usuario`
+    const idUsuario = usuario?.id || usuario?.id_usuario;
 
     const [formData, setFormData] = useState({
         nome: "",
         email: "",
         descricao: "",
-        imagem: null
+        imagem: null, // arquivo selecionado pelo input
+        imagemPreview: null // url da imagem atual fornecida pelo backend
     });
 
     useEffect(() => {
         if (!idUsuario) return;
+
+        const carregarDados = async () => {
+            try {
+                const dados = await buscarDadosUsuario(idUsuario);
+                if (dados) {
+                    setFormData((prev) => ({
+                        ...prev,
+                        nome: dados.nome || "",
+                        email: dados.email || "",
+                        descricao: dados.descricao_guia || dados.descricao || "",
+                    }));
+                }
+
+                const imgUrl = await buscarImagemUsuario(idUsuario);
+                if (imgUrl) {
+                    setFormData((prev) => ({ ...prev, imagemPreview: imgUrl }));
+                }
+            } catch (err) {
+                console.error("Erro ao carregar dados do guia:", err);
+            }
+        };
+
+        carregarDados();
     }, [idUsuario]);
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
-        setFormData({
-            ...formData,
-            [name]: files ? files[0] : value,
-        });
+        if (files && files[0]) {
+            // arquivo selecionado -> atualiza `imagem` e limpa imagemPreview
+            setFormData((prev) => ({ ...prev, imagem: files[0] }));
+        } else {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -44,7 +72,7 @@ export default function DadosGuia() {
             const result = await atualizarGuia(idUsuario, formData);
             console.log("Guia atualizado com sucesso:", result);
             alert("Guia atualizado com sucesso!");
-            navigate(routeUrls.HOME);
+            navigate(routeUrls.CATALOGO_TRILHAS_ADM);
         } catch (err) {
             console.error("Erro ao atualizar guia:", err);
             alert("Erro ao atualizar guia!");
@@ -98,7 +126,6 @@ export default function DadosGuia() {
                             <div className="adicionar-guia-imagem">
                                 <div
                                     className="upload-box"
-                                    onClick={() => document.getElementById("upload-input").click()}
                                 >
                                     {formData.imagem ? (
                                         <img
@@ -106,6 +133,8 @@ export default function DadosGuia() {
                                             alt="Pré-visualização"
                                             className="preview-img"
                                         />
+                                    ) : formData.imagemPreview ? (
+                                        <img src={formData.imagemPreview} alt="Imagem atual" className="preview-img" />
                                     ) : (
                                         <div className="upload-placeholder">
                                             <FaCloudUploadAlt size={80} color="#226144" />
