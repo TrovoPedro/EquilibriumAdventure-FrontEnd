@@ -35,43 +35,51 @@ const InscricaoTrilhasLimitado = () => {
 
   // Buscar evento e ativação
   useEffect(() => {
-    const carregarEvento = async () => {
-      try {
-        const eventoData = await buscarEventoAtivoPorId(id);
+  const carregarEvento = async () => {
+    try {
+      const eventoData = await buscarEventoAtivoPorId(id);
 
-        if (eventoData.length > 0) {
-          const ativacao = eventoData[0];
-          setEvento({
-            idAtivacao: ativacao.idAtivacao,
-            nome: ativacao.evento?.nome || "",
-            descricao: ativacao.evento?.descricao || "",
-            nivel_dificuldade: ativacao.evento?.nivelDificuldade || "",
-            distancia_km: ativacao.evento?.distanciaKm || 0,
-            responsavel: ativacao.evento?.responsavel || "",
-            endereco: ativacao.evento?.endereco || "",
-            caminho_arquivo_evento: ativacao.evento?.caminhoArquivoEvento || "",
-            preco: ativacao.preco,
-            horaInicio: ativacao.horaInicio,
-            horaFinal: ativacao.horaFinal,
-            tempoEstimado: ativacao.tempoEstimado,
-            limiteInscritos: ativacao.limiteInscritos,
-            dataAtivacao: ativacao.dataAtivacao,
-            tipo: ativacao.tipo,
-            estado: ativacao.estado,
-          });
+      if (eventoData.length > 0) {
+        const ativacao = eventoData[0];
+        setEvento({
+          idAtivacao: ativacao.idAtivacao,
+          nome: ativacao.evento?.nome || "",
+          descricao: ativacao.evento?.descricao || "",
+          nivel_dificuldade: ativacao.evento?.nivelDificuldade || "",
+          distancia_km: ativacao.evento?.distanciaKm || 0,
+          responsavel: ativacao.evento?.responsavel || "",
+          endereco: ativacao.evento?.endereco || "",
+          caminho_arquivo_evento: ativacao.evento?.caminhoArquivoEvento || "",
+          preco: ativacao.preco,
+          horaInicio: ativacao.horaInicio,
+          horaFinal: ativacao.horaFinal,
+          tempoEstimado: ativacao.tempoEstimado,
+          limiteInscritos: ativacao.limiteInscritos,
+          dataAtivacao: ativacao.dataAtivacao,
+          tipo: ativacao.tipo,
+          estado: ativacao.estado,
+        });
 
-          const imagemUrl = await buscarImagemEvento(ativacao.evento.idEvento);
-          setImagemEvento(imagemUrl || null);
-          console.log("Evento carregado:", ativacao);
-        } else {
-          console.error("Nenhuma ativação encontrada para este evento");
+        const imagemUrl = await buscarImagemEvento(ativacao.evento.idEvento);
+        setImagemEvento(imagemUrl || null);
+
+        if (ativacao.idAtivacao) {
+          console.log("Buscando GPX:", ativacao.evento.idEvento);
+          const gpx = await buscarGpx(ativacao.evento.idEvento);
+          setGpxData(gpx);
         }
-      } catch (error) {
-        console.error("Erro ao carregar evento:", error);
+
+        console.log("Evento carregado:", ativacao);
+      } else {
+        console.error("Nenhuma ativação encontrada para este evento");
       }
-    };
-    carregarEvento();
-  }, [id]);
+    } catch (error) {
+      console.error("Erro ao carregar evento e GPX:", error);
+    }
+  };
+
+  carregarEvento();
+}, [id]);
 
   // Carregar comentários
   const carregarComentarios = async () => {
@@ -102,22 +110,6 @@ const InscricaoTrilhasLimitado = () => {
   };
 
 
-  useEffect(() => {
-    const carregarGpx = async () => {
-      if (!evento?.idAtivacao) return;
-
-      try {
-        const gpx = await buscarGpx(evento.idAtivacao); // ✅ usa idAtivacao
-        setGpxData(gpx);
-      } catch (error) {
-        console.error("Erro ao carregar GPX:", error);
-      }
-
-    };
-
-    carregarGpx();
-  }, [evento]);
-  // Checar inscrição
   const checarInscricao = async () => {
     try {
       if (usuario?.id && evento?.idAtivacao) {

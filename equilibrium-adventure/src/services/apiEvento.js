@@ -69,12 +69,12 @@ export const buscarEventoAtivoPorId = async (id) => {
     throw error;
   }
 };
-export const buscarGpx = async (idAtivacao) => {
+export const buscarGpx = async (id) => {
   try {
-    const response = await api.get(`/ativacao/${idAtivacao}/gpx`, {
-      responseType: "arraybuffer",
+    const response = await api.get(`/guia/${id}/gpx`, {
+      responseType: 'text',
     });
-    return response.data;
+    return response.data; 
   } catch (error) {
     console.error("Erro ao buscar GPX do evento:", error);
     throw error;
