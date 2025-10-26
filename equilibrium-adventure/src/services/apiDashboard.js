@@ -88,7 +88,8 @@ export const getPalavrasComentarios = async (usuarioId) => {
 export const getTendenciasAno = async (usuarioId) => {
   try {
     const response = await api.get(`/tendencias-ano?usuarioId=${usuarioId}`);
-    return response.data;
+    // Normaliza resposta: alguns endpoints retornam { value: [...] } (Azure-style)
+    return response.data && response.data.value ? response.data.value : response.data;
   } catch (error) {
     throw error;
   }
@@ -98,7 +99,7 @@ export const getTendenciasAno = async (usuarioId) => {
 export const getTendenciasMes = async (usuarioId) => {
   try {
     const response = await api.get(`/tendencias-mes?usuarioId=${usuarioId}`);
-    return response.data;
+    return response.data && response.data.value ? response.data.value : response.data;
   } catch (error) {
     throw error;
   }
@@ -108,7 +109,7 @@ export const getTendenciasMes = async (usuarioId) => {
 export const getTendenciasDia = async (usuarioId) => {
   try {
     const response = await api.get(`/tendencias-dia?usuarioId=${usuarioId}`);
-    return response.data;
+    return response.data && response.data.value ? response.data.value : response.data;
   } catch (error) {
     throw error;
   }
