@@ -1,7 +1,7 @@
 import "./relatorio-anamnese.css"
 import { gerarRelatorioAnamnese } from "../../services/chamadasAPIAgenda";
 import { buscarUsuarioPorId } from "../../services/api";
-import { data, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import useGoBack from "../../utils/useGoBack";
 import Header from "../../components/header/header-unified";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
@@ -12,39 +12,46 @@ import "./relatorio-anamnese.css";
 const RelatorioAnamnese = () => {
   const navigate = useNavigate();
   const goBack = useGoBack();
-  const { userId } = useParams();
+
+  // Pegar parâmetros da rota aqui (hooks devem ser chamados no topo do componente)
+  const params = useParams();
+  const userId = params?.id || params?.userId || params?.fkAventureiro || null;
+
+  const [formData, setFormData] = useState({
+    nome: "",
+    relatorio: ""
+  });
+  const [relatorio, setRelatorio] = useState("");
+  const [nome, setNome] = useState("");
 
 
-    const handleExibirNome = async () => {
-        try {
-            const usuarioLocal = userId;
-            const userId = usuarioLocal ? JSON.parse(usuarioLocal).id : null;
-            const usuario = await buscarUsuarioPorId(userId);
-            setNome(usuario.nome);
-        } catch (error) {
-            console.error("Erro ao buscar usuário:", error);
-        }
-    };
+  const handleExibirNome = async () => {
+    try {
+      if (!userId) {
+        console.warn('userId não encontrado nas params da rota');
+        return;
+      }
+      const usuario = await buscarUsuarioPorId(userId);
+      if (usuario && usuario.nome) setNome(usuario.nome);
+    } catch (error) {
+      console.error("Erro ao buscar usuário:", error);
+    }
+  };
 
     useEffect(() => {
         handleExibirNome();
-    }, []);
-
-  useEffect(() => {
-    handleExibirNome();
-  }, [userId]);
+    }, [userId]);
 
   const handleSalvarRelatorio = async () => {
     try {
       if (!userId) throw new Error("fkAventureiro não encontrado na URL");
-      console.log("userId:", userId);
-      console.log("relatorio:", relatorio);
+      if (!relatorio || relatorio.trim() === "") {
+        alert("Por favor, preencha o relatório antes de salvar.");
+        return false;
+      }
       const data = await gerarRelatorioAnamnese({ userId, relatorio });
-      alert("Relatório salvo com sucesso!");
-      console.log("Relatório salvo:", data);
       return true;
     } catch (error) {
-      console.error("Erro ao salvar relatório:", error);
       alert("Erro ao salvar relatório. Tente novamente.");
       return false;
     }
@@ -56,7 +63,7 @@ const RelatorioAnamnese = () => {
   <div className="font-['Raleway',Arial,sans-serif] text-[#226144] bg-gradient-to-br from-[#f6f7f8] to-[#eef0f1] min-h-screen flex flex-col items-center justify-center pt-24 sm:pt-28 lg:pt-32 pb-[70px] px-4">
 
   <div className="div-title w-full max-w-[1300px] mx-auto px-6 sm:px-10 mb-4 sm:mb-6">
-          <div className="editar-evento-header">
+          <div className="editar-evento-header"> 
             <ButtonBack onClick={() => navigate(-1)} />
             <h1 className="h1-title">Relatório de Anamnese</h1>
           </div>

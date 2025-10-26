@@ -44,7 +44,7 @@ export const gerarRelatorioAnamnese = async ({ userId, relatorio }) => {
     //   fkAventureiro: userId,
     //   descricao: relatorio
     // });
-    const response = await axios.patch(`${BASE_URL}/gerar-relatorio?fkAventureiro=${userId}&descricao=${encodeURIComponent(relatorio)}`);
+    const response = await axios.patch(`http://localhost:8080/agendamentos/gerar-relatorio?fkAventureiro=${userId}&descricao=${encodeURIComponent(relatorio)}`);
     return response.data;
   } catch (err) {
     console.error("Erro ao gerar relatório de anamnese:", err);
