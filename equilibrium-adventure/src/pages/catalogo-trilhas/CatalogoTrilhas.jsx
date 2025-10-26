@@ -18,9 +18,16 @@ const CatalogoTrilhas = () => {
   useEffect(() => {
     let isMounted = true;
 
+    // Fallback para sessionStorage caso o contexto do guia ainda não esteja
+    // populado quando a rota é visitada via back/forward.
+    const stored = sessionStorage.getItem('guiaSelecionado');
+    const storedGuide = stored ? JSON.parse(stored) : null;
+    const guideId = guiaSelecionado?.id || storedGuide?.id || 0;
+
     const carregarTrilhas = async () => {
       try {
-        const trilhasData = await buscarEventosAtivosPorGuia(guiaSelecionado?.id || 0);
+        if (!guideId) return;
+        const trilhasData = await buscarEventosAtivosPorGuia(guideId);
         const trilhasComImagens = await Promise.all(
           trilhasData.map(async (trilha) => {
             const imagemUrl = await buscarImagemEvento(trilha.id_evento);
@@ -42,12 +49,20 @@ const CatalogoTrilhas = () => {
       }
     };
 
+    // initial load
     carregarTrilhas();
+
+    // reload when window regains focus (helps when using browser back/forward)
+    const handleFocus = () => {
+      carregarTrilhas();
+    };
+    window.addEventListener('focus', handleFocus);
 
     return () => {
       isMounted = false;
+      window.removeEventListener('focus', handleFocus);
     };
-  }, []);
+  }, [guiaSelecionado?.id]);
 
 const handleSaibaMais = (ativacaoId) => {
   navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', ativacaoId));

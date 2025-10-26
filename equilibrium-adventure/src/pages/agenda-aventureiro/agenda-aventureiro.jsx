@@ -137,6 +137,12 @@ const CriarAgendaAventureiro = () => {
                     }
                     alt="EVENTO"
                     onError={(e) => (e.target.src = Trilha)}
+                    onClick={() => {
+                      if (proximoEventoComImagem && proximoEventoComImagem.idEvento) {
+                        navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', proximoEventoComImagem.idEvento));
+                      }
+                    }}
+                    style={{ cursor: proximoEventoComImagem ? 'pointer' : 'default' }}
                   />
                 );
               })()}
@@ -161,7 +167,11 @@ const CriarAgendaAventureiro = () => {
                       </span>
                     </div>
                     <div className="agenda-aventureiro-item-actions">
-                      <ButtonSubmitForm title="Mais Informações" type="button" />
+                      <ButtonSubmitForm
+                        title="Mais Informações"
+                        type="button"
+                        onClick={() => navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', item.idEvento))}
+                      />
                       <ButtonDangerForm
                         title="Cancelar Inscrição"
                         type="button"

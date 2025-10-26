@@ -31,11 +31,17 @@ const CatalogoTrilhas = () => {
   useEffect(() => {
     let isMounted = true;
 
+    // Allow falling back to sessionStorage in case AuthContext hasn't hydrated
+    // yet when the route is revisited via back/forward navigation.
+    const stored = sessionStorage.getItem('usuario');
+    const storedUser = stored ? JSON.parse(stored) : null;
+    const userId = usuario?.id || storedUser?.id;
+
     const carregarEventos = async () => {
-      if (!usuario?.id) return;
+      if (!userId) return;
 
       try {
-        const eventosData = await buscarEventosPorGuia(usuario.id);
+        const eventosData = await buscarEventosPorGuia(userId);
 
         const eventosComImagens = await Promise.all(
           eventosData.map(async (evento) => {
@@ -58,7 +64,7 @@ const CatalogoTrilhas = () => {
       }
 
       try {
-        const eventosAtivosData = await buscarEventosAtivosPorGuia(usuario.id);
+        const eventosAtivosData = await buscarEventosAtivosPorGuia(userId);
 
         const ativosComImagens = await Promise.all(
           eventosAtivosData.map(async (evento) => {
@@ -81,12 +87,20 @@ const CatalogoTrilhas = () => {
       }
     };
 
+    // initial load
     carregarEventos();
+
+    // also reload when window regains focus (helps when using browser back/forward)
+    const handleFocus = () => {
+      carregarEventos();
+    };
+    window.addEventListener('focus', handleFocus);
 
     return () => {
       isMounted = false;
+      window.removeEventListener('focus', handleFocus);
     };
-  }, [usuario]);
+  }, [usuario?.id]);
 
 
   const handleOnClick = (action, eventoId) => {
