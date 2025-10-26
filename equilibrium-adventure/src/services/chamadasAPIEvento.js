@@ -311,3 +311,36 @@ export async function ativarEvento(formDataValues) {
         return false;
     }
 }   
+
+
+export const alterarEstadoEvento = async (id, estado) => {
+  try {
+    const response = await axios.put(`http://localhost:8080/ativacoes/${id}/estado`, null, {
+      params: { estado } // envia como query param
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao alterar estado do evento:", error);
+    throw error;
+  }
+};
+
+export async function atualizarAtivacaoEvento(id, eventoData) {
+  try {
+    const response = await axios.put(`http://localhost:8080/ativacoes/${id}`, {
+      horaInicio: eventoData.horaInicio,
+      horaFinal: eventoData.horaFim,
+      tempoEstimado: eventoData.tempoEstimado,
+      limiteInscritos: eventoData.limiteInscritos,
+      dataAtivacao: eventoData.dataEvento,
+      tipo: eventoData.categoria,
+      preco: eventoData.preco,
+      estado: eventoData.estado,
+      eventoId: eventoData.idEvento // se tiver
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao atualizar evento:", error);
+    throw error;
+  }
+}

@@ -16,38 +16,42 @@ const CatalogoTrilhas = () => {
   const [error, setError] = useState({ trilhas: null, anuncios: null });
 
   useEffect(() => {
-    let isMounted = true;
+  let isMounted = true;
 
-    const carregarTrilhas = async () => {
-      try {
-        const trilhasData = await buscarEventosAtivosPorGuia(guiaSelecionado?.id || 0);
-        const trilhasComImagens = await Promise.all(
-          trilhasData.map(async (trilha) => {
-            const imagemUrl = await buscarImagemEvento(trilha.id_evento);
-            return { ...trilha, imagemUrl: imagemUrl || catalogoFallback };
-          })
-        );
+  const carregarTrilhas = async () => {
+    try {
+      const trilhasData = await buscarEventosAtivosPorGuia(guiaSelecionado?.id || 0);
+      const trilhasComImagens = await Promise.all(
+        trilhasData.map(async (trilha) => {
+          const imagemUrl = await buscarImagemEvento(trilha.id_evento);
+          return { ...trilha, imagemUrl: imagemUrl || catalogoFallback };
+        })
+      );
 
-        if (isMounted) {
-          setTrilhas(trilhasComImagens);
-          setError((prev) => ({ ...prev, trilhas: null }));
-        }
-      } catch (err) {
-        console.error("Erro ao carregar trilhas:", err);
-        if (isMounted)
-          setError((prev) => ({ ...prev, trilhas: "Erro ao carregar trilhas." }));
-      } finally {
-        if (isMounted)
-          setLoading((prev) => ({ ...prev, trilhas: false }));
+      // FILTRO: apenas eventos com log diferente de "FINALIZADO"
+      const trilhasAtivas = trilhasComImagens.filter(
+        (trilha) => (trilha.log || "").trim().toUpperCase() !== "FINALIZADO"
+      );
+
+      if (isMounted) {
+        setTrilhas(trilhasAtivas);
+        setError((prev) => ({ ...prev, trilhas: null }));
       }
-    };
+    } catch (err) {
+      console.error("Erro ao carregar trilhas:", err);
+      if (isMounted)
+        setError((prev) => ({ ...prev, trilhas: "Erro ao carregar trilhas." }));
+    } finally {
+      if (isMounted)
+        setLoading((prev) => ({ ...prev, trilhas: false }));
+    }
+  };
 
-    carregarTrilhas();
+  carregarTrilhas();
 
-    return () => {
-      isMounted = false;
-    };
-  }, []);
+  return () => { isMounted = false; };
+}, [guiaSelecionado]);
+
 
 const handleSaibaMais = (ativacaoId) => {
   navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', ativacaoId));

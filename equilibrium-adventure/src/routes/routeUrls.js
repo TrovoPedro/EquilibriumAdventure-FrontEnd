@@ -9,7 +9,7 @@ const routeUrls = {
     CATALOGO_TRILHA: '/catalogo-trilhas',
     QUESTIONARIO: '/questionario',
     INFORMACOES_PESSOAIS: '/informacoes-pessoais',
-    DADOS_CLIENTE: '/dados-cliente',
+    DADOS_CLIENTE: '/dados-cliente/:id',
     ATIVAR_EVENTO: '/ativar-evento/:id',
     CRIAR_INFOS_ADIC_GUIA: '/infos-adic-guia',
     CATALOGO_TRILHAS_ADM: '/catalogo-trilhas-adm',
