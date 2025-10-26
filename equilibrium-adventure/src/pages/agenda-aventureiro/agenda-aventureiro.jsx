@@ -8,7 +8,11 @@ import ButtonDangerForm from "../../components/button-padrao/button-danger-form"
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
-import { buscarInscricoesPorUsuario, cancelarInscricao, buscarHistoricoPorUsuario } from "../../services/apiAventureiro";
+import {
+  buscarInscricoesPorUsuario,
+  cancelarInscricao,
+  buscarHistoricoPorUsuario,
+} from "../../services/apiAventureiro";
 import { buscarImagemUsuario } from "../../services/apiUsuario";
 import { useAuth } from "../../context/AuthContext";
 import { convertDateToBrazilian } from "../../utils/dateConversions";
@@ -39,12 +43,14 @@ const CriarAgendaAventureiro = () => {
       if (!idUsuario) return;
       try {
         const data = await buscarInscricoesPorUsuario(idUsuario);
+        console.log("Dados recebidos do back:", data); // <-- LOG AQUI
         const agendaFormatada = data.map((item) => ({
           idEvento: item.idAtivacaoEvento,
           nomeEvento: item.nomeEvento ?? "Sem nome",
-          // keep original string and format later to avoid timezone shifts
-          dataAtivacao: item.dataAtivacao
+          dataAtivacao: item.dataAtivacao,
+          imagem: item.imagemEvento,
         }));
+        console.log("Agenda formatada:", agendaFormatada); // <-- LOG AQUI
         setAgenda(agendaFormatada);
       } catch (error) {
         console.error(error);
@@ -61,7 +67,7 @@ const CriarAgendaAventureiro = () => {
         const historicoFormatado = data.map((item) => ({
           idEvento: item.idAtivacaoEvento,
           nomeEvento: item.nomeEvento ?? "Sem nome",
-          dataAtivacao: item.dataAtivacao
+          dataAtivacao: item.dataAtivacao,
         }));
         setHistorico(historicoFormatado);
       } catch (error) {
@@ -74,16 +80,14 @@ const CriarAgendaAventureiro = () => {
   const handleCancelar = async (idEvento) => {
     try {
       await cancelarInscricao(idUsuario, idEvento);
-      setAgenda(prev => prev.filter(item => item.idEvento !== idEvento));
+      setAgenda((prev) => prev.filter((item) => item.idEvento !== idEvento));
     } catch (error) {
       console.error(error);
       alert("Erro ao cancelar inscrição!");
     }
   };
 
-  const formatarData = (dataString) => {
-    return convertDateToBrazilian(dataString);
-  };
+  const formatarData = (dataString) => convertDateToBrazilian(dataString);
 
   return (
     <>
@@ -116,6 +120,29 @@ const CriarAgendaAventureiro = () => {
               </div>
             </div>
           </div>
+
+          <div className="card-imagem">
+            <h2>Próximo Evento</h2>
+            {console.log("Agenda atual:", agenda)}
+            <div className="next-event-card">
+              {(() => {
+                const proximoEventoComImagem = agenda.find(item => item.imagem) || agenda[0];
+
+                return (
+                  <img
+                    src={
+                      proximoEventoComImagem?.imagem
+                        ? `data:image/jpeg;base64,${proximoEventoComImagem.imagem}`
+                        : Trilha
+                    }
+                    alt="EVENTO"
+                    onError={(e) => (e.target.src = Trilha)}
+                  />
+                );
+              })()}
+            </div>
+          </div>
+
         </div>
 
         <div className="agenda-aventureiro-section">
@@ -126,8 +153,12 @@ const CriarAgendaAventureiro = () => {
                 agenda.map((item) => (
                   <div key={item.idEvento} className="agenda-aventureiro-item">
                     <div className="agenda-aventureiro-item-info">
-                      <span className="agenda-aventureiro-item-name">{item.nomeEvento}</span>
-                      <span className="agenda-aventureiro-item-date">{formatarData(item.dataAtivacao)}</span>
+                      <span className="agenda-aventureiro-item-name">
+                        {item.nomeEvento}
+                      </span>
+                      <span className="agenda-aventureiro-item-date">
+                        {formatarData(item.dataAtivacao)}
+                      </span>
                     </div>
                     <div className="agenda-aventureiro-item-actions">
                       <ButtonSubmitForm title="Mais Informações" type="button" />
@@ -152,10 +183,17 @@ const CriarAgendaAventureiro = () => {
             <div className="agenda-aventureiro-historico-list">
               {historico.length > 0 ? (
                 historico.map((item) => (
-                  <div key={item.idEvento} className="agenda-aventureiro-historico-item">
+                  <div
+                    key={item.idEvento}
+                    className="agenda-aventureiro-historico-item"
+                  >
                     <div className="agenda-aventureiro-historico-info">
-                      <span className="agenda-aventureiro-item-name">{item.nomeEvento}</span>
-                      <span className="agenda-aventureiro-item-date">{formatarData(item.dataAtivacao)}</span>
+                      <span className="agenda-aventureiro-item-name">
+                        {item.nomeEvento}
+                      </span>
+                      <span className="agenda-aventureiro-item-date">
+                        {formatarData(item.dataAtivacao)}
+                      </span>
                     </div>
                   </div>
                 ))
