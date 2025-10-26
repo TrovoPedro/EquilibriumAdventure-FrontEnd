@@ -30,31 +30,27 @@ const Login = () => {
       const usuario = await loginUsuario(credentials);
       login(usuario);
 
-      if (usuario.tipoUsuario === "AVENTUREIRO" && !usuario.primeiraVez) {
-        try {
-        console.log(usuario.id);
-          const informacoes = await buscarInformacoesPerfil(usuario.id);
-          console.log("Informações do perfil:", informacoes);
-
-          if (informacoes && informacoes.nivel) {
-            salvarPontuacao(informacoes.nivel);
-            console.log("Nível carregado:", informacoes.nivel);
-          } else {
-            console.log("Usuário sem nível registrado ainda (primeiro login).");
-          }
-        } catch (error) {
-          console.warn("Erro ao carregar o nível do usuário:", error);
-        }
-      }
-
       // Determinar para onde navegar baseado no tipo de usuário
       let navigationRoute;
       if (usuario.tipoUsuario === "ADMINISTRADOR" || usuario.tipoUsuario === "GUIA") {
         navigationRoute = routeUrls.CATALOGO_TRILHAS_ADM;
-      } else if (usuario.tipoUsuario === "AVENTUREIRO" && usuario.primeiraVez) {
-        navigationRoute = routeUrls.QUESTIONARIO;
-      } else if (usuario.tipoUsuario === "AVENTUREIRO" && !usuario.primeiraVez) {
-        navigationRoute = routeUrls.ESCOLHER_GUIA;
+      } else if (usuario.tipoUsuario === "AVENTUREIRO") {
+        try {
+          const informacoes = await buscarInformacoesPerfil(usuario.id);
+          console.log("Informações do perfil:", informacoes);
+          if (informacoes && informacoes.nivel) {
+            salvarPontuacao(informacoes.nivel);
+            console.log("Nível carregado:", informacoes.nivel);
+            navigationRoute = routeUrls.ESCOLHER_GUIA;
+          } else {
+            console.log("Usuário sem nível registrado ainda - irá para questionário.");
+            navigationRoute = routeUrls.QUESTIONARIO;
+          }
+        } catch (error) {
+     
+          console.warn("Erro ao carregar o perfil do usuário (irá para questionário):", error);
+          navigationRoute = routeUrls.QUESTIONARIO;
+        }
       }
 
       // Salvar a rota e mostrar pop-up de sucesso

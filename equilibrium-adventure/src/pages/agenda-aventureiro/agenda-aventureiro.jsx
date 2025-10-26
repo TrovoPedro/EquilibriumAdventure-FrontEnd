@@ -8,9 +8,15 @@ import ButtonDangerForm from "../../components/button-padrao/button-danger-form"
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
-import { buscarInscricoesPorUsuario, cancelarInscricao, buscarHistoricoPorUsuario } from "../../services/apiAventureiro";
+import {
+  buscarInscricoesPorUsuario,
+  cancelarInscricao,
+  buscarHistoricoPorUsuario,
+} from "../../services/apiAventureiro";
+import { showError, showSuccess, showWarning } from "../../utils/swalHelper";
 import { buscarImagemUsuario } from "../../services/apiUsuario";
 import { useAuth } from "../../context/AuthContext";
+import { convertDateToBrazilian } from "../../utils/dateConversions";
 
 const CriarAgendaAventureiro = () => {
   const navigate = useNavigate();
@@ -38,11 +44,14 @@ const CriarAgendaAventureiro = () => {
       if (!idUsuario) return;
       try {
         const data = await buscarInscricoesPorUsuario(idUsuario);
+        console.log("Dados recebidos do back:", data); // <-- LOG AQUI
         const agendaFormatada = data.map((item) => ({
           idEvento: item.idAtivacaoEvento,
           nomeEvento: item.nomeEvento ?? "Sem nome",
-          dataAtivacao: item.dataAtivacao ? new Date(item.dataAtivacao) : undefined
+          dataAtivacao: item.dataAtivacao,
+          imagem: item.imagemEvento,
         }));
+        console.log("Agenda formatada:", agendaFormatada); // <-- LOG AQUI
         setAgenda(agendaFormatada);
       } catch (error) {
         console.error(error);
@@ -59,7 +68,7 @@ const CriarAgendaAventureiro = () => {
         const historicoFormatado = data.map((item) => ({
           idEvento: item.idAtivacaoEvento,
           nomeEvento: item.nomeEvento ?? "Sem nome",
-          dataAtivacao: item.dataAtivacao ? new Date(item.dataAtivacao) : undefined
+          dataAtivacao: item.dataAtivacao,
         }));
         setHistorico(historicoFormatado);
       } catch (error) {
@@ -70,24 +79,27 @@ const CriarAgendaAventureiro = () => {
   }, [idUsuario]);
 
   const handleCancelar = async (idEvento) => {
+    const confirmResult = await showWarning(
+      "Tem certeza que deseja cancelar sua inscrição?",
+      "Atenção",
+      "Sim, cancelar",
+      "Não",
+      true
+    );
+
+    if (!confirmResult.isConfirmed) return;
+
     try {
       await cancelarInscricao(idUsuario, idEvento);
-      setAgenda(prev => prev.filter(item => item.idEvento !== idEvento));
+      setAgenda((prev) => prev.filter((item) => item.idEvento !== idEvento));
+      showSuccess("Inscrição cancelada com sucesso!");
     } catch (error) {
       console.error(error);
-      alert("Erro ao cancelar inscrição!");
+      showError("Erro ao cancelar inscrição!");
     }
   };
 
-  const formatarData = (dataString) => {
-    if (!dataString) return "";
-    const data = new Date(dataString);
-    if (isNaN(data)) return "";
-    const dia = String(data.getDate()).padStart(2, "0");
-    const mes = String(data.getMonth() + 1).padStart(2, "0");
-    const ano = data.getFullYear();
-    return `${dia}/${mes}/${ano}`;
-  };
+  const formatarData = (dataString) => convertDateToBrazilian(dataString);
 
   return (
     <>
@@ -120,6 +132,35 @@ const CriarAgendaAventureiro = () => {
               </div>
             </div>
           </div>
+
+          <div className="card-imagem">
+            <h2>Próximo Evento</h2>
+            {console.log("Agenda atual:", agenda)}
+            <div className="next-event-card">
+              {(() => {
+                const proximoEventoComImagem = agenda.find(item => item.imagem) || agenda[0];
+
+                return (
+                  <img
+                    src={
+                      proximoEventoComImagem?.imagem
+                        ? `data:image/jpeg;base64,${proximoEventoComImagem.imagem}`
+                        : Trilha
+                    }
+                    alt="EVENTO"
+                    onError={(e) => (e.target.src = Trilha)}
+                    onClick={() => {
+                      if (proximoEventoComImagem && proximoEventoComImagem.idEvento) {
+                        navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', proximoEventoComImagem.idEvento));
+                      }
+                    }}
+                    style={{ cursor: proximoEventoComImagem ? 'pointer' : 'default' }}
+                  />
+                );
+              })()}
+            </div>
+          </div>
+
         </div>
 
         <div className="agenda-aventureiro-section">
@@ -130,11 +171,19 @@ const CriarAgendaAventureiro = () => {
                 agenda.map((item) => (
                   <div key={item.idEvento} className="agenda-aventureiro-item">
                     <div className="agenda-aventureiro-item-info">
-                      <span className="agenda-aventureiro-item-name">{item.nomeEvento}</span>
-                      <span className="agenda-aventureiro-item-date">{formatarData(item.dataAtivacao)}</span>
+                      <span className="agenda-aventureiro-item-name">
+                        {item.nomeEvento}
+                      </span>
+                      <span className="agenda-aventureiro-item-date">
+                        {formatarData(item.dataAtivacao)}
+                      </span>
                     </div>
                     <div className="agenda-aventureiro-item-actions">
-                      <ButtonSubmitForm title="Mais Informações" type="button" />
+                      <ButtonSubmitForm
+                        title="Mais Informações"
+                        type="button"
+                        onClick={() => navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', item.idEvento))}
+                      />
                       <ButtonDangerForm
                         title="Cancelar Inscrição"
                         type="button"
@@ -156,10 +205,17 @@ const CriarAgendaAventureiro = () => {
             <div className="agenda-aventureiro-historico-list">
               {historico.length > 0 ? (
                 historico.map((item) => (
-                  <div key={item.idEvento} className="agenda-aventureiro-historico-item">
+                  <div
+                    key={item.idEvento}
+                    className="agenda-aventureiro-historico-item"
+                  >
                     <div className="agenda-aventureiro-historico-info">
-                      <span className="agenda-aventureiro-item-name">{item.nomeEvento}</span>
-                      <span className="agenda-aventureiro-item-date">{formatarData(item.dataAtivacao)}</span>
+                      <span className="agenda-aventureiro-item-name">
+                        {item.nomeEvento}
+                      </span>
+                      <span className="agenda-aventureiro-item-date">
+                        {formatarData(item.dataAtivacao)}
+                      </span>
                     </div>
                   </div>
                 ))

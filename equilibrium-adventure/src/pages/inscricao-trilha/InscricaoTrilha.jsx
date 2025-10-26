@@ -3,180 +3,276 @@ import Header from "../../components/header/header-unified";
 import CircleBackButton from "../../components/circle-back-button/circle-back-button";
 import MapaTrilha from "../../components/mapa-trilha/MapaTrilha";
 import React, { useState, useEffect } from "react";
+import { showSuccess, showError, showWarning } from "../../utils/swalHelper";
+import { convertDateToBrazilian } from "../../utils/dateConversions";
 import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Comentarios from '../../components/comentarios/Comentarios';
-import PopUpAviso from "../../components/pop-up-aviso/pop-up-aviso";
-import routeUrls from "../../routes/routeUrls";
+import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx } from "../../services/apiEvento";
+import trilhaImg from "../../assets/cachoeiralago.jpg";
+import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
+import { verificarInscricao, criarInscricao, cancelarInscricao } from "../../services/apiInscricao";
 
-const comentariosIniciais = [
-	{ nome: "Guilherme", texto: "Gostei muito dessa trilha me ajudou bastante a superar meu medo de altura" },
-	{ nome: "Rebeca", texto: "Fiquei com bastante medo no início mas no final deu para aproveitar muito" },
-];
+const InscricaoTrilhasLimitado = () => {
+  const { id } = useParams(); // ID do evento
+  const [evento, setEvento] = useState(null);
+  const [imagemEvento, setImagemEvento] = useState(null);
+  const [gpxData, setGpxData] = useState(null);
+  const [comentarios, setComentarios] = useState([]);
+  const [inscrito, setInscrito] = useState(false);
+  const { usuario } = useAuth();
+  const { nivel } = useScore();
+  const navigate = useNavigate();
+  const nivelOrdem = {
+    'Explorador': 1,
+    'Aventureiro': 2,
+    'Desbravador': 3
+  };
 
-const InscricaoTrilhasLimitado = ({ idEvento, nivelNecessario }) => {
-	// Rolar para o topo ao entrar na tela
-	useEffect(() => {
-		window.scrollTo({ top: 0, behavior: 'smooth' });
-	}, []);
-	const [comentarios, setComentarios] = useState(comentariosIniciais);
-	const [novoComentario, setNovoComentario] = useState("");
-	const [inscrito, setInscrito] = useState(false);
-	const [showAvisoAnamnese, setShowAvisoAnamnese] = useState(false);
-	const { usuario } = useAuth();
-	const { nivel } = useScore();
-	const navigate = useNavigate();
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, []);
 
-	// Verificar se o usuário está inscrito
-	useEffect(() => {
-		const verificarInscricao = async () => {
-			try {
-				if (usuario?.id_usuario && idEvento) {
-					const response = await api.get(`/inscricoes/${idEvento}/${usuario.id_usuario}`);
-					setInscrito(!!response.data); // Se encontrou inscrição, está inscrito
-				}
-			} catch (error) {
-				console.error("Erro ao verificar inscrição:", error);
-			}
-		};
+  // Buscar evento e ativação
+  useEffect(() => {
+  const carregarEvento = async () => {
+    try {
+      const eventoData = await buscarEventoAtivoPorId(id);
 
-		verificarInscricao();
-	}, [usuario, idEvento]);
+      if (eventoData.length > 0) {
+        const ativacao = eventoData[0];
+        setEvento({
+          idAtivacao: ativacao.idAtivacao,
+          nome: ativacao.evento?.nome || "",
+          descricao: ativacao.evento?.descricao || "",
+          nivel_dificuldade: ativacao.evento?.nivelDificuldade || "",
+          distancia_km: ativacao.evento?.distanciaKm || 0,
+          responsavel: ativacao.evento?.responsavel || "",
+          endereco: ativacao.evento?.endereco || "",
+          caminho_arquivo_evento: ativacao.evento?.caminhoArquivoEvento || "",
+          preco: ativacao.preco,
+          horaInicio: ativacao.horaInicio,
+          horaFinal: ativacao.horaFinal,
+          tempoEstimado: ativacao.tempoEstimado,
+          limiteInscritos: ativacao.limiteInscritos,
+          dataAtivacao: ativacao.dataAtivacao,
+          tipo: ativacao.tipo,
+          estado: ativacao.estado,
+        });
 
-	// Verifica se o nível do usuário é suficiente
-	const nivelSuficiente = nivel >= nivelNecessario;
+        const imagemUrl = await buscarImagemEvento(ativacao.evento.idEvento);
+        setImagemEvento(imagemUrl || null);
 
-	const handleInscrever = async () => {
-		try {
-			if (!usuario?.id_usuario || !idEvento) return;
+        if (ativacao.idAtivacao) {
+          console.log("Buscando GPX:", ativacao.evento.idEvento);
+          const gpx = await buscarGpx(ativacao.evento.idEvento);
+          setGpxData(gpx);
+        }
 
-			await api.post('/inscricoes', {
-				fk_aventureiro: usuario.id_usuario,
-				fk_ativacao_evento: idEvento,
-				data_inscricao: new Date()
-			});
+        console.log("Evento carregado:", ativacao);
+      } else {
+        console.error("Nenhuma ativação encontrada para este evento");
+      }
+    } catch (error) {
+      console.error("Erro ao carregar evento e GPX:", error);
+    }
+  };
 
-			setInscrito(true);
-		} catch (error) {
-			console.error("Erro ao fazer inscrição:", error);
-			// Aqui você pode adicionar uma notificação de erro
-		}
-	};
+  carregarEvento();
+}, [id]);
 
-	const handleComentario = (e) => {
-		e.preventDefault();
-		if (novoComentario.trim() === "") return;
-		setComentarios([...comentarios, { nome: "Você", texto: novoComentario }]);
-		setNovoComentario("");
-	};
+  // Carregar comentários
+  const carregarComentarios = async () => {
+    if (id) {
+      const comentariosData = await listarComentariosPorAtivacao(id);
+      setComentarios(comentariosData);
+    }
+  };
 
-	return (
-		<div className="inscricao-trilha-container" style={{position: 'relative'}}>
-			<Header />
-			<CircleBackButton onClick={() => navigate(-1)} />
-			<span className="inscricao-trilha-header-separator"></span>
-			<div className="inscricao-trilha-header">
-				<img src={trilhaImg} alt="Trilha Pedra do Baú" />
-				<div className="inscricao-trilha-info">
-					<div><b>Título:</b> Pedra do Baú</div>
-					<div><b>Data:</b> 12/05/2025</div>
-					<div><b>Nível:</b> Aventureiro</div>
-					<div><b>Descrição:</b> Uma trilha desbravadora desafia seus limites e revela paisagens incríveis. É esforço e descoberta em perfeita harmonia.</div>
-				</div>
-			</div>
+  useEffect(() => {
+    if (id) {
+      carregarComentarios();
+    }
+  }, [id]);
 
-			<form className="inscricao-trilha-dados" autoComplete="off">
-				<div className="inscricao-trilha-form-row">
-					<div className="inscricao-trilha-form-group">
-						<label>Distância:</label>
-						<input type="text" value="15km" disabled />
-					</div>
-					<div className="inscricao-trilha-form-group">
-						<label>Categoria:</label>
-						<input type="text" value="Escalada" disabled />
-					</div>
-					<div className="inscricao-trilha-form-group">
-						<label>Preço:</label>
-						<input type="text" value="R$100,00" disabled />
-					</div>
-					<div className="inscricao-trilha-form-group">
-						<label>Hora de Início:</label>
-						<input type="text" value="08:00" disabled />
-					</div>
-				</div>
-				<div className="inscricao-trilha-form-row">
-					<div className="inscricao-trilha-form-group">
-						<label>Hora de Fim:</label>
-						<input type="text" value="12:00" disabled />
-					</div>
-					<div className="inscricao-trilha-form-group">
-						<label>Duração Estimada:</label>
-						<input type="text" value="4h" disabled />
-					</div>
-					<div className="inscricao-trilha-form-group">
-						<label>Quantidade de Inscritos:</label>
-						<input type="text" value="8" disabled />
-					</div>
-					<div className="inscricao-trilha-form-group">
-						<label>Limite de Inscritos:</label>
-						<input type="text" value="10" disabled />
-					</div>
-				</div>
-			</form>
 
-					{/* Mensagem de alerta removida conforme solicitado */}
-					<button 
-						className={`inscricao-trilha-btn ${inscrito ? 'disabled' : ''}`}
-						onClick={() => {
-							if (inscrito) return;
-							if (nivelSuficiente) {
-								handleInscrever();
-							} else {
-								setShowAvisoAnamnese(true);
-							}
-						}}
-						disabled={inscrito}
-					>
-						{inscrito ? 'Já Inscrito' : nivelSuficiente ? 'Se Inscrever' : 'Inscrever-se na Trilha'}
-					</button>
+  const handleEnviarComentario = async (comentarioObj) => {
+    const comentarioCriado = await adicionarComentario({
+      texto: comentarioObj.texto,
+      idUsuario: usuario.id,
+      idAtivacaoEvento: id // ⚠ aqui mudou
+    });
 
-			<Comentarios 
-				comentariosIniciais={comentariosIniciais}
-				onEnviarComentario={async (comentario) => {
-					// Aqui você pode implementar a lógica de salvamento do comentário
-					console.log('Enviando comentário:', comentario);
-				}}
-			/>
+    setComentarios(prev => [...prev, {
+      nome: comentarioCriado.nomeUsuario,
+      texto: comentarioCriado.texto
+    }]);
+  };
 
-			   <div className="card inscricao-trilha-mapa">
-				   <h3>Mapa da Trilha</h3>
-				   <MapaTrilha 
-					   gpxFile="/assets/gpx-files/trilha-cachoeira-dos-grampos-fumaca.gpx"
-					   altura="450px"
-				   />
-			   </div>
 
-			   {/* Popup de aviso para anamnese */}
-			   {showAvisoAnamnese && (
-				   <PopUpAviso
-					   title="Nível Insuficiente!"
-					   message="Para garantir que sua experiência seja confortável e segura,
-					    		recomendamos agendar uma conversa com um guia."
-					   showCancelButton={true}
-					   confirmButtonText="Agendar Anamnese"
-					   cancelButtonText="Voltar"
-					   onConfirm={() => {
-						   setShowAvisoAnamnese(false);
-						   navigate(routeUrls.AGENDAMENTO_ANAMNESE);
-					   }}
-					   onCancel={() => {
-						   setShowAvisoAnamnese(false);
-					   }}
-				   />
-			   )}
-		</div>
-	);
+  const checarInscricao = async () => {
+    try {
+      if (usuario?.id && evento?.idAtivacao) {
+        const data = await verificarInscricao(usuario.id, evento.idAtivacao);
+        setInscrito(data.jaInscrito);
+      }
+    } catch (error) {
+      console.error("Erro ao verificar inscrição:", error);
+    }
+  };
+
+  useEffect(() => {
+    checarInscricao();
+    return () => setInscrito(false);
+  }, [usuario?.id, evento?.idAtivacao]);
+
+  // Cancelar inscrição
+  const handleCancelarInscricao = async () => {
+    const confirmResult = await showWarning(
+      "Tem certeza que deseja cancelar sua inscrição?",
+      "Atenção",
+      "Sim, cancelar",
+      "Não",
+      true
+    );
+
+    if (!confirmResult.isConfirmed) return;
+
+    try {
+  await cancelarInscricao(usuario.id, evento.idAtivacao);
+  showSuccess("Inscrição cancelada com sucesso!");
+      setInscrito(false);
+    } catch (error) {
+      console.error("Erro ao cancelar inscrição:", error);
+      showError(error.message || "Erro ao cancelar inscrição. Tente novamente.");
+    }
+  };
+
+  // Verifica se usuário pode participar
+  const podeParticipar = () => {
+    const nivelUsuario = nivelOrdem[nivel] || 0;
+    const nivelTrilha = nivelOrdem[evento.nivel_dificuldade] || 0;
+    return nivelUsuario >= nivelTrilha;
+  };
+
+  // Inscrever usuário
+  const handleInscrever = async () => {
+    try {
+  await criarInscricao(evento.idAtivacao, usuario.id);
+  showSuccess("Inscrição realizada com sucesso!");
+      setInscrito(true);
+
+      await checarInscricao();
+    } catch (error) {
+      console.error("Erro ao fazer inscrição:", error);
+      if (error.response && error.response.data) {
+        showError(error.response.data.message || error.response.data);
+      } else {
+        showError("Erro ao realizar inscrição. Tente novamente mais tarde.");
+      }
+    }
+  };
+
+  if (!evento) return <p>Carregando evento...</p>;
+
+  return (
+    <div className="inscricao-trilha-container" style={{ position: 'relative' }}>
+      <Header />
+      <CircleBackButton onClick={() => navigate(-1)} />
+
+      <div className="inscricao-trilha-header">
+        <img src={imagemEvento || trilhaImg} alt={evento.nome} />
+        <div className="inscricao-trilha-info">
+          <div><b>Título:</b> {evento.nome}</div>
+          <div><b>Nível:</b> {evento.nivel_dificuldade}</div>
+          <div><b>Data:</b> {evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"}</div>
+          <div><b>Descrição:</b> {evento.descricao}</div>
+        </div>
+      </div>
+
+      <form className="inscricao-trilha-dados">
+        <div className="inscricao-trilha-form-row">
+          <div className="inscricao-trilha-form-group">
+            <label>Distância:</label>
+            <input type="text" value={`${evento.distancia_km} km`} disabled />
+          </div>
+          <div className="inscricao-trilha-form-group">
+            <label>Categoria:</label>
+            <input type="text" value={evento.tipo || "N/A"} disabled />
+          </div>
+          <div className="inscricao-trilha-form-group">
+            <label>Preço:</label>
+            <input type="text" value={`R$ ${evento.preco?.toFixed(2) || "0,00"}`} disabled />
+          </div>
+        </div>
+
+        <div className="inscricao-trilha-form-row">
+          <div className="inscricao-trilha-form-group">
+            <label>Hora de Início:</label>
+            <input type="text" value={evento.horaInicio || "N/A"} disabled />
+          </div>
+          <div className="inscricao-trilha-form-group">
+            <label>Hora de Término:</label>
+            <input type="text" value={evento.horaFinal || "N/A"} disabled />
+          </div>
+          <div className="inscricao-trilha-form-group">
+            <label>Data:</label>
+            <input type="text" value={evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"} disabled />
+          </div>
+        </div>
+
+        <div className="inscricao-trilha-form-row endereco-row">
+          <div className="inscricao-trilha-form-group full-width">
+            <label>Endereço:</label>
+            <input
+              type="text"
+              disabled
+              className="endereco-input"
+              value={
+                evento.endereco
+                  ? `${evento.endereco.rua || ""}, ${evento.endereco.numero || ""} - ${evento.endereco.bairro || ""}, ${evento.endereco.cidade || ""} - ${evento.endereco.estado || ""}, CEP: ${evento.endereco.cep || ""}`
+                  : "Endereço não disponível"
+              }
+            />
+          </div>
+        </div>
+      </form >
+
+      <button
+        className={`inscricao-trilha-btn ${inscrito ? 'btn-cancelar' : 'btn-inscrever'}`}
+        onClick={() => {
+            if (inscrito) {
+              handleCancelarInscricao();
+              return;
+            }
+
+            if (!podeParticipar()) {
+              showWarning("Seu nível atual não permite participar dessa trilha!");
+              return;
+            }
+
+            handleInscrever();
+        }}
+      >
+        {inscrito ? 'Cancelar inscrição' : 'Se Inscrever'}
+      </button>
+
+      <Comentarios comentariosIniciais={comentarios} onEnviarComentario={handleEnviarComentario} />
+
+      <div className="card inscricao-trilha-mapa">
+        <h3>Mapa da Trilha</h3>
+        <MapaTrilha
+          gpxFile={
+            gpxData
+              ? URL.createObjectURL(new Blob([gpxData], { type: "application/gpx+xml" }))
+              : "/assets/gpx-files/trilha-cachoeira-dos-grampos-fumaca.gpx"
+          }
+          altura="450px"
+        />
+      </div>
+    </div >
+  );
 };
 
 export default InscricaoTrilhasLimitado;

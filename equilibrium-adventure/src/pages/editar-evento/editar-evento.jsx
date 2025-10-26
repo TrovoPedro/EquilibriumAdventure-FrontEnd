@@ -5,12 +5,13 @@ import Header from "../../components/header/header-unified";
 import { maskCep, maskDistancia } from "../../utils/masks";
 import { scrollToTop } from "../../utils/scrollToTop";
 import { cadastrarEvento, buscarCep, editarEvento } from "../../services/chamadasAPIEvento";
+import { showSuccess, showError } from "../../utils/swalHelper";
 import "./editar-evento.css";
 import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
 import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import routeUrls from "../../routes/routeUrls";
-import { buscarImagemEvento } from "../../services/apiEvento";
+import { buscarImagemEvento, buscarImagemEventoBlob } from "../../services/apiEvento";
 import { buscarDadosEvento, buscarenderecoEvento } from "../../services/chamadasAPIEvento";
 
 const EditarEvento = () => {
@@ -44,9 +45,9 @@ const EditarEvento = () => {
                 try {
                     const eventoData = await buscarDadosEvento({ id });
                     if (eventoData) {
-                        setEventoId(eventoData.id_evento || id);
-
-                        setFormData({
+                        setEventoId(eventoData.id_evento || id)
+                        setFormData((prev) => ({
+                            ...prev,
                             titulo: eventoData.nome || "",
                             distancia: eventoData.distancia_km ? `${eventoData.distancia_km} km` : "",
                             dificuldade: eventoData.nivel_dificuldade || "",
@@ -61,9 +62,11 @@ const EditarEvento = () => {
                                 cidade: "",
                                 estado: ""
                             },
-                            imagem: null,
-                            trilha: null
-                        });
+                        
+                            imagem: prev && prev.imagem ? prev.imagem : null,
+                        
+                            trilha: prev && prev.trilha ? prev.trilha : null
+                        }));
 
                         if (eventoData.endereco) {
                             try {
@@ -108,22 +111,24 @@ const EditarEvento = () => {
         };
 
         let generatedUrl = null;
-        const loadImagemEvento = async () => {
+
+    const loadImagemEvento = async () => {
             if (id) {
                 try {
-                    const imgUrl = await buscarImagemEvento(id); // returns object URL string or null
-                    if (imgUrl) {
-                        generatedUrl = imgUrl;
-                        // derive a display name if backend didn't provide one
+                    const imgBlob = await buscarImagemEventoBlob(id); // Blob or null
+                    if (imgBlob) {
+                        generatedUrl = URL.createObjectURL(imgBlob);
                         const imagemNome = `imagem-${eventoId || id}.jpg`;
+                        // store blob separately on state so we can convert to File
                         setFormData((prev) => ({
                             ...prev,
                             imagem: {
                                 name: imagemNome,
-                                url: imgUrl
+                                url: generatedUrl,
+                                blob: imgBlob
                             }
                         }));
-                        setPreviewUrl(imgUrl);
+                        setPreviewUrl(generatedUrl);
                     }
                 } catch (error) {
                     console.error("Erro ao carregar imagem do evento:", error);
@@ -179,17 +184,11 @@ const EditarEvento = () => {
                 }
             });
         } else {
-            if (name === 'imagem' && files && files[0]) {
-                if (previewUrl) {
-                    try { URL.revokeObjectURL(previewUrl); } catch (e) { }
-                }
-                const file = files[0];
-                const url = URL.createObjectURL(file);
-                setPreviewUrl(url);
-                setFormData({
-                    ...formData,
-                    imagem: file 
-                });
+                if (name === 'imagem' && files && files[0]) {
+                    if (previewUrl) try { URL.revokeObjectURL(previewUrl); } catch (e) {}
+                    const file = files[0];
+                    setPreviewUrl(URL.createObjectURL(file));
+                    setFormData({ ...formData, imagem: file });
             } else if (name === 'trilha' && files && files[0]) {
                 // Ler conteúdo do arquivo .gpx como texto e armazenar nome + conteúdo
                 const file = files[0];
@@ -237,7 +236,7 @@ const EditarEvento = () => {
                     }
                 }));
             } catch (err) {
-                alert(err.message);
+                showError(err.message);
             }
         }
     };
@@ -246,11 +245,12 @@ const EditarEvento = () => {
         e.preventDefault();
 
         if (!eventoId || !formData.endereco.id) {
-            alert("Erro: IDs do evento ou endereço não encontrados.");
+            showError("Erro: IDs do evento ou endereço não encontrados.");
             return;
         }
 
         try {
+            // prepare payload
             const eventoParaEditar = {
                 nome: formData.titulo,
                 descricao: formData.descricao,
@@ -266,18 +266,50 @@ const EditarEvento = () => {
                     estado: formData.endereco.estado,
                     cep: formData.endereco.cep
                 },
-                trilha: formData.trilha,
-                imagem: formData.imagem
+                trilha: formData.trilha
             };
 
-           
+            // Determine which image to send (if any).
+            let imagemToSend = null;
+
+            if (formData.imagem instanceof File) {
+                imagemToSend = formData.imagem;
+            } else if (formData.imagem && formData.imagem.blob) {
+                try {
+                    const blob = formData.imagem.blob;
+                    const name = formData.imagem.name || `imagem-${eventoId || id}.jpg`;
+                    imagemToSend = new File([blob], name, { type: blob.type || 'image/jpeg' });
+                } catch (err) {
+                    console.warn('Não foi possível converter blob em File para reenvio da imagem:', err);
+                }
+            } else if (previewUrl && (eventoId || id)) {
+                // As a last resort, try to re-fetch the image blob from the server
+                // so we can include it in the multipart request and avoid sending
+                // an explicit null (which some backends may interpret as removal).
+                try {
+                    const serverBlob = await buscarImagemEventoBlob(eventoId || id);
+                    if (serverBlob) {
+                        const filename = `imagem-${eventoId || id}.jpg`;
+                        imagemToSend = new File([serverBlob], filename, { type: serverBlob.type || 'image/jpeg' });
+                    }
+                } catch (err) {
+                    console.warn('Erro ao re-obter imagem do servidor para reenvio:', err);
+                }
+            }
+
+            if (imagemToSend) {
+                eventoParaEditar.imagem = imagemToSend;
+            }
+
+            console.debug('Enviando editarEvento com imagem?', Boolean(eventoParaEditar.imagem), eventoParaEditar.imagem);
+
             const resultado = await editarEvento(eventoParaEditar, eventoId);
 
-            alert("Evento editado com sucesso!");
+            showSuccess("Evento editado com sucesso!");
             navigate(routeUrls.CATALOGO_TRILHAS_ADM);
         } catch (error) {
             console.error("Erro ao editar evento:", error);
-            alert("Erro ao editar evento. Tente novamente.");
+            showError("Erro ao editar evento. Tente novamente.");
         }
     };
 
@@ -308,7 +340,6 @@ const EditarEvento = () => {
                         Imagem do Evento:
                         <div
                             className="upload-box"
-                            onClick={() => document.getElementById("upload-input").click()}
                         >
                             {previewUrl || (formData.imagem && formData.imagem.url) ? (
                                 <img
@@ -369,7 +400,6 @@ const EditarEvento = () => {
                         Mapa da Trilha (.gpx):
                         <div
                             className="upload-box"
-                            onClick={() => document.getElementById("upload-trilha-input").click()}
                         >
                             {formData.trilha ? (
                                 <div className="trilha-preview">

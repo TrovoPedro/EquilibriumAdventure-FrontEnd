@@ -15,7 +15,8 @@
 .swal2-confirm-warning:hover {
     background-color: #366d49 !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(69, 139, 96, 0.3);
+    /* remover box-shadow para evitar artefato visual ao lado do botão */
+    box-shadow: none !important;
 }
 
 .swal2-cancel-warning {
@@ -35,6 +36,17 @@
     background-color: #5a6268 !important;
     transform: translateY(-1px);
     box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+}
+
+/* Garantir que o botão cancelar fique acima de possíveis sombras do botão confirmar */
+.swal2-cancel-warning {
+    z-index: 2;
+    position: relative;
+}
+
+.swal2-confirm-warning {
+    z-index: 1;
+    position: relative;
 }
 
 /* Personalização do ícone de aviso para verde */

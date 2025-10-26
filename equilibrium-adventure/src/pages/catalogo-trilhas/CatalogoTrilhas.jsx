@@ -18,9 +18,16 @@ const CatalogoTrilhas = () => {
   useEffect(() => {
     let isMounted = true;
 
+    // Fallback para sessionStorage caso o contexto do guia ainda não esteja
+    // populado quando a rota é visitada via back/forward.
+    const stored = sessionStorage.getItem('guiaSelecionado');
+    const storedGuide = stored ? JSON.parse(stored) : null;
+    const guideId = guiaSelecionado?.id || storedGuide?.id || 0;
+
     const carregarTrilhas = async () => {
       try {
-        const trilhasData = await buscarEventosAtivosPorGuia(guiaSelecionado?.id || 0);
+        if (!guideId) return;
+        const trilhasData = await buscarEventosAtivosPorGuia(guideId);
         const trilhasComImagens = await Promise.all(
           trilhasData.map(async (trilha) => {
             const imagemUrl = await buscarImagemEvento(trilha.id_evento);
@@ -42,23 +49,33 @@ const CatalogoTrilhas = () => {
       }
     };
 
+    // initial load
     carregarTrilhas();
+
+    // reload when window regains focus (helps when using browser back/forward)
+    const handleFocus = () => {
+      carregarTrilhas();
+    };
+    window.addEventListener('focus', handleFocus);
 
     return () => {
       isMounted = false;
+      window.removeEventListener('focus', handleFocus);
     };
-  }, []);
+  }, [guiaSelecionado?.id]);
 
-  const handleSaibaMais = (eventoId) => {
-    navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', eventoId));
-  };
-  const handleDetalhes = (eventoId) => {
-    const trilhaSelecionada = trilhas.find(trilha => trilha.id_evento === eventoId);
-    if (trilhaSelecionada && trilhaSelecionada.id_ativacao) {
-      sessionStorage.setItem('ativacaoSelecionadaId', trilhaSelecionada.id_ativacao);
-      navigate(routeUrls.DETALHES_EVENTO.replace(':id', trilhaSelecionada.id_ativacao));
-    }
-  };
+const handleSaibaMais = (ativacaoId) => {
+  navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', ativacaoId));
+};
+
+const handleDetalhes = (ativacaoId) => {
+  const trilhaSelecionada = trilhas.find(trilha => trilha.id_ativacao === ativacaoId);
+  if (trilhaSelecionada) {
+    sessionStorage.setItem('ativacaoSelecionadaId', trilhaSelecionada.id_ativacao);
+    navigate(routeUrls.DETALHES_EVENTO.replace(':id', trilhaSelecionada.id_ativacao));
+  }
+};
+
 
   const [termoPesquisa, setTermoPesquisa] = useState("");
 
@@ -109,7 +126,8 @@ const CatalogoTrilhas = () => {
             <div className="destinos-grid">
               {filtrarEventos(trilhas).length > 0 ? (
                 filtrarEventos(trilhas).slice(0, 5).map((trilha) => (
-                  <div className="destino-card" key={trilha.id_evento}>
+                  console.log(trilha),  
+                  <div className="destino-card" key={trilha.id_ativacao}>
                     <img
                       src={trilha.imagemUrl}
                       alt={trilha.nome}
@@ -119,7 +137,7 @@ const CatalogoTrilhas = () => {
                     <div className="destino-overlay">
                       <button
                         className="destino-detalhes-btn"
-                       onClick={() => handleSaibaMais(trilha.id_evento)}
+                       onClick={() => handleSaibaMais(trilha.id_ativacao)}
                       >
                         Detalhes
                       </button>
@@ -144,7 +162,7 @@ const CatalogoTrilhas = () => {
             <div className="anuncios-grid">
               {filtrarEventos(trilhas).length > 0 ? (
                 filtrarEventos(trilhas).map((trilha) => (
-                  <div className="anuncio-card" key={trilha.id_evento}>
+                  <div className="anuncio-card" key={trilha.id_ativacao}>
                     <div className="anuncio-img-wrap">
                       <img
                         src={trilha.imagemUrl}
@@ -167,7 +185,7 @@ const CatalogoTrilhas = () => {
                         <div className="anuncio-btn-group">
                           <button
                             className="anuncio-btn"
-                            onClick={() => handleSaibaMais(trilha.id_evento)}
+                            onClick={() => handleSaibaMais(trilha.id_ativacao)}
                           >
                             Saiba Mais
                           </button>
