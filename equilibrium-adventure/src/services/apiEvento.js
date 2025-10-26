@@ -19,13 +19,14 @@ export const buscarEventosPorGuia = async (id) => {
 
 export const buscarEventosAtivosPorGuia = async (id) => {
   try {
-    const response = await api.get(`guia/ativos/guia/${id}`);
+    // Garantir que a URL comece com '/' para concatenar corretamente com baseURL
+    const response = await api.get(`/guia/ativos/guia/${id}`);
     return response.data;
   } catch (error) {
-    if (error.response?.status === 404) {
+    if (error.response?.status === 404 || error.response?.status === 204) {
       return []; // Retorna array vazio quando não há eventos ativos
     }
-    console.error('Erro ao buscar eventos ativos:', error);
+    console.error('Erro ao buscar eventos ativos:', error?.response?.data || error.message);
     throw error;
   }
 };

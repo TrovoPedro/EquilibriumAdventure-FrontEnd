@@ -2,6 +2,7 @@ import Header from "../../components/header/header-unified";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
 import { useState, useEffect } from "react";
+import { showSuccess, showError } from "../../utils/swalHelper";
 import { useNavigate, useParams } from "react-router-dom";
 import "./relatorio-anamnese.css";
 
@@ -43,12 +44,12 @@ const RelatorioAnamnese = () => {
       console.log("userId:", userId);
       console.log("relatorio:", relatorio);
       const data = await gerarRelatorioAnamnese({ userId, relatorio });
-      alert("Relatório salvo com sucesso!");
+  showSuccess("Relatório salvo com sucesso!");
       console.log("Relatório salvo:", data);
       return true;
     } catch (error) {
       console.error("Erro ao salvar relatório:", error);
-      alert("Erro ao salvar relatório. Tente novamente.");
+  showError("Erro ao salvar relatório. Tente novamente.");
       return false;
     }
   };

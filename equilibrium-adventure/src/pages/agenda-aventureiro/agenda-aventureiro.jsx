@@ -13,6 +13,7 @@ import {
   cancelarInscricao,
   buscarHistoricoPorUsuario,
 } from "../../services/apiAventureiro";
+import { showError, showSuccess, showWarning } from "../../utils/swalHelper";
 import { buscarImagemUsuario } from "../../services/apiUsuario";
 import { useAuth } from "../../context/AuthContext";
 import { convertDateToBrazilian } from "../../utils/dateConversions";
@@ -78,12 +79,23 @@ const CriarAgendaAventureiro = () => {
   }, [idUsuario]);
 
   const handleCancelar = async (idEvento) => {
+    const confirmResult = await showWarning(
+      "Tem certeza que deseja cancelar sua inscrição?",
+      "Atenção",
+      "Sim, cancelar",
+      "Não",
+      true
+    );
+
+    if (!confirmResult.isConfirmed) return;
+
     try {
       await cancelarInscricao(idUsuario, idEvento);
       setAgenda((prev) => prev.filter((item) => item.idEvento !== idEvento));
+      showSuccess("Inscrição cancelada com sucesso!");
     } catch (error) {
       console.error(error);
-      alert("Erro ao cancelar inscrição!");
+      showError("Erro ao cancelar inscrição!");
     }
   };
 

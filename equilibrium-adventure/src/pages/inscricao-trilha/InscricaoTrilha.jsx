@@ -3,6 +3,7 @@ import Header from "../../components/header/header-unified";
 import CircleBackButton from "../../components/circle-back-button/circle-back-button";
 import MapaTrilha from "../../components/mapa-trilha/MapaTrilha";
 import React, { useState, useEffect } from "react";
+import { showSuccess, showError, showWarning } from "../../utils/swalHelper";
 import { convertDateToBrazilian } from "../../utils/dateConversions";
 import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
@@ -128,15 +129,23 @@ const InscricaoTrilhasLimitado = () => {
 
   // Cancelar inscrição
   const handleCancelarInscricao = async () => {
-    if (!window.confirm("Tem certeza que deseja cancelar sua inscrição?")) return;
+    const confirmResult = await showWarning(
+      "Tem certeza que deseja cancelar sua inscrição?",
+      "Atenção",
+      "Sim, cancelar",
+      "Não",
+      true
+    );
+
+    if (!confirmResult.isConfirmed) return;
 
     try {
-      await cancelarInscricao(usuario.id, evento.idAtivacao);
-      alert("Inscrição cancelada com sucesso!");
+  await cancelarInscricao(usuario.id, evento.idAtivacao);
+  showSuccess("Inscrição cancelada com sucesso!");
       setInscrito(false);
     } catch (error) {
       console.error("Erro ao cancelar inscrição:", error);
-      alert(error.message || "Erro ao cancelar inscrição. Tente novamente.");
+      showError(error.message || "Erro ao cancelar inscrição. Tente novamente.");
     }
   };
 
@@ -150,17 +159,17 @@ const InscricaoTrilhasLimitado = () => {
   // Inscrever usuário
   const handleInscrever = async () => {
     try {
-      await criarInscricao(evento.idAtivacao, usuario.id);
-      alert("Inscrição realizada com sucesso!");
+  await criarInscricao(evento.idAtivacao, usuario.id);
+  showSuccess("Inscrição realizada com sucesso!");
       setInscrito(true);
 
       await checarInscricao();
     } catch (error) {
       console.error("Erro ao fazer inscrição:", error);
       if (error.response && error.response.data) {
-        alert(error.response.data.message || error.response.data);
+        showError(error.response.data.message || error.response.data);
       } else {
-        alert("Erro ao realizar inscrição. Tente novamente mais tarde.");
+        showError("Erro ao realizar inscrição. Tente novamente mais tarde.");
       }
     }
   };
@@ -233,17 +242,17 @@ const InscricaoTrilhasLimitado = () => {
       <button
         className={`inscricao-trilha-btn ${inscrito ? 'btn-cancelar' : 'btn-inscrever'}`}
         onClick={() => {
-          if (inscrito) {
-            handleCancelarInscricao();
-            return;
-          }
+            if (inscrito) {
+              handleCancelarInscricao();
+              return;
+            }
 
-          if (!podeParticipar()) {
-            alert("Seu nível atual não permite participar dessa trilha!");
-            return;
-          }
+            if (!podeParticipar()) {
+              showWarning("Seu nível atual não permite participar dessa trilha!");
+              return;
+            }
 
-          handleInscrever();
+            handleInscrever();
         }}
       >
         {inscrito ? 'Cancelar inscrição' : 'Se Inscrever'}

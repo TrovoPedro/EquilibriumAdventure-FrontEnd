@@ -4,6 +4,7 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import routeUrls from "../../routes/routeUrls";
 import Header from "../../components/header/header-unified";
 import { cadastrarGuia } from "../../services/chamadasAPIGuia";
+import { showWarning } from "../../utils/swalHelper";
 import "./adicionar-guia.css";
 import leftArrow from "../../assets/left-arrow-green.png";
 
@@ -52,7 +53,7 @@ export default function AdicionarGuia() {
         const cadastrar = async () => {
             try {
                 if (!formData.nome || !formData.email || !formData.senha || !formData.descricao) {
-                    alert("Por favor, preencha todos os campos obrigatórios.");
+                    showWarning("Por favor, preencha todos os campos obrigatórios.");
                     return;
                 }
                 const response = await cadastrarGuia(formData);

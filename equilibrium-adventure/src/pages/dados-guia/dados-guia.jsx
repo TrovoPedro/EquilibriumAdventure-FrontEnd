@@ -7,6 +7,7 @@ import useGoBack from "../../utils/useGoBack";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import { atualizarGuia } from "../../services/apiGuia";
+import { showSuccess, showError, showWarning } from "../../utils/swalHelper";
 import { buscarDadosUsuario, buscarImagemUsuario } from "../../services/apiUsuario";
 
 export default function DadosGuia() {
@@ -64,18 +65,18 @@ export default function DadosGuia() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!idUsuario) {
-            alert("Usuário não logado");
+            showWarning("Usuário não logado");
             return;
         }
 
         try {
             const result = await atualizarGuia(idUsuario, formData);
-            console.log("Guia atualizado com sucesso:", result);
-            alert("Guia atualizado com sucesso!");
+            console.log("Dados atualizados com sucesso:", result);
+            showSuccess("Dados atualizados com sucesso!");
             navigate(routeUrls.CATALOGO_TRILHAS_ADM);
         } catch (err) {
             console.error("Erro ao atualizar guia:", err);
-            alert("Erro ao atualizar guia!");
+            showError("Erro ao atualizar guia!");
         }
     };
 

@@ -183,7 +183,8 @@ export const editarEvento = async (eventoData, eventoId) => {
                     conteudoGpx = comprimirGPX(conteudoGpx);
                 }
             } catch (error) {
-                alert("Erro ao processar arquivo GPX: " + error.message);
+                // Serviços não devem usar alert() (sem DOM). Logamos e retornamos false para o caller tratar a UI.
+                console.error("Erro ao processar arquivo GPX: " + error.message);
                 return false;
             }
         }

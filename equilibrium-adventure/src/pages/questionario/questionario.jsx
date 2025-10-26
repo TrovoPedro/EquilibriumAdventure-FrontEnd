@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls"
 import { useScore } from "../../context/ScoreContext";
 import { useAuth } from "../../context/AuthContext";
+import { showSuccess, showError, showWarning } from "../../utils/swalHelper";
 
 const Questionario = () => {
   const navigate = useNavigate();
@@ -38,7 +39,7 @@ const Questionario = () => {
   const handleSubmitAnswers = async () => {
     try {
       if (!usuario || !usuario.id) {
-        alert("Por favor, faça login para enviar suas respostas.");
+        showWarning("Por favor, faça login para enviar suas respostas.");
         return;
       }
 
@@ -49,7 +50,7 @@ const Questionario = () => {
       };
 
       if (Object.keys(todasRespostas).length !== questions.length) {
-        alert("Por favor, responda todas as questões antes de finalizar.");
+        showWarning("Por favor, responda todas as questões antes de finalizar.");
         return;
       }
 
@@ -68,8 +69,7 @@ const Questionario = () => {
         const nivelObtido = nivelCalculado.toLowerCase();
         setNivel(nivelObtido);
 
-
-        alert(`Parabéns! Você foi classificado como: ${nivelObtido}`);
+        showSuccess(`Parabéns! Você foi classificado como: ${nivelObtido}`);
 
         salvarPontuacao(0, nivelObtido);
 
@@ -86,29 +86,31 @@ const Questionario = () => {
 
         // Verifica se é o erro específico de informações pessoais
         if (calcError.message?.includes('Informações pessoais')) {
-          alert(calcError.message);
+          showError(calcError.message);
           navigate('/perfil');
           return;
         }
 
-        alert("Suas respostas foram salvas, mas houve um erro ao calcular seu nível. " +
-          "Por favor, verifique se suas informações pessoais estão preenchidas e tente novamente.");
+        showError(
+          "Suas respostas foram salvas, mas houve um erro ao calcular seu nível. " +
+            "Por favor, verifique se suas informações pessoais estão preenchidas e tente novamente."
+        );
       }
     } catch (err) {
       console.error("Erro ao enviar respostas:", err);
       if (err.response) {
         console.error("Detalhes do erro:", err.response.data);
-        alert(`Falha ao enviar respostas: ${err.response.data.message || 'Erro no servidor'}`);
+        showError(`Falha ao enviar respostas: ${err.response.data.message || 'Erro no servidor'}`);
       } else if (err.request) {
-        alert("Não foi possível conectar ao servidor. Verifique sua conexão.");
+        showError("Não foi possível conectar ao servidor. Verifique sua conexão.");
       } else {
-        alert("Erro ao enviar respostas. Por favor, tente novamente.");
+        showError("Erro ao enviar respostas. Por favor, tente novamente.");
       }
     }
   };
   const handleOnClickNext = () => {
     if (selectedOption === null) {
-      alert("Por favor, selecione uma opção antes de prosseguir.");
+      showWarning("Por favor, selecione uma opção antes de prosseguir.");
       return;
     }
 
@@ -156,7 +158,7 @@ const Questionario = () => {
         index === questions.length - 1 ? "Finalizar" : "Próxima Questão"
       );
     } else {
-      alert("Por favor, responda as questões em ordem.");
+  showWarning("Por favor, responda as questões em ordem.");
     }
   };
 
