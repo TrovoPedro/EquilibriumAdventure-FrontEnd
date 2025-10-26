@@ -4,7 +4,7 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import routeUrls from "../../routes/routeUrls";
 import Header from "../../components/header/header-unified";
 import { cadastrarGuia } from "../../services/chamadasAPIGuia";
-import { showWarning } from "../../utils/swalHelper";
+import { showSuccess, showWarning } from "../../utils/swalHelper";
 import "./adicionar-guia.css";
 import leftArrow from "../../assets/left-arrow-green.png";
 
@@ -58,8 +58,10 @@ export default function AdicionarGuia() {
                 }
                 const response = await cadastrarGuia(formData);
                 if (response) {
-
-                    navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+                    showSuccess("Guia cadastrado com sucesso!");
+                    setTimeout(() => {
+                        navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+                    }, 2000);
                 }
             } catch (error) {
                 if (!response) {
