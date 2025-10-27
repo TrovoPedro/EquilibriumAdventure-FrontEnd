@@ -5,6 +5,7 @@ import Header from "../../components/header/header-unified";
 import { maskCep, maskDistancia } from "../../utils/masks";
 import { scrollToTop } from "../../utils/scrollToTop";
 import { cadastrarEvento, buscarCep, editarEvento } from "../../services/chamadasAPIEvento";
+import { showSuccess, showError } from "../../utils/swalHelper";
 import "./editar-evento.css";
 import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
 import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
@@ -235,7 +236,7 @@ const EditarEvento = () => {
                     }
                 }));
             } catch (err) {
-                alert(err.message);
+                showError(err.message);
             }
         }
     };
@@ -244,7 +245,7 @@ const EditarEvento = () => {
         e.preventDefault();
 
         if (!eventoId || !formData.endereco.id) {
-            alert("Erro: IDs do evento ou endereço não encontrados.");
+            showError("Erro: IDs do evento ou endereço não encontrados.");
             return;
         }
 
@@ -304,11 +305,11 @@ const EditarEvento = () => {
 
             const resultado = await editarEvento(eventoParaEditar, eventoId);
 
-            alert("Evento editado com sucesso!");
+            showSuccess("Evento editado com sucesso!");
             navigate(routeUrls.CATALOGO_TRILHAS_ADM);
         } catch (error) {
             console.error("Erro ao editar evento:", error);
-            alert("Erro ao editar evento. Tente novamente.");
+            showError("Erro ao editar evento. Tente novamente.");
         }
     };
 

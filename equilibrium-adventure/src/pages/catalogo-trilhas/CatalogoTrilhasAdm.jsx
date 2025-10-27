@@ -31,8 +31,14 @@ const CatalogoTrilhas = () => {
   useEffect(() => {
     let isMounted = true;
 
+    // Allow falling back to sessionStorage in case AuthContext hasn't hydrated
+    // yet when the route is revisited via back/forward navigation.
+    const stored = sessionStorage.getItem('usuario');
+    const storedUser = stored ? JSON.parse(stored) : null;
+    const userId = usuario?.id || storedUser?.id;
+
     const carregarEventos = async () => {
-      if (!usuario?.id) return;
+      if (!userId) return;
 
       // Carregar eventos base
       try {
@@ -69,9 +75,20 @@ const CatalogoTrilhas = () => {
       }
     };
 
+    // initial load
     carregarEventos();
-    return () => { isMounted = false; };
-  }, [usuario]);
+
+    // also reload when window regains focus (helps when using browser back/forward)
+    const handleFocus = () => {
+      carregarEventos();
+    };
+    window.addEventListener('focus', handleFocus);
+
+    return () => {
+      isMounted = false;
+      window.removeEventListener('focus', handleFocus);
+    };
+  }, [usuario?.id]);
 
   const handleOnClick = (action, eventoId, ativacaoId) => {
     if (action === "ativar") navigate(routeUrls.ATIVAR_EVENTO.replace(':id', eventoId));

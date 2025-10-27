@@ -39,8 +39,22 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
         redirect(routeUrls.RELATORIO_ANAMNESE);
     }
 
-    const handleOnClickMaisInfo = (eventoId = null) => {
-        // Redireciona para a tela de dados do guia conforme solicitado
+    const handleOnClickMaisInfo = (idAtivacao = null, eventoId = null) => {
+        // Se tivermos o id da ativação, redireciona para os detalhes do evento ativo
+        if (idAtivacao) {
+            sessionStorage.setItem('ativacaoSelecionadaId', idAtivacao);
+            redirect(`/detalhes-evento/${idAtivacao}`);
+            return;
+        }
+
+        // Caso não haja id da ativação, mas tenhamos o id do evento base, navegar para detalhes do evento (fallback)
+        if (eventoId) {
+            // alguns fluxos esperam o id do evento; tentamos passar via rota de detalhes por evento
+            redirect(`/detalhes-evento/${eventoId}`);
+            return;
+        }
+
+        // Default: ir para dados do guia se nada mais estiver disponível
         redirect(routeUrls.DADOS_GUIA);
     }
 
@@ -90,15 +104,15 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
 
     useEffect(() => {
         const carregarAnamneses = async () => {
-            if (usuario?.id) {
-                try {
-                    const lista = await listarAnamnesesPorResponsavel(usuario.id);
-                    setAnamneses(lista);
-                } catch (error) {
-                    setAnamneses([]);
+                if (usuario?.id) {
+                    try {
+                        const lista = await listarAnamnesesPorResponsavel(usuario.id);
+                        setAnamneses(lista);
+                    } catch (error) {
+                        setAnamneses([]);
+                    }
                 }
-            }
-        };
+            };
         const buscaImagem = async () => {
             if (!idUsuario) return;
             const url = await buscarImagemUsuario(idUsuario);
@@ -281,7 +295,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                                     ) : eventosAtivos.length > 0 ? (
                                         eventosAtivos.map((evento, idx) => (
                                             <div className="evento-ativo-card" key={`${evento.id_evento}-${evento.id_ativacao || idx}`}>
-                                                <div className="evento-image" onClick={() => handleOnClickMaisInfo(evento.id_evento)} style={{ cursor: 'pointer' }}>
+                                                <div className="evento-image" onClick={() => handleOnClickMaisInfo(evento.id_ativacao, evento.id_evento)} style={{ cursor: 'pointer' }}>
                                                     <img src={evento.imagemUrl || catalogoFallback} alt={evento.nome_evento} />
                                                 </div>
                                                 <div className="evento-info">
@@ -289,7 +303,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                                                         {evento.data_ativacao.split('-').reverse().join('/')} , {evento.hora_inicio}
                                                     </span>
                                                     <h4>{evento.nome_evento}</h4>
-                                                    <button onClick={() => handleOnClickMaisInfo(evento.id_evento)} className="evento-info-btn">
+                                                    <button onClick={() => handleOnClickMaisInfo(evento.id_ativacao, evento.id_evento)} className="evento-info-btn">
                                                         Informações
                                                     </button>
                                                 </div>

@@ -70,6 +70,11 @@ const DetalhesEvento = () => {
     }
   };
 
+  useEffect(() => {
+    carregarComentarios();
+  }, [id]);
+
+
   const handleEnviarComentario = async (comentarioObj) => {
     const comentarioCriado = await adicionarComentario({
       texto: comentarioObj.texto,

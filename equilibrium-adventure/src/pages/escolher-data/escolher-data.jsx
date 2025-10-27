@@ -42,7 +42,7 @@ export default function EscolhaDataCard({ onClose }) {
         setDatasExistentes(datas.map((d) => d.dataDisponivel));
         console.log("Datas existentes:", datas.map((d) => d.dataDisponivel));
       } catch (err) {
-        alert("Erro ao buscar datas já cadastradas.");
+    showError("Erro ao buscar datas já cadastradas.");
         console.error(err);
       }
     }
@@ -65,12 +65,12 @@ export default function EscolhaDataCard({ onClose }) {
 
   const handleSave = async () => {
     if (!value || !hora) {
-      alert("Selecione uma data e um horário!");
+      showWarning("Selecione uma data e um horário!");
       return;
     }
 
     if (!usuario || !usuario.id) {
-      alert("Usuário não logado. Faça login novamente.");
+      showWarning("Usuário não logado. Faça login novamente.");
       return;
     }
 
@@ -86,11 +86,11 @@ export default function EscolhaDataCard({ onClose }) {
         dataDisponivel: dataHoraISO,
       });
 
-      alert("Disponibilidade adicionada!");
+      showSuccess("Disponibilidade adicionada!");
       handleClose();
     } catch (err) {
       console.error(err);
-      alert(
+      showError(
         "Erro ao adicionar disponibilidade: " +
           (err.response?.data || err.message)
       );
