@@ -40,48 +40,36 @@ const CatalogoTrilhas = () => {
     const carregarEventos = async () => {
       if (!userId) return;
 
+      // Carregar eventos base
       try {
-        const eventosData = await buscarEventosPorGuia(userId);
-
+        const eventosData = await buscarEventosPorGuia(usuario.id);
         const eventosComImagens = await Promise.all(
           eventosData.map(async (evento) => {
             const imagemUrl = await buscarImagemEvento(evento.id_evento);
             return { ...evento, imagemUrl: imagemUrl || catalogo1 };
           })
         );
-
-        if (isMounted) {
-          setEventosBase(eventosComImagens);
-          setError(prev => ({ ...prev, base: null }));
-        }
+        if (isMounted) setEventosBase(eventosComImagens);
       } catch (err) {
         console.error("Erro ao carregar eventos base:", err);
-        if (isMounted) {
-          setError(prev => ({ ...prev, base: "Erro ao carregar os eventos base." }));
-        }
+        if (isMounted) setError(prev => ({ ...prev, base: "Erro ao carregar os eventos base." }));
       } finally {
         if (isMounted) setLoading(prev => ({ ...prev, base: false }));
       }
 
+      // Carregar eventos ativos
       try {
-        const eventosAtivosData = await buscarEventosAtivosPorGuia(userId);
-
+        const eventosAtivosData = await buscarEventosAtivosPorGuia(usuario.id);
         const ativosComImagens = await Promise.all(
           eventosAtivosData.map(async (evento) => {
             const imagemUrl = await buscarImagemEvento(evento.id_evento);
             return { ...evento, imagemUrl: imagemUrl || catalogo1 };
           })
         );
-
-        if (isMounted) {
-          setEventosAtivos(ativosComImagens);
-          setError(prev => ({ ...prev, ativos: null }));
-        }
+        if (isMounted) setEventosAtivos(ativosComImagens);
       } catch (err) {
         console.error("Erro ao carregar eventos ativos:", err);
-        if (isMounted) {
-          setError(prev => ({ ...prev, ativos: "Erro ao carregar os eventos ativos." }));
-        }
+        if (isMounted) setError(prev => ({ ...prev, ativos: "Erro ao carregar os eventos ativos." }));
       } finally {
         if (isMounted) setLoading(prev => ({ ...prev, ativos: false }));
       }
@@ -102,21 +90,14 @@ const CatalogoTrilhas = () => {
     };
   }, [usuario?.id]);
 
-
-  const handleOnClick = (action, eventoId) => {
-    if (action === "ativar") {
-      navigate(routeUrls.ATIVAR_EVENTO.replace(':id', eventoId));
-    } else if (action === "editar") {
-      navigate(routeUrls.EDITAR_EVENTO.replace(':id', eventoId));
-    } else if (action === "detalhes") {
-      const eventoSelecionado = eventosAtivos.find(ev => ev.id_evento === eventoId);
-      if (eventoSelecionado && eventoSelecionado.id_ativacao) {
-        sessionStorage.setItem('ativacaoSelecionadaId', eventoSelecionado.id_ativacao);
-        navigate(routeUrls.DETALHES_EVENTO.replace(':id', eventoSelecionado.id_ativacao));
-      }
+  const handleOnClick = (action, eventoId, ativacaoId) => {
+    if (action === "ativar") navigate(routeUrls.ATIVAR_EVENTO.replace(':id', eventoId));
+    else if (action === "editar") navigate(routeUrls.EDITAR_EVENTO.replace(':id', eventoId));
+    else if (action === "detalhes" && ativacaoId) {
+      sessionStorage.setItem('ativacaoSelecionadaId', ativacaoId);
+      navigate(routeUrls.DETALHES_EVENTO.replace(':id', ativacaoId));
     }
   };
-
 
   return (
     <>
@@ -148,8 +129,9 @@ const CatalogoTrilhas = () => {
           {error.ativos && <p className="error-text">{error.ativos}</p>}
           {!loading.ativos && !error.ativos && (
             <div className="anuncios-grid">
-              {filtrarEventos(eventosAtivos).length > 0 ? (
-                filtrarEventos(eventosAtivos).map((evento, idx) => (
+              {filtrarEventos(eventosAtivos)
+                .filter(evento => (evento.log || "").trim().toUpperCase() !== "FINALIZADO")
+                .map((evento, idx) => (
                   <div className="anuncio-card" key={`ativo-${evento.id_evento}-${evento.id_ativacao || idx}`}>
                     <div className="anuncio-img-wrap">
                       <img
@@ -172,14 +154,20 @@ const CatalogoTrilhas = () => {
                         </div>
                         <span className="anuncio-preco">R${evento.preco}<span className="anuncio-preco-unidade">/pessoa</span></span>
                         <div className="anuncio-btn-group">
-                          <button className="anuncio-btn" onClick={() => handleOnClick("detalhes", evento.id_evento)}>Detalhes</button>
+                          <button
+                            className="anuncio-btn"
+                            onClick={() => handleOnClick("detalhes", evento.id_evento, evento.id_ativacao)}
+                          >
+                            Detalhes
+                          </button>
                         </div>
                       </div>
                     </div>
                   </div>
-                ))
-              ) : (
-                <p className="no-events-text">Nenhum evento ativo encontrado.</p>
+              ))}
+              {filtrarEventos(eventosAtivos)
+                .filter(evento => (evento.log || "").trim().toUpperCase() !== "FINALIZADO").length === 0 && (
+                  <p className="no-events-text">Nenhum evento ativo encontrado.</p>
               )}
             </div>
           )}
@@ -206,8 +194,6 @@ const CatalogoTrilhas = () => {
                     <div className="anuncio-info">
                       <h3 className="anuncio-titulo">{evento.nome_evento}</h3>
                       <span className="anuncio-local">{evento.local}</span>
-                      <h3 className="anuncio-titulo">{evento.titulo}</h3>
-                      <p className="anuncio-desc">{evento.descricao}</p>
                       <div className="anuncio-footer">
                         <div className="anuncio-btn-group">
                           <button className="anuncio-ativar-btn" onClick={() => handleOnClick("ativar", evento.id_evento)}>Ativar</button>
@@ -227,4 +213,5 @@ const CatalogoTrilhas = () => {
     </>
   );
 };
+
 export default CatalogoTrilhas;

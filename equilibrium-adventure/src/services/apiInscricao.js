@@ -31,3 +31,13 @@ export const cancelarInscricao = async (idAventureiro, idAtivacao) => {
     throw error.response?.data || "Erro ao cancelar inscrição";
   }
 };
+
+export const listarInscritos = async (ativacaoId) => {
+  try {
+    const response = await api.get(`/inscricoes/ativacao/${ativacaoId}/inscritos`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar inscritos:", error);
+    throw error;
+  }
+}
