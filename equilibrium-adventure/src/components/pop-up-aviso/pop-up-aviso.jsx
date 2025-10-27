@@ -18,19 +18,15 @@ const PopUpAviso = ({
             text: message,
             icon: "warning",
             draggable: true,
-            showCancelButton: showCancelButton,
+            showCancelButton: false,
             confirmButtonText: confirmButtonText,
-            cancelButtonText: cancelButtonText,
             customClass: {
-                confirmButton: 'swal2-confirm-warning',
-                cancelButton: 'swal2-cancel-warning'
+                confirmButton: 'swal2-confirm-warning'
             },
-            buttonsStyling: false, // Usar nossos estilos CSS customizados
+            buttonsStyling: false, 
         }).then((result) => {
             if (result.isConfirmed && onConfirm) {
                 onConfirm();
-            } else if (result.isDismissed && onCancel) {
-                onCancel();
             }
         });
     };

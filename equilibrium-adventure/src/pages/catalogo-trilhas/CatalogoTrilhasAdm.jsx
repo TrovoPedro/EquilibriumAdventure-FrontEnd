@@ -49,10 +49,30 @@ const CatalogoTrilhas = () => {
             return { ...evento, imagemUrl: imagemUrl || catalogo1 };
           })
         );
-        if (isMounted) setEventosBase(eventosComImagens);
+        if (isMounted) {
+          setEventosBase(eventosComImagens);
+          try {
+            sessionStorage.setItem('eventosBaseCache', JSON.stringify(eventosComImagens));
+          } catch (e) {
+            console.warn('Não foi possível salvar eventosBaseCache no sessionStorage', e);
+          }
+        }
       } catch (err) {
         console.error("Erro ao carregar eventos base:", err);
-        if (isMounted) setError(prev => ({ ...prev, base: "Erro ao carregar os eventos base." }));
+        // fallback: tentar carregar do cache em sessionStorage
+        try {
+          const cached = sessionStorage.getItem('eventosBaseCache');
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (isMounted) setEventosBase(parsed);
+            console.info('Usando cache de eventos base devido a erro no fetch');
+          } else {
+            if (isMounted) setError(prev => ({ ...prev, base: "Erro ao carregar os eventos base." }));
+          }
+        } catch (e) {
+          console.error('Erro ao ler cache de eventos base:', e);
+          if (isMounted) setError(prev => ({ ...prev, base: "Erro ao carregar os eventos base." }));
+        }
       } finally {
         if (isMounted) setLoading(prev => ({ ...prev, base: false }));
       }
@@ -66,10 +86,30 @@ const CatalogoTrilhas = () => {
             return { ...evento, imagemUrl: imagemUrl || catalogo1 };
           })
         );
-        if (isMounted) setEventosAtivos(ativosComImagens);
+        if (isMounted) {
+          setEventosAtivos(ativosComImagens);
+          try {
+            sessionStorage.setItem('eventosAtivosCache', JSON.stringify(ativosComImagens));
+          } catch (e) {
+            console.warn('Não foi possível salvar eventosAtivosCache no sessionStorage', e);
+          }
+        }
       } catch (err) {
         console.error("Erro ao carregar eventos ativos:", err);
-        if (isMounted) setError(prev => ({ ...prev, ativos: "Erro ao carregar os eventos ativos." }));
+        // fallback: tentar carregar do cache em sessionStorage
+        try {
+          const cachedAtivos = sessionStorage.getItem('eventosAtivosCache');
+          if (cachedAtivos) {
+            const parsedA = JSON.parse(cachedAtivos);
+            if (isMounted) setEventosAtivos(parsedA);
+            console.info('Usando cache de eventos ativos devido a erro no fetch');
+          } else {
+            if (isMounted) setError(prev => ({ ...prev, ativos: "Erro ao carregar os eventos ativos." }));
+          }
+        } catch (e) {
+          console.error('Erro ao ler cache de eventos ativos:', e);
+          if (isMounted) setError(prev => ({ ...prev, ativos: "Erro ao carregar os eventos ativos." }));
+        }
       } finally {
         if (isMounted) setLoading(prev => ({ ...prev, ativos: false }));
       }

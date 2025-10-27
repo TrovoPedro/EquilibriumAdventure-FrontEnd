@@ -33,6 +33,7 @@ const DetalhesEvento = () => {
 
           setEvento({
             idAtivacao: ativacao.idAtivacao,
+            idEvento: ativacao.evento?.idEvento || ativacao.evento?.id_evento || null,
             titulo: ativacao.evento?.nome || "",
             descricao: ativacao.evento?.descricao || "",
             nivelDificuldade: ativacao.evento?.nivelDificuldade || "",
@@ -116,13 +117,31 @@ const DetalhesEvento = () => {
     if (!confirmResult || !confirmResult.isConfirmed) return;
 
     try {
-      const atualizado = await atualizarAtivacaoEvento(id, evento);
+      const payload = {
+        horaInicio: evento.horaInicio,
+        horaFim: evento.horaFim,
+        tempoEstimado: evento.tempoEstimado,
+        limiteInscritos: evento.limiteInscritos,
+        dataEvento: evento.dataEvento,
+        categoria: evento.categoria,
+        preco: evento.preco,
+        estado: evento.estado
+      };
+
+      if (evento && (evento.idEvento || evento.eventoId)) {
+        payload.eventoId = evento.idEvento || evento.eventoId;
+      }
+
+      const atualizado = await atualizarAtivacaoEvento(id, payload);
       await showSuccess('Evento atualizado com sucesso!');
 
-      setEvento(prev => ({
-        ...prev,
-        ...atualizado
-      }));
+   
+      if (atualizado) {
+        setEvento(prev => ({
+          ...prev,
+          ...atualizado
+        }));
+      }
     } catch (error) {
       console.error("Erro ao salvar alterações do evento:", error);
       await showError('Ocorreu um erro ao salvar as alterações. Tente novamente.');

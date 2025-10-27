@@ -6,3 +6,9 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+
+.swal2-popup .swal2-icon.swal2-warning ~ .swal2-actions .swal2-cancel,
+.swal2-cancel-warning {
+  display: none !important;
+}

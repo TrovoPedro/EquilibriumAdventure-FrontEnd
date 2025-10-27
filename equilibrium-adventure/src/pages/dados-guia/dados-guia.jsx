@@ -70,6 +70,16 @@ export default function DadosGuia() {
         }
 
         try {
+            const confirmResult = await showWarning('Deseja salvar as alterações do guia?', 'Confirmar', 'Sim', 'Cancelar', true);
+            if (!confirmResult || !confirmResult.isConfirmed) {
+                return; 
+            }
+        } catch (err) {
+            console.error('Erro ao exibir confirmação:', err);
+            return;
+        }
+
+        try {
             const result = await atualizarGuia(idUsuario, formData);
             console.log("Dados atualizados com sucesso:", result);
             showSuccess("Dados atualizados com sucesso!");
