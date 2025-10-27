@@ -10,6 +10,7 @@ import { listarComentariosPorAtivacao, adicionarComentario } from '../../service
 import { listarInscritos, cancelarInscricao } from '../../services/apiInscricao';
 import { useAuth } from "../../context/AuthContext";
 import { alterarEstadoEvento, atualizarAtivacaoEvento } from "../../services/chamadasAPIEvento";
+import { showSuccess, showError, showWarning } from '../../utils/swalHelper';
 import { useNavigate } from 'react-router-dom';
 import routeUrls from '../../routes/routeUrls';
 
@@ -111,40 +112,40 @@ const DetalhesEvento = () => {
   };
 
   const handleSalvarEvento = async () => {
-
-    if (!window.confirm("Deseja salvar as alterações neste evento?")) return;
+    const confirmResult = await showWarning('Deseja salvar as alterações neste evento?', 'Confirmar', 'Sim', 'Cancelar', true);
+    if (!confirmResult || !confirmResult.isConfirmed) return;
 
     try {
       const atualizado = await atualizarAtivacaoEvento(id, evento);
-      alert("Evento atualizado com sucesso!");
+      await showSuccess('Evento atualizado com sucesso!');
 
-      // Atualiza o estado local com o retorno do backend
       setEvento(prev => ({
         ...prev,
         ...atualizado
       }));
     } catch (error) {
       console.error("Erro ao salvar alterações do evento:", error);
-      alert("Ocorreu um erro ao salvar as alterações. Tente novamente.");
+      await showError('Ocorreu um erro ao salvar as alterações. Tente novamente.');
     }
   };
 
   const handleDelete = async () => {
-    // Pergunta ao usuário se ele realmente quer excluir/finalizar
-    const confirmacao = window.confirm("Tem certeza que deseja excluir este evento?");
-
-    if (!confirmacao) return; // se o usuário clicar em 'Cancelar', não faz nada
-
-    console.log("Excluindo evento...");
+    const confirmResult = await showWarning('Tem certeza que deseja excluir este evento?', 'Confirmação', 'Sim, excluir', 'Cancelar', true);
+    if (!confirmResult || !confirmResult.isConfirmed) return;
 
     try {
       await alterarEstadoEvento(id, "FINALIZADO");
-      console.log("Evento excluido com sucesso!");
-      alert("Evento excluido!");
+
+      const inscritos = await listarInscritos(id);
+      if (inscritos && inscritos.length > 0) {
+        await Promise.all(inscritos.map(u => cancelarInscricao(u.idUsuario, id).catch(() => null)));
+      }
+
+      await showSuccess('Evento excluído!');
       navigate(-1);
     } catch (error) {
       console.error("Erro ao finalizar evento:", error);
-      alert("Ocorreu um erro ao finalizar o evento.");
+      await showError('Ocorreu um erro ao finalizar o evento.');
     }
   };
 
@@ -153,17 +154,17 @@ const DetalhesEvento = () => {
   };
 
   const handleNegarUsuario = async (userId) => {
-    if (!window.confirm("Tem certeza que deseja cancelar essa inscrição?")) return;
+    const confirmResult = await showWarning('Tem certeza que deseja cancelar essa inscrição?', 'Confirmação', 'Sim, cancelar', 'Cancelar', true);
+    if (!confirmResult || !confirmResult.isConfirmed) return;
 
     try {
-      await cancelarInscricao(userId, id); // 'id' é o id da ativação do evento
-      alert("Inscrição cancelada com sucesso!");
+      await cancelarInscricao(userId, id);
+      await showSuccess('Inscrição cancelada com sucesso!');
 
-      // Atualiza a lista de usuários removendo o cancelado
       setUsuarios(prev => prev.filter(u => u.idUsuario !== userId));
     } catch (error) {
       console.error("Erro ao cancelar inscrição:", error);
-      alert(error.message || "Erro ao cancelar inscrição. Tente novamente.");
+      await showError(error.message || 'Erro ao cancelar inscrição. Tente novamente.');
     }
   };
 
