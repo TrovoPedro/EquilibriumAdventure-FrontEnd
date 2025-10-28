@@ -328,18 +328,28 @@ export const alterarEstadoEvento = async (id, estado) => {
 
 export async function atualizarAtivacaoEvento(id, eventoData) {
   try {
-    const response = await axios.put(`http://localhost:8080/ativacoes/${id}`, {
-      horaInicio: eventoData.horaInicio,
-      horaFinal: eventoData.horaFim,
-      tempoEstimado: eventoData.tempoEstimado,
-      limiteInscritos: eventoData.limiteInscritos,
-      dataAtivacao: eventoData.dataEvento,
-      tipo: eventoData.categoria,
-      preco: eventoData.preco,
-      estado: eventoData.estado,
-      eventoId: eventoData.idEvento // se tiver
-    });
-    return response.data;
+
+        const payload = {
+            horaInicio: eventoData.horaInicio,
+            horaFinal: eventoData.horaFim,
+            tempoEstimado: eventoData.tempoEstimado,
+            limiteInscritos: eventoData.limiteInscritos,
+            dataAtivacao: eventoData.dataEvento,
+            tipo: eventoData.categoria,
+            preco: eventoData.preco,
+            estado: eventoData.estado
+        };
+
+            if (eventoData && eventoData.eventoId !== undefined && eventoData.eventoId !== null) {
+                payload.eventoId = eventoData.eventoId;
+            } else if (eventoData && eventoData.idEvento !== undefined && eventoData.idEvento !== null) {
+                payload.eventoId = eventoData.idEvento;
+            }
+
+            if (payload.eventoId === null) delete payload.eventoId;
+
+            const response = await axios.put(`http://localhost:8080/ativacoes/${id}`, payload);
+            return response.data;
   } catch (error) {
     console.error("Erro ao atualizar evento:", error);
     throw error;

@@ -7,6 +7,7 @@ import InfoPessoaisCard from "../../components/info-pessoais-card/info-pessoais-
 import EnderecoCard from "../../components/endereco-card/endereco-card";
 import PopUpOk from "../../components/pop-up-ok/pop-up-ok";
 import PopUpErro from "../../components/pop-up-erro/pop-up-erro";
+import { showWarning } from "../../utils/swalHelper";
 import imagemPadraoUsuario from "../../assets/imagem-do-usuario.png";
 
 import { buscarCep } from "../../services/chamadasAPIEvento";
@@ -442,6 +443,21 @@ export default function InformacoesPessoais() {
 		}
 
 		console.log("Iniciando processo de salvamento...");
+
+		
+		try {
+			const confirmResult = await showWarning('Deseja salvar as alterações?', 'Confirmar', 'Sim', 'Cancelar', true);
+			if (!confirmResult || !confirmResult.isConfirmed) {
+				setSaving(false);
+				console.log('Ação de salvar cancelada pelo usuário');
+				return;
+			}
+		} catch (e) {
+			
+			console.error('Erro ao exibir confirmação:', e);
+			setSaving(false);
+			return;
+		}
 		console.log("dadosOriginais completo:", dadosOriginais);
 		console.log("dadosOriginais.nivel:", dadosOriginais?.nivel);
 		console.log("Modo:", isEditMode ? "EDICAO" : "CADASTRO");
