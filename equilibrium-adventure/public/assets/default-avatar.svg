@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" width="128" height="128" role="img" aria-labelledby="title">
+  <title>Default user avatar</title>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#4b5563"/>
+      <stop offset="100%" stop-color="#1f2937"/>
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="64" fill="url(#bg)"/>
+  <g fill="#e5e7eb">
+    <circle cx="64" cy="48" r="22"/>
+    <path d="M16 112c6-22.5 26-38 48-38s42 15.5 48 38c-14 10-34 16-48 16s-34-6-48-16z"/>
+  </g>
+</svg>

@@ -3,6 +3,7 @@ import ButtonSubmitForm from '../button-padrao/button-submit-form';
 import './EventoInfo.css';
 import CircleBackButton from '../circle-back-button/circle-back-button';
 import ButtonDangerForm from '../button-padrao/button-danger-form';
+import defaultTrailImg from '../../assets/img12-catalogo.jpg';
 
 const EventoInfo = ({ 
   evento, 
@@ -22,7 +23,14 @@ const EventoInfo = ({
       </div>
       <div className="evento-header">
         <div className="evento-imagem">
-          <img src={evento.imagemUrl} alt={evento.nome} />
+          <img
+            src={evento?.imagemUrl || defaultTrailImg}
+            alt={evento?.titulo || evento?.nome || 'Imagem do evento'}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = defaultTrailImg;
+            }}
+          />
         </div>
         <div className="evento-detalhes">
           <div className="campo-info-titulo">

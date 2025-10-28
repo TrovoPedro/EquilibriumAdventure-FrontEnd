@@ -58,9 +58,8 @@ const Header = () => {
     AVENTUREIRO: {
       defaultAvatar: imgDefault,
       menuItems: [
-        { label: "HOME", route: routeUrls.CATALOGO_TRILHA },
-        { label: "MAIS PESQUISADOS", route: "#" },
-        { label: "TRILHAS", route: "#" },
+        { label: "HOME", route: routeUrls.HOME },
+        { label: "ESCOLHER GUIA", route: routeUrls.ESCOLHER_GUIA },
       ],
       agendaRoute: routeUrls.AGENDA_AVENTUREIRO,
     },
