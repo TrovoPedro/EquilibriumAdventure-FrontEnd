@@ -140,7 +140,7 @@ const CatalogoTrilhas = () => {
 
         {/* Seção de destinos */}
         <section className="destinos">
-          <h2>Destinos que você vai amar conhecer</h2>
+          <h2 className="destinos-titulo">Destinos que você vai amar conhecer</h2>
           {loading.trilhas ? (
             <p>Carregando trilhas...</p>
           ) : error.trilhas ? (
