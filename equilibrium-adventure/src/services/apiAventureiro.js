@@ -2,6 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "http://localhost:8080",
+  headers: { "Content-Type": "application/json" }
 });
 
 export const getPerguntas = async () => {
@@ -47,10 +48,13 @@ export const cancelarInscricao = async (idAventureiro, idEvento) => {
   const response = await api.delete(`/inscricoes/cancelar-inscricao/${idAventureiro}/${idEvento}`);
   return response.data;
 };
-
 export const postRespostas = async (respostas) => {
   try {
-    const response = await api.post('/respostas-aventureiro/salvar', respostas);
+    const response = await api.post(
+      '/respostas-aventureiro/salvar',
+      respostas,
+      { headers: { 'Content-Type': 'application/json' } }
+    );
     return response.data;
   } catch (error) {
     console.error('Erro ao enviar respostas:', error);
@@ -58,6 +62,7 @@ export const postRespostas = async (respostas) => {
   }
 };
 
+// Calcular nível
 export const calcularNivel = async (usuarioId) => {
   try {
     const response = await api.post(`/respostas-aventureiro/calcular-nivel/${usuarioId}`, {});
@@ -85,7 +90,6 @@ export const calcularNivel = async (usuarioId) => {
     throw error;
   }
 };
-
 export const inicializarPerguntas = async () => {
   try {
     const response = await api.get('/perguntas/inicializar');
