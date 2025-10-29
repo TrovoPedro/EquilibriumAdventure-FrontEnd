@@ -63,6 +63,13 @@ const EscolherGuia = () => {
     <>
       <div className="fullscreen-bg"></div>
       <div className="overlay">
+        <button
+          className="close-btn-escolher-guia"
+          aria-label="Fechar"
+          onClick={() => navigate(routeUrls.LOGIN)}
+        >
+          ✕
+        </button>
         <h1>Escolha o seu guia...</h1>
         <div className="guides-carousel-container">
           {isCarousel && currentSlide > 0 && (
