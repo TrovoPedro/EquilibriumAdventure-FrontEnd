@@ -1,153 +1,375 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+    overflow-x: hidden;
+}
+
+/* Página principal */
 .adicionar-guia-container {
-    height: 100vh;
     width: 100%;
+    min-height: 100vh;
+    background: #f6f7f8;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: flex-start;
-    padding: 90px 4% 2.5% 4%;
-    row-gap: 2vh;
+    padding: 110px 20px 70px 20px;
+    overflow-x: hidden;
+    position: relative;
 }
 
-.adicionar-guia-title {
-    font-size: 2rem;
-    font-weight: bold;
-    color: #0C513F;
+/* Botão X para fechar */
+.close-btn-adicionar-guia {
+    position: absolute;
+    right: 20px;
+    top: 120px;
+    border: none;
+    background: transparent;
+    font-size: 30px;
+    cursor: pointer;
+    color: #9aa0a6;
+    z-index: 10;
+    transition: all 0.2s ease;
 }
 
+.close-btn-adicionar-guia:hover {
+    color: #226144;
+    transform: scale(1.1);
+}
+
+/* Header com botão de voltar e título */
 .adicionar-guia-header {
     display: flex;
     align-items: center;
+    gap: 18px;
     justify-content: flex-start;
-    column-gap: 2vw;
+    margin-bottom: 32px;
     width: 100%;
+    max-width: 1400px;
+    padding-left: 40px;
 }
 
-.adicionar-guia-layout-wrapper {
+.adicionar-guia-title {
+    font-family: "Raleway", sans-serif;
+    color: #226144;
+    font-size: 32px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.back-arrow-circle {
+    cursor: pointer;
     display: flex;
-    width: 100%;
-    height: 100%;
-    column-gap: 4vw;
     align-items: center;
-    justify-content: space-between;
+    justify-content: center;
+    transition: transform 0.2s ease;
 }
 
-.adicionar-guia-side-column {
-    /* flex: 1; */
-    /* background-color: white; */
-    width: 45%;
-    height: 100%;
-    row-gap: 6vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-start;
-    align-items: stretch;
+.back-arrow-circle:hover {
+    transform: scale(1.1);
 }
 
-.adicionar-guia-center-column {
-    /* flex: 2; */
-    background-color: #E9E9E9;
+.back-arrow {
+    width: 40px;
+    height: 40px;
+}
+
+/* Formulário */
+.adicionar-guia-layout-wrapper {
+    background: #ffffff;
+    padding: 50px 60px;
     border-radius: 20px;
-    height: 100%;
-    width: 45%;
     display: flex;
-    flex-direction: column;
-    row-gap: 1vh;
-    padding: 1.5vh 2.5vw ;
+    gap: 40px;
+    box-shadow: 0 4px 20px rgba(34, 97, 68, 0.1);
+    border: 1px solid rgba(34, 97, 68, 0.1);
+    max-width: 1400px;
+    width: 95%;
+    min-height: 600px;
+    position: relative;
 }
 
+/* Coluna lateral - Upload de imagem e botões */
+.adicionar-guia-side-column {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    min-width: 380px;
+}
+
+/* Coluna central - Campos do formulário */
+.adicionar-guia-center-column {
+    flex: 1.2;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+/* Upload de imagem */
 .adicionar-guia-imagem {
-    width: 100%;
-    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .upload-box {
     border: 2px dashed #bbb;
-    border-radius: 8px;
+    border-radius: 12px;
     padding: 40px;
+    min-height: 400px;
     text-align: center;
     background: #f5f5f5;
     color: #666;
     cursor: pointer;
-    transition: border 0.3s ease;
-    height: 100%;
+    transition: all 0.3s ease;
     display: flex;
     align-items: center;
     justify-content: center;
+    flex: 1;
 }
 
 .upload-box:hover {
-    border-color: #0C513F;
+    border-color: #226144;
     background: #f0f0f0;
+    transform: translateY(-2px);
 }
 
 .upload-placeholder {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    font-size: 14px;
-    color: #0C513F;
+    gap: 16px;
+    font-size: 16px;
+    color: #226144;
+}
+
+.upload-placeholder p {
+    margin: 0;
+    font-weight: 500;
 }
 
 .preview-img {
-    max-width: 60%;
-    border-radius: 6px;
+    max-width: 100%;
+    max-height: 100%;
+    border-radius: 12px;
+    object-fit: contain;
 }
 
+/* Botões */
 .adicionar-guia-botoes {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    row-gap: 2vh;
+    gap: 16px;
 }
 
 .adicionar-guia-btn {
-    background: #336948;
+    background: #226144;
     color: white;
     border: none;
-    padding: 12px 50px;
-    border-radius: 15px;
+    padding: 16px 32px;
+    border-radius: 12px;
     cursor: pointer;
     width: 100%;
-    font-size: 16px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(34, 97, 68, 0.2);
+}
+
+.adicionar-guia-btn:hover {
+    background: #1a4d36;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(34, 97, 68, 0.3);
+}
+
+.adicionar-guia-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(34, 97, 68, 0.2);
 }
 
 .adicionar-guia-btn a {
     text-decoration: none;
     color: white;
-}
-
-.adicionar-guia-center-column input {
-    width: 100%;
-    padding: 4px 16px;
-    border: 1px inset #0C513F;
-    outline: none;
-    border-radius: 8px;
-}
-.adicionar-guia-center-column textarea {
+    display: block;
     width: 100%;
     height: 100%;
-    resize: none;
-    padding: 12px 16px;
-    outline: none;
-    border: 1px inset #0C513F;
-    border-radius: 8px;
-}
-.adicionar-guia-center-column label {
-    gap: 0.7vh;
-    color: #0C513F;
-    display: flex;
-    font-size: 1.15rem;
-    flex-direction: column;
-    align-items: flex-start;
 }
 
-.adicionar-guia-center-column label #text {
-    font-size: 2rem;
+/* Labels e inputs */
+.adicionar-guia-center-column label {
+    display: flex;
+    flex-direction: column;
+    font-weight: 600;
+    color: #226144;
+    font-size: 1.1rem;
+    gap: 8px;
+}
+
+.adicionar-guia-center-column input,
+.adicionar-guia-center-column textarea {
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 12px;
+    border: 2px solid #e0e0e0;
+    font-size: 1rem;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: "Inter", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.adicionar-guia-center-column input:focus,
+.adicionar-guia-center-column textarea:focus {
+    border-color: #226144;
+    box-shadow: 0 0 0 3px rgba(34, 97, 68, 0.1);
+}
+
+.adicionar-guia-center-column input:hover,
+.adicionar-guia-center-column textarea:hover {
+    border-color: #226144;
+}
+
+.adicionar-guia-center-column textarea {
+    min-height: 150px;
+    resize: vertical;
+    flex: 1;
 }
 
 .adicionar-guia-center-column #descricao-label {
-    width: 100%;
-    height: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.adicionar-guia-center-column #descricao {
+    flex: 1;
+}
+
+/* Animações */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.adicionar-guia-header {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+.adicionar-guia-layout-wrapper {
+    animation: fadeInUp 0.6s ease-out 0.1s both;
+}
+
+/* Responsividade */
+@media (max-width: 1200px) {
+    .adicionar-guia-layout-wrapper {
+        flex-direction: column;
+        gap: 30px;
+    }
+    
+    .adicionar-guia-side-column {
+        min-width: 100%;
+        flex-direction: row;
+        gap: 20px;
+    }
+    
+    .adicionar-guia-imagem {
+        flex: 1;
+    }
+    
+    .adicionar-guia-botoes {
+        flex: 0 0 300px;
+        justify-content: flex-start;
+    }
+    
+    .upload-box {
+        min-height: 350px;
+    }
+}
+
+@media (max-width: 768px) {
+    .adicionar-guia-container {
+        padding: 110px 10px 40px 10px;
+    }
+    
+    .close-btn-adicionar-guia {
+        right: 15px;
+        top: 110px;
+        font-size: 26px;
+    }
+    
+    .adicionar-guia-header {
+        gap: 12px;
+    }
+    
+    .adicionar-guia-title {
+        font-size: 24px;
+    }
+    
+    .adicionar-guia-layout-wrapper {
+        padding: 30px 20px;
+        width: 100%;
+    }
+    
+    .adicionar-guia-side-column {
+        flex-direction: column;
+    }
+    
+    .adicionar-guia-botoes {
+        flex: none;
+    }
+    
+    .upload-box {
+        min-height: 300px;
+    }
+}
+
+@media (max-width: 480px) {
+    .adicionar-guia-container {
+        padding: 110px 5px 40px 5px;
+    }
+    
+    .close-btn-adicionar-guia {
+        right: 10px;
+        top: 105px;
+        font-size: 24px;
+    }
+    
+    .adicionar-guia-header {
+        gap: 8px;
+    }
+    
+    .adicionar-guia-title {
+        font-size: 20px;
+    }
+    
+    .adicionar-guia-layout-wrapper {
+        padding: 20px 15px;
+    }
+    
+    .back-arrow {
+        width: 32px;
+        height: 32px;
+    }
+    
+    .adicionar-guia-center-column label {
+        font-size: 1rem;
+    }
+    
+    .adicionar-guia-btn {
+        font-size: 1rem;
+        padding: 14px 24px;
+    }
 }

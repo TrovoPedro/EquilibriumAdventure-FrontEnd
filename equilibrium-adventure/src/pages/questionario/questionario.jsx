@@ -148,7 +148,7 @@ const Questionario = () => {
     <div className="questionario-wrapper">
       <div className="questionario-container">
         <div className="questionario-content">
-          <h2>{questions[currentQuestionIndex].title}</h2>
+          <h2>Questão {currentQuestionIndex + 1}</h2>
           <p className="question-text">
             {questions[currentQuestionIndex].question}
           </p>

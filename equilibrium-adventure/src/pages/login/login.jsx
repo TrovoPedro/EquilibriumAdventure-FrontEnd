@@ -1,12 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Forms from '../../components/forms/forms';
 import './login.css';
 import routeUrls from "../../routes/routeUrls";
 import { useNavigate } from 'react-router-dom';
 import { loginUsuario, buscarInformacoesPerfil } from '../../services/api';
-import { buscarNivelPerfil } from '../../services/api'; // importe a função
+import { buscarNivelPerfil } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { useScore } from "../../context/ScoreContext";
+import PopUpErro from '../../components/pop-up-erro/pop-up-erro.jsx';
+import PopUpOk from '../../components/pop-up-ok/pop-up-ok.jsx';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -14,6 +16,10 @@ const Login = () => {
   const text = "Cadastre-se";
   const { login } = useAuth();
   const { salvarPontuacao } = useScore();
+  const [showErrorPopup, setShowErrorPopup] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [pendingNavigation, setPendingNavigation] = useState(null);
 
   const handleSubmit = async (formData) => {
     const credentials = {
@@ -24,40 +30,31 @@ const Login = () => {
     try {
       const usuario = await loginUsuario(credentials);
       login(usuario);
-
-      if (usuario.tipoUsuario === "AVENTUREIRO" && !usuario.primeiraVez) {
+      // Salva navegação pendente, mostra popup e só navega após confirmação
+      let nextRoute = null;
+      if (usuario.tipoUsuario === "ADMINISTRADOR" || usuario.tipoUsuario === "GUIA") {
+        nextRoute = routeUrls.CATALOGO_TRILHAS_ADM;
+      } else if (usuario.tipoUsuario === "AVENTUREIRO" && usuario.primeiraVez) {
+        nextRoute = routeUrls.QUESTIONARIO;
+      } else if (usuario.tipoUsuario === "AVENTUREIRO" && !usuario.primeiraVez) {
         try {
           const informacoes = await buscarInformacoesPerfil(usuario.id);
           const nivel = await buscarNivelPerfil(usuario.id);
-
-          console.log("Informações do perfil:", informacoes);
-
           if (nivel.nivel) {
             salvarPontuacao(nivel.nivel);
-            console.log("Nível carregado:", nivel.nivel);
+            nextRoute = routeUrls.ESCOLHER_GUIA;
           } else {
-            console.log("Usuário sem nível registrado ainda (primeiro login).");
-            navigate(routeUrls.QUESTIONARIO);
-            return;
+            nextRoute = routeUrls.QUESTIONARIO;
           }
         } catch (error) {
-          console.warn("Erro ao carregar o nível do usuário:", error);
-          navigate(routeUrls.QUESTIONARIO);
-          return;
+          nextRoute = routeUrls.QUESTIONARIO;
         }
       }
-
-      if (usuario.tipoUsuario === "ADMINISTRADOR" || usuario.tipoUsuario === "GUIA") {
-        navigate(routeUrls.CATALOGO_TRILHAS_ADM);
-      } else if (usuario.tipoUsuario === "AVENTUREIRO" && usuario.primeiraVez) {
-        navigate(routeUrls.QUESTIONARIO);
-      } else if (usuario.tipoUsuario === "AVENTUREIRO" && !usuario.primeiraVez) {
-        navigate(routeUrls.ESCOLHER_GUIA);
-      }
-
+      setPendingNavigation(nextRoute);
+      setShowSuccessPopup(true);
     } catch (error) {
-      alert("Credenciais inválidas ou erro no servidor!");
-      console.error(error);
+      setErrorMessage('Credenciais inválidas ou erro no servidor!');
+      setShowErrorPopup(true);
     }
   };
 
@@ -67,6 +64,29 @@ const Login = () => {
 
   return (
     <div className="login-page">
+      {showSuccessPopup && (
+        <PopUpOk
+          title="Login realizado!"
+          message="Login efetuado com sucesso!"
+          onConfirm={() => {
+            setShowSuccessPopup(false);
+            if (pendingNavigation) {
+              navigate(pendingNavigation);
+              setPendingNavigation(null);
+            }
+          }}
+        />
+      )}
+      {showErrorPopup && (
+        <PopUpErro
+          title="Erro no login!"
+          message={errorMessage}
+          onConfirm={() => {
+            setShowErrorPopup(false);
+            setErrorMessage('');
+          }}
+        />
+      )}
       <div className="login-left">
         <div className="login-left-content">
           <div className="text-wrap">

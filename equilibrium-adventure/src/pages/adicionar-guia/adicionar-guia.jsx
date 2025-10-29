@@ -83,10 +83,10 @@ export default function AdicionarGuia() {
             <Header />
             <div className="adicionar-guia-container">
                 <div className="adicionar-guia-header">
-                    <span className="back-arrow-circle">
+                    <span className="back-arrow-circle" onClick={() => navigate(routeUrls.CATALOGO_TRILHAS_ADM)}>
                         <img className="back-arrow" src={leftArrow} alt="Voltar" />
                     </span>
-                    <span className="adicionar-guia-title">Adicionar Guia</span>
+                    <h1 className="adicionar-guia-title">Adicionar Guia</h1>
                 </div>
                 <form className="adicionar-guia-layout-wrapper" autoComplete="off" onSubmit={handleSubmit}>
                     <div style={{ position: 'absolute', left: '-9999px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }} aria-hidden="true">
@@ -106,7 +106,7 @@ export default function AdicionarGuia() {
                                     <img src={formData.imagem} alt="Pré-visualização" className="preview-img" />
                                 ) : (
                                     <div className="upload-placeholder">
-                                        <FaCloudUploadAlt size={150} color="#0C513F" />
+                                        <FaCloudUploadAlt size={150} color="#226144" />
                                         <p>Clique ou arraste uma imagem aqui</p>
                                     </div>
                                 )}
@@ -123,28 +123,26 @@ export default function AdicionarGuia() {
 
                         </div>
                         <div className="adicionar-guia-botoes">
-                            <button onClick={handleSubmit} className="adicionar-guia-btn">Registrar</button>
-                            <button className="adicionar-guia-btn">
-                                <a href="">
+                            <button type="submit" className="adicionar-guia-btn">Registrar</button>
+                            <button type="button" className="adicionar-guia-btn" onClick={() => navigate(routeUrls.VER_GUIAS)}>
                                 Visualizar Guias
-                                </a> 
-                                </button>
+                            </button>
                         </div>
                     </div>
                     <div className="adicionar-guia-center-column">
-                        <label htmlFor="">
+                        <label htmlFor="nome">
                             Nome:
-                            <input autoComplete="name" type="text" name="nome" value={formData.nome} onChange={handleChange} data-field="nome" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')} />
+                            <input autoComplete="name" type="text" id="nome" name="nome" value={formData.nome} onChange={handleChange} data-field="nome" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')} />
                         </label>
-                        <label htmlFor="">
+                        <label htmlFor="email">
                             E-mail:
-                            <input autoComplete="email" type="text" name="email" value={formData.email} onChange={handleChange} data-field="email" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')} />
+                            <input autoComplete="email" type="text" id="email" name="email" value={formData.email} onChange={handleChange} data-field="email" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')} />
                         </label>
-                        <label htmlFor="">
+                        <label htmlFor="senha">
                             Senha:
-                            <input autoComplete="new-password" type="password" name="senha" value={formData.senha} onChange={handleChange} data-field="senha" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')} />
+                            <input autoComplete="new-password" type="password" id="senha" name="senha" value={formData.senha} onChange={handleChange} data-field="senha" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')} />
                         </label>
-                        <label id="descricao-label" htmlFor="">
+                        <label id="descricao-label" htmlFor="descricao">
                             Descrição do Guia:
                             <textarea autoComplete="off" name="descricao" id="descricao" value={formData.descricao} onChange={handleChange} data-field="descricao" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')}></textarea>
                         </label>
