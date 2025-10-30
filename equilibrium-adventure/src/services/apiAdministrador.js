@@ -27,12 +27,10 @@ export const atualizarGuia = async (id, descricaoGuia, imgUsuario) => {
   try {
     const formData = new FormData();
     
-    // Adiciona a descrição se fornecida
     if (descricaoGuia !== null && descricaoGuia !== undefined) {
       formData.append('descricao_guia', descricaoGuia);
     }
     
-    // Adiciona a imagem se fornecida
     if (imgUsuario) {
       formData.append('img_usuario', imgUsuario);
     }
@@ -46,5 +44,29 @@ export const atualizarGuia = async (id, descricaoGuia, imgUsuario) => {
     return response.data;
   } catch (error) {
     throw error.response?.data || error.message;
+  }
+};
+
+export const deletarGuia = async (id) => {
+  try {
+    const numericId = Number(id);
+    console.log("🔢 ID para deletar:", numericId, "Tipo:", typeof numericId);
+    
+    const response = await api.delete(`/administrador/deletar-guia/${numericId}`);
+    
+    console.log("🌐 Response completo:", response);
+    console.log("📈 Status:", response.status);
+    
+    return response;
+  } catch (error) {
+    console.error("🚨 Erro na API deletarGuia:", error);
+    
+    if (error.response?.status === 404) {
+      throw new Error('Guia não encontrado');
+    } else if (error.response?.status === 403) {
+      throw new Error('Não autorizado a deletar este guia');
+    } else {
+      throw error.response?.data || error.message;
+    }
   }
 };
