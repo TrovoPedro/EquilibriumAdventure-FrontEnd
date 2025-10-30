@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
 import "./dados-guia.css";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 import BackButton from "../../components/circle-back-button/circle-back-button";
 import useGoBack from "../../utils/useGoBack";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
-import { atualizarGuia } from "../../services/apiGuia";
+import { atualizarGuia } from "../../services/apiAdministrador";
 
 export default function DadosGuia() {
     const navigate = useNavigate();
+    const location = useLocation();
     const goBack = useGoBack();
     const { usuario } = useAuth();
-    const idUsuario = usuario?.id;
+    
+    // Receber dados do guia selecionado via location.state
+    const guiaData = location.state?.guiaData;
+    const guiaId = location.state?.guiaId;
 
     const [formData, setFormData] = useState({
         nome: "",
@@ -22,8 +26,16 @@ export default function DadosGuia() {
     });
 
     useEffect(() => {
-        if (!idUsuario) return;
-    }, [idUsuario]);
+        // Preencher os campos com os dados do guia selecionado
+        if (guiaData) {
+            setFormData({
+                nome: guiaData.nome || "",
+                email: guiaData.email || "",
+                descricao: guiaData.descricao_guia || "",
+                imagem: null // A imagem será carregada separadamente se necessário
+            });
+        }
+    }, [guiaData]);
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
@@ -35,19 +47,31 @@ export default function DadosGuia() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!idUsuario) {
-            alert("Usuário não logado");
+        
+        if (!guiaId) {
+            alert("ID do guia não encontrado");
             return;
         }
 
         try {
-            const result = await atualizarGuia(idUsuario, formData);
+            console.log("Atualizando guia:", {
+                id: guiaId,
+                descricao: formData.descricao,
+                imagem: formData.imagem
+            });
+            
+            const result = await atualizarGuia(
+                guiaId, 
+                formData.descricao, 
+                formData.imagem
+            );
+            
             console.log("Guia atualizado com sucesso:", result);
             alert("Guia atualizado com sucesso!");
-            navigate(routeUrls.HOME);
+            navigate(routeUrls.VER_GUIAS); // Volta para a lista de guias
         } catch (err) {
             console.error("Erro ao atualizar guia:", err);
-            alert("Erro ao atualizar guia!");
+            alert(`Erro ao atualizar guia: ${err.message || err}`);
         }
     };
 
@@ -65,8 +89,10 @@ export default function DadosGuia() {
                                 id="nome"
                                 name="nome"
                                 value={formData.nome}
-                                onChange={handleChange}
-                                placeholder="Digite seu nome completo"
+                                readOnly
+                                disabled
+                                placeholder="Nome do guia (somente leitura)"
+                                style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
                             />
                         </label>
                         <label htmlFor="email">
@@ -76,8 +102,10 @@ export default function DadosGuia() {
                                 id="email"
                                 name="email"
                                 value={formData.email}
-                                onChange={handleChange}
-                                placeholder="Digite seu email"
+                                readOnly
+                                disabled
+                                placeholder="Email do guia (somente leitura)"
+                                style={{ backgroundColor: '#f5f5f5', cursor: 'not-allowed' }}
                             />
                         </label>
                         <label htmlFor="descricao">

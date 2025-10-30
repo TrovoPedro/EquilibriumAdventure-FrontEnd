@@ -33,12 +33,16 @@ export default function AdicionarGuia() {
         navigate(routeUrls.HOME);
     };
 
+    const handleVoltar = () => {
+        navigate(-1);
+    };
+
     return (
         <>
             <Header />
             <div className="adicionar-guia-container">
                 <div className="adicionar-guia-header">
-                    <span className="back-arrow-circle">
+                    <span className="back-arrow-circle" onClick={handleVoltar}>
                         <img className="back-arrow" src={leftArrow} alt="Voltar" />
                     </span>
                     <span className="adicionar-guia-title">Adicionar Guia</span>
