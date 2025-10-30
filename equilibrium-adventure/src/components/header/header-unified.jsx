@@ -43,6 +43,7 @@ const Header = () => {
         { label: "HOME", route: routeUrls.CATALOGO_TRILHAS_ADM },
         { label: "CRIAR EVENTO", route: routeUrls.CRIAR_EVENTO },
         { label: "DASHBOARD", route: routeUrls.DASHBOARD },
+        { label: "VER GUIAS", route: routeUrls.VER_GUIAS },
         { label: "NOVO GUIA", route: routeUrls.ADICIONAR_GUIA },
       ],
       agendaRoute: routeUrls.INFOS_ADICIONAIS_GUIA,

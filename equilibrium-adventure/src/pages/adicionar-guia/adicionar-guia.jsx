@@ -72,18 +72,16 @@ export default function AdicionarGuia() {
         cadastrar();
     };
 
-    useEffect(() => {
-        return () => {
-            if (previewUrl) URL.revokeObjectURL(previewUrl);
-        };
-    }, [previewUrl]);
+    const handleVoltar = () => {
+        navigate(-1);
+    };
 
     return (
         <>
             <Header />
             <div className="adicionar-guia-container">
                 <div className="adicionar-guia-header">
-                    <span className="back-arrow-circle" onClick={() => navigate(routeUrls.CATALOGO_TRILHAS_ADM)}>
+                    <span className="back-arrow-circle" onClick={handleVoltar}>
                         <img className="back-arrow" src={leftArrow} alt="Voltar" />
                     </span>
                     <h1 className="adicionar-guia-title">Adicionar Guia</h1>
