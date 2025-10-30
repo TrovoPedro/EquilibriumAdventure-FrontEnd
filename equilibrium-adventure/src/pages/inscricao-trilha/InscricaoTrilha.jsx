@@ -15,6 +15,22 @@ import { listarComentariosPorAtivacao, adicionarComentario } from '../../service
 import { verificarInscricao, criarInscricao, cancelarInscricao } from "../../services/apiInscricao";
 
 const InscricaoTrilhasLimitado = () => {
+  // Compartilhar trilha
+  const handleCompartilhar = () => {
+    const url = window.location.href;
+    const titulo = evento?.nome || "Trilha";
+    const texto = `Confira a trilha: ${titulo}`;
+    if (navigator.share) {
+      navigator.share({
+        title: titulo,
+        text: texto,
+        url
+      }).catch(() => {});
+    } else {
+      navigator.clipboard.writeText(url);
+      showSuccess("Link da trilha copiado para área de transferência!");
+    }
+  };
   const { id } = useParams(); // ID do evento
   const [evento, setEvento] = useState(null);
   const [imagemEvento, setImagemEvento] = useState(null);
@@ -96,8 +112,16 @@ const InscricaoTrilhasLimitado = () => {
     }
   }, [id]);
 
-
+          {inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
   const handleEnviarComentario = async (comentarioObj) => {
+
+        <button
+          className="inscricao-trilha-btn btn-compartilhar"
+          style={{ marginTop: '10px', background: '#4caf50', color: '#fff' }}
+          onClick={handleCompartilhar}
+        >
+          Compartilhar trilha
+        </button>
     const comentarioCriado = await adicionarComentario({
       texto: comentarioObj.texto,
       idUsuario: usuario.id,
@@ -241,6 +265,21 @@ const InscricaoTrilhasLimitado = () => {
 
       <button
         className={`inscricao-trilha-btn ${inscrito ? 'btn-cancelar' : 'btn-inscrever'}`}
+        style={{
+          background: inscrito ? '#a93226' : '#226144',
+          color: '#fff',
+          border: 'none',
+          borderRadius: '12px',
+          padding: '18px 0',
+          fontSize: '1.35rem',
+          fontWeight: 700,
+          cursor: 'pointer',
+          margin: '32px 0 0 0',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+          textAlign: 'center',
+          letterSpacing: '0.5px',
+          transition: 'background 0.2s'
+        }}
         onClick={() => {
             if (inscrito) {
               handleCancelarInscricao();
@@ -255,7 +294,27 @@ const InscricaoTrilhasLimitado = () => {
             handleInscrever();
         }}
       >
-        {inscrito ? 'Cancelar inscrição' : 'Se Inscrever'}
+        {inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
+      </button>
+
+      <button
+        className="inscricao-trilha-btn btn-compartilhar"
+        style={{
+          marginTop: '10px',
+          background: '#fff',
+          color: '#226144',
+          border: '2px solid #226144',
+          borderRadius: '12px',
+          fontWeight: 'bold',
+          fontSize: '1.15rem',
+          padding: '16px 0',
+          cursor: 'pointer',
+          boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+          transition: 'background 0.2s'
+        }}
+        onClick={handleCompartilhar}
+      >
+        Compartilhar trilha
       </button>
 
       <Comentarios comentariosIniciais={comentarios} onEnviarComentario={handleEnviarComentario} />

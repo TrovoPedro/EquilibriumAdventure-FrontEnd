@@ -218,7 +218,7 @@ const CatalogoTrilhas = () => {
                           )}
                         </div>
                         <span className="anuncio-preco">
-                          {trilha.preco}
+                          R${trilha.preco}
                           <span className="anuncio-preco-unidade">
                             /pessoa
                           </span>
