@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 import "./header.css";
 import imgDefault from "../../assets/imagem-do-usuario.png";
@@ -11,6 +11,7 @@ import axios from "axios";
 
 const Header = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
   const { resetarPontuacao } = useScore();
   const { resetarEscolhaGuia } = useGuide();
@@ -67,9 +68,12 @@ const Header = () => {
 
   // Pega configuração do usuário atual ou usa a do aventureiro
   const currentConfig = userConfigs[tipoUsuario] || userConfigs.AVENTUREIRO;
+  // detecta rota do relatório de anamnese para aplicar spacer específico
+  const isRelatorioAnamnese = location?.pathname?.startsWith("/relatorio-anamnese");
 
   return (
-    <header className="header">
+    <>
+      <header className="header">
       {/* 🖼️ Imagem do usuário */}
       <div className="header-left" onClick={() => navigate(currentConfig.agendaRoute)}>
         <img
@@ -152,6 +156,9 @@ const Header = () => {
         <span className="hamburger-bar"></span>
       </button>
     </header>
+      {/* Spacer visível apenas na rota de relatório de anamnese para evitar que o conteúdo fique abaixo do header fixo */}
+      {isRelatorioAnamnese && <div className="header-spacer" aria-hidden="true" />}
+    </>
   );
 };
 

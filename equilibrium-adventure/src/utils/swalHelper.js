@@ -36,6 +36,7 @@ export const showWarning = (
     text: message,
     icon: 'warning',
     showCancelButton: showCancel,
+    showCloseButton: true,
     confirmButtonText,
     cancelButtonText,
     customClass: {

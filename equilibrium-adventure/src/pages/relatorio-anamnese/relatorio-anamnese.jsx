@@ -62,7 +62,7 @@ const RelatorioAnamnese = () => {
   return (
     <>
       <Header />
-  <div className="font-['Raleway',Arial,sans-serif] text-[#226144] bg-gradient-to-br from-[#f6f7f8] to-[#eef0f1] min-h-screen flex flex-col items-center justify-center pt-24 sm:pt-28 lg:pt-32 pb-[70px] px-4">
+  <div className="font-['Raleway',Arial,sans-serif] text-[#226144] bg-gradient-to-br from-[#f6f7f8] to-[#eef0f1] min-h-screen flex flex-col items-center justify-start pt-20 sm:pt-24 lg:pt-28 pb-24 px-4">
 
   <div className="div-title w-full max-w-[1300px] mx-auto px-6 sm:px-10 mb-4 sm:mb-6">
           <div className="editar-evento-header"> 
@@ -71,7 +71,7 @@ const RelatorioAnamnese = () => {
           </div>
         </div>
 
-  <div className="bg-white rounded-[20px] shadow-[0_4px_20px_rgba(34,97,68,0.10)] border border-[#e0e0e0] max-w-[1300px] w-full mx-auto mt-0 min-h-[480px] sm:min-h-[540px] lg:min-h-[620px] pt-8 pb-12 px-6 sm:px-10 flex flex-col items-stretch transition-all duration-300 animate-slideUp">
+  <div className="bg-white rounded-[20px] shadow-[0_4px_20px_rgba(34,97,68,0.10)] border border-[#e0e0e0] max-w-[1200px] w-full mx-auto mt-0 -mt-6 sm:-mt-4 min-h-[260px] sm:min-h-[480px] lg:min-h-[540px] pt-6 pb-12 px-6 sm:px-10 flex flex-col items-stretch transition-all duration-300 animate-slideUp">
           <form
             className="evento-form w-full flex-1 flex flex-col items-center justify-center gap-8"
             onSubmit={async (e) => {
@@ -105,7 +105,16 @@ const RelatorioAnamnese = () => {
               />
             </div>
 
-            <div className="flex justify-end w-full max-w-[940px] mx-auto mt-6 pb-2">
+            <div className="flex justify-end w-full max-w-[940px] mx-auto mt-6 pb-2 gap-4">
+              <ButtonSubmitForm
+                type="button"
+                title="Mais Informações"
+                onClick={() => {
+                  if (userId) {
+                    navigate(`/dados-cliente/${userId}`);
+                  }
+                }}
+              />
               <ButtonSubmitForm type="submit" title="Salvar Relatório" />
             </div>
           </form>
