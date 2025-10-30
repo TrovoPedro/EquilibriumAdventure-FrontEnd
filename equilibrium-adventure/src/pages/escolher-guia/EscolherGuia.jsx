@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from "react";
-import './EscolherGuia.css';
+import "./EscolherGuia.css";
 import { buscarGuias } from "../../services/apiTrilhas";
 import routeUrls from "../../routes/routeUrls";
 import { useNavigate } from "react-router-dom";
 import { useGuide } from "../../context/GuideContext";
+import useGoBack from "../../utils/useGoBack";
 
-const EscolherGuia = () => {
+function EscolherGuia() {
   const [guias, setGuias] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
   const { escolherGuia } = useGuide();
+  const goBack = useGoBack(); // 👈 chama o hook e armazena a função
 
   const CARDS_PER_SLIDE = 4;
 
@@ -66,7 +68,7 @@ const EscolherGuia = () => {
         <button
           className="close-btn-escolher-guia"
           aria-label="Fechar"
-          onClick={() => navigate(routeUrls.LOGIN)}
+          onClick={goBack} // 👈 usa a função retornada
         >
           ✕
         </button>
@@ -92,9 +94,11 @@ const EscolherGuia = () => {
                   onClick={() => handleOnClickGuia(guia)}
                 >
                   <img
-                    src={guia.imagemBase64
-                      ? `data:image/png;base64,${guia.imagemBase64}`
-                      : "/assets/default-avatar.svg"}
+                    src={
+                      guia.imagemBase64
+                        ? `data:image/png;base64,${guia.imagemBase64}`
+                        : "/assets/default-avatar.svg"
+                    }
                     onError={(e) => {
                       if (!e.currentTarget.dataset.fallbackApplied) {
                         e.currentTarget.src = "/assets/default-avatar.svg";
@@ -128,7 +132,9 @@ const EscolherGuia = () => {
                 key={index}
                 type="button"
                 aria-label={`Ir para slide ${index + 1}`}
-                className={`indicator ${index === currentSlide ? 'indicator--active' : ''}`}
+                className={`indicator ${
+                  index === currentSlide ? "indicator--active" : ""
+                }`}
                 onClick={() => goToSlide(index)}
               />
             ))}
@@ -137,6 +143,6 @@ const EscolherGuia = () => {
       </div>
     </>
   );
-};
+}
 
 export default EscolherGuia;

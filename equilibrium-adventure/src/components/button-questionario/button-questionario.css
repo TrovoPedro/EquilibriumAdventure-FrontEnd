@@ -16,9 +16,13 @@
 }
 
 .button-questionario-back {
-    background-color: #c92a2a;
+    background-color: #fff;
+    border: 2px solid #245535;
+    color: #245535;
 }
 
 .button-questionario-back:hover {
-    background-color: #a61e1e;
+    background-color: #18521f13;
+    color: #163f1bfb;
+    transition: background 0.2s;
 }
