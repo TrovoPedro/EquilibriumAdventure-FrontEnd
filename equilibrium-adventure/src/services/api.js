@@ -22,38 +22,47 @@ export const loginUsuario = async (credentials) => {
   }
 };
 
+// buscar usuario por id
+export const buscarUsuarioPorId = async (id) => {
+  try {
+    const response = await api.get(`/usuarios/buscar/${id}`);
+    return response.data;
+  } catch (error) {
+    throw error.response?.data || error.message;
+  }
+};
+
 export const buscarInformacoesPerfil = async (usuarioId) => {
   try {
-    console.log("GET /informacoes-pessoais/perfil-nivel/", usuarioId);
-    const response = await api.get(`/informacoes-pessoais/perfil-nivel/${usuarioId}`);
-    console.log("Perfil completo recebido");
+    const response = await api.get(`/informacoes-pessoais/perfil-info/${usuarioId}`);
     const data = response.data;
-    console.log("Dados do perfil completo:", data);
 
-    // Verificar se a resposta é válida
-    if (!data) {
-      const err = new Error("Perfil completo não encontrado");
-      err.code = "PERFIL_NAO_ENCONTRADO";
-      throw err;
+    if (!data || Object.keys(data).length === 0) {
+      console.warn("Perfil não encontrado para o usuário", usuarioId);
+      return null; // ✅ retorna null em vez de lançar erro
     }
-    
-    // Verificar se é um objeto vazio (mas não tratar como erro se tiver estrutura básica)
-    const isEmptyObject = data && typeof data === 'object' && !Array.isArray(data) && Object.keys(data).length === 0;
-    if (data === "" || isEmptyObject) {
-      const err = new Error("Perfil completo está vazio");
-      err.code = "PERFIL_VAZIO";
-      throw err;
-    }
-    
+
     return data;
   } catch (error) {
-    console.error("Erro ao buscar perfil completo:", error);
-    // Se for erro 404, significa que o perfil não existe
     if (error.response?.status === 404) {
-      const err = new Error("Perfil não encontrado");
-      err.code = "PERFIL_NAO_ENCONTRADO";
-      throw err;
+      console.warn("Perfil não encontrado (404)");
+      return null; // ✅ evita quebrar o fluxo
     }
-    throw error.response?.data || error;
+    throw error;
+  }
+};
+
+
+export const buscarNivelPerfil = async (usuarioId) => {
+  try {
+    const response = await api.get(`/informacoes-pessoais/perfil-nivel/${usuarioId}`);
+    return response.data; // vai retornar { nivel: "AVENTUREIRO" } ou similar
+  } catch (error) {
+    console.error("Erro ao buscar nível do perfil:", error);
+    if (error.response?.status === 404) {
+      // Perfil não encontrado
+      return null;
+    }
+    throw error;
   }
 };

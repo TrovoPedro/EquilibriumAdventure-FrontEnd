@@ -204,6 +204,22 @@ const Dashboard = () => {
     loadDashboardData();
   }, [dataLoaded]);
 
+  
+  useEffect(() => {
+    if (!usuario) return;
+    const usuarioId = usuario.id || usuario.id_usuario;
+    if (!usuarioId) return;
+
+    (async () => {
+      try {
+        await handleFilter('Mensal');
+
+      } catch (err) {
+   
+      }
+    })();
+  }, [usuario]);
+
   const calculateOccupancyRate = (data) => {
     if (!data || data.length === 0) return 0;
     const totalOccupancy = data.reduce((sum, item) => {
@@ -251,13 +267,24 @@ const Dashboard = () => {
       setLoading(true);
       setChartView(filterType);
       
-      const storedUser = localStorage.getItem("usuario");
-      if (!storedUser) return;
+      // Consistently resolve usuarioId: prefer context -> sessionStorage -> localStorage
+      let usuarioId = null;
+      if (usuario && (usuario.id || usuario.id_usuario)) {
+        usuarioId = usuario.id || usuario.id_usuario;
+      } else {
+        const stored = sessionStorage.getItem("usuario") || localStorage.getItem("usuario");
+        if (!stored) {
+          return;
+        }
+        try {
+          const userData = JSON.parse(stored);
+          usuarioId = userData.id || userData.id_usuario;
+        } catch (err) {
+          return;
+        }
+      }
+
       
-      const userData = JSON.parse(storedUser);
-      const usuarioId = userData.id || userData.id_usuario;
-      
-      if (!usuarioId) return;
 
       let tendenciasData = [];
       

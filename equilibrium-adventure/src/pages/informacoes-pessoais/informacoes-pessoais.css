@@ -13,14 +13,41 @@ body {
 	flex-direction: column;
 	align-items: center;
 	justify-content: flex-start;
-	background: url('../../assets/vertical-shot-branches-green-tree-perfect-background.jpg') no-repeat center center fixed;
-	background-size: cover;
 	box-sizing: border-box;
-	background-blend-mode: darken;
 	padding-bottom: 40px;
 	overflow-x: hidden; 
 	overflow-y: auto;   
 	font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+	position: relative; /* necessário para o pseudo-elemento de fundo */
+}
+
+/* Fundo em proporção semelhante à tela de Escolher Guia */
+.editar-dados-container::before {
+	content: "";
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: -2; /* fica atrás da camada de escurecimento */
+	background-image: url('../../assets/vertical-shot-branches-green-tree-perfect-background.jpg');
+	background-size: cover;
+	background-position: center;
+	background-repeat: no-repeat;
+	pointer-events: none;
+}
+
+/* Camada para escurecer levemente o fundo (similar ao efeito da tela de escolher guia) */
+.editar-dados-container::after {
+	content: "";
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	z-index: -1; /* acima da imagem, abaixo do conteúdo */
+	background: rgba(0, 0, 0, 0.45); /* ajuste a intensidade conforme necessário */
+	pointer-events: none;
 }
 
 .titulo-editar-dados {
@@ -105,6 +132,46 @@ body {
 
 .salvar-btn {
 	animation: slideInFromBottom 0.6s ease-out 0.4s both;
+}
+
+
+/* ===== Overrides de inputs para esta tela (bordas verdes e cantos arredondados) ===== */
+.editar-dados-container .info-pessoais__form-group input,
+.editar-dados-container .endereco__form-group input,
+.editar-dados-container input[type="text"],
+.editar-dados-container input[type="email"],
+.editar-dados-container input[type="tel"],
+.editar-dados-container input[type="date"],
+.editar-dados-container input[type="number"],
+.editar-dados-container textarea {
+	background-color: #ffffff;
+	border: 2px solid #226144;
+	border-radius: 16px;
+	color: #2c3e50;
+	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+	transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.editar-dados-container .info-pessoais__form-group input::placeholder,
+.editar-dados-container .endereco__form-group input::placeholder,
+.editar-dados-container textarea::placeholder {
+	color: #607D8B;
+	opacity: 0.85;
+}
+
+.editar-dados-container .info-pessoais__form-group input:focus,
+.editar-dados-container .endereco__form-group input:focus,
+.editar-dados-container textarea:focus {
+	border-color: #226144;
+	box-shadow: 0 0 0 3px rgba(34, 97, 68, 0.16);
+	outline: none;
+}
+
+.editar-dados-container .info-pessoais__form-group input:hover,
+.editar-dados-container .endereco__form-group input:hover,
+.editar-dados-container textarea:hover {
+	border-color: #226144;
+	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
 
 

@@ -4,10 +4,11 @@ import './login.css';
 import routeUrls from "../../routes/routeUrls";
 import { useNavigate } from 'react-router-dom';
 import { loginUsuario, buscarInformacoesPerfil } from '../../services/api';
+import { buscarNivelPerfil } from '../../services/api';
 import { useAuth } from '../../context/AuthContext';
 import { useScore } from "../../context/ScoreContext";
-import PopUpOk from '../../components/pop-up-ok/pop-up-ok';
-import PopUpErro from '../../components/pop-up-erro/pop-up-erro';
+import PopUpErro from '../../components/pop-up-erro/pop-up-erro.jsx';
+import PopUpOk from '../../components/pop-up-ok/pop-up-ok.jsx';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,9 +16,9 @@ const Login = () => {
   const text = "Cadastre-se";
   const { login } = useAuth();
   const { salvarPontuacao } = useScore();
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [pendingNavigation, setPendingNavigation] = useState(null);
 
   const handleSubmit = async (formData) => {
@@ -29,42 +30,31 @@ const Login = () => {
     try {
       const usuario = await loginUsuario(credentials);
       login(usuario);
-
-      if (usuario.tipoUsuario === "AVENTUREIRO" && !usuario.primeiraVez) {
+      // Salva navegação pendente, mostra popup e só navega após confirmação
+      let nextRoute = null;
+      if (usuario.tipoUsuario === "ADMINISTRADOR" || usuario.tipoUsuario === "GUIA") {
+        nextRoute = routeUrls.CATALOGO_TRILHAS_ADM;
+      } else if (usuario.tipoUsuario === "AVENTUREIRO" && usuario.primeiraVez) {
+        nextRoute = routeUrls.QUESTIONARIO;
+      } else if (usuario.tipoUsuario === "AVENTUREIRO" && !usuario.primeiraVez) {
         try {
-        console.log(usuario.id);
           const informacoes = await buscarInformacoesPerfil(usuario.id);
-          console.log("Informações do perfil:", informacoes);
-
-          if (informacoes && informacoes.nivel) {
-            salvarPontuacao(informacoes.nivel);
-            console.log("Nível carregado:", informacoes.nivel);
+          const nivel = await buscarNivelPerfil(usuario.id);
+          if (nivel.nivel) {
+            salvarPontuacao(nivel.nivel);
+            nextRoute = routeUrls.ESCOLHER_GUIA;
           } else {
-            console.log("Usuário sem nível registrado ainda (primeiro login).");
+            nextRoute = routeUrls.QUESTIONARIO;
           }
         } catch (error) {
-          console.warn("Erro ao carregar o nível do usuário:", error);
+          nextRoute = routeUrls.QUESTIONARIO;
         }
       }
-
-      // Determinar para onde navegar baseado no tipo de usuário
-      let navigationRoute;
-      if (usuario.tipoUsuario === "ADMINISTRADOR" || usuario.tipoUsuario === "GUIA") {
-        navigationRoute = routeUrls.CATALOGO_TRILHAS_ADM;
-      } else if (usuario.tipoUsuario === "AVENTUREIRO" && usuario.primeiraVez) {
-        navigationRoute = routeUrls.QUESTIONARIO;
-      } else if (usuario.tipoUsuario === "AVENTUREIRO" && !usuario.primeiraVez) {
-        navigationRoute = routeUrls.ESCOLHER_GUIA;
-      }
-
-      // Salvar a rota e mostrar pop-up de sucesso
-      setPendingNavigation(navigationRoute);
+      setPendingNavigation(nextRoute);
       setShowSuccessPopup(true);
-
     } catch (error) {
-      setErrorMessage(error.erro || "Credenciais inválidas ou erro no servidor!");
+      setErrorMessage('Credenciais inválidas ou erro no servidor!');
       setShowErrorPopup(true);
-      console.error(error);
     }
   };
 
@@ -74,6 +64,29 @@ const Login = () => {
 
   return (
     <div className="login-page">
+      {showSuccessPopup && (
+        <PopUpOk
+          title="Login realizado!"
+          message="Login efetuado com sucesso!"
+          onConfirm={() => {
+            setShowSuccessPopup(false);
+            if (pendingNavigation) {
+              navigate(pendingNavigation);
+              setPendingNavigation(null);
+            }
+          }}
+        />
+      )}
+      {showErrorPopup && (
+        <PopUpErro
+          title="Erro no login!"
+          message={errorMessage}
+          onConfirm={() => {
+            setShowErrorPopup(false);
+            setErrorMessage('');
+          }}
+        />
+      )}
       <div className="login-left">
         <div className="login-left-content">
           <div className="text-wrap">
@@ -107,30 +120,6 @@ const Login = () => {
           />
         </div>
       </div>
-
-      {showSuccessPopup && (
-        <PopUpOk 
-          title="Login realizado!"
-          message="Bem-vindo de volta! Redirecionando..."
-          onConfirm={() => {
-            setShowSuccessPopup(false);
-            if (pendingNavigation) {
-              navigate(pendingNavigation);
-            }
-          }}
-        />
-      )}
-      
-      {showErrorPopup && (
-        <PopUpErro 
-          title="Erro no login!"
-          message={errorMessage}
-          onConfirm={() => {
-            setShowErrorPopup(false);
-            setErrorMessage('');
-          }}
-        />
-      )}
     </div>
   );
 };

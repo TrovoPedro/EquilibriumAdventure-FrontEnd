@@ -14,6 +14,12 @@
   font-family: 'Arial', sans-serif;
 }
 
+/* Spacer usado apenas em páginas que precisam que o conteúdo seja empurrado para baixo (ex.: relatorio-anamnese) */
+.header-spacer {
+  height: 70px; /* corresponde à altura do header em desktop */
+  width: 100%;
+}
+
 /* Logo à esquerda */
 .header-left {
   display: flex;
@@ -107,6 +113,11 @@
   .header {
     flex-direction: row;
     padding: 0 16px;
+    height: 60px;
+  }
+
+  /* Altura menor do spacer em telas pequenas (para corresponder ao header mobile) */
+  .header-spacer {
     height: 60px;
   }
 

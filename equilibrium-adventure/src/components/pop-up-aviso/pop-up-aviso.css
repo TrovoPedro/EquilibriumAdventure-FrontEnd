@@ -4,45 +4,31 @@
     color: #FFF !important;
     cursor: pointer !important;
     border: none !important;
-    border-radius: 8px !important;
-    padding: 12px 24px !important;
-    font-weight: 600 !important;
-    font-size: 16px !important;
-    transition: all 0.3s ease !important;
-    margin-right: 8px !important;
+    border-radius: 10px !important;
+    padding: 14px 36px !important;
+    font-weight: 700 !important;
+    font-size: 18px !important;
+    transition: all 0.18s ease !important;
+    margin: 0 !important;
+    min-width: 140px !important;
 }
 
 .swal2-confirm-warning:hover {
     background-color: #366d49 !important;
     transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(69, 139, 96, 0.3);
+    box-shadow: 0 6px 18px rgba(54, 109, 73, 0.18) !important;
 }
 
-.swal2-cancel-warning {
-    background-color: #6c757d !important;
-    color: #FFF !important;
-    cursor: pointer !important;
-    border: none !important;
-    border-radius: 8px !important;
-    padding: 12px 24px !important;
-    font-weight: 600 !important;
-    font-size: 16px !important;
-    transition: all 0.3s ease !important;
-    margin-left: 8px !important;
-}
 
-.swal2-cancel-warning:hover {
-    background-color: #5a6268 !important;
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
-}
-
-/* Personalização do ícone de aviso para verde */
 .swal2-icon.swal2-warning {
-    border-color: #458b60 !important;
-    color: #458b60 !important;
+    border-color: #f6b886 !important;
+    color: #f6b886 !important;
 }
 
 .swal2-icon.swal2-warning .swal2-icon-content {
-    color: #458b60 !important;
+    color: #f6b886 !important;
+}
+
+.swal2-cancel-warning {
+    display: none !important;
 }

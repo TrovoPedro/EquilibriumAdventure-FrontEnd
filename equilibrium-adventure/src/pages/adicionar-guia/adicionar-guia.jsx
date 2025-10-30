@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import routeUrls from "../../routes/routeUrls";
 import Header from "../../components/header/header-unified";
+import { cadastrarGuia } from "../../services/chamadasAPIGuia";
+import { showSuccess, showWarning } from "../../utils/swalHelper";
 import "./adicionar-guia.css";
 import leftArrow from "../../assets/left-arrow-green.png";
 
@@ -11,26 +13,63 @@ export default function AdicionarGuia() {
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         nome: "",
-        dataNascimento: "",
         email: "",
         senha: "",
-        cargo: "",
         descricao: "",
         imagem: null
     });
+    const [previewUrl, setPreviewUrl] = useState(null);
 
     const handleChange = (e) => {
-        const { name, value, files } = e.target;
+        const { name, value, files, dataset } = e.target;
+        const field = dataset.field || name;
+
+        if (files && files[0]) {
+            const file = files[0];
+
+            if (previewUrl) {
+                URL.revokeObjectURL(previewUrl);
+            }
+
+            const newUrl = URL.createObjectURL(file);
+            setPreviewUrl(newUrl);
+
+            setFormData({
+                ...formData,
+                [field]: file,
+            });
+            return;
+        }
+
         setFormData({
             ...formData,
-            [name]: files ? files[0] : value,
+            [field]: value,
         });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("Guia registrado:", formData);
-        navigate(routeUrls.HOME);
+
+        const cadastrar = async () => {
+            try {
+                if (!formData.nome || !formData.email || !formData.senha || !formData.descricao) {
+                    showWarning("Por favor, preencha todos os campos obrigatórios.");
+                    return;
+                }
+                const response = await cadastrarGuia(formData);
+                if (response) {
+                    showSuccess("Guia cadastrado com sucesso!");
+                    setTimeout(() => {
+                        navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+                    }, 2000);
+                }
+            } catch (error) {
+                if (!response) {
+                    console.error("Erro ao cadastrar guia:", error);
+                }
+            }
+        };
+        cadastrar();
     };
 
     const handleVoltar = () => {
@@ -45,32 +84,36 @@ export default function AdicionarGuia() {
                     <span className="back-arrow-circle" onClick={handleVoltar}>
                         <img className="back-arrow" src={leftArrow} alt="Voltar" />
                     </span>
-                    <span className="adicionar-guia-title">Adicionar Guia</span>
+                    <h1 className="adicionar-guia-title">Adicionar Guia</h1>
                 </div>
-                <div className="adicionar-guia-layout-wrapper">
+                <form className="adicionar-guia-layout-wrapper" autoComplete="off" onSubmit={handleSubmit}>
+                    <div style={{ position: 'absolute', left: '-9999px', top: 'auto', width: '1px', height: '1px', overflow: 'hidden' }} aria-hidden="true">
+                        <input type="text" name="fake-username" autoComplete="username" tabIndex={-1} />
+                        <input type="password" name="fake-password" autoComplete="current-password" tabIndex={-1} />
+                    </div>
                     <div className="adicionar-guia-side-column">
                         <div className="adicionar-guia-imagem">
-                            <div
-                                className="upload-box"
-                                onClick={() => document.getElementById("upload-input").click()}
-                            >
-                                {formData.imagem ? (
+                            <label htmlFor="upload-input" className="upload-box">
+                                {previewUrl ? (
                                     <img
-                                        src={URL.createObjectURL(formData.imagem)}
+                                        src={previewUrl}
                                         alt="Pré-visualização"
                                         className="preview-img"
                                     />
+                                ) : formData.imagem ? (
+                                    <img src={formData.imagem} alt="Pré-visualização" className="preview-img" />
                                 ) : (
                                     <div className="upload-placeholder">
-                                        <FaCloudUploadAlt size={150} color="#0C513F" />
+                                        <FaCloudUploadAlt size={150} color="#226144" />
                                         <p>Clique ou arraste uma imagem aqui</p>
                                     </div>
                                 )}
-                            </div>
+                            </label>
                             <input
                                 type="file"
                                 id="upload-input"
                                 name="imagem"
+                                data-field="imagem"
                                 onChange={handleChange}
                                 accept="image/*"
                                 style={{ display: "none" }}
@@ -78,41 +121,31 @@ export default function AdicionarGuia() {
 
                         </div>
                         <div className="adicionar-guia-botoes">
-                            <button className="adicionar-guia-btn">Registrar</button>
-                            <button className="adicionar-guia-btn">
-                                <a href="">
+                            <button type="submit" className="adicionar-guia-btn">Registrar</button>
+                            <button type="button" className="adicionar-guia-btn" onClick={() => navigate(routeUrls.VER_GUIAS)}>
                                 Visualizar Guias
-                                </a> 
-                                </button>
+                            </button>
                         </div>
                     </div>
                     <div className="adicionar-guia-center-column">
-                        <label htmlFor="">
+                        <label htmlFor="nome">
                             Nome:
-                            <input type="text" name="nome" value={formData.nome} onChange={handleChange} />
+                            <input autoComplete="name" type="text" id="nome" name="nome" value={formData.nome} onChange={handleChange} data-field="nome" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')} />
                         </label>
-                        <label htmlFor="">
-                            Data de Nascimento:
-                            <input type="date" name="dataNascimento" value={formData.dataNascimento} onChange={handleChange} />
-                        </label>
-                        <label htmlFor="">
+                        <label htmlFor="email">
                             E-mail:
-                            <input type="text" name="email" value={formData.email} onChange={handleChange} />
+                            <input autoComplete="email" type="text" id="email" name="email" value={formData.email} onChange={handleChange} data-field="email" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')} />
                         </label>
-                        <label htmlFor="">
+                        <label htmlFor="senha">
                             Senha:
-                            <input type="password" name="senha" value={formData.senha} onChange={handleChange} />
+                            <input autoComplete="new-password" type="password" id="senha" name="senha" value={formData.senha} onChange={handleChange} data-field="senha" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')} />
                         </label>
-                        <label htmlFor="">
-                            Cargo:
-                            <input type="text" name="cargo" value={formData.cargo} onChange={handleChange} />
-                        </label>
-                        <label id="descricao-label" htmlFor="">
+                        <label id="descricao-label" htmlFor="descricao">
                             Descrição do Guia:
-                            <textarea name="descricao" id="descricao" value={formData.descricao} onChange={handleChange}></textarea>
+                            <textarea autoComplete="off" name="descricao" id="descricao" value={formData.descricao} onChange={handleChange} data-field="descricao" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')}></textarea>
                         </label>
                     </div>
-                </div>
+                </form>
             </div>
         </>
     );

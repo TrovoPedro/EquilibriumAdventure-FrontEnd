@@ -120,7 +120,6 @@ const CriarEvento = () => {
                         Imagem do Evento:
                         <div
                             className="upload-box"
-                            onClick={() => document.getElementById("upload-input").click()}
                         >
                             {formData.imagem ? (
                                 <img
@@ -177,7 +176,6 @@ const CriarEvento = () => {
                         Mapa da Trilha (.gpx):
                         <div
                             className="upload-box-trilha"
-                            onClick={() => document.getElementById("upload-trilha-input").click()}
                         >
                             {formData.trilha ? (
                                 <div className="trilha-preview">

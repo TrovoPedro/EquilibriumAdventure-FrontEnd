@@ -31,78 +31,113 @@ const CatalogoTrilhas = () => {
   useEffect(() => {
     let isMounted = true;
 
-    const carregarEventos = async () => {
-      if (!usuario?.id) return;
+    // Allow falling back to sessionStorage in case AuthContext hasn't hydrated
+    // yet when the route is revisited via back/forward navigation.
+    const stored = sessionStorage.getItem('usuario');
+    const storedUser = stored ? JSON.parse(stored) : null;
+    const userId = usuario?.id || storedUser?.id;
 
+    const carregarEventos = async () => {
+      if (!userId) return;
+
+      // Carregar eventos base
       try {
         const eventosData = await buscarEventosPorGuia(usuario.id);
-
         const eventosComImagens = await Promise.all(
           eventosData.map(async (evento) => {
             const imagemUrl = await buscarImagemEvento(evento.id_evento);
             return { ...evento, imagemUrl: imagemUrl || catalogo1 };
           })
         );
-
         if (isMounted) {
           setEventosBase(eventosComImagens);
-          setError(prev => ({ ...prev, base: null }));
+          try {
+            sessionStorage.setItem('eventosBaseCache', JSON.stringify(eventosComImagens));
+          } catch (e) {
+            console.warn('Não foi possível salvar eventosBaseCache no sessionStorage', e);
+          }
         }
       } catch (err) {
         console.error("Erro ao carregar eventos base:", err);
-        if (isMounted) {
-          setError(prev => ({ ...prev, base: "Erro ao carregar os eventos base." }));
+        // fallback: tentar carregar do cache em sessionStorage
+        try {
+          const cached = sessionStorage.getItem('eventosBaseCache');
+          if (cached) {
+            const parsed = JSON.parse(cached);
+            if (isMounted) setEventosBase(parsed);
+            console.info('Usando cache de eventos base devido a erro no fetch');
+          } else {
+            if (isMounted) setError(prev => ({ ...prev, base: "Erro ao carregar os eventos base." }));
+          }
+        } catch (e) {
+          console.error('Erro ao ler cache de eventos base:', e);
+          if (isMounted) setError(prev => ({ ...prev, base: "Erro ao carregar os eventos base." }));
         }
       } finally {
         if (isMounted) setLoading(prev => ({ ...prev, base: false }));
       }
 
+      // Carregar eventos ativos
       try {
         const eventosAtivosData = await buscarEventosAtivosPorGuia(usuario.id);
-
         const ativosComImagens = await Promise.all(
           eventosAtivosData.map(async (evento) => {
             const imagemUrl = await buscarImagemEvento(evento.id_evento);
             return { ...evento, imagemUrl: imagemUrl || catalogo1 };
           })
         );
-
         if (isMounted) {
           setEventosAtivos(ativosComImagens);
-          setError(prev => ({ ...prev, ativos: null }));
+          try {
+            sessionStorage.setItem('eventosAtivosCache', JSON.stringify(ativosComImagens));
+          } catch (e) {
+            console.warn('Não foi possível salvar eventosAtivosCache no sessionStorage', e);
+          }
         }
       } catch (err) {
         console.error("Erro ao carregar eventos ativos:", err);
-        if (isMounted) {
-          setError(prev => ({ ...prev, ativos: "Erro ao carregar os eventos ativos." }));
+        // fallback: tentar carregar do cache em sessionStorage
+        try {
+          const cachedAtivos = sessionStorage.getItem('eventosAtivosCache');
+          if (cachedAtivos) {
+            const parsedA = JSON.parse(cachedAtivos);
+            if (isMounted) setEventosAtivos(parsedA);
+            console.info('Usando cache de eventos ativos devido a erro no fetch');
+          } else {
+            if (isMounted) setError(prev => ({ ...prev, ativos: "Erro ao carregar os eventos ativos." }));
+          }
+        } catch (e) {
+          console.error('Erro ao ler cache de eventos ativos:', e);
+          if (isMounted) setError(prev => ({ ...prev, ativos: "Erro ao carregar os eventos ativos." }));
         }
       } finally {
         if (isMounted) setLoading(prev => ({ ...prev, ativos: false }));
       }
     };
 
+    // initial load
     carregarEventos();
+
+    // also reload when window regains focus (helps when using browser back/forward)
+    const handleFocus = () => {
+      carregarEventos();
+    };
+    window.addEventListener('focus', handleFocus);
 
     return () => {
       isMounted = false;
+      window.removeEventListener('focus', handleFocus);
     };
-  }, [usuario]);
+  }, [usuario?.id]);
 
-
-  const handleOnClick = (action, eventoId) => {
-    if (action === "ativar") {
-      navigate(routeUrls.ATIVAR_EVENTO.replace(':id', eventoId));
-    } else if (action === "editar") {
-      navigate(routeUrls.EDITAR_EVENTO.replace(':id', eventoId));
-    } else if (action === "detalhes") {
-      const eventoSelecionado = eventosAtivos.find(ev => ev.id_evento === eventoId);
-      if (eventoSelecionado && eventoSelecionado.id_ativacao) {
-        sessionStorage.setItem('ativacaoSelecionadaId', eventoSelecionado.id_ativacao);
-        navigate(routeUrls.DETALHES_EVENTO.replace(':id', eventoSelecionado.id_ativacao));
-      }
+  const handleOnClick = (action, eventoId, ativacaoId) => {
+    if (action === "ativar") navigate(routeUrls.ATIVAR_EVENTO.replace(':id', eventoId));
+    else if (action === "editar") navigate(routeUrls.EDITAR_EVENTO.replace(':id', eventoId));
+    else if (action === "detalhes" && ativacaoId) {
+      sessionStorage.setItem('ativacaoSelecionadaId', ativacaoId);
+      navigate(routeUrls.DETALHES_EVENTO.replace(':id', ativacaoId));
     }
   };
-
 
   return (
     <>
@@ -134,9 +169,10 @@ const CatalogoTrilhas = () => {
           {error.ativos && <p className="error-text">{error.ativos}</p>}
           {!loading.ativos && !error.ativos && (
             <div className="anuncios-grid">
-              {filtrarEventos(eventosAtivos).length > 0 ? (
-                filtrarEventos(eventosAtivos).map((evento) => (
-                  <div className="anuncio-card" key={`ativo-${evento.id_evento}`}>
+              {filtrarEventos(eventosAtivos)
+                .filter(evento => (evento.log || "").trim().toUpperCase() !== "FINALIZADO")
+                .map((evento, idx) => (
+                  <div className="anuncio-card" key={`ativo-${evento.id_evento}-${evento.id_ativacao || idx}`}>
                     <div className="anuncio-img-wrap">
                       <img
                         src={evento.imagemUrl || catalogo1}
@@ -158,14 +194,20 @@ const CatalogoTrilhas = () => {
                         </div>
                         <span className="anuncio-preco">R${evento.preco}<span className="anuncio-preco-unidade">/pessoa</span></span>
                         <div className="anuncio-btn-group">
-                          <button className="anuncio-btn" onClick={() => handleOnClick("detalhes", evento.id_evento)}>Detalhes</button>
+                          <button
+                            className="anuncio-btn"
+                            onClick={() => handleOnClick("detalhes", evento.id_evento, evento.id_ativacao)}
+                          >
+                            Detalhes
+                          </button>
                         </div>
                       </div>
                     </div>
                   </div>
-                ))
-              ) : (
-                <p className="no-events-text">Nenhum evento ativo encontrado.</p>
+              ))}
+              {filtrarEventos(eventosAtivos)
+                .filter(evento => (evento.log || "").trim().toUpperCase() !== "FINALIZADO").length === 0 && (
+                  <p className="no-events-text">Nenhum evento ativo encontrado.</p>
               )}
             </div>
           )}
@@ -179,8 +221,8 @@ const CatalogoTrilhas = () => {
           {!loading.base && !error.base && (
             <div className="anuncios-grid">
               {filtrarEventos(eventosBase).length > 0 ? (
-                filtrarEventos(eventosBase).map((evento) => (
-                  <div className="anuncio-card" key={`base-${evento.id_evento}`}>
+                filtrarEventos(eventosBase).map((evento, idx) => (
+                  <div className="anuncio-card" key={`base-${evento.id_evento}-${idx}`}>
                     <div className="anuncio-img-wrap">
                       <img
                         src={evento.imagemUrl || catalogo1}
@@ -192,8 +234,6 @@ const CatalogoTrilhas = () => {
                     <div className="anuncio-info">
                       <h3 className="anuncio-titulo">{evento.nome_evento}</h3>
                       <span className="anuncio-local">{evento.local}</span>
-                      <h3 className="anuncio-titulo">{evento.titulo}</h3>
-                      <p className="anuncio-desc">{evento.descricao}</p>
                       <div className="anuncio-footer">
                         <div className="anuncio-btn-group">
                           <button className="anuncio-ativar-btn" onClick={() => handleOnClick("ativar", evento.id_evento)}>Ativar</button>
@@ -213,4 +253,5 @@ const CatalogoTrilhas = () => {
     </>
   );
 };
+
 export default CatalogoTrilhas;

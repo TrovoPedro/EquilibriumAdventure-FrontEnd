@@ -2,6 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "http://localhost:8080",
+  headers: { "Content-Type": "application/json" }
 });
 
 export const getPerguntas = async () => {
@@ -47,10 +48,13 @@ export const cancelarInscricao = async (idAventureiro, idEvento) => {
   const response = await api.delete(`/inscricoes/cancelar-inscricao/${idAventureiro}/${idEvento}`);
   return response.data;
 };
-
 export const postRespostas = async (respostas) => {
   try {
-    const response = await api.post('/respostas-aventureiro/salvar', respostas);
+    const response = await api.post(
+      '/respostas-aventureiro/salvar',
+      respostas,
+      { headers: { 'Content-Type': 'application/json' } }
+    );
     return response.data;
   } catch (error) {
     console.error('Erro ao enviar respostas:', error);
@@ -58,35 +62,34 @@ export const postRespostas = async (respostas) => {
   }
 };
 
+// Calcular nível
 export const calcularNivel = async (usuarioId) => {
   try {
     const response = await api.post(`/respostas-aventureiro/calcular-nivel/${usuarioId}`, {});
-    
-    if (response.data === null) {
-      throw new Error('Nível não pôde ser calculado');
+    const data = response.data;
+
+    if (!data) {
+      throw new Error("Nível não pôde ser calculado");
     }
 
-    if (typeof response.data === 'string') {
-      return response.data;
-    }
-
-    if (response.data.nivel) {
-      return response.data.nivel;
-    }
-
-    return 'EXPLORADOR';
+    // retorna todo o objeto, não apenas o nível
+    return {
+      nivel: data.nivel || "EXPLORADOR",
+      encaminharParaAnamnese: data.encaminharParaAnamnese || false,
+      pontuacaoTotal: data.pontuacaoTotal || 0,
+      mensagem: data.mensagem || "",
+    };
   } catch (error) {
     if (error.response?.status === 500) {
-      const message = error.response.data?.message || 'Erro interno do servidor';
-      if (message.includes('Informações pessoais não encontradas')) {
-        throw new Error('É necessário preencher suas informações pessoais antes de calcular o nível.');
+      const message = error.response.data?.message || "Erro interno do servidor";
+      if (message.includes("Informações pessoais não encontradas")) {
+        throw new Error("É necessário preencher suas informações pessoais antes de calcular o nível.");
       }
     }
-    console.error('Erro ao calcular nível:', error);
+    console.error("Erro ao calcular nível:", error);
     throw error;
   }
 };
-
 export const inicializarPerguntas = async () => {
   try {
     const response = await api.get('/perguntas/inicializar');

@@ -1,9 +1,4 @@
 .dados-guia-wrapper {
-    background-image: url('../../assets/background-questionario.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
     min-height: 100vh;
     width: 100%;
     display: flex;
@@ -11,10 +6,36 @@
     justify-content: center;
     align-items: center;
     padding: 40px 20px;
+    position: relative; /* base para os pseudo-elementos de fundo */
 }
 
+/* Imagem de fundo em tela cheia (mesma proporção do Escolher Guia) */
 .dados-guia-wrapper::before {
-    /* removido para visual mais clean */
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -2;
+    background-image: url('../../assets/vertical-shot-branches-green-tree-perfect-background.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    pointer-events: none;
+}
+
+/* Camada para escurecer levemente o fundo */
+.dados-guia-wrapper::after {
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    background: rgba(0, 0, 0, 0.45);
+    pointer-events: none;
 }
 
 .dados-guia-container {
@@ -99,30 +120,59 @@
 
 .dados-guia-container input {
     width: 100%;
-    padding: 10px 14px;
-    background-color: #e8f6ef;
-    border: 1px solid #b2dfdb;
+    padding: 12px 16px;
+    background-color: #ffffff;
+    border: 2px solid #226144; /* verde da identidade */
     outline: none;
-    border-radius: 8px;
+    border-radius: 16px; /* cantos bem arredondados */
     font-size: 1rem;
+    color: #2c3e50;
     margin-top: 6px;
     margin-bottom: 2px;
-    transition: border 0.2s;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 .dados-guia-container textarea {
     width: 100%;
-    padding: 10px 14px;
-    background-color: #e8f6ef;
-    border: 1px solid #b2dfdb;
+    padding: 12px 16px;
+    background-color: #ffffff;
+    border: 2px solid #226144; /* verde da identidade */
     outline: none;
-    border-radius: 8px;
+    border-radius: 16px; /* cantos bem arredondados */
     font-size: 1rem;
+    color: #2c3e50;
     margin-top: 6px;
     margin-bottom: 2px;
-    transition: border 0.2s;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease, transform 0.2s ease;
     resize: vertical;
     min-height: 80px;
     max-height: 180px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+/* Placeholder mais suave */
+.dados-guia-container input::placeholder,
+.dados-guia-container textarea::placeholder {
+    color: #607D8B;
+    opacity: 0.85;
+}
+
+/* Estados de foco acessíveis, sem brilho exagerado */
+.dados-guia-container input:focus,
+.dados-guia-container textarea:focus {
+    border-color: #226144;
+    box-shadow: 0 0 0 3px rgba(34, 97, 68, 0.16);
+    background-color: #ffffff;
+    transform: translateY(-1px);
+    animation: inputFocus 0.3s ease-out;
+}
+
+/* Hover com leve elevação, igual Informações Pessoais */
+.dados-guia-container input:hover,
+.dados-guia-container textarea:hover {
+    border-color: #226144;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-1px);
 }
 .dados-guia-container label {
     display: flex;
@@ -178,4 +228,11 @@
 .dados-guia-btn:active {
     transform: translateY(0);
     box-shadow: 0 2px 8px rgba(34, 97, 68, 0.2);
+}
+
+/* Animação usada na tela de Informações Pessoais */
+@keyframes inputFocus {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.02); }
+    100% { transform: scale(1); }
 }

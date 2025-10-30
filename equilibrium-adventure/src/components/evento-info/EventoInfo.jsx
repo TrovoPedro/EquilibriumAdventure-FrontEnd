@@ -3,14 +3,15 @@ import ButtonSubmitForm from '../button-padrao/button-submit-form';
 import './EventoInfo.css';
 import CircleBackButton from '../circle-back-button/circle-back-button';
 import ButtonDangerForm from '../button-padrao/button-danger-form';
+import defaultTrailImg from '../../assets/img12-catalogo.jpg';
 
 const EventoInfo = ({ 
   evento, 
   onSalvar, 
+  onDelete,
   onChange,
   editavel = false 
 }) => {
-  // Função para voltar
   const handleVoltar = () => {
     window.history.back();
   };
@@ -22,7 +23,14 @@ const EventoInfo = ({
       </div>
       <div className="evento-header">
         <div className="evento-imagem">
-          <img src={evento.imagem} alt={evento.titulo} />
+          <img
+            src={evento?.imagemUrl || defaultTrailImg}
+            alt={evento?.titulo || evento?.nome || 'Imagem do evento'}
+            onError={(e) => {
+              e.currentTarget.onerror = null;
+              e.currentTarget.src = defaultTrailImg;
+            }}
+          />
         </div>
         <div className="evento-detalhes">
           <div className="campo-info-titulo">
@@ -42,11 +50,11 @@ const EventoInfo = ({
               {editavel ? (
                 <input
                   type="date"
-                  value={evento.data}
-                  onChange={(e) => onChange('data', e.target.value)}
+                  value={evento.dataEvento}
+                  onChange={(e) => onChange('dataEvento', e.target.value)}
                 />
               ) : (
-                <span>{evento.data}</span>
+                <span>{evento.dataEvento}</span>
               )}
             </div>
             <div className="campo-info">
@@ -93,7 +101,7 @@ const EventoInfo = ({
       </div>
 
       <div className="campos-linha" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', marginTop: '2.5rem', justifyContent: 'center', width: '100%' }}>
-  <div className="campo-info" style={{ width: '500px' }}>
+        <div className="campo-info" style={{ width: '500px' }}>
           <label style={{ marginBottom: '0.5rem', fontWeight: 'bold', color: '#226144', fontSize: '1.1rem' }}>CATEGORIA:</label>
           {editavel ? (
             <select
@@ -115,24 +123,24 @@ const EventoInfo = ({
             <span>{evento.categoria}</span>
           )}
         </div>
-  <div className="campo-info" style={{ width: '500px' }}>
+        <div className="campo-info" style={{ width: '500px' }}>
           <label style={{ marginBottom: '0.5rem', fontWeight: 'bold', color: '#226144', fontSize: '1.1rem' }}>DURAÇÃO (HORAS):</label>
           {editavel ? (
             <input
               type="number"
               style={{ height: '48px', borderRadius: '10px', border: '1px solid #d1e7dd', padding: '0 1rem', fontSize: '1.1rem', width: '100%' }}
-              value={evento.duracao}
-              onChange={(e) => onChange('duracao', e.target.value)}
+              value={evento.tempoEstimado}
+              onChange={(e) => onChange('tempoEstimado', e.target.value)}
               min="1"
               max="24"
               placeholder="4"
               required
             />
           ) : (
-            <span>{evento.duracao}</span>
+            <span>{evento.tempoEstimado}</span>
           )}
         </div>
-  <div className="campo-info" style={{ width: '500px' }}>
+        <div className="campo-info" style={{ width: '500px' }}>
           <label style={{ marginBottom: '0.5rem', fontWeight: 'bold', color: '#226144', fontSize: '1.1rem' }}>PREÇO (R$):</label>
           {editavel ? (
             <input
@@ -154,7 +162,7 @@ const EventoInfo = ({
       {editavel && (
         <div className="evento-acoes">
           <ButtonSubmitForm onClick={onSalvar} title="Salvar Alterações" />
-          <ButtonDangerForm onClick={onSalvar} title={'Excluir Evento'}></ButtonDangerForm>
+          <ButtonDangerForm onClick={onDelete} title={'Excluir Evento'} />
         </div>
       )}
     </div>

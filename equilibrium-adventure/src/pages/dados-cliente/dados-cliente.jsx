@@ -12,7 +12,10 @@ import {
 	formatarHora
 } from "../../utils/dateValidations";
 
+import { useParams } from "react-router-dom";
+
 export default function DadosCliente() {
+	const { id: idUsuarioParam } = useParams();
 	const [dadosCliente, setDadosCliente] = useState(null);
 	const [agendamentoData, setAgendamentoData] = useState(null);
 	const [respostasQuestionario, setRespostasQuestionario] = useState("");
@@ -22,14 +25,13 @@ export default function DadosCliente() {
 	const [currentSlide, setCurrentSlide] = useState(0);
 	const carrosselRef = useRef(null);
 
-	// ID fixo = 1 Alterar depois para integrar com as outras telas
-	const usuarioIdFixo = 1;
+	const usuarioIdFixo = idUsuarioParam || 1;
 
 	useEffect(() => {
 		carregarDadosCliente();
 		buscarAgendamentoAnamnese();
 		carregarRespostasQuestionario();
-	}, []);
+	}, [usuarioIdFixo]);
 
 	useEffect(() => {
 		const handleKeyDown = (event) => {

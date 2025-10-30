@@ -22,7 +22,8 @@ export default function DadosGuia() {
         nome: "",
         email: "",
         descricao: "",
-        imagem: null
+        imagem: null, // arquivo selecionado pelo input
+        imagemPreview: null // url da imagem atual fornecida pelo backend
     });
 
     useEffect(() => {
@@ -39,10 +40,12 @@ export default function DadosGuia() {
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
-        setFormData({
-            ...formData,
-            [name]: files ? files[0] : value,
-        });
+        if (files && files[0]) {
+            // arquivo selecionado -> atualiza `imagem` e limpa imagemPreview
+            setFormData((prev) => ({ ...prev, imagem: files[0] }));
+        } else {
+            setFormData((prev) => ({ ...prev, [name]: value }));
+        }
     };
 
     const handleSubmit = async (e) => {
@@ -126,7 +129,6 @@ export default function DadosGuia() {
                             <div className="adicionar-guia-imagem">
                                 <div
                                     className="upload-box"
-                                    onClick={() => document.getElementById("upload-input").click()}
                                 >
                                     {formData.imagem ? (
                                         <img
@@ -134,6 +136,8 @@ export default function DadosGuia() {
                                             alt="Pré-visualização"
                                             className="preview-img"
                                         />
+                                    ) : formData.imagemPreview ? (
+                                        <img src={formData.imagemPreview} alt="Imagem atual" className="preview-img" />
                                     ) : (
                                         <div className="upload-placeholder">
                                             <FaCloudUploadAlt size={80} color="#226144" />

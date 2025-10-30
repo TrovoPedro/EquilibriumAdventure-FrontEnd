@@ -60,22 +60,19 @@ const Questionario = () => {
       }));
 
       await postRespostas(respostasParaEnviar);
-
       try {
-        const nivelCalculado = await calcularNivel(usuario.id);
+        const resultadoNivel = await calcularNivel(usuario.id);
+        const nivelCalculado = resultadoNivel?.nivel ?? resultadoNivel;
 
-        // Se for uma string (enum Nivel do backend), converte para minúsculo
-        const nivelObtido = nivelCalculado.toLowerCase();
+        const nivelObtido = typeof nivelCalculado === "string"
+          ? nivelCalculado.toLowerCase()
+          : String(nivelCalculado?.nivel ?? "EXPLORADOR").toLowerCase();
+
         setNivel(nivelObtido);
-
-
         alert(`Parabéns! Você foi classificado como: ${nivelObtido}`);
+        salvarPontuacao(nivelObtido);
 
-        salvarPontuacao(0, nivelObtido);
-
-        navigate(routeUrls.ESCOLHER_GUIA, {
-          state: { nivel: nivelObtido }
-        });
+        navigate(routeUrls.ESCOLHER_GUIA, { state: { nivel: nivelObtido } });
 
         setAnswers({});
         setCurrentQuestionIndex(0);
@@ -83,17 +80,17 @@ const Questionario = () => {
         setTitleButton("Próxima Questão");
       } catch (calcError) {
         console.error("Erro ao calcular nível:", calcError);
-
-        // Verifica se é o erro específico de informações pessoais
-        if (calcError.message?.includes('Informações pessoais')) {
-          alert(calcError.message);
-          navigate('/perfil');
+        if (calcError.message?.includes("Informações pessoais")) {
+          showError(calcError.message);
+          navigate("/perfil");
           return;
         }
-
-        alert("Suas respostas foram salvas, mas houve um erro ao calcular seu nível. " +
-          "Por favor, verifique se suas informações pessoais estão preenchidas e tente novamente.");
+        alert(
+          "Suas respostas foram salvas, mas houve um erro ao calcular seu nível. " +
+          "Por favor, verifique se suas informações pessoais estão preenchidas e tente novamente."
+        );
       }
+
     } catch (err) {
       console.error("Erro ao enviar respostas:", err);
       if (err.response) {
@@ -132,6 +129,22 @@ const Questionario = () => {
     }
   };
 
+  const handleOnClickBack = () => {
+    if (currentQuestionIndex > 0) {
+      // Salva a resposta atual antes de voltar (se houver)
+      if (selectedOption !== null) {
+        setAnswers({
+          ...answers,
+          [questions[currentQuestionIndex].id]: selectedOption
+        });
+      }
+
+      setCurrentQuestionIndex((prev) => prev - 1);
+      setSelectedOption(answers[questions[currentQuestionIndex - 1].id] || null);
+      setTitleButton("Próxima Questão");
+    }
+  };
+
   const handleNavigatorClick = (index) => {
     if (Object.keys(answers).length >= index) {
       setCurrentQuestionIndex(index);
@@ -151,7 +164,7 @@ const Questionario = () => {
     <div className="questionario-wrapper">
       <div className="questionario-container">
         <div className="questionario-content">
-          <h2>{questions[currentQuestionIndex].title}</h2>
+          <h2>Questão {currentQuestionIndex + 1}</h2>
           <p className="question-text">
             {questions[currentQuestionIndex].question}
           </p>
@@ -171,7 +184,12 @@ const Questionario = () => {
             ))}
           </div>
 
-          <ButtonQuest title={titleButton} onClick={handleOnClickNext} />
+          <div className="button-container">
+            {currentQuestionIndex > 0 && (
+              <ButtonQuest title="Voltar" onClick={handleOnClickBack} isBackButton />
+            )}
+            <ButtonQuest title={titleButton} onClick={handleOnClickNext} />
+          </div>
         </div>
 
         <div className="question-navigator">

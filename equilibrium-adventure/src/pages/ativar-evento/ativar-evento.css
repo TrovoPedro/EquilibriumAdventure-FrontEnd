@@ -108,14 +108,14 @@
 .ativar-evento-form select {
 	border: 2px solid #e0e0e0;
 	border-radius: 12px;
-	padding: 14px 16px;
-	font-size: 1rem;
+	padding: 16px 18px;
+	font-size: 1.08rem;
 	outline: none;
 	background: #ffffff;
 	transition: all 0.3s ease;
 	font-family: inherit;
 	color: #333;
-	height: 48px;
+	height: 60px;
 	width: 100%;
 }
 
@@ -127,8 +127,8 @@
 	background-color: #ffffff;
 	border: 2px solid #e0e0e0;
 	border-radius: 12px;
-	padding: 14px 16px;
-	height: 48px;
+	padding: 16px 18px;
+	height: 60px;
 }
 
 /* Ajustes finos do conteúdo interno do input date/time no WebKit */
@@ -179,6 +179,12 @@
 	.ativar-evento-form .form-group-full select { max-width: 100%; }
 
 	.ativar-evento-form .form-group-categoria select { max-width: 380px; }
+
+	/* Padroniza a altura do campo de categoria com os demais campos */
+	.ativar-evento-form .form-group-categoria select {
+		height: 60px;
+		font-size: 1.08rem;
+	}
 
 	/* Campo com largura reduzida acompanha a padronização */
 	.input-largura-reduzida { max-width: 380px !important; }
