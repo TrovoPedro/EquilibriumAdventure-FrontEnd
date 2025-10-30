@@ -2,19 +2,20 @@ import Forms from '../../components/forms/forms';
 import './cadastro.css';
 import routeUrls from "../../routes/routeUrls"
 import { useNavigate } from 'react-router-dom';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { cadastrarUsuario } from '../../services/api';
 import { validateUserData } from '../../utils/validators';
 import PopUpOk from '../../components/pop-up-ok/pop-up-ok';
 import PopUpErro from '../../components/pop-up-erro/pop-up-erro';
+import Swal from 'sweetalert2';
 
 const Cadastro = () => {
     const navigate = useNavigate();
     const title = "CADASTRAR";
     const text = "Entre aqui";
     const [error, setError] = useState(null);
-    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [showErrorPopup, setShowErrorPopup] = useState(false);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
     const handleSubmit = async (formData) => {
@@ -38,6 +39,11 @@ const Cadastro = () => {
         try {
             await cadastrarUsuario(userData);
             setShowSuccessPopup(true);
+            // Redirecionamento automático após 1.5 segundos
+            setTimeout(() => {
+                setShowSuccessPopup(false);
+                navigate(routeUrls.LOGIN);
+            }, 1500);
         } catch (error) {
             setError(error.erro || 'Erro ao realizar cadastro');
             setErrorMessage(error.erro || 'Erro ao realizar cadastro');
@@ -48,6 +54,24 @@ const Cadastro = () => {
     const handleNavigate = () => {
         navigate(routeUrls.LOGIN);
     }
+
+    useEffect(() => {
+        if (showSuccessPopup) {
+            Swal.fire({
+                title: 'Cadastro realizado!',
+                text: 'Sua conta foi criada com sucesso! Redirecionando para o login...',
+                icon: 'success',
+                showConfirmButton: false,
+                allowOutsideClick: false,
+                allowEscapeKey: false,
+                timer: 1500,
+                customClass: {
+                    confirmButton: 'swal2-confirm'
+                },
+                buttonsStyling: false
+            });
+        }
+    }, [showSuccessPopup]);
 
     return (
         <div className="login-page">
@@ -79,17 +103,6 @@ const Cadastro = () => {
             </div>
 
             <button className="chat-floating" aria-hidden>💬</button>
-            
-            {showSuccessPopup && (
-                <PopUpOk 
-                    title="Cadastro realizado!"
-                    message="Sua conta foi criada com sucesso! Redirecionando para o login..."
-                    onConfirm={() => {
-                        setShowSuccessPopup(false);
-                        navigate(routeUrls.LOGIN);
-                    }}
-                />
-            )}
             
             {showErrorPopup && (
                 <PopUpErro 

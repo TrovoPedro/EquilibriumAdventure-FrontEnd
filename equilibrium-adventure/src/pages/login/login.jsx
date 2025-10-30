@@ -18,8 +18,6 @@ const Login = () => {
   const { salvarPontuacao } = useScore();
   const [showErrorPopup, setShowErrorPopup] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
-  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-  const [pendingNavigation, setPendingNavigation] = useState(null);
 
   const handleSubmit = async (formData) => {
     const credentials = {
@@ -50,8 +48,8 @@ const Login = () => {
           nextRoute = routeUrls.QUESTIONARIO;
         }
       }
-      setPendingNavigation(nextRoute);
-      setShowSuccessPopup(true);
+      
+      navigate(nextRoute);
     } catch (error) {
       setErrorMessage('Credenciais inválidas ou erro no servidor!');
       setShowErrorPopup(true);
@@ -64,19 +62,7 @@ const Login = () => {
 
   return (
     <div className="login-page">
-      {showSuccessPopup && (
-        <PopUpOk
-          title="Login realizado!"
-          message="Login efetuado com sucesso!"
-          onConfirm={() => {
-            setShowSuccessPopup(false);
-            if (pendingNavigation) {
-              navigate(pendingNavigation);
-              setPendingNavigation(null);
-            }
-          }}
-        />
-      )}
+
       {showErrorPopup && (
         <PopUpErro
           title="Erro no login!"
