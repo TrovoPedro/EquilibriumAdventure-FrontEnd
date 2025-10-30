@@ -7,6 +7,7 @@ import useGoBack from "../../utils/useGoBack";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import { atualizarGuia } from "../../services/apiAdministrador";
+import PopUpOk from "../../components/pop-up-ok/pop-up-ok";
 
 export default function DadosGuia() {
     const navigate = useNavigate();
@@ -25,6 +26,8 @@ export default function DadosGuia() {
         imagem: null, // arquivo selecionado pelo input
         imagemPreview: null // url da imagem atual fornecida pelo backend
     });
+
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
     useEffect(() => {
         // Preencher os campos com os dados do guia selecionado
@@ -70,8 +73,7 @@ export default function DadosGuia() {
             );
             
             console.log("Guia atualizado com sucesso:", result);
-            alert("Guia atualizado com sucesso!");
-            navigate(routeUrls.VER_GUIAS); // Volta para a lista de guias
+            setShowSuccessPopup(true);
         } catch (err) {
             console.error("Erro ao atualizar guia:", err);
             alert(`Erro ao atualizar guia: ${err.message || err}`);
@@ -163,6 +165,17 @@ export default function DadosGuia() {
                     </button>
                 </div>
             </div>
+            
+            {showSuccessPopup && (
+                <PopUpOk
+                    title="Sucesso!"
+                    message="Dados do guia atualizados com sucesso!"
+                    onConfirm={() => {
+                        setShowSuccessPopup(false);
+                        navigate(routeUrls.VER_GUIAS);
+                    }}
+                />
+            )}
         </div>
     );
 }

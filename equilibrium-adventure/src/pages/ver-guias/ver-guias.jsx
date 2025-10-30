@@ -1,16 +1,55 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import './ver-guias.css';
-import { buscarGuiasAdm, buscarGuiaPorId } from "../../services/apiAdministrador";
+import '../../components/pop-up-aviso/pop-up-aviso.css';
+import { buscarGuiasAdm, buscarGuiaPorId, deletarGuia } from "../../services/apiAdministrador";
 import leftArrow from "../../assets/left-arrow-green.png";
 import Header from "../../components/header/header-unified";
 import { useGuide } from "../../context/GuideContext";
 import routeUrls from "../../routes/routeUrls";
+import PopUpAviso from "../../components/pop-up-aviso/pop-up-aviso";
+import PopUpOk from "../../components/pop-up-ok/pop-up-ok";
+import PopUpErro from "../../components/pop-up-erro/pop-up-erro";
+import Swal from 'sweetalert2';
+
+// Componente para popup de confirmação customizado
+const PopupConfirmacao = ({ guiaNome, onConfirm, onCancel }) => {
+    useEffect(() => {
+        Swal.fire({
+            title: "Tem certeza?",
+            text: `Você não poderá reverter esta ação! O guia "${guiaNome}" será removido permanentemente.`,
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonText: "Sim, remover!",
+            cancelButtonText: "Cancelar",
+            customClass: {
+                confirmButton: 'swal2-confirm-warning',
+                cancelButton: 'swal2-cancel-warning'
+            },
+            buttonsStyling: false,
+            allowOutsideClick: false,
+            allowEscapeKey: false
+        }).then((result) => {
+            if (result.isConfirmed) {
+                onConfirm();
+            } else {
+                onCancel();
+            }
+        });
+    }, [guiaNome, onConfirm, onCancel]);
+
+    return null;
+};
 
 const VerGuias = () => {
 
     const [guias, setGuias] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [showConfirmPopup, setShowConfirmPopup] = useState(false);
+    const [guiaToDelete, setGuiaToDelete] = useState(null);
+    const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+    const [showErrorPopup, setShowErrorPopup] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const navigate = useNavigate();
     const { escolherGuia } = useGuide();
 
@@ -72,7 +111,43 @@ const VerGuias = () => {
     };
 
     const handleRemoverGuia = (guiaId) => {
-        console.log("Remover guia:", guiaId);
+        const guia = guias.find(g => g.idUsuario === guiaId);
+        setGuiaToDelete({ id: guiaId, nome: guia?.nome || 'Guia' });
+        setShowConfirmPopup(true);
+    };
+
+    const confirmarRemocaoGuia = async () => {
+        setShowConfirmPopup(false);
+        
+        try {
+            console.log("🗑️ Iniciando remoção do guia:", guiaToDelete.id);
+            console.log("🔗 URL da chamada:", `/administrador/deletar-guia/${guiaToDelete.id}`);
+            
+            const response = await deletarGuia(guiaToDelete.id);
+            
+            console.log("✅ Resposta da API:", response);
+            console.log("📊 Status da resposta:", response?.status);
+            
+            // Remove o guia da lista local
+            setGuias(prevGuias => prevGuias.filter(guia => guia.idUsuario !== guiaToDelete.id));
+            
+            // Mostra popup de sucesso
+            setShowSuccessPopup(true);
+            setGuiaToDelete(null);
+            
+            console.log("🎉 Guia removido com sucesso da lista local");
+        } catch (error) {
+            console.error("❌ Erro completo ao deletar guia:", error);
+            console.error("📋 Detalhes do erro:", {
+                message: error.message,
+                response: error.response,
+                status: error.response?.status,
+                data: error.response?.data
+            });
+            setErrorMessage(error.message || 'Erro ao remover guia');
+            setShowErrorPopup(true);
+            setGuiaToDelete(null);
+        }
     };
 
     return (
@@ -115,6 +190,39 @@ const VerGuias = () => {
                     )}
                 </div>
             </div>
+            
+            {/* Popup de Confirmação para Deletar */}
+            {showConfirmPopup && (
+                <PopupConfirmacao
+                    guiaNome={guiaToDelete?.nome}
+                    onConfirm={confirmarRemocaoGuia}
+                    onCancel={() => {
+                        setShowConfirmPopup(false);
+                        setGuiaToDelete(null);
+                    }}
+                />
+            )}
+
+            {/* Popup de Sucesso */}
+            {showSuccessPopup && (
+                <PopUpOk
+                    title="Guia Removido!"
+                    message="O guia foi removido com sucesso!"
+                    onConfirm={() => setShowSuccessPopup(false)}
+                />
+            )}
+
+            {/* Popup de Erro */}
+            {showErrorPopup && (
+                <PopUpErro
+                    title="Erro ao Remover"
+                    message={errorMessage}
+                    onConfirm={() => {
+                        setShowErrorPopup(false);
+                        setErrorMessage('');
+                    }}
+                />
+            )}
         </>
     );
 };
