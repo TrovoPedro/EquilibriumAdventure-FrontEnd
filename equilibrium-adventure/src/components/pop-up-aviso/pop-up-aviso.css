@@ -30,5 +30,21 @@
 }
 
 .swal2-cancel-warning {
-    display: none !important;
+    background-color: #d33 !important;
+    color: #FFF !important;
+    cursor: pointer !important;
+    border: none !important;
+    border-radius: 10px !important;
+    padding: 14px 36px !important;
+    font-weight: 700 !important;
+    font-size: 18px !important;
+    transition: all 0.18s ease !important;
+    margin: 0 10px !important;
+    min-width: 140px !important;
+}
+
+.swal2-cancel-warning:hover {
+    background-color: #b02a2a !important;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 18px rgba(176, 42, 42, 0.18) !important;
 }

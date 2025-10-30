@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls"
 import { useScore } from "../../context/ScoreContext";
 import { useAuth } from "../../context/AuthContext";
+import PopUpOk from "../../components/pop-up-ok/pop-up-ok";
 
 const Questionario = () => {
   const navigate = useNavigate();
@@ -16,6 +17,8 @@ const Questionario = () => {
   const [titleButton, setTitleButton] = useState("Próxima Questão");
   const [loading, setLoading] = useState(true);
   const [nivel, setNivel] = useState(null);
+  const [showSuccessPopup, setShowSuccessPopup] = useState(false);
+  const [nivelObtido, setNivelObtido] = useState('');
   const { salvarPontuacao } = useScore();
   const { usuario } = useAuth();
 
@@ -69,10 +72,9 @@ const Questionario = () => {
           : String(nivelCalculado?.nivel ?? "EXPLORADOR").toLowerCase();
 
         setNivel(nivelObtido);
-        alert(`Parabéns! Você foi classificado como: ${nivelObtido}`);
+        setNivelObtido(nivelObtido);
         salvarPontuacao(nivelObtido);
-
-        navigate(routeUrls.ESCOLHER_GUIA, { state: { nivel: nivelObtido } });
+        setShowSuccessPopup(true);
 
         setAnswers({});
         setCurrentQuestionIndex(0);
@@ -208,6 +210,21 @@ const Questionario = () => {
           </div>
         </div>
       </div>
+      
+      {showSuccessPopup && (
+        <PopUpOk
+          title="Questionário Concluído!"
+          message={`Parabéns! Suas respostas foram enviadas com sucesso! Você foi classificado como: ${nivelObtido.toUpperCase()}`}
+          onConfirm={() => {
+            setShowSuccessPopup(false);
+            navigate(routeUrls.ESCOLHER_GUIA, { state: { nivel: nivelObtido } });
+            setAnswers({});
+            setCurrentQuestionIndex(0);
+            setSelectedOption(null);
+            setTitleButton("Próxima Questão");
+          }}
+        />
+      )}
     </div>
   );
 };
