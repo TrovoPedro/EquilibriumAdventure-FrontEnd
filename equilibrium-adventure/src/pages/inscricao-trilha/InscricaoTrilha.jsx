@@ -12,7 +12,7 @@ import Comentarios from '../../components/comentarios/Comentarios';
 import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx } from "../../services/apiEvento";
 import trilhaImg from "../../assets/cachoeiralago.jpg";
 import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
-import { verificarInscricao, criarInscricao, cancelarInscricao } from "../../services/apiInscricao";
+import { verificarInscricao, criarInscricao, cancelarInscricao, listarInscritos } from "../../services/apiInscricao";
 
 const InscricaoTrilhasLimitado = () => {
   // Compartilhar trilha
@@ -37,6 +37,7 @@ const InscricaoTrilhasLimitado = () => {
   const [gpxData, setGpxData] = useState(null);
   const [comentarios, setComentarios] = useState([]);
   const [inscrito, setInscrito] = useState(false);
+  const [inscritosCount, setInscritosCount] = useState(0);
   const { usuario } = useAuth();
   const { nivel } = useScore();
   const navigate = useNavigate();
@@ -112,6 +113,22 @@ const InscricaoTrilhasLimitado = () => {
     }
   }, [id]);
 
+  // Carregar contagem de inscritos
+  useEffect(() => {
+    const carregarInscritos = async () => {
+      try {
+        if (id) {
+          const inscritos = await listarInscritos(id);
+          setInscritosCount(Array.isArray(inscritos) ? inscritos.length : 0);
+        }
+      } catch (error) {
+        console.error('Erro ao carregar inscritos:', error);
+      }
+    };
+
+    carregarInscritos();
+  }, [id]);
+
           {inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
   const handleEnviarComentario = async (comentarioObj) => {
 
@@ -167,6 +184,7 @@ const InscricaoTrilhasLimitado = () => {
   await cancelarInscricao(usuario.id, evento.idAtivacao);
   showSuccess("Inscrição cancelada com sucesso!");
       setInscrito(false);
+      setInscritosCount(prev => Math.max(0, prev - 1));
     } catch (error) {
       console.error("Erro ao cancelar inscrição:", error);
       showError(error.message || "Erro ao cancelar inscrição. Tente novamente.");
@@ -186,6 +204,7 @@ const InscricaoTrilhasLimitado = () => {
   await criarInscricao(evento.idAtivacao, usuario.id);
   showSuccess("Inscrição realizada com sucesso!");
       setInscrito(true);
+      setInscritosCount(prev => prev + 1);
 
       await checarInscricao();
     } catch (error) {
@@ -210,7 +229,8 @@ const InscricaoTrilhasLimitado = () => {
         <div className="inscricao-trilha-info">
           <div><b>Título:</b> {evento.nome}</div>
           <div><b>Nível:</b> {evento.nivel_dificuldade}</div>
-          <div><b>Data:</b> {evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"}</div>
+              <div><b>Data:</b> {evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"}</div>
+              <div><b>Limite de Inscritos:</b> {evento.limiteInscritos || 'N/A'} <span style={{color:'#226144'}}>({inscritosCount} inscritos)</span></div>
           <div><b>Descrição:</b> {evento.descricao}</div>
         </div>
       </div>
