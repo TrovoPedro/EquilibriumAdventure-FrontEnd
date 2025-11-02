@@ -7,7 +7,7 @@ import olhoFechado from '../../assets/olho-fechado.png';
 import { maskTelefone } from '../../utils/maskTelefone';
 import { validatePhone } from '../../utils/validatePhone';
 
-const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
+const Forms = ({ title, handleSubmit, text, handleNavigate, isSubmitting = false }) => {
     const location = useLocation();
     const [phoneError, setPhoneError] = useState('');
     const path = location.pathname;
@@ -161,6 +161,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
     return (
         <form className='forms' onSubmit={(e) => {
             e.preventDefault();
+            if (isSubmitting) return; // previne envios duplicados
             handleSubmit(formData);
         }}>
             {renderFormFields()}
@@ -169,7 +170,7 @@ const Forms = ({ title, handleSubmit, text, handleNavigate }) => {
                     {path.toLowerCase() === '/login' ? 'Ainda não tem uma conta?' : 'Já tem uma conta?'}
                     <button type="button" className='button-cad' onClick={handleNavigate}>{text}</button>
                 </span>
-                <ButtonAuth type="submit" title={title} />
+                <ButtonAuth type="submit" title={title} disabled={isSubmitting} />
             </div>
         </form>
     );

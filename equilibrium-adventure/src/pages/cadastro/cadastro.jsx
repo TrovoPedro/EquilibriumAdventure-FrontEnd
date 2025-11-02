@@ -18,13 +18,16 @@ const Cadastro = () => {
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
-    const handleSubmit = async (formData) => {
+    const [isSubmitting, setIsSubmitting] = useState(false);
+
+    // função que realiza o envio real (mantive a lógica existente)
+    const submitForm = async (formData) => {
         const errors = validateUserData(formData);
 
         if (Object.keys(errors).length > 0) {
             setErrorMessage(Object.values(errors).join("\n"));
             setShowErrorPopup(true);
-            return;
+            return false;
         }
         
         const userData = {
@@ -44,10 +47,27 @@ const Cadastro = () => {
                 setShowSuccessPopup(false);
                 navigate(routeUrls.LOGIN);
             }, 1500);
+            return true;
         } catch (error) {
             setError(error.erro || 'Erro ao realizar cadastro');
             setErrorMessage(error.erro || 'Erro ao realizar cadastro');
             setShowErrorPopup(true);
+            return false;
+        }
+    };
+
+    // wrapper que previne envios duplicados
+    const handleSubmit = async (formData) => {
+        if (isSubmitting) return; // já está enviando
+        setIsSubmitting(true);
+        try {
+            const success = await submitForm(formData);
+            // se houve erro, libera para nova tentativa; se sucesso, mantemos isSubmitting
+            if (!success) setIsSubmitting(false);
+        } catch (err) {
+            // em caso de erro inesperado, libera o botão
+            setIsSubmitting(false);
+            throw err;
         }
     };
 
@@ -98,11 +118,10 @@ const Cadastro = () => {
                         <h1>comunidade online</h1>
                     </div>
 
-                    <Forms title={title} handleSubmit={handleSubmit} text={text} handleNavigate={handleNavigate} className="forms-custom" />
+                    <Forms title={title} handleSubmit={handleSubmit} text={text} handleNavigate={handleNavigate} className="forms-custom" isSubmitting={isSubmitting} />
                 </div>
             </div>
 
-            <button className="chat-floating" aria-hidden>💬</button>
             
             {showErrorPopup && (
                 <PopUpErro 
