@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./dados-guia.css";
 import { useNavigate, useLocation } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
@@ -7,6 +7,7 @@ import useGoBack from "../../utils/useGoBack";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
 import { atualizarGuia } from "../../services/apiAdministrador";
+import { buscarImagemUsuario } from "../../services/apiUsuario";
 import PopUpOk from "../../components/pop-up-ok/pop-up-ok";
 
 export default function DadosGuia() {
@@ -40,6 +41,38 @@ export default function DadosGuia() {
             });
         }
     }, [guiaData]);
+
+    // ref para armazenar URL criado e limpar quando o componente desmontar
+    const imagemUrlRef = useRef(null);
+
+    // Busca a imagem do usuário (guia) pelo id e preenche imagemPreview
+    useEffect(() => {
+        const carregarImagem = async () => {
+            if (!guiaId) return;
+            try {
+                const url = await buscarImagemUsuario(guiaId);
+                if (url) {
+                    // limpa url anterior, se houver
+                    if (imagemUrlRef.current) {
+                        try { URL.revokeObjectURL(imagemUrlRef.current); } catch (e) { /* ignore */ }
+                    }
+                    imagemUrlRef.current = url;
+                    setFormData(prev => ({ ...prev, imagemPreview: url }));
+                }
+            } catch (err) {
+                console.error('Erro ao carregar imagem do guia:', err);
+            }
+        };
+
+        carregarImagem();
+
+        return () => {
+            if (imagemUrlRef.current) {
+                try { URL.revokeObjectURL(imagemUrlRef.current); } catch (e) { /* ignore */ }
+                imagemUrlRef.current = null;
+            }
+        };
+    }, [guiaId]);
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;

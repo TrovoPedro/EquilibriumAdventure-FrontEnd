@@ -10,26 +10,19 @@ import routeUrls from "../../routes/routeUrls";
 import PopUpAviso from "../../components/pop-up-aviso/pop-up-aviso";
 import PopUpOk from "../../components/pop-up-ok/pop-up-ok";
 import PopUpErro from "../../components/pop-up-erro/pop-up-erro";
-import Swal from 'sweetalert2';
+import { showWarning } from "../../utils/swalHelper";
 
 // Componente para popup de confirmação customizado
 const PopupConfirmacao = ({ guiaNome, onConfirm, onCancel }) => {
     useEffect(() => {
-        Swal.fire({
-            title: "Tem certeza?",
-            text: `Você não poderá reverter esta ação! O guia "${guiaNome}" será removido permanentemente.`,
-            icon: "warning",
-            showCancelButton: true,
-            confirmButtonText: "Sim, remover!",
-            cancelButtonText: "Cancelar",
-            customClass: {
-                confirmButton: 'swal2-confirm-warning',
-                cancelButton: 'swal2-cancel-warning'
-            },
-            buttonsStyling: false,
-            allowOutsideClick: false,
-            allowEscapeKey: false
-        }).then((result) => {
+        // Usa o helper padronizado para warnings (inclui showCloseButton)
+        showWarning(
+            `Você não poderá reverter esta ação! O guia "${guiaNome}" será removido permanentemente.`,
+            'Tem certeza?',
+            'Sim, remover!',
+            'Cancelar',
+            true
+        ).then((result) => {
             if (result.isConfirmed) {
                 onConfirm();
             } else {
