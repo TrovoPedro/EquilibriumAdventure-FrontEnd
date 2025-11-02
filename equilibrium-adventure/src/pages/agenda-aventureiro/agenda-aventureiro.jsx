@@ -12,7 +12,10 @@ import {
   buscarInscricoesPorUsuario,
   cancelarInscricao,
   buscarHistoricoPorUsuario,
+  verificarAtivacaoAvaliada,
+  avaliarInscricao,
 } from "../../services/apiAventureiro";
+import Swal from 'sweetalert2';
 import { showError, showSuccess, showWarning } from "../../utils/swalHelper";
 import { buscarImagemUsuario } from "../../services/apiUsuario";
 import { useAuth } from "../../context/AuthContext";
@@ -25,6 +28,7 @@ const CriarAgendaAventureiro = () => {
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [agenda, setAgenda] = useState([]);
   const [historico, setHistorico] = useState([]);
+  const evaluatedIdsRef = React.useRef(new Set());
   const tipoUsuario = usuario?.tipoUsuario;
   const nomeUsuario = usuario?.nome;
 
@@ -43,15 +47,15 @@ const CriarAgendaAventureiro = () => {
     const carregarAgenda = async () => {
       if (!idUsuario) return;
       try {
-        const data = await buscarInscricoesPorUsuario(idUsuario);
-        console.log("Dados recebidos do back:", data); // <-- LOG AQUI
+  const data = await buscarInscricoesPorUsuario(idUsuario);
+  console.log("Dados recebidos do back:", data);
         const agendaFormatada = data.map((item) => ({
           idEvento: item.idAtivacaoEvento,
           nomeEvento: item.nomeEvento ?? "Sem nome",
           dataAtivacao: item.dataAtivacao,
           imagem: item.imagemEvento,
         }));
-        console.log("Agenda formatada:", agendaFormatada); // <-- LOG AQUI
+  console.log("Agenda formatada:", agendaFormatada);
         setAgenda(agendaFormatada);
       } catch (error) {
         console.error(error);
@@ -66,17 +70,154 @@ const CriarAgendaAventureiro = () => {
       try {
         const data = await buscarHistoricoPorUsuario(idUsuario);
         const historicoFormatado = data.map((item) => ({
+          idInscricao: item.idInscricao ?? item.idInscricaoEvento ?? null,
           idEvento: item.idAtivacaoEvento,
           nomeEvento: item.nomeEvento ?? "Sem nome",
           dataAtivacao: item.dataAtivacao,
         }));
         setHistorico(historicoFormatado);
+        const promessas = historicoFormatado.map(async (h) => {
+          if (!h.idEvento) return null;
+          const avaliada = await verificarAtivacaoAvaliada(idUsuario, h.idEvento);
+          if (avaliada === false) return h;
+          return null;
+        });
+
+        const resultados = await Promise.all(promessas);
+        const naoAvaliadas = resultados.filter(Boolean);
+        console.log('ativacoes não avaliadas (antes de filtrar por sessão):', naoAvaliadas.map(n => n?.idEvento));
+        const naoAvaliadasFiltradas = naoAvaliadas.filter(n => n && !evaluatedIdsRef.current.has(n.idEvento));
+        console.log('ativacoes não avaliadas (após filtrar por sessão):', naoAvaliadasFiltradas.map(n => n?.idEvento));
+        if (naoAvaliadasFiltradas.length > 0) {
+          mostrarModalAvaliacao(naoAvaliadasFiltradas);
+        }
       } catch (error) {
         console.error(error);
       }
     };
     carregarHistorico();
   }, [idUsuario]);
+
+  const mostrarModalAvaliacao = (itens) => {
+    if (!itens || itens.length === 0) return;
+
+    const html = `
+      <style>
+        .ea-rating-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #e6e6e6}
+        .ea-event-name{flex:1;margin-right:12px}
+        .ea-stars{display:inline-flex;gap:6px}
+        .ea-star{font-size:28px;cursor:pointer;color:#cfcfcf}
+        .ea-star.filled{color:#FFD700}
+      </style>
+      <div>
+        ${itens
+          .map((it, idx) => `
+            <div class="ea-rating-row" data-idx="${idx}" data-idinscricao="${it.idInscricao}" data-idevento="${it.idEvento}">
+              <div class="ea-event-name">${it.nomeEvento} <br/><small>${formatarData(it.dataAtivacao)}</small></div>
+              <div class="ea-stars" data-idx="${idx}">
+                <span class="ea-star" data-value="1">☆</span>
+                <span class="ea-star" data-value="2">☆</span>
+                <span class="ea-star" data-value="3">☆</span>
+                <span class="ea-star" data-value="4">☆</span>
+                <span class="ea-star" data-value="5">☆</span>
+              </div>
+            </div>
+          `)
+          .join('')}
+      </div>
+    `;
+
+    const ratings = {};
+
+    Swal.fire({
+      title: 'Avalie seus eventos concluídos',
+      html,
+      showCloseButton: true,
+      showConfirmButton: true,
+      confirmButtonText: 'Finalizar avaliações',
+      width: '720px',
+      customClass: { popup: 'swal2-shadow' },
+      didOpen: () => {
+        const container = Swal.getHtmlContainer();
+        if (!container) return;
+        container.querySelectorAll('.ea-stars').forEach((starsGroup) => {
+          const idx = starsGroup.getAttribute('data-idx');
+          const row = container.querySelector(`.ea-rating-row[data-idx="${idx}"]`);
+          const idInscricao = row?.getAttribute('data-idinscricao');
+          starsGroup.querySelectorAll('.ea-star').forEach((star) => {
+            star.addEventListener('click', (ev) => {
+              const value = Number(star.getAttribute('data-value')) || 0;
+              ratings[idx] = value;
+              starsGroup.querySelectorAll('.ea-star').forEach((s) => {
+                const v = Number(s.getAttribute('data-value')) || 0;
+                if (v <= value) {
+                  s.classList.add('filled');
+                  s.textContent = '★';
+                } else {
+                  s.classList.remove('filled');
+                  s.textContent = '☆';
+                }
+              });
+            });
+            star.addEventListener('mouseenter', () => {
+              const v = Number(star.getAttribute('data-value')) || 0;
+              starsGroup.querySelectorAll('.ea-star').forEach((s) => {
+                const sv = Number(s.getAttribute('data-value')) || 0;
+                s.textContent = sv <= v ? '★' : '☆';
+              });
+            });
+            star.addEventListener('mouseleave', () => {
+              starsGroup.querySelectorAll('.ea-star').forEach((s) => {
+                if (s.classList.contains('filled')) s.textContent = '★'; else s.textContent = '☆';
+              });
+            });
+          });
+        });
+      }
+    }).then(async (result) => {
+      if (!result.isConfirmed) return;
+      const avaliadosIds = [];
+      const promises = itens.map(async (it, idx) => {
+        const rating = ratings[idx];
+        if (!rating) return null;
+        let sendOk = null;
+        if (it.idInscricao) {
+          try {
+            await avaliarInscricao(it.idInscricao, rating);
+            sendOk = true;
+          } catch (err) {
+            sendOk = false;
+            console.error('Erro ao enviar avaliação para idInscricao', it.idInscricao, err);
+          }
+        } else {
+          console.log('idInscricao ausente para evento', it.idEvento, '- pulando envio direto, farei verificação posterior');
+        }
+
+        try {
+          const avaliada = await verificarAtivacaoAvaliada(idUsuario, it.idEvento);
+          console.log('Revalidação após avaliar para evento', it.idEvento, '=>', avaliada);
+          if (sendOk === true || avaliada === true) {
+            avaliadosIds.push(it.idEvento);
+            return true;
+          }
+          return { error: !(sendOk === true), item: it };
+        } catch (err) {
+          console.error('Erro na revalidação de avaliação para evento', it.idEvento, err);
+          return { error: !(sendOk === true), item: it };
+        }
+      });
+
+      const results = await Promise.all(promises);
+      const hadError = results.some(r => r && r.error);
+      if (hadError) {
+        showError('Algumas avaliações falharam ou não foram confirmadas. Tente novamente.');
+      } else {
+        showSuccess('Avaliações enviadas e confirmadas com sucesso!');
+        avaliadosIds.forEach(id => evaluatedIdsRef.current.add(id));
+        console.log('Eventos avaliados nesta sessão:', Array.from(evaluatedIdsRef.current));
+      }
+    });
+  };
 
   const handleCancelar = async (idEvento) => {
     const confirmResult = await showWarning(
