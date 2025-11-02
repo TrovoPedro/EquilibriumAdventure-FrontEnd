@@ -182,24 +182,14 @@ const CatalogoTrilhas = () => {
                       />
                     </div>
                     <div className="anuncio-info">
-                      <span className="anuncio-local">{evento.rua}</span>
-                      <h3 className="anuncio-titulo">{evento.nome_evento}</h3>
                       <p className="anuncio-desc">{evento.descricao}</p>
                       <div className="anuncio-footer">
                         <div className="anuncio-detalhes">
                           {evento.data_ativacao && <span>Data: {evento.data_ativacao.split('-').reverse().join('/')}</span>}
-                          <span>Dificuldade: {evento.nivel_dificuldade}</span>
-                          <span>Distância: {evento.distancia_km}km</span>
-                          <span>Horário: {evento.hora_inicio} - {evento.hora_final}</span>
                         </div>
                         <span className="anuncio-preco">R${evento.preco}<span className="anuncio-preco-unidade">/pessoa</span></span>
                         <div className="anuncio-btn-group">
-                          <button
-                            className="anuncio-btn"
-                            onClick={() => handleOnClick("detalhes", evento.id_evento, evento.id_ativacao)}
-                          >
-                            Detalhes
-                          </button>
+                          <button className="anuncio-btn" onClick={() => handleOnClick("detalhes", evento.id_evento, evento.id_ativacao)}>Detalhes</button>
                         </div>
                       </div>
                     </div>
