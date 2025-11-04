@@ -56,6 +56,14 @@ export default function AdicionarGuia() {
                     showWarning("Por favor, preencha todos os campos obrigatórios.");
                     return;
                 }
+                if (formData.senha.length.trim() < 8) {
+                    showWarning("A senha deve ter pelo menos 8 caracteres.");
+                    return;
+                }
+                if (formData.descricao.length.trim() < 8) {
+                    showWarning("A descrição deve ter pelo menos 8 caracteres.");
+                    return;  
+                }
                 const response = await cadastrarGuia(formData);
                 if (response) {
                     showSuccess("Guia cadastrado com sucesso!");
