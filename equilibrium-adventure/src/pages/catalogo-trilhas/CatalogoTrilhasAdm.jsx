@@ -182,6 +182,7 @@ const CatalogoTrilhas = () => {
                       />
                     </div>
                     <div className="anuncio-info">
+                      <h3 className="anuncio-titulo">{evento.nome_evento}</h3>
                       <p className="anuncio-desc">{evento.descricao}</p>
                       <div className="anuncio-footer">
                         <div className="anuncio-detalhes">
