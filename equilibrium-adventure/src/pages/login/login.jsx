@@ -9,6 +9,8 @@ import { useAuth } from '../../context/AuthContext';
 import { useScore } from "../../context/ScoreContext";
 import PopUpErro from '../../components/pop-up-erro/pop-up-erro.jsx';
 import PopUpOk from '../../components/pop-up-ok/pop-up-ok.jsx';
+import Swal from 'sweetalert2';
+import questionnaireIcon from '../../assets/questionnaire.png';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -33,6 +35,22 @@ const Login = () => {
       if (usuario.tipoUsuario === "ADMINISTRADOR" || usuario.tipoUsuario === "GUIA") {
         nextRoute = routeUrls.CATALOGO_TRILHAS_ADM;
       } else if (usuario.tipoUsuario === "AVENTUREIRO" && usuario.primeiraVez) {
+        // Mostra aviso antes de ir para o questionário
+        await Swal.fire({
+          title: 'Bem-vindo!',
+          text: 'Estamos direcionando você para um questionário rápido para compreender melhor seu perfil e oferecer as melhores recomendações.',
+          imageUrl: questionnaireIcon,
+          imageWidth: 100,
+          imageHeight: 100,
+          imageAlt: 'Questionário',
+          confirmButtonText: 'Continuar',
+          confirmButtonColor: '#295c44',
+          timer: 3500,
+          timerProgressBar: true,
+          allowOutsideClick: false,
+          allowEscapeKey: false
+        });
+        
         nextRoute = routeUrls.QUESTIONARIO;
       } else if (usuario.tipoUsuario === "AVENTUREIRO" && !usuario.primeiraVez) {
         try {
@@ -40,16 +58,62 @@ const Login = () => {
           const nivel = await buscarNivelPerfil(usuario.id);
           if (nivel.nivel) {
             salvarPontuacao(nivel.nivel);
+            
+            // Mostra aviso antes de ir para escolher guia
+            const result = await Swal.fire({
+              title: 'Login realizado com sucesso!',
+              text: 'Você será redirecionado para escolher seu guia.',
+              icon: 'success',
+              confirmButtonText: 'Continuar',
+              confirmButtonColor: '#295c44',
+              timer: 2000,
+              timerProgressBar: true
+            });
+            
             nextRoute = routeUrls.ESCOLHER_GUIA;
           } else {
+            // Mostra aviso antes de ir para o questionário
+            await Swal.fire({
+              title: 'Avaliação de Perfil',
+              text: 'Estamos direcionando você para um questionário rápido para compreender melhor seu perfil e oferecer as melhores recomendações.',
+              imageUrl: questionnaireIcon,
+              imageWidth: 100,
+              imageHeight: 100,
+              imageAlt: 'Questionário',
+              confirmButtonText: 'Continuar',
+              confirmButtonColor: '#295c44',
+              timer: 3500,
+              timerProgressBar: true,
+              allowOutsideClick: false,
+              allowEscapeKey: false
+            });
+            
             nextRoute = routeUrls.QUESTIONARIO;
           }
         } catch (error) {
+          // Mostra aviso em caso de erro
+          await Swal.fire({
+            title: 'Avaliação de Perfil',
+            text: 'Estamos direcionando você para um questionário rápido para compreender melhor seu perfil e oferecer as melhores recomendações.',
+            imageUrl: questionnaireIcon,
+            imageWidth: 100,
+            imageHeight: 100,
+            imageAlt: 'Questionário',
+            confirmButtonText: 'Continuar',
+            confirmButtonColor: '#295c44',
+            timer: 3500,
+            timerProgressBar: true,
+            allowOutsideClick: false,
+            allowEscapeKey: false
+          });
+          
           nextRoute = routeUrls.QUESTIONARIO;
         }
       }
       
-      navigate(nextRoute);
+      if (nextRoute) {
+        navigate(nextRoute);
+      }
     } catch (error) {
       setErrorMessage('Credenciais inválidas ou erro no servidor!');
       setShowErrorPopup(true);

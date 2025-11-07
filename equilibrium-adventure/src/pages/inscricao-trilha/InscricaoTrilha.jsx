@@ -13,6 +13,7 @@ import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx } from "../../ser
 import trilhaImg from "../../assets/cachoeiralago.jpg";
 import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
 import { verificarInscricao, criarInscricao, cancelarInscricao, listarInscritos } from "../../services/apiInscricao";
+import Swal from 'sweetalert2';
 
 const InscricaoTrilhasLimitado = () => {
   // Compartilhar trilha
@@ -209,10 +210,29 @@ const InscricaoTrilhasLimitado = () => {
       await checarInscricao();
     } catch (error) {
       console.error("Erro ao fazer inscrição:", error);
-      if (error.response && error.response.data) {
-        showError(error.response.data.message || error.response.data);
+      
+      // Verifica se é erro de informações pessoais
+      const errorMessage = error.response?.data?.message || error.response?.data || error.message || "";
+      
+      if (errorMessage.toLowerCase().includes("informações pessoais") || 
+          errorMessage.toLowerCase().includes("informacoes pessoais")) {
+        const result = await Swal.fire({
+          title: 'Informações Pessoais Necessárias',
+          text: 'É necessário preencher suas informações pessoais antes de realizar a inscrição.',
+          icon: 'warning',
+          showCancelButton: true,
+          showCloseButton: true,
+          confirmButtonText: 'Ir para Informações Pessoais',
+          cancelButtonText: 'Cancelar',
+          confirmButtonColor: '#295c44',
+          cancelButtonColor: '#d33'
+        });
+        
+        if (result.isConfirmed) {
+          navigate('/informacoes-pessoais');
+        }
       } else {
-        showError("Erro ao realizar inscrição. Tente novamente mais tarde.");
+        showError(errorMessage || "Erro ao realizar inscrição. Tente novamente mais tarde.");
       }
     }
   };
