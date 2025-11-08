@@ -11,8 +11,6 @@ const API_BASE_URL = 'http://localhost:8080';
  */
 export const listarPerguntasComRespostas = async (idUsuario) => {
     try {
-        console.log(`🔍 Buscando perguntas e respostas para usuário ID: ${idUsuario}`);
-        
         const response = await fetch(`${API_BASE_URL}/respostas-aventureiro/perguntas-com-respostas?idUsuario=${idUsuario}`, {
             method: 'GET',
             headers: {
@@ -22,18 +20,15 @@ export const listarPerguntasComRespostas = async (idUsuario) => {
 
         if (!response.ok) {
             if (response.status === 404) {
-                console.log('📭 Nenhuma pergunta ou resposta encontrada');
                 return [];
             }
             throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
         }
 
         const data = await response.json();
-        console.log(`✅ ${data.length} perguntas com respostas carregadas:`, data);
         
         return data;
     } catch (error) {
-        console.error('❌ Erro ao buscar perguntas e respostas:', error);
         throw new Error(`Falha ao carregar questionário: ${error.message}`);
     }
 };
@@ -127,7 +122,32 @@ export const obterEstatisticasQuestionario = async (idUsuario) => {
             dadosBrutos: perguntasComRespostas
         };
     } catch (error) {
-        console.error('❌ Erro ao obter estatísticas:', error);
         throw error;
+    }
+};
+
+/**
+ * Garantir pontuação mínima para anamnese (mínimo 8 pontos para nível explorador)
+ * @param {number} idUsuario - ID do usuário
+ * @returns {Promise<Object>} Resultado com pontuação anterior e atual
+ */
+export const garantirPontuacaoMinimaParaAnamnese = async (idUsuario) => {
+    try {
+        const response = await fetch(`${API_BASE_URL}/respostas-aventureiro/garantir-pontuacao-minima?idUsuario=${idUsuario}`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error(`Erro HTTP: ${response.status} - ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        
+        return data;
+    } catch (error) {
+        throw new Error(`Falha ao ajustar pontuação: ${error.message}`);
     }
 };
