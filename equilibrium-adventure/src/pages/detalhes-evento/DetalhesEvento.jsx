@@ -5,7 +5,7 @@ import EventoInfo from '../../components/evento-info/EventoInfo';
 import UsuariosInscritos from '../../components/usuarios-inscritos/UsuariosInscritos';
 import Comentarios from '../../components/comentarios/Comentarios';
 import './DetalhesEvento.css';
-import { buscarImagemEvento, buscarEventoAtivoPorId } from "../../services/apiEvento";
+import { buscarImagemEvento, buscarEventoAtivoPorId, buscarMediaAvaliacoes } from "../../services/apiEvento";
 import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
 import { listarInscritos, cancelarInscricao } from '../../services/apiInscricao';
 import { useAuth } from "../../context/AuthContext";
@@ -19,6 +19,8 @@ const DetalhesEvento = () => {
   const [evento, setEvento] = useState(null);
   const [comentarios, setComentarios] = useState([]);
   const [usuarios, setUsuarios] = useState([]);
+  const [mediaAvaliacoes, setMediaAvaliacoes] = useState(0);
+  const [mensagemAvaliacao, setMensagemAvaliacao] = useState('');
   const { usuario } = useAuth();
   const navigate = useNavigate();
 
@@ -105,6 +107,31 @@ const DetalhesEvento = () => {
     carregarInscritos();
   }, [id]);
 
+  // Carregar média de avaliações
+  useEffect(() => {
+    const carregarMediaAvaliacoes = async () => {
+      try {
+        if (id) {
+          console.log('Buscando média de avaliações para ID:', id);
+          const resultado = await buscarMediaAvaliacoes(id);
+          console.log('Resultado da média:', resultado);
+          
+          if (resultado.mediaAvaliacoes !== undefined) {
+            setMediaAvaliacoes(resultado.mediaAvaliacoes);
+            console.log('Média de avaliações definida:', resultado.mediaAvaliacoes);
+          } else if (resultado.mensagem) {
+            setMensagemAvaliacao(resultado.mensagem);
+            console.log('Mensagem:', resultado.mensagem);
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao carregar média de avaliações:', error);
+      }
+    };
+
+    carregarMediaAvaliacoes();
+  }, [id]);
+
   const handleEventoChange = (campo, valor) => {
     setEvento(prev => ({
       ...prev,
@@ -187,22 +214,74 @@ const DetalhesEvento = () => {
     }
   };
 
+  const renderStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+
+    return (
+      <div className="stars-rating">
+        {[...Array(5)].map((_, i) => (
+          <span key={i} className={i < fullStars ? 'star-full' : (i === fullStars && hasHalfStar ? 'star-half' : 'star-empty')}>
+            ★
+          </span>
+        ))}
+      </div>
+    );
+  };
 
   return (
     <div className="detalhes-evento-container">
       <Header />
+
       <div className="detalhes-evento-content">
-        {evento ? (
-          <EventoInfo
-            evento={evento}
-            onChange={handleEventoChange}
-            onSalvar={handleSalvarEvento}
-            onDelete={handleDelete}
-            editavel={true}
-          />
-        ) : (
-          <p>Carregando informações do evento...</p>
-        )}
+        <div style={{ position: 'relative' }}>
+          {/* Avaliação média no canto superior direito do card */}
+          {(mediaAvaliacoes > 0 || mensagemAvaliacao) && (
+            <div style={{
+              position: 'absolute',
+              top: '20px',
+              right: '20px',
+              background: 'rgba(255, 255, 255, 0.98)',
+              padding: '12px 18px',
+              borderRadius: '12px',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '6px',
+              zIndex: 10,
+              border: '1px solid #e0e0e0'
+            }}>
+              {mediaAvaliacoes > 0 ? (
+                <>
+                  <span style={{ fontSize: '0.85rem', color: '#666', fontWeight: '600' }}>Avaliação Média</span>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                    <span style={{ fontSize: '1.4rem', fontWeight: '700', color: '#226144' }}>
+                      {mediaAvaliacoes.toFixed(1)}
+                    </span>
+                    {renderStars(mediaAvaliacoes)}
+                  </div>
+                </>
+              ) : (
+                <span style={{ fontSize: '0.85rem', color: '#666', fontWeight: '500', textAlign: 'center' }}>
+                  {mensagemAvaliacao}
+                </span>
+              )}
+            </div>
+          )}
+
+          {evento ? (
+            <EventoInfo
+              evento={evento}
+              onChange={handleEventoChange}
+              onSalvar={handleSalvarEvento}
+              onDelete={handleDelete}
+              editavel={true}
+            />
+          ) : (
+            <p>Carregando informações do evento...</p>
+          )}
+        </div>
 
 
         <UsuariosInscritos
