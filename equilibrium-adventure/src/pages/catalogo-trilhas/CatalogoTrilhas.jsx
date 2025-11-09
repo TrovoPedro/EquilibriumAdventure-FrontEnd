@@ -15,6 +15,11 @@ const CatalogoTrilhas = () => {
   const [loading, setLoading] = useState({ trilhas: true, anuncios: true });
   const [error, setError] = useState({ trilhas: null, anuncios: null });
   const [termoPesquisa, setTermoPesquisa] = useState("");
+  
+  // Estados dos filtros
+  const [filtroData, setFiltroData] = useState("");
+  const [filtroNivel, setFiltroNivel] = useState("");
+  const [filtroCategoria, setFiltroCategoria] = useState("");
 
   useEffect(() => {
     let isMounted = true;
@@ -103,15 +108,35 @@ const CatalogoTrilhas = () => {
 
   const filtrarEventos = (eventos) => {
     const termo = termoPesquisa.toLowerCase().trim();
-    if (!termo) return eventos;
-
-    return eventos.filter(
-      (evento) =>
+    
+    return eventos.filter((evento) => {
+      // Filtro de pesquisa por texto
+      const matchTexto = !termo || 
         (evento.nome_evento || "").toLowerCase().includes(termo) ||
         (evento.descricao || "").toLowerCase().includes(termo) ||
         (evento.rua || "").toLowerCase().includes(termo) ||
-        (evento.nivel_dificuldade || "").toLowerCase().includes(termo)
-    );
+        (evento.nivel_dificuldade || "").toLowerCase().includes(termo);
+      
+      // Filtro por data
+      const matchData = !filtroData || evento.data_ativacao === filtroData;
+      
+      // Filtro por nível
+      const matchNivel = !filtroNivel || 
+        (evento.nivel_dificuldade || "").toLowerCase() === filtroNivel.toLowerCase();
+      
+      // Filtro por categoria
+      const matchCategoria = !filtroCategoria || 
+        (evento.tipo || "").toLowerCase() === filtroCategoria.toLowerCase();
+      
+      return matchTexto && matchData && matchNivel && matchCategoria;
+    });
+  };
+
+  const limparFiltros = () => {
+    setFiltroData("");
+    setFiltroNivel("");
+    setFiltroCategoria("");
+    setTermoPesquisa("");
   };
 
   return (
@@ -134,6 +159,68 @@ const CatalogoTrilhas = () => {
                 value={termoPesquisa}
                 onChange={(e) => setTermoPesquisa(e.target.value)}
               />
+            </div>
+          </div>
+        </div>
+
+        {/* Seção de Filtros */}
+        <div className="filtros-section">
+          <div className="filtros-container">
+            <div className="filtros-titulo-grupo">
+              <h3 className="filtros-titulo">Filtrar Resultados</h3>
+              <button className="limpar-filtros-btn" onClick={limparFiltros}>
+                Limpar Filtros
+              </button>
+            </div>
+            
+            <div className="filtros-grid">
+              {/* Filtro por Data */}
+              <div className="filtro-item">
+                <label htmlFor="filtro-data">Data do Evento</label>
+                <input
+                  id="filtro-data"
+                  type="date"
+                  value={filtroData}
+                  onChange={(e) => setFiltroData(e.target.value)}
+                  className="filtro-input"
+                />
+              </div>
+
+              {/* Filtro por Nível */}
+              <div className="filtro-item">
+                <label htmlFor="filtro-nivel">Nível de Dificuldade</label>
+                <select
+                  id="filtro-nivel"
+                  value={filtroNivel}
+                  onChange={(e) => setFiltroNivel(e.target.value)}
+                  className="filtro-select"
+                >
+                  <option value="">Todos os níveis</option>
+                  <option value="explorador">Explorador</option>
+                  <option value="aventureiro">Aventureiro</option>
+                  <option value="desbravador">Desbravador</option>
+                </select>
+              </div>
+
+              {/* Filtro por Categoria */}
+              <div className="filtro-item">
+                <label htmlFor="filtro-categoria">Categoria</label>
+                <select
+                  id="filtro-categoria"
+                  value={filtroCategoria}
+                  onChange={(e) => setFiltroCategoria(e.target.value)}
+                  className="filtro-select"
+                >
+                  <option value="">Todas as categorias</option>
+                  <option value="cachoeira">Cachoeira</option>
+                  <option value="montanhismo">Montanhismo</option>
+                  <option value="trilha">Trilha</option>
+                  <option value="rapel">Rapel</option>
+                  <option value="escalada">Escalada</option>
+                  <option value="camping">Camping</option>
+                  <option value="outros">Outros</option>
+                </select>
+              </div>
             </div>
           </div>
         </div>
