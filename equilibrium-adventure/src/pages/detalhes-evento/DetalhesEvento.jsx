@@ -253,18 +253,15 @@ const DetalhesEvento = () => {
               border: '1px solid #e0e0e0'
             }}>
               {mediaAvaliacoes > 0 ? (
-                <>
-                  <span style={{ fontSize: '0.85rem', color: '#666', fontWeight: '600' }}>Avaliação Média</span>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontSize: '1.4rem', fontWeight: '700', color: '#226144' }}>
-                      {mediaAvaliacoes.toFixed(1)}
-                    </span>
-                    {renderStars(mediaAvaliacoes)}
-                  </div>
-                </>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                  <span style={{ fontSize: '1.4rem', fontWeight: '700', color: '#226144' }}>
+                    {mediaAvaliacoes.toFixed(1)}
+                  </span>
+                  {renderStars(mediaAvaliacoes)}
+                </div>
               ) : (
                 <span style={{ fontSize: '0.85rem', color: '#666', fontWeight: '500', textAlign: 'center' }}>
-                  {mensagemAvaliacao}
+                  {mensagemAvaliacao.replace('tem', 'possui')}
                 </span>
               )}
             </div>
