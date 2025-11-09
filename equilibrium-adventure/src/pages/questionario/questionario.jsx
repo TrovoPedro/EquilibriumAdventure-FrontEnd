@@ -65,7 +65,8 @@ const Questionario = () => {
       await postRespostas(respostasParaEnviar);
       try {
         const resultadoNivel = await calcularNivel(usuario.id);
-        const nivelCalculado = resultadoNivel?.nivel ?? resultadoNivel;
+        const nivelCalculado = resultadoNivel?.nivel || resultadoNivel;
+        const encaminharParaAnamnese = resultadoNivel?.encaminharParaAnamnese || false;
 
         const nivelObtido = typeof nivelCalculado === "string"
           ? nivelCalculado.toLowerCase()
@@ -75,6 +76,9 @@ const Questionario = () => {
         setNivelObtido(nivelObtido);
         salvarPontuacao(nivelObtido);
         setShowSuccessPopup(true);
+
+        // Guardar informação de anamnese no localStorage para uso posterior
+        sessionStorage.setItem('encaminharParaAnamnese', JSON.stringify(encaminharParaAnamnese));
 
         setAnswers({});
         setCurrentQuestionIndex(0);

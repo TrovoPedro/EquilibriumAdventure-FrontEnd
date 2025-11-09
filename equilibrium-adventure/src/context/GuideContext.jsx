@@ -5,16 +5,21 @@ const GuideContext = createContext();
 export function GuideProvider({ children }) {
     const [guiaSelecionado, setGuiaSelecionado] = useState(null);
 
-    const escolherGuia = (guia) => {
-        setGuiaSelecionado(guia);
-        sessionStorage.setItem(
-            "guiaSelecionado",
-            JSON.stringify({
-                id: guia.id,
-                nome: guia.nome,
-            })
-        );
-
+    const escolherGuia = async (guia) => {
+        try {
+            setGuiaSelecionado(guia);
+            sessionStorage.setItem(
+                "guiaSelecionado",
+                JSON.stringify({
+                    id: guia.id,
+                    nome: guia.nome,
+                })
+            );
+            // Aguarda o próximo ciclo de renderização
+            await new Promise(resolve => setTimeout(resolve, 0));
+        } catch (error) {
+            console.error('Erro ao escolher guia:', error);
+        }
     };
 
     const resetarEscolhaGuia = () => {

@@ -201,14 +201,29 @@ const InscricaoTrilhasLimitado = () => {
   // Inscrever usuário
   const handleInscrever = async () => {
     try {
-  await criarInscricao(evento.idAtivacao, usuario.id);
-  showSuccess("Inscrição realizada com sucesso!");
+      await criarInscricao(evento.idAtivacao, usuario.id);
+      showSuccess("Inscrição realizada com sucesso!");
       setInscrito(true);
       setInscritosCount(prev => prev + 1);
-
       await checarInscricao();
     } catch (error) {
       console.error("Erro ao fazer inscrição:", error);
+      
+      if (error.response?.data?.message === "Preencha todas as informações pessoais antes de se inscrever em um evento.") {
+        const result = await showWarning(
+          "Você precisa completar suas informações pessoais antes de se inscrever.",
+          "Atenção",
+          "Completar agora",
+          "Cancelar",
+          true
+        );
+        
+        if (result.isConfirmed) {
+          navigate('/informacoes-pessoais');
+        }
+        return;
+      }
+      
       if (error.response && error.response.data) {
         showError(error.response.data.message || error.response.data);
       } else {
