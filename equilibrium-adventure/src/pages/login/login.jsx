@@ -33,6 +33,17 @@ const Login = () => {
       // Salva navegação pendente, mostra popup e só navega após confirmação
       let nextRoute = null;
       if (usuario.tipoUsuario === "ADMINISTRADOR" || usuario.tipoUsuario === "GUIA") {
+        // Mostra aviso antes de ir para o catálogo
+        await Swal.fire({
+          title: 'Login realizado com sucesso!',
+          text: 'Você será redirecionado para o catálogo de trilhas.',
+          icon: 'success',
+          confirmButtonText: 'Continuar',
+          confirmButtonColor: '#295c44',
+          timer: 2000,
+          timerProgressBar: true
+        });
+        
         nextRoute = routeUrls.CATALOGO_TRILHAS_ADM;
       } else if (usuario.tipoUsuario === "AVENTUREIRO" && usuario.primeiraVez) {
         // Mostra aviso antes de ir para o questionário
@@ -45,7 +56,7 @@ const Login = () => {
           imageAlt: 'Questionário',
           confirmButtonText: 'Continuar',
           confirmButtonColor: '#295c44',
-          timer: 3500,
+          timer: 6000,
           timerProgressBar: true,
           allowOutsideClick: false,
           allowEscapeKey: false
@@ -82,7 +93,7 @@ const Login = () => {
               imageAlt: 'Questionário',
               confirmButtonText: 'Continuar',
               confirmButtonColor: '#295c44',
-              timer: 3500,
+              timer: 6000,
               timerProgressBar: true,
               allowOutsideClick: false,
               allowEscapeKey: false
@@ -101,7 +112,7 @@ const Login = () => {
             imageAlt: 'Questionário',
             confirmButtonText: 'Continuar',
             confirmButtonColor: '#295c44',
-            timer: 3500,
+            timer: 6000,
             timerProgressBar: true,
             allowOutsideClick: false,
             allowEscapeKey: false

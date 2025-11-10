@@ -68,12 +68,18 @@ const RelatorioAnamnese = () => {
         text: 'O aventureiro avaliado conseguirá fazer trilhas de nível Explorador?',
         icon: 'question',
         showCancelButton: true,
+        showCloseButton: true,
         confirmButtonText: 'Sim',
         cancelButtonText: 'Não',
         confirmButtonColor: '#295c44',
         cancelButtonColor: '#6c757d',
         reverseButtons: true
       });
+
+      // Se o usuário clicar no X ou fechar o modal, cancela o envio
+      if (result.isDismissed) {
+        return false;
+      }
 
       // Salva o relatório
       const data = await gerarRelatorioAnamnese({ userId, relatorio });
