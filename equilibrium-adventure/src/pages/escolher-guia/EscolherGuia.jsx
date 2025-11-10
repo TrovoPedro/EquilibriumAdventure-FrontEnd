@@ -35,9 +35,27 @@ function EscolherGuia() {
     return <p style={{ color: "#fff" }}>Carregando guias...</p>;
   }
 
-  const handleOnClickGuia = (guia) => {
-    escolherGuia(guia);
-    navigate(routeUrls.CATALOGO_TRILHA);
+  const handleOnClickGuia = async (guia) => {
+    try {
+      // Escolhe o guia e aguarda a atualização do contexto
+      await escolherGuia(guia);
+      console.log('Guia selecionado:', guia);
+
+      // Verifica se o usuário precisa fazer anamnese
+      const encaminharParaAnamnese = JSON.parse(sessionStorage.getItem('encaminharParaAnamnese') || 'false');
+      console.log('Encaminhar para anamnese:', encaminharParaAnamnese);
+
+      // Força um pequeno delay antes da navegação
+      await new Promise(resolve => setTimeout(resolve, 100));
+
+      // Usa replace em vez de push para evitar problemas com o histórico
+      const nextRoute = encaminharParaAnamnese ? routeUrls.AGENDAMENTO_ANAMNESE : routeUrls.CATALOGO_TRILHA;
+      console.log('Tentando navegar para:', nextRoute);
+      
+      window.location.href = nextRoute;
+    } catch (error) {
+      console.error('Erro ao processar clique no guia:', error);
+    }
   };
 
   const isCarousel = guias.length > CARDS_PER_SLIDE;
@@ -132,9 +150,8 @@ function EscolherGuia() {
                 key={index}
                 type="button"
                 aria-label={`Ir para slide ${index + 1}`}
-                className={`indicator ${
-                  index === currentSlide ? "indicator--active" : ""
-                }`}
+                className={`indicator ${index === currentSlide ? "indicator--active" : ""
+                  }`}
                 onClick={() => goToSlide(index)}
               />
             ))}
