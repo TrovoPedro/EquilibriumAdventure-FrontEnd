@@ -25,7 +25,7 @@ const InscricaoTrilhasLimitado = () => {
         title: titulo,
         text: texto,
         url
-      }).catch(() => {});
+      }).catch(() => { });
     } else {
       navigator.clipboard.writeText(url);
       showSuccess("Link da trilha copiado para área de transferência!");
@@ -38,8 +38,9 @@ const InscricaoTrilhasLimitado = () => {
   const [comentarios, setComentarios] = useState([]);
   const [inscrito, setInscrito] = useState(false);
   const [inscritosCount, setInscritosCount] = useState(0);
-  const { usuario } = useAuth();
+  const { usuario, anamnese } = useAuth()
   const { nivel } = useScore();
+  const [nivelInsuficiente, setNivelInsuficiente] = useState(false);
   const navigate = useNavigate();
   const nivelOrdem = {
     'Explorador': 1,
@@ -53,51 +54,51 @@ const InscricaoTrilhasLimitado = () => {
 
   // Buscar evento e ativação
   useEffect(() => {
-  const carregarEvento = async () => {
-    try {
-      const eventoData = await buscarEventoAtivoPorId(id);
+    const carregarEvento = async () => {
+      try {
+        const eventoData = await buscarEventoAtivoPorId(id);
 
-      if (eventoData.length > 0) {
-        const ativacao = eventoData[0];
-        setEvento({
-          idAtivacao: ativacao.idAtivacao,
-          nome: ativacao.evento?.nome || "",
-          descricao: ativacao.evento?.descricao || "",
-          nivel_dificuldade: ativacao.evento?.nivelDificuldade || "",
-          distancia_km: ativacao.evento?.distanciaKm || 0,
-          responsavel: ativacao.evento?.responsavel || "",
-          endereco: ativacao.evento?.endereco || "",
-          caminho_arquivo_evento: ativacao.evento?.caminhoArquivoEvento || "",
-          preco: ativacao.preco,
-          horaInicio: ativacao.horaInicio,
-          horaFinal: ativacao.horaFinal,
-          tempoEstimado: ativacao.tempoEstimado,
-          limiteInscritos: ativacao.limiteInscritos,
-          dataAtivacao: ativacao.dataAtivacao,
-          tipo: ativacao.tipo,
-          estado: ativacao.estado,
-        });
+        if (eventoData.length > 0) {
+          const ativacao = eventoData[0];
+          setEvento({
+            idAtivacao: ativacao.idAtivacao,
+            nome: ativacao.evento?.nome || "",
+            descricao: ativacao.evento?.descricao || "",
+            nivel_dificuldade: ativacao.evento?.nivelDificuldade || "",
+            distancia_km: ativacao.evento?.distanciaKm || 0,
+            responsavel: ativacao.evento?.responsavel || "",
+            endereco: ativacao.evento?.endereco || "",
+            caminho_arquivo_evento: ativacao.evento?.caminhoArquivoEvento || "",
+            preco: ativacao.preco,
+            horaInicio: ativacao.horaInicio,
+            horaFinal: ativacao.horaFinal,
+            tempoEstimado: ativacao.tempoEstimado,
+            limiteInscritos: ativacao.limiteInscritos,
+            dataAtivacao: ativacao.dataAtivacao,
+            tipo: ativacao.tipo,
+            estado: ativacao.estado,
+          });
 
-        const imagemUrl = await buscarImagemEvento(ativacao.evento.idEvento);
-        setImagemEvento(imagemUrl || null);
+          const imagemUrl = await buscarImagemEvento(ativacao.evento.idEvento);
+          setImagemEvento(imagemUrl || null);
 
-        if (ativacao.idAtivacao) {
-          console.log("Buscando GPX:", ativacao.evento.idEvento);
-          const gpx = await buscarGpx(ativacao.evento.idEvento);
-          setGpxData(gpx);
+          if (ativacao.idAtivacao) {
+            console.log("Buscando GPX:", ativacao.evento.idEvento);
+            const gpx = await buscarGpx(ativacao.evento.idEvento);
+            setGpxData(gpx);
+          }
+
+          console.log("Evento carregado:", ativacao);
+        } else {
+          console.error("Nenhuma ativação encontrada para este evento");
         }
-
-        console.log("Evento carregado:", ativacao);
-      } else {
-        console.error("Nenhuma ativação encontrada para este evento");
+      } catch (error) {
+        console.error("Erro ao carregar evento e GPX:", error);
       }
-    } catch (error) {
-      console.error("Erro ao carregar evento e GPX:", error);
-    }
-  };
+    };
 
-  carregarEvento();
-}, [id]);
+    carregarEvento();
+  }, [id]);
 
   // Carregar comentários
   const carregarComentarios = async () => {
@@ -129,16 +130,16 @@ const InscricaoTrilhasLimitado = () => {
     carregarInscritos();
   }, [id]);
 
-          {inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
+  { inscrito ? 'Cancelar inscrição' : 'Realizar inscrição' }
   const handleEnviarComentario = async (comentarioObj) => {
 
-        <button
-          className="inscricao-trilha-btn btn-compartilhar"
-          style={{ marginTop: '10px', background: '#4caf50', color: '#fff' }}
-          onClick={handleCompartilhar}
-        >
-          Compartilhar trilha
-        </button>
+    <button
+      className="inscricao-trilha-btn btn-compartilhar"
+      style={{ marginTop: '10px', background: '#4caf50', color: '#fff' }}
+      onClick={handleCompartilhar}
+    >
+      Compartilhar trilha
+    </button>
     const comentarioCriado = await adicionarComentario({
       texto: comentarioObj.texto,
       idUsuario: usuario.id,
@@ -168,6 +169,23 @@ const InscricaoTrilhasLimitado = () => {
     return () => setInscrito(false);
   }, [usuario?.id, evento?.idAtivacao]);
 
+  // mostra alerta e esconde botões se o usuário não tiver nível suficiente
+  useEffect(() => {
+    if (!evento) return;
+    const nivelUsuario = nivelOrdem[nivel] || 0;
+    const nivelTrilha = nivelOrdem[evento.nivel_dificuldade] || 0;
+    const insuf = nivelUsuario < nivelTrilha;
+    setNivelInsuficiente(insuf);
+    if (insuf) {
+      // mostra alerta apenas uma vez ao abrir a tela
+      showWarning(
+        'Seu nível atual não permite participar dessa trilha. Entre em contato com um guia para orientação ou realize o treinamento necessário.',
+        'Atenção',
+        'OK'
+      );
+    }
+  }, [evento, nivel]);
+
   // Cancelar inscrição
   const handleCancelarInscricao = async () => {
     const confirmResult = await showWarning(
@@ -181,8 +199,8 @@ const InscricaoTrilhasLimitado = () => {
     if (!confirmResult.isConfirmed) return;
 
     try {
-  await cancelarInscricao(usuario.id, evento.idAtivacao);
-  showSuccess("Inscrição cancelada com sucesso!");
+      await cancelarInscricao(usuario.id, evento.idAtivacao);
+      showSuccess("Inscrição cancelada com sucesso!");
       setInscrito(false);
       setInscritosCount(prev => Math.max(0, prev - 1));
     } catch (error) {
@@ -208,7 +226,7 @@ const InscricaoTrilhasLimitado = () => {
       await checarInscricao();
     } catch (error) {
       console.error("Erro ao fazer inscrição:", error);
-      
+
       if (error.response?.data?.message === "Preencha todas as informações pessoais antes de se inscrever em um evento.") {
         const result = await showWarning(
           "Você precisa completar suas informações pessoais antes de se inscrever.",
@@ -217,13 +235,13 @@ const InscricaoTrilhasLimitado = () => {
           "Cancelar",
           true
         );
-        
+
         if (result.isConfirmed) {
           navigate('/informacoes-pessoais');
         }
         return;
       }
-      
+
       if (error.response && error.response.data) {
         showError(error.response.data.message || error.response.data);
       } else {
@@ -244,8 +262,8 @@ const InscricaoTrilhasLimitado = () => {
         <div className="inscricao-trilha-info">
           <div><b>Título:</b> {evento.nome}</div>
           <div><b>Nível:</b> {evento.nivel_dificuldade}</div>
-              <div><b>Data:</b> {evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"}</div>
-              <div><b>Limite de Inscritos:</b> {evento.limiteInscritos || 'N/A'} <span style={{color:'#226144'}}>({inscritosCount} inscritos)</span></div>
+          <div><b>Data:</b> {evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"}</div>
+          <div><b>Limite de Inscritos:</b> {evento.limiteInscritos || 'N/A'} <span style={{ color: '#226144' }}>({inscritosCount} inscritos)</span></div>
           <div><b>Descrição:</b> {evento.descricao}</div>
         </div>
       </div>
@@ -298,26 +316,32 @@ const InscricaoTrilhasLimitado = () => {
         </div>
       </form >
 
-      <button
-        className={`inscricao-trilha-btn ${inscrito ? 'btn-cancelar' : 'btn-inscrever'}`}
-        style={{
-          background: inscrito ? '#a93226' : '#226144',
-          color: '#fff',
-          border: 'none',
-          borderRadius: '12px',
-          padding: '18px 0',
-          fontSize: '1.35rem',
-          fontWeight: 700,
-          cursor: 'pointer',
-          margin: '32px 0 0 0',
-          boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-          textAlign: 'center',
-          letterSpacing: '0.5px',
-          transition: 'background 0.2s'
-        }}
-        onClick={() => {
+      {!nivelInsuficiente && (
+        <button
+          className={`inscricao-trilha-btn ${inscrito ? 'btn-cancelar' : 'btn-inscrever'}`}
+          style={{
+            background: inscrito ? '#a93226' : '#226144',
+            color: '#fff',
+            border: 'none',
+            borderRadius: '12px',
+            padding: '18px 0',
+            fontSize: '1.35rem',
+            fontWeight: 700,
+            cursor: 'pointer',
+            margin: '32px 0 0 0',
+            boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+            textAlign: 'center',
+            letterSpacing: '0.5px',
+            transition: 'background 0.2s'
+          }}
+          onClick={() => {
             if (inscrito) {
               handleCancelarInscricao();
+              return;
+            }
+
+            if (anamnese && anamnese.length > 0) {
+              showWarning("Você já possui uma anamnese agendada. Aguarde a finalização antes de se inscrever em outra trilha.");
               return;
             }
 
@@ -327,10 +351,24 @@ const InscricaoTrilhasLimitado = () => {
             }
 
             handleInscrever();
-        }}
-      >
-        {inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
-      </button>
+          }}
+        >
+          {inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
+        </button>
+      )}
+
+      {nivelInsuficiente && (
+        <div style={{
+          marginTop: 24,
+          padding: '16px',
+          background: '#fff3cd',
+          color: '#856404',
+          border: '1px solid #ffeeba',
+          borderRadius: 8
+        }}>
+          <strong>Atenção:</strong> Seu nível atual não permite participar desta trilha. Entre em contato com um guia para orientação ou realize os treinamentos necessários.
+        </div>
+      )}
 
       <button
         className="inscricao-trilha-btn btn-compartilhar"

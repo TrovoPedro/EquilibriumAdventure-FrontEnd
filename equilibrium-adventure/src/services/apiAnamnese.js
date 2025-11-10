@@ -39,3 +39,14 @@ export async function agendarAnamnese(agendamento) {
     throw err;
   }
 }
+
+export const buscarAnamnesePorAventureiro = async (idAventureiro) => {
+  try {
+    const response = await axios.get(`${BASE_URL}/agendamentos/por-aventureiro/${idAventureiro}`);
+    return response.status === 204 ? [] : response.data;
+  } catch (error) {
+    console.error("Erro ao buscar anamnese do aventureiro:", error);
+    throw error;
+  }
+};
+
