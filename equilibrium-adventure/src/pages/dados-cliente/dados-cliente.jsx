@@ -102,24 +102,19 @@ export default function DadosCliente() {
 	const carregarDadosCliente = async () => {
 		try {
 			setLoading(true);
-			console.log("Carregando dados do cliente ID:", usuarioIdFixo);
 			
 			let dadosCliente = null;
 			
 			try {
 				const dados = await buscarPerfilCompleto(usuarioIdFixo);
-				console.log("Dados completos recebidos:", dados);
 				dadosCliente = dados;
 			} catch (error) {
-				console.log("Perfil completo não encontrado, buscando dados básicos");
 				
 				try {
 					const { buscarDadosUsuario } = await import("../../services/apiUsuario");
 					const dadosBasicos = await buscarDadosUsuario(usuarioIdFixo);
-					console.log("Dados básicos recebidos:", dadosBasicos);
 					dadosCliente = dadosBasicos;
 				} catch (userError) {
-					console.error("Erro ao buscar dados básicos:", userError);
 					setErro("Nenhum dado do cliente encontrado");
 					return;
 				}
@@ -128,7 +123,6 @@ export default function DadosCliente() {
 			setDadosCliente(dadosCliente);
 			
 		} catch (error) {
-			console.error("Erro geral ao carregar dados:", error);
 			setErro("Erro ao carregar dados do cliente");
 		} finally {
 			setLoading(false);
@@ -137,10 +131,7 @@ export default function DadosCliente() {
 
 	const carregarRespostasQuestionario = async () => {
 		try {
-			console.log("Carregando respostas do questionario para ID:", usuarioIdFixo);
-			
 			const dadosEstruturados = await listarPerguntasComRespostas(usuarioIdFixo);
-			console.log("Perguntas com respostas carregadas");
 			
 			setPerguntasComRespostas(dadosEstruturados);
 			setCurrentSlide(0); 
@@ -149,7 +140,6 @@ export default function DadosCliente() {
 			setRespostasQuestionario(estatisticas.respostasFormatadas);
 			
 		} catch (error) {
-			console.error("Erro ao carregar questionario:", error.message);
 			setRespostasQuestionario("Erro ao carregar respostas do questionário");
 			setPerguntasComRespostas([]);
 			setCurrentSlide(0);
@@ -160,8 +150,6 @@ export default function DadosCliente() {
 
 	const buscarAgendamentoAnamnese = async () => {
 		try {
-			console.log("Buscando agendamento para ID:", usuarioIdFixo);
-			
 			const response = await fetch(`http://localhost:8080/agendamentos/por-aventureiro/${usuarioIdFixo}`);
 			
 			if (response.ok) {
@@ -169,17 +157,13 @@ export default function DadosCliente() {
 				if (agendamentos && agendamentos.length > 0) {
 					const agendamento = agendamentos[0];
 					setAgendamentoData(agendamento);
-					console.log("Agendamento encontrado");
 				} else {
-					console.log("Nenhum agendamento encontrado - usando data atual");
 					setAgendamentoData(null);
 				}
 			} else if (response.status === 204) {
-				console.log("Nenhum agendamento encontrado - usando data atual");
 				setAgendamentoData(null);
 			}
 		} catch (error) {
-			console.error("Erro ao buscar agendamento:", error.message);
 			setAgendamentoData(null);
 		}
 	};
@@ -297,7 +281,8 @@ export default function DadosCliente() {
 													<div className="alternativas-titulo">Alternativas:</div>
 													<ul className="alternativas-lista">
 														{item.alternativas.map((alternativa, altIndex) => {
-															const isEscolhida = item.alternativaEscolhida === (alternativa.second + 1);
+															// Comparação direta: alternativaEscolhida vem do banco (0-based) e alternativa.second também é 0-based
+															const isEscolhida = item.alternativaEscolhida === alternativa.second;
 															return (
 																<li 
 																	key={altIndex} 
@@ -319,8 +304,8 @@ export default function DadosCliente() {
 														return <span className="nao-respondida">Nao respondida</span>;
 													}
 													
-													const indiceEscolhido = item.alternativaEscolhida - 1;
-													const alternativaValida = item.alternativas?.find(alt => alt.second === indiceEscolhido);
+													// Validação direta: alternativaEscolhida do banco (0-based) comparado com alternativa.second (0-based)
+													const alternativaValida = item.alternativas?.find(alt => alt.second === item.alternativaEscolhida);
 													
 													if (alternativaValida) {
 														return <span className="respondida">Respondida</span>;

@@ -4,7 +4,7 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import routeUrls from "../../routes/routeUrls";
 import Header from "../../components/header/header-unified";
 import { cadastrarGuia } from "../../services/chamadasAPIGuia";
-import { showSuccess, showWarning } from "../../utils/swalHelper";
+import { showSuccess, showWarning, showError } from "../../utils/swalHelper";
 import "./adicionar-guia.css";
 import leftArrow from "../../assets/left-arrow-green.png";
 
@@ -52,10 +52,50 @@ export default function AdicionarGuia() {
 
         const cadastrar = async () => {
             try {
-                if (!formData.nome || !formData.email || !formData.senha || !formData.descricao) {
-                    showWarning("Por favor, preencha todos os campos obrigatórios.");
+                // Validações básicas de campos obrigatórios
+                if (!formData.nome || !formData.nome.trim()) {
+                    showWarning("Por favor, preencha o nome do guia.");
                     return;
                 }
+
+                // Valida se tem sobrenome
+                const nomeParts = formData.nome.trim().split(' ');
+                if (nomeParts.length < 2 || nomeParts[1].trim() === '') {
+                    showWarning("Por favor, preencha o nome completo com sobrenome.");
+                    return;
+                }
+
+                if (!formData.email || !formData.email.trim()) {
+                    showWarning("Por favor, preencha o e-mail do guia.");
+                    return;
+                }
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                if (!emailRegex.test(formData.email)) {
+                    showWarning("Por favor, insira um e-mail válido.");
+                    return;
+                }
+
+                if (!formData.senha || !formData.senha.trim()) {
+                    showWarning("Por favor, preencha a senha.");
+                    return;
+                }
+
+                if (formData.senha.length < 8) {
+                    showWarning("A senha deve ter pelo menos 8 caracteres.");
+                    return;
+                }
+
+                if (!formData.descricao || !formData.descricao.trim()) {
+                    showWarning("Por favor, preencha a descrição do guia.");
+                    return;
+                }
+
+                if (formData.descricao.trim().length < 10) {
+                    showWarning("A descrição deve ter pelo menos 10 caracteres.");
+                    return;
+                }
+
                 const response = await cadastrarGuia(formData);
                 if (response) {
                     showSuccess("Guia cadastrado com sucesso!");
@@ -64,9 +104,8 @@ export default function AdicionarGuia() {
                     }, 2000);
                 }
             } catch (error) {
-                if (!response) {
-                    console.error("Erro ao cadastrar guia:", error);
-                }
+                console.error("Erro ao cadastrar guia:", error);
+                showError("Erro ao cadastrar guia. Verifique os dados e tente novamente.");
             }
         };
         cadastrar();
@@ -130,19 +169,58 @@ export default function AdicionarGuia() {
                     <div className="adicionar-guia-center-column">
                         <label htmlFor="nome">
                             Nome:
-                            <input autoComplete="name" type="text" id="nome" name="nome" value={formData.nome} onChange={handleChange} data-field="nome" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')} />
+                            <input 
+                                autoComplete="name" 
+                                type="text" 
+                                id="nome" 
+                                name="nome" 
+                                value={formData.nome} 
+                                onChange={handleChange} 
+                                data-field="nome" 
+                                readOnly 
+                                onFocus={(e) => e.currentTarget.removeAttribute('readOnly')}
+                            />
                         </label>
                         <label htmlFor="email">
                             E-mail:
-                            <input autoComplete="email" type="text" id="email" name="email" value={formData.email} onChange={handleChange} data-field="email" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')} />
+                            <input 
+                                autoComplete="email" 
+                                type="text" 
+                                id="email" 
+                                name="email" 
+                                value={formData.email} 
+                                onChange={handleChange} 
+                                data-field="email" 
+                                readOnly 
+                                onFocus={(e) => e.currentTarget.removeAttribute('readOnly')}
+                            />
                         </label>
                         <label htmlFor="senha">
                             Senha:
-                            <input autoComplete="new-password" type="password" id="senha" name="senha" value={formData.senha} onChange={handleChange} data-field="senha" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')} />
+                            <input 
+                                autoComplete="new-password" 
+                                type="password" 
+                                id="senha" 
+                                name="senha" 
+                                value={formData.senha} 
+                                onChange={handleChange} 
+                                data-field="senha" 
+                                readOnly 
+                                onFocus={(e) => e.currentTarget.removeAttribute('readOnly')}
+                            />
                         </label>
                         <label id="descricao-label" htmlFor="descricao">
                             Descrição do Guia:
-                            <textarea autoComplete="off" name="descricao" id="descricao" value={formData.descricao} onChange={handleChange} data-field="descricao" readOnly onFocus={(e) => e.currentTarget.removeAttribute('readOnly')}></textarea>
+                            <textarea 
+                                autoComplete="off" 
+                                name="descricao" 
+                                id="descricao" 
+                                value={formData.descricao} 
+                                onChange={handleChange} 
+                                data-field="descricao" 
+                                readOnly 
+                                onFocus={(e) => e.currentTarget.removeAttribute('readOnly')}
+                            ></textarea>
                         </label>
                     </div>
                 </form>

@@ -2,6 +2,7 @@
     min-height: 100vh;
     background: #ffffff;
     font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    position: relative;
 }
 
 .detalhes-evento-content {
@@ -11,6 +12,28 @@
     display: flex;
     flex-direction: column;
     gap: 32px;
+}
+
+/* Estrelas de avaliação */
+.stars-rating {
+    display: flex;
+    gap: 2px;
+}
+
+.stars-rating .star-full {
+    color: #ffc107;
+    font-size: 1.2rem;
+}
+
+.stars-rating .star-half {
+    color: #ffc107;
+    font-size: 1.2rem;
+    opacity: 0.5;
+}
+
+.stars-rating .star-empty {
+    color: #ddd;
+    font-size: 1.2rem;
 }
 
 /* Animação de entrada para os cards */

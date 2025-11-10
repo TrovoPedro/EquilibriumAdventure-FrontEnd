@@ -351,6 +351,28 @@
   background-color: #9c1d2a;
 }
 
+/* Estrelas de avaliação */
+.stars-rating {
+  display: flex;
+  gap: 2px;
+}
+
+.stars-rating .star-full {
+  color: #ffc107;
+  font-size: 1.2rem;
+}
+
+.stars-rating .star-half {
+  color: #ffc107;
+  font-size: 1.2rem;
+  opacity: 0.5;
+}
+
+.stars-rating .star-empty {
+  color: #ddd;
+  font-size: 1.2rem;
+}
+
 /* removido bloco duplicado de .inscricao-trilha-mapa e regras relacionadas */
 
 @media (max-width: 900px) {

@@ -80,7 +80,7 @@
     position: relative;
     overflow: hidden;
     animation: fadeInUp 0.6s ease-out both;
-    height: 320px;
+    height: 280px;
     display: flex;
     flex-direction: column;
 }

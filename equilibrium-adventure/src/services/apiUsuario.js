@@ -11,7 +11,6 @@ export const buscarDadosUsuario = async (id) => {
         const response = await api.get(`/usuarios/buscar/${id}`);
         return response.data;
     } catch (error) {
-        console.error("Erro ao buscar dados do usuário:", error);
         throw error;
     }
 };
@@ -25,7 +24,6 @@ export async function buscarImagemUsuario(idUsuario) {
     // Converte o blob em uma URL utilizável no <img>
     return URL.createObjectURL(response.data);
   } catch (error) {
-    console.error("Erro ao buscar imagem do usuário:", error);
     return null;
   }
 }

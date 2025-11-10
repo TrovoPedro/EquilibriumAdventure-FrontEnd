@@ -81,3 +81,13 @@ export const buscarGpx = async (id) => {
     throw error;
   }
 };
+
+export const buscarMediaAvaliacoes = async (idAtivacao) => {
+  try {
+    const response = await api.get(`/ativacoes/media-avaliacoes/${idAtivacao}`);
+    return response.data; // Retorna { mediaAvaliacoes: number } ou { mensagem: string }
+  } catch (error) {
+    console.error("Erro ao buscar média de avaliações:", error);
+    return { mediaAvaliacoes: 0 };
+  }
+};

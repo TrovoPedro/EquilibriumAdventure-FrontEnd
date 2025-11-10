@@ -9,10 +9,11 @@ import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Comentarios from '../../components/comentarios/Comentarios';
-import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx } from "../../services/apiEvento";
+import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx, buscarMediaAvaliacoes } from "../../services/apiEvento";
 import trilhaImg from "../../assets/cachoeiralago.jpg";
 import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
 import { verificarInscricao, criarInscricao, cancelarInscricao, listarInscritos } from "../../services/apiInscricao";
+import Swal from 'sweetalert2';
 
 const InscricaoTrilhasLimitado = () => {
   // Compartilhar trilha
@@ -38,6 +39,8 @@ const InscricaoTrilhasLimitado = () => {
   const [comentarios, setComentarios] = useState([]);
   const [inscrito, setInscrito] = useState(false);
   const [inscritosCount, setInscritosCount] = useState(0);
+  const [mediaAvaliacoes, setMediaAvaliacoes] = useState(0);
+  const [mensagemAvaliacao, setMensagemAvaliacao] = useState('');
   const { usuario, anamnese } = useAuth()
   const { nivel } = useScore();
   const [nivelInsuficiente, setNivelInsuficiente] = useState(false);
@@ -130,7 +133,57 @@ const InscricaoTrilhasLimitado = () => {
     carregarInscritos();
   }, [id]);
 
-  { inscrito ? 'Cancelar inscrição' : 'Realizar inscrição' }
+  // Carregar média de avaliações
+  useEffect(() => {
+    const carregarMediaAvaliacoes = async () => {
+      try {
+        if (id) {
+          console.log('Buscando média de avaliações para ID:', id);
+          const resultado = await buscarMediaAvaliacoes(id);
+          console.log('Resultado da média:', resultado);
+          
+          if (resultado.mediaAvaliacoes !== undefined) {
+            setMediaAvaliacoes(resultado.mediaAvaliacoes);
+            console.log('Média de avaliações definida:', resultado.mediaAvaliacoes);
+          } else if (resultado.mensagem) {
+            setMensagemAvaliacao(resultado.mensagem);
+            console.log('Mensagem:', resultado.mensagem);
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao carregar média de avaliações:', error);
+      }
+    };
+
+    carregarMediaAvaliacoes();
+  }, [id]);
+
+  // Carregar média de avaliações
+  useEffect(() => {
+    const carregarMediaAvaliacoes = async () => {
+      try {
+        if (id) {
+          console.log('Buscando média de avaliações para ID:', id);
+          const resultado = await buscarMediaAvaliacoes(id);
+          console.log('Resultado da média:', resultado);
+          
+          if (resultado.mediaAvaliacoes !== undefined) {
+            setMediaAvaliacoes(resultado.mediaAvaliacoes);
+            console.log('Média de avaliações definida:', resultado.mediaAvaliacoes);
+          } else if (resultado.mensagem) {
+            setMensagemAvaliacao(resultado.mensagem);
+            console.log('Mensagem:', resultado.mensagem);
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao carregar média de avaliações:', error);
+      }
+    };
+
+    carregarMediaAvaliacoes();
+  }, [id]);
+
+  {inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
   const handleEnviarComentario = async (comentarioObj) => {
 
     <button
@@ -226,28 +279,46 @@ const InscricaoTrilhasLimitado = () => {
       await checarInscricao();
     } catch (error) {
       console.error("Erro ao fazer inscrição:", error);
-
-      if (error.response?.data?.message === "Preencha todas as informações pessoais antes de se inscrever em um evento.") {
-        const result = await showWarning(
-          "Você precisa completar suas informações pessoais antes de se inscrever.",
-          "Atenção",
-          "Completar agora",
-          "Cancelar",
-          true
-        );
-
+      
+      // Verifica se é erro de informações pessoais
+      const errorMessage = error.response?.data?.message || error.response?.data || error.message || "";
+      
+      if (errorMessage.toLowerCase().includes("informações pessoais") || 
+          errorMessage.toLowerCase().includes("informacoes pessoais")) {
+        const result = await Swal.fire({
+          title: 'Informações Pessoais Necessárias',
+          text: 'É necessário preencher suas informações pessoais antes de realizar a inscrição.',
+          icon: 'warning',
+          showCancelButton: true,
+          showCloseButton: true,
+          confirmButtonText: 'Ir para Informações Pessoais',
+          cancelButtonText: 'Cancelar',
+          confirmButtonColor: '#295c44',
+          cancelButtonColor: '#d33'
+        });
+        
         if (result.isConfirmed) {
           navigate('/informacoes-pessoais');
         }
-        return;
-      }
-
-      if (error.response && error.response.data) {
-        showError(error.response.data.message || error.response.data);
       } else {
-        showError("Erro ao realizar inscrição. Tente novamente mais tarde.");
+        showError(errorMessage || "Erro ao realizar inscrição. Tente novamente mais tarde.");
       }
     }
+  };
+
+  const renderStars = (rating) => {
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 !== 0;
+
+    return (
+      <div className="stars-rating">
+        {[...Array(5)].map((_, i) => (
+          <span key={i} className={i < fullStars ? 'star-full' : (i === fullStars && hasHalfStar ? 'star-half' : 'star-empty')}>
+            ★
+          </span>
+        ))}
+      </div>
+    );
   };
 
   if (!evento) return <p>Carregando evento...</p>;
@@ -257,7 +328,39 @@ const InscricaoTrilhasLimitado = () => {
       <Header />
       <CircleBackButton onClick={() => navigate(-1)} />
 
-      <div className="inscricao-trilha-header">
+      <div className="inscricao-trilha-header" style={{ position: 'relative' }}>
+        {/* Avaliação média no canto superior direito do header */}
+        {(mediaAvaliacoes > 0 || mensagemAvaliacao) && (
+          <div style={{
+            position: 'absolute',
+            top: '10px',
+            right: '10px',
+            background: 'rgba(255, 255, 255, 0.98)',
+            padding: '10px 16px',
+            borderRadius: '10px',
+            boxShadow: '0 3px 10px rgba(0,0,0,0.12)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '5px',
+            zIndex: 10,
+            border: '1px solid #e0e0e0'
+          }}>
+            {mediaAvaliacoes > 0 ? (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '1.3rem', fontWeight: '700', color: '#226144' }}>
+                  {mediaAvaliacoes.toFixed(1)}
+                </span>
+                {renderStars(mediaAvaliacoes)}
+              </div>
+            ) : (
+              <span style={{ fontSize: '0.8rem', color: '#666', fontWeight: '500', textAlign: 'center', maxWidth: '150px' }}>
+                {mensagemAvaliacao.replace('tem', 'possui')}
+              </span>
+            )}
+          </div>
+        )}
+
         <img src={imagemEvento || trilhaImg} alt={evento.nome} />
         <div className="inscricao-trilha-info">
           <div><b>Título:</b> {evento.nome}</div>
