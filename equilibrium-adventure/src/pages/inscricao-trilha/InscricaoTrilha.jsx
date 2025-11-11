@@ -9,6 +9,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Comentarios from '../../components/comentarios/Comentarios';
+import EventoInfo from '../../components/evento-info/EventoInfo';
 import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx, buscarMediaAvaliacoes } from "../../services/apiEvento";
 import trilhaImg from "../../assets/cachoeiralago.jpg";
 import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
@@ -329,95 +330,104 @@ const InscricaoTrilhasLimitado = () => {
       <CircleBackButton onClick={() => navigate(-1)} />
 
       <div className="inscricao-trilha-header" style={{ position: 'relative' }}>
-        {/* Avaliação média no canto superior direito do header */}
+        {/* Avaliação média no canto superior direito do card (mantemos visual semelhante ao detalhes-evento) */}
         {(mediaAvaliacoes > 0 || mensagemAvaliacao) && (
           <div style={{
             position: 'absolute',
-            top: '10px',
-            right: '10px',
-            background: 'rgba(255, 255, 255, 0.98)',
-            padding: '10px 16px',
-            borderRadius: '10px',
-            boxShadow: '0 3px 10px rgba(0,0,0,0.12)',
+            top: '20px',
+            right: '20px',
+            background: 'transparent', /* removido fundo branco */
+            padding: '12px 18px',
+            borderRadius: '12px',
+            boxShadow: 'none',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '5px',
+            gap: '6px',
             zIndex: 10,
-            border: '1px solid #e0e0e0'
+            border: 'none'
           }}>
             {mediaAvaliacoes > 0 ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-                <span style={{ fontSize: '1.3rem', fontWeight: '700', color: '#226144' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <span style={{ fontSize: '1.4rem', fontWeight: '700', color: '#226144' }}>
                   {mediaAvaliacoes.toFixed(1)}
                 </span>
                 {renderStars(mediaAvaliacoes)}
               </div>
             ) : (
-              <span style={{ fontSize: '0.8rem', color: '#666', fontWeight: '500', textAlign: 'center', maxWidth: '150px' }}>
+              <span style={{ fontSize: '0.85rem', color: '#666', fontWeight: '500', textAlign: 'center' }}>
                 {mensagemAvaliacao.replace('tem', 'possui')}
               </span>
             )}
           </div>
         )}
 
-        <img src={imagemEvento || trilhaImg} alt={evento.nome} />
-        <div className="inscricao-trilha-info">
-          <div><b>Título:</b> {evento.nome}</div>
-          <div><b>Nível:</b> {evento.nivel_dificuldade}</div>
-          <div><b>Data:</b> {evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"}</div>
-          <div><b>Limite de Inscritos:</b> {evento.limiteInscritos || 'N/A'} <span style={{ color: '#226144' }}>({inscritosCount} inscritos)</span></div>
-          <div><b>Descrição:</b> {evento.descricao}</div>
-        </div>
+        {/* Reusar o componente EventoInfo para aplicar o mesmo layout/estilização da tela de detalhes */}
+        <EventoInfo
+          evento={{
+            titulo: evento.nome,
+            descricao: evento.descricao,
+            nivelDificuldade: evento.nivel_dificuldade,
+            distanciaKm: evento.distancia_km,
+            responsavel: evento.responsavel,
+            endereco: evento.endereco,
+            caminhoArquivoEvento: evento.caminho_arquivo_evento,
+            preco: evento.preco,
+            horaInicio: evento.horaInicio,
+            horaFim: evento.horaFinal,
+            tempoEstimado: evento.tempoEstimado,
+            limiteInscritos: evento.limiteInscritos,
+            dataEvento: evento.dataAtivacao,
+            categoria: evento.tipo,
+            estado: evento.estado,
+            imagemUrl: imagemEvento || trilhaImg
+          }}
+          editavel={false}
+          showBackButton={false}
+        >
+          {/* Informações adicionais agora dentro do card EventoInfo usando classes do EventoInfo */}
+          <div style={{ marginTop: '1.5rem' }}>
+            <div className="campos-linha">
+              <div className="campo-info">
+                <label>Distância:</label>
+                <input type="text" value={`${evento.distancia_km} km`} disabled />
+              </div>
+              <div className="campo-info">
+                <label>Categoria:</label>
+                <input type="text" value={evento.tipo || "N/A"} disabled />
+              </div>
+              <div className="campo-info">
+                <label>Preço (R$):</label>
+                <input type="text" value={`R$ ${evento.preco?.toFixed(2) || "0,00"}`} disabled />
+              </div>
+            </div>
+
+            <div className="campos-linha" style={{ marginTop: '1rem' }}>
+              <div className="campo-info">
+                <label>Hora de Início:</label>
+                <input type="text" value={evento.horaInicio || "N/A"} disabled />
+              </div>
+              <div className="campo-info">
+                <label>Hora Fim:</label>
+                <input type="text" value={evento.horaFinal || "N/A"} disabled />
+              </div>
+              <div className="campo-info">
+                <label>Data:</label>
+                <input type="text" value={evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"} disabled />
+              </div>
+            </div>
+
+            <div className="evento-descricao" style={{ marginTop: '1rem' }}>
+              <label>Endereço:</label>
+              <p>
+                {evento.endereco
+                  ? `${evento.endereco.rua || ""}${evento.endereco.numero ? ', ' + evento.endereco.numero : ''} - ${evento.endereco.bairro || ""}, ${evento.endereco.cidade || ""} - ${evento.endereco.estado || ""}, CEP: ${evento.endereco.cep || ""}`
+                  : 'Endereço não disponível'}
+              </p>
+            </div>
+          </div>
+        </EventoInfo>
       </div>
-
-      <form className="inscricao-trilha-dados">
-        <div className="inscricao-trilha-form-row">
-          <div className="inscricao-trilha-form-group">
-            <label>Distância:</label>
-            <input type="text" value={`${evento.distancia_km} km`} disabled />
-          </div>
-          <div className="inscricao-trilha-form-group">
-            <label>Categoria:</label>
-            <input type="text" value={evento.tipo || "N/A"} disabled />
-          </div>
-          <div className="inscricao-trilha-form-group">
-            <label>Preço:</label>
-            <input type="text" value={`R$ ${evento.preco?.toFixed(2) || "0,00"}`} disabled />
-          </div>
-        </div>
-
-        <div className="inscricao-trilha-form-row">
-          <div className="inscricao-trilha-form-group">
-            <label>Hora de Início:</label>
-            <input type="text" value={evento.horaInicio || "N/A"} disabled />
-          </div>
-          <div className="inscricao-trilha-form-group">
-            <label>Hora de Término:</label>
-            <input type="text" value={evento.horaFinal || "N/A"} disabled />
-          </div>
-          <div className="inscricao-trilha-form-group">
-            <label>Data:</label>
-            <input type="text" value={evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"} disabled />
-          </div>
-        </div>
-
-        <div className="inscricao-trilha-form-row endereco-row">
-          <div className="inscricao-trilha-form-group full-width">
-            <label>Endereço:</label>
-            <input
-              type="text"
-              disabled
-              className="endereco-input"
-              value={
-                evento.endereco
-                  ? `${evento.endereco.rua || ""}, ${evento.endereco.numero || ""} - ${evento.endereco.bairro || ""}, ${evento.endereco.cidade || ""} - ${evento.endereco.estado || ""}, CEP: ${evento.endereco.cep || ""}`
-                  : "Endereço não disponível"
-              }
-            />
-          </div>
-        </div>
-      </form >
 
       {!nivelInsuficiente && (
         <button

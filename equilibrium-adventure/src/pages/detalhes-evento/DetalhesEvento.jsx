@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router-dom";
 import Header from '../../components/header/header-unified';
+import CircleBackButton from '../../components/circle-back-button/circle-back-button';
 import EventoInfo from '../../components/evento-info/EventoInfo';
 import UsuariosInscritos from '../../components/usuarios-inscritos/UsuariosInscritos';
 import Comentarios from '../../components/comentarios/Comentarios';
@@ -234,23 +235,25 @@ const DetalhesEvento = () => {
       <Header />
 
       <div className="detalhes-evento-content">
-        <div style={{ position: 'relative' }}>
-          {/* Avaliação média no canto superior direito do card */}
+        <div className="detalhes-evento-cards">
+          {/* Botão de voltar posicionado relativo a este card */}
+          <CircleBackButton onClick={() => navigate(-1)} />
+          {/* Avaliação média no canto superior direito do painel */}
           {(mediaAvaliacoes > 0 || mensagemAvaliacao) && (
             <div style={{
               position: 'absolute',
-              top: '20px',
-              right: '20px',
+              top: '96px',
+              right: '64px',
               background: 'rgba(255, 255, 255, 0.98)',
               padding: '12px 18px',
               borderRadius: '12px',
-              boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+              boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
               display: 'flex',
               flexDirection: 'column',
               alignItems: 'center',
               gap: '6px',
-              zIndex: 10,
-              border: '1px solid #e0e0e0'
+              zIndex: 20,
+              border: '1px solid #e6e6e6'
             }}>
               {mediaAvaliacoes > 0 ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -278,16 +281,15 @@ const DetalhesEvento = () => {
           ) : (
             <p>Carregando informações do evento...</p>
           )}
+
+          <UsuariosInscritos
+            usuarios={usuarios}
+            onAprovar={handleAprovarUsuario}
+            onNegar={handleNegarUsuario}
+          />
+
+          <Comentarios comentariosIniciais={comentarios} onEnviarComentario={handleEnviarComentario} />
         </div>
-
-
-        <UsuariosInscritos
-          usuarios={usuarios}
-          onAprovar={handleAprovarUsuario}
-          onNegar={handleNegarUsuario}
-        />
-
-        <Comentarios comentariosIniciais={comentarios} onEnviarComentario={handleEnviarComentario} />
       </div>
     </div>
   );
