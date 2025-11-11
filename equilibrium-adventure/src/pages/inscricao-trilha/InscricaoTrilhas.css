@@ -51,6 +51,8 @@
   margin: 32px 0 32px 0;
 }
 
+/* (back button positioning removed to use component's original styles) */
+
 .inscricao-trilha-header img {
   width: 380px;
   height: 380px;

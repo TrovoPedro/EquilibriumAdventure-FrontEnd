@@ -1,7 +1,6 @@
 import React from 'react';
 import ButtonSubmitForm from '../button-padrao/button-submit-form';
 import './EventoInfo.css';
-import CircleBackButton from '../circle-back-button/circle-back-button';
 import ButtonDangerForm from '../button-padrao/button-danger-form';
 import defaultTrailImg from '../../assets/img12-catalogo.jpg';
 
@@ -10,16 +9,16 @@ const EventoInfo = ({
   onSalvar, 
   onDelete,
   onChange,
-  editavel = false 
+  editavel = false,
+  showBackButton = false,
+  children
 }) => {
-  const handleVoltar = () => {
-    window.history.back();
-  };
+  // Back button removed from this card as requested
 
   return (
     <div className="evento-info-container">
       <div className="evento-info-top-bar">
-        <CircleBackButton onClick={handleVoltar} />
+        <h3 className="evento-card-title">Informações da Trilha</h3>
       </div>
       <div className="evento-header">
         <div className="evento-imagem">
@@ -58,21 +57,6 @@ const EventoInfo = ({
               )}
             </div>
             <div className="campo-info">
-              <label>Hora Fim:</label>
-              {editavel ? (
-                <input
-                  type="time"
-                  value={evento.horaFim}
-                  onChange={(e) => onChange('horaFim', e.target.value)}
-                />
-              ) : (
-                <span>{evento.horaFim}</span>
-              )}
-            </div>
-          </div>
-
-          <div className="campos-linha">
-            <div className="campo-info">
               <label>Hora Início:</label>
               {editavel ? (
                 <input
@@ -82,6 +66,21 @@ const EventoInfo = ({
                 />
               ) : (
                 <span>{evento.horaInicio}</span>
+              )}
+            </div>
+          </div>
+
+          <div className="campos-linha">
+            <div className="campo-info">
+              <label>Hora Fim:</label>
+              {editavel ? (
+                <input
+                  type="time"
+                  value={evento.horaFim}
+                  onChange={(e) => onChange('horaFim', e.target.value)}
+                />
+              ) : (
+                <span>{evento.horaFim}</span>
               )}
             </div>
             <div className="campo-info">
@@ -102,7 +101,7 @@ const EventoInfo = ({
 
       <div className="campos-linha" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', marginTop: '2.5rem', justifyContent: 'center', width: '100%' }}>
         <div className="campo-info" style={{ width: '500px' }}>
-          <label style={{ marginBottom: '0.5rem', fontWeight: 'bold', color: '#226144', fontSize: '1.1rem' }}>CATEGORIA:</label>
+          <label style={{ marginBottom: '0.5rem', color: '#226144' }}>CATEGORIA:</label>
           {editavel ? (
             <select
               style={{ height: '48px', borderRadius: '10px', border: '1px solid #d1e7dd', padding: '0 1rem', fontSize: '1.1rem', width: '100%' }}
@@ -124,7 +123,7 @@ const EventoInfo = ({
           )}
         </div>
         <div className="campo-info" style={{ width: '500px' }}>
-          <label style={{ marginBottom: '0.5rem', fontWeight: 'bold', color: '#226144', fontSize: '1.1rem' }}>DURAÇÃO (HORAS):</label>
+          <label style={{ marginBottom: '0.5rem', color: '#226144' }}>DURAÇÃO (HORAS):</label>
           {editavel ? (
             <input
               type="number"
@@ -141,7 +140,7 @@ const EventoInfo = ({
           )}
         </div>
         <div className="campo-info" style={{ width: '500px' }}>
-          <label style={{ marginBottom: '0.5rem', fontWeight: 'bold', color: '#226144', fontSize: '1.1rem' }}>PREÇO (R$):</label>
+          <label style={{ marginBottom: '0.5rem', color: '#226144' }}>PREÇO (R$):</label>
           {editavel ? (
             <input
               type="number"
@@ -165,6 +164,9 @@ const EventoInfo = ({
           <ButtonDangerForm onClick={onDelete} title={'Excluir Evento'} />
         </div>
       )}
+
+      {/* Permit external pages to inject extra content (e.g. inscription fields) inside the card */}
+      {children}
     </div>
   );
 };

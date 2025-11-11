@@ -14,26 +14,59 @@
     gap: 32px;
 }
 
-/* Estrelas de avaliação */
+/* Estrelas de avaliação - estilo aprimorado (apenas CSS, integração inalterada) */
 .stars-rating {
     display: flex;
-    gap: 2px;
+    gap: 8px; /* espaço mais confortável entre estrelas */
+    align-items: center;
+    line-height: 1;
 }
 
+/* tamanho consistente e alinhamento */
+.stars-rating span {
+    font-size: 1.25rem;
+    display: inline-block;
+    line-height: 1;
+    transition: transform 150ms ease, opacity 150ms ease;
+}
+
+/* Estrela cheia: usar gradiente dourado via background-clip para look refinado */
 .stars-rating .star-full {
-    color: #ffc107;
-    font-size: 1.2rem;
+    background: linear-gradient(90deg, #ffd166 0%, #ffb703 50%, #ff8f00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.04);
 }
 
+/* Meia estrela: preenche apenas a metade (visual) mantendo o caractere ★ como fonte */
 .stars-rating .star-half {
-    color: #ffc107;
-    font-size: 1.2rem;
-    opacity: 0.5;
+    background: linear-gradient(90deg, #ffd166 0%, #ffd166 50%, #e6e6e6 50%, #e6e6e6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
 }
 
+/* Estrela vazia */
 .stars-rating .star-empty {
-    color: #ddd;
-    font-size: 1.2rem;
+    color: #e6e6e6;
+}
+
+/* efeito sutil ao aparecer */
+.stars-rating span.show {
+    transform: translateY(-2px);
+}
+
+/* Responsividade: reduzir tamanho e gap em telas pequenas */
+@media (max-width: 480px) {
+    .stars-rating span {
+        font-size: 1.05rem;
+    }
+    .stars-rating {
+        gap: 6px;
+    }
 }
 
 /* Animação de entrada para os cards */
@@ -70,4 +103,69 @@
         padding: 100px 16px 40px 16px;
         gap: 24px;
     }
+}
+
+/* Padronizar tamanho e alinhamento dos botões exclusivamente dentro desta tela */
+.detalhes-evento-content [class*="btn-"]:not(.circle-back-btn),
+.detalhes-evento-content button:not(.circle-back-btn) {
+    min-width: 240px;
+    width: 240px;
+    height: 48px;
+    white-space: nowrap; /* não quebrar texto */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+/* Garantir que os grupos de ações fiquem alinhados à direita */
+.detalhes-evento-content .evento-acoes,
+.detalhes-evento-content .usuario-card .usuario-acoes {
+    justify-content: flex-end;
+}
+
+/* Mobile: manter largura total mas sem quebra de texto; reduz levemente a fonte para evitar overflow */
+@media (max-width: 600px) {
+    .detalhes-evento-content [class*="btn-"]:not(.circle-back-btn),
+    .detalhes-evento-content button:not(.circle-back-btn) {
+        width: 100%;
+        min-width: 0;
+        font-size: 0.95rem;
+    }
+}
+
+/* Override para remover o fundo branco do container de avaliação (elemento inline-styled)
+   Mantém padding e posicionamento, apenas remove o fundo/borda para integrar com o card */
+.detalhes-evento-content > div > div[style] {
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+}
+
+/* Painel que envolve os cards da tela de detalhes do evento */
+.detalhes-evento-cards {
+    position: relative; /* para o badge de avaliação posicionado absoluto */
+    background: #ffffff;
+    border-radius: 14px;
+     /* Aumentado padding-top para acomodar o botão de voltar no topo do card
+         (ajuste extra para evitar sobreposição com o conteúdo de informação) */
+     padding: 80px 28px 32px 28px;
+    box-shadow: 0 12px 30px rgba(34, 97, 68, 0.06);
+    border: 1px solid #e6efe6; /* leve borda verde acinzentada para combinar com o tema */
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* Ajustes responsivos: reduzir padding em telas menores */
+@media (max-width: 768px) {
+    .detalhes-evento-cards {
+        padding: 20px;
+        gap: 18px;
+    }
+}
+
+/* Quando a wrapper existir, animar os filhos internamente (mantém entrada suave) */
+.detalhes-evento-cards > * {
+    animation: none; /* evitar duplicar animações aplicadas anteriormente */
 }
