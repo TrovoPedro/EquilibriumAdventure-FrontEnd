@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useAuth } from "../../context/AuthContext"; // ✅ Importa o contexto
+import { showSuccess, showError, showWarning } from "../../utils/swalHelper";
 
 import "../escolher-data/escolher-data.css";
 import {
@@ -73,6 +74,17 @@ export default function EscolhaDataCard({ onClose }) {
       showWarning("Usuário não logado. Faça login novamente.");
       return;
     }
+
+    // confirma antes de salvar
+    const confirm = await showWarning(
+      "Deseja salvar esta data e horário?",
+      "Confirmar salvamento",
+      "Sim",
+      "Cancelar",
+      true
+    );
+
+    if (!confirm.isConfirmed) return;
 
     try {
       const dataHoraISO = dayjs(value)
@@ -140,12 +152,12 @@ export default function EscolhaDataCard({ onClose }) {
   return (
     <div
       className="overlay"
-      style={{ position: "fixed", zIndex: 2000 }}
+      style={{ position: "fixed", zIndex: 99999, top: 0, left: 0, right: 0, bottom: 0 }}
       onClick={(e) => e.target.classList.contains("overlay") && handleClose()}
     >
       <Card
         className="card-escolha"
-        style={{ position: "relative", zIndex: 2100 }}
+        style={{ position: "relative", zIndex: 100000 }}
       >
         <CardContent>
           <Box display="flex" justifyContent="flex-end">
@@ -235,23 +247,7 @@ export default function EscolhaDataCard({ onClose }) {
               Salvar Data
             </Button>
 
-            <Button
-              variant="contained"
-              sx={{
-                backgroundColor: "#226144",
-                color: "#fff",
-                fontWeight: 300,
-                fontSize: "0.8rem",
-                borderRadius: "8px",
-                padding: "12px 24px",
-                minWidth: "140px",
-                boxShadow: "0 2px 8px rgba(34,97,68,0.13)",
-                "&:hover": { backgroundColor: "#1a4d35" },
-              }}
-              onClick={handleClose}
-            >
-              Ver Calendário
-            </Button>
+            {/* "Ver Calendário" button removed as requested */}
           </Box>
         </CardContent>
       </Card>

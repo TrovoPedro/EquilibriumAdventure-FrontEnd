@@ -79,6 +79,7 @@
     display: flex;
     gap: 32px;
     margin-bottom: 32px;
+    align-items: flex-start; /* alinhar topo da imagem e dos detalhes */
 }
 
 .evento-imagem {
@@ -147,7 +148,7 @@
 
 /* Estilo específico para o primeiro campo-info (título) */
 .evento-detalhes > .campo-info-titulo {
-    margin-top: 20px;
+    margin-top: 0; /* remove margem extra para alinhar com a imagem */
 }
 
 .campos-linha {

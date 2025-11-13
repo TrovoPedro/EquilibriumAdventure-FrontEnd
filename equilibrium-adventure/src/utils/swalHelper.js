@@ -9,6 +9,15 @@ export const showSuccess = (message, title = 'Sucesso', buttonText = 'OK') => {
     customClass: { confirmButton: 'swal2-confirm' },
     buttonsStyling: false,
     draggable: true
+    ,
+    didOpen: (popup) => {
+      try {
+        const container = popup && popup.closest('.swal2-container');
+        if (container) container.style.zIndex = '100010';
+      } catch (e) {
+        // ignore
+      }
+    }
   });
 };
 
@@ -21,6 +30,15 @@ export const showError = (message, title = 'Erro', buttonText = 'OK') => {
     customClass: { confirmButton: 'swal2-confirm-error' },
     buttonsStyling: false,
     draggable: true
+    ,
+    didOpen: (popup) => {
+      try {
+        const container = popup && popup.closest('.swal2-container');
+        if (container) container.style.zIndex = '100010';
+      } catch (e) {
+        // ignore
+      }
+    }
   });
 };
 
@@ -45,6 +63,15 @@ export const showWarning = (
     },
     buttonsStyling: false,
     draggable: true
+    ,
+    didOpen: (popup) => {
+      try {
+        const container = popup && popup.closest('.swal2-container');
+        if (container) container.style.zIndex = '100010';
+      } catch (e) {
+        // ignore
+      }
+    }
   });
 };
 

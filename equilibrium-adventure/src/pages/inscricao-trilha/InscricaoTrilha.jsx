@@ -385,38 +385,8 @@ const InscricaoTrilhasLimitado = () => {
           editavel={false}
           showBackButton={false}
         >
-          {/* Informações adicionais agora dentro do card EventoInfo usando classes do EventoInfo */}
+          {/* Informações adicionais (reduzidas) dentro do card EventoInfo: apenas endereço para evitar duplicação */}
           <div style={{ marginTop: '1.5rem' }}>
-            <div className="campos-linha">
-              <div className="campo-info">
-                <label>Distância:</label>
-                <input type="text" value={`${evento.distancia_km} km`} disabled />
-              </div>
-              <div className="campo-info">
-                <label>Categoria:</label>
-                <input type="text" value={evento.tipo || "N/A"} disabled />
-              </div>
-              <div className="campo-info">
-                <label>Preço (R$):</label>
-                <input type="text" value={`R$ ${evento.preco?.toFixed(2) || "0,00"}`} disabled />
-              </div>
-            </div>
-
-            <div className="campos-linha" style={{ marginTop: '1rem' }}>
-              <div className="campo-info">
-                <label>Hora de Início:</label>
-                <input type="text" value={evento.horaInicio || "N/A"} disabled />
-              </div>
-              <div className="campo-info">
-                <label>Hora Fim:</label>
-                <input type="text" value={evento.horaFinal || "N/A"} disabled />
-              </div>
-              <div className="campo-info">
-                <label>Data:</label>
-                <input type="text" value={evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"} disabled />
-              </div>
-            </div>
-
             <div className="evento-descricao" style={{ marginTop: '1rem' }}>
               <label>Endereço:</label>
               <p>
