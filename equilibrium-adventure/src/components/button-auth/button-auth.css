@@ -2,7 +2,7 @@
     background-color: #336948;
     color: white;
     border: none;
-    border-radius: 50px; 
+    border-radius: 3px; /* menos arredondado (alinhado ao cabeçalho) */
     width: 150px;        
     height: 50px;        
     font-size: 0.75rem;   
@@ -15,7 +15,8 @@
 }
 
 .auth-button:hover {
-    background-color: #213f2c;
+    /* manter mesma cor no hover: não alteramos cor/fundo */
+    background-color: #336948;
 }
 
 .auth-button:active {

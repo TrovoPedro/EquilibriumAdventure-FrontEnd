@@ -5,7 +5,11 @@
     font-weight: 600;
     border: none;
     border-radius: 12px;
-    padding: 16px 40px;
+    /* reduzir um pouco a altura e aumentar a largura para combinar com o botão cancelar */
+    padding: 12px 44px;
+    width: 260px;
+    height: 48px;
+    min-width: 240px;
     cursor: pointer;
     box-shadow: 0 4px 12px rgba(34, 97, 68, 0.2);
     transition: all 0.3s ease;

@@ -25,8 +25,8 @@ export default function BannerComHeader() {
               <li><a href="#" onClick={() => scrollToSection('eventos-section')}>EVENTOS</a></li>
               <li><a href="#" onClick={() => scrollToSection('guias-section')}>NOSSOS GUIAS</a></li>
               <li><a href="#" onClick={() => scrollToSection('feedbacks-section')}>FEEDBACKS</a></li>
-              <li onClick = {()=>navigate("/Cadastro")} className="btn"> CRIAR CONTA</li>
-              <li onClick = {()=>navigate("/Login")} className="btn"> ENTRAR</li>
+              <li onClick={() => navigate("/Cadastro")} className="btn btn-create">CRIAR CONTA</li>
+              <li onClick={() => navigate("/Login")} className="btn btn-enter">ENTRAR</li>
             </ul>
           </nav>
       </header>

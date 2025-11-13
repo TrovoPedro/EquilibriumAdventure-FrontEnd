@@ -44,6 +44,37 @@
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
+/* Specific header button variants */
+.btn-create {
+  /* Mantém visual branco com texto verde, apenas adiciona a mesma borda do botão 'entrar' */
+  background: #ffffff;
+  color: var(--cor-principal, #2f7a5a);
+  border: 3px solid #ffffff;
+  border-radius: 3px;
+}
+.btn-create:hover {
+  /* mantém as cores originais, apenas aplica leve escala no hover */
+  transform: scale(1.05);
+}
+
+.menu .btn-enter {
+  background: transparent !important;
+  color: #ffffff !important;
+  border: 3px solid #ffffff !important; /* thicker white border */
+  transition: border-color 160ms ease, transform 120ms ease, background 160ms ease;
+  border-radius: 3px; /* menos arredondado para entrar */
+}
+.menu .btn-enter:hover {
+  /* não altera cor/fundo no hover; apenas leve escala */
+  transform: scale(1.02);
+}
+
+/* Garantir que quando ambas as classes estiverem presentes (.btn btn-create)
+   o border-radius permaneça 3px (mais específico que regra global .btn) */
+.btn.btn-create {
+  border-radius: 3px;
+}
+
 .menu .lang {
   font-size: 1.2rem;
 }

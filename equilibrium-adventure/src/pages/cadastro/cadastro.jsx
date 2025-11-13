@@ -114,8 +114,7 @@ const Cadastro = () => {
                 </button>
                 <div className="auth-card">
                     <div className="login-header">
-                        <h1>Junte-se e conecte-se à </h1>
-                        <h1>comunidade online</h1>
+                        <h1>Junte-se e conecte-se à comunidade online</h1>
                     </div>
 
                     <Forms title={title} handleSubmit={handleSubmit} text={text} handleNavigate={handleNavigate} className="forms-custom" isSubmitting={isSubmitting} />
