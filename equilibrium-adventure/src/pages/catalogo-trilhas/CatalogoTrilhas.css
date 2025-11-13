@@ -206,11 +206,54 @@ h2,
 }
 
 .filtros-container {
+  position: relative; /* necessário para posicionar o ::before (linha verde) */
+  /* esconder excessos para a linha seguir a borda arredondada */
+  overflow: hidden;
   background: #fff;
   border-radius: 16px;
   padding: 32px 40px;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   border: 1px solid #e8e8e8;
+}
+
+/* Barra de destaque verde no topo do card de filtros + underline animado do título */
+.filtros-container::before {
+  /* mesma estilização dos cards da Agenda Aventureiro: barra de destaque no topo */
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #336948, #226144, #0C513F);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  /* seguir a borda superior arredondada do card */
+  border-radius: 16px 16px 0 0;
+}
+
+.filtros-container:hover::before {
+  opacity: 1;
+}
+
+.filtros-titulo {
+  position: relative; /* necessário para o ::after do underline */
+}
+
+.filtros-titulo::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #336948, #226144);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.filtros-container:hover .filtros-titulo::after {
+  width: 80px;
 }
 
 .filtros-titulo-grupo {

@@ -112,10 +112,9 @@
 .usuario-card:hover {
     border-color: #c1d4c1;
     background: #ffffff;
-    transform: translateY(-1px);
-    box-shadow: 
-        inset 0 2px 4px rgba(0, 0, 0, 0.04),
-        0 4px 12px rgba(0, 0, 0, 0.08);
+    /* movimento removido: manter apenas animação da linha verde do container */
+    transform: none !important;
+    box-shadow: none !important;
 }
 
 .usuario-nome {

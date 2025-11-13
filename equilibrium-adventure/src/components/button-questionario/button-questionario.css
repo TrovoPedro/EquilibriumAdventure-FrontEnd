@@ -1,28 +1,37 @@
 .button-questionario {
-    background-color: #2d6b43;
-    color: #fff;
+    /* Use CSS variables (with fallbacks) so color aligns with global button styles */
+    background-color: var(--btn-bg, #226144);
+    color: var(--btn-color, #fff);
     border: none;
     border-radius: 12px;
-    padding: 0.8rem 2rem;
+    /* Match dimensions with .btn-cancelar (Remover) */
+    padding: 12px 44px;
+    height: 48px;
+    width: 260px;
+    min-width: 240px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     font-size: 1.1rem;
     font-family: 'Zen Kaku Gothic Antique', sans-serif;
     cursor: pointer;
-    transition: background 0.2s;
-    font-weight: 500;
+    transition: background 0.2s, transform 0.2s;
+    font-weight: 600;
+    box-sizing: border-box;
 }
 
 .button-questionario:hover {
-     background-color: #245535;
+     background-color: var(--btn-bg-hover, #1b4d36);
 }
 
 .button-questionario-back {
     background-color: #fff;
-    border: 2px solid #245535;
-    color: #245535;
+    border: 2px solid var(--btn-bg, #226144);
+    color: var(--btn-bg, #226144);
 }
 
 .button-questionario-back:hover {
-    background-color: #18521f13;
-    color: #163f1bfb;
+    background-color: rgba(34,97,68,0.08);
+    color: var(--btn-bg-hover, #1b4d36);
     transition: background 0.2s;
 }

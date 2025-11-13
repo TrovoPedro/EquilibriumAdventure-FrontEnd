@@ -19,7 +19,7 @@
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
     overflow: hidden;
-    width: 420px;
+    width: 480px; /* largura aumentada de 420px para 480px */
     min-height: 450px;
     transition: transform 0.2s;
     display: flex;
@@ -40,7 +40,8 @@
 }
 
 .card:hover {
-    transform: translateY(-8px) scale(1.03);
+    /* remover movimento do card no hover; manter apenas animações internas se houver */
+    transform: none !important;
 }
 
 

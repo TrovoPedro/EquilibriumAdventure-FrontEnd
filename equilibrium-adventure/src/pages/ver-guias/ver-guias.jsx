@@ -3,7 +3,9 @@ import { useNavigate } from "react-router-dom";
 import './ver-guias.css';
 import '../../components/pop-up-aviso/pop-up-aviso.css';
 import { buscarGuiasAdm, buscarGuiaPorId, deletarGuia } from "../../services/apiAdministrador";
-import leftArrow from "../../assets/left-arrow-green.png";
+import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
+import ButtonQuest from "../../components/button-questionario/button-questionario";
+import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
 import Header from "../../components/header/header-unified";
 import { useGuide } from "../../context/GuideContext";
 import routeUrls from "../../routes/routeUrls";
@@ -146,14 +148,17 @@ const VerGuias = () => {
     return (
         <>
             <Header></Header>
-            <div className="ver-guias-container">
-                <div className="ver-guias-header">
-                    <span className="back-arrow-circle" onClick={handleVoltar}>
-                        <img className="back-arrow" src={leftArrow} alt="Voltar" />
-                    </span>
-                    <h1 className="ver-guias-title">Ver Guias</h1>
+            <div className="ver-guias-page">
+                <div className="ver-guias-container">
+                <div className="div-title">
+                    <div className="editar-evento-header">
+                        <ButtonBack onClick={handleVoltar} />
+                        <h1 className="h1-title">Ver Guias</h1>
+                    </div>
                 </div>
-                <div className="ver-guias-body">
+
+                <div className="ver-guias-card">
+                    <div className="ver-guias-body">
                     {loading ? (
                         <div className="loading">Carregando guias...</div>
                     ) : guias.length === 0 ? (
@@ -162,27 +167,29 @@ const VerGuias = () => {
                         guias.map((guia, index) => (
                             <div key={guia.idUsuario || index} className="ver-guias-item">
                                 <div className="ver-guias-info">
-                                    <span className="ver-guias-nome">{guia.nome || 'Nome não disponível'}</span>
+                                    <div>
+                                        <span className="ver-guias-nome">{guia.nome || 'Nome não disponível'}</span>
+                                        <div className="ver-guias-sub">{guia.email || guia.cpf || ''}</div>
+                                    </div>
                                 </div>
-                                <div className="ver-guias-btns">
-                                    <div 
-                                        className="ver-guias-btn-green"
+                                <div className="ver-guias-actions">
+                                    <ButtonQuest
                                         onClick={() => handleVerMaisInfo(guia)}
-                                    >
-                                        <span>Mais Informações</span>
-                                    </div>
-                                    <div 
-                                        className="ver-guias-btn-red"
+                                        title={"Mais Informações"}
+                                    />
+                                    <ButtonCancelarEvento
                                         onClick={() => handleRemoverGuia(guia.idUsuario)}
-                                    >
-                                        <span>Remover</span>
-                                    </div>
+                                        title={"Remover"}
+                                    />
                                 </div>
                             </div>
                         ))
                     )}
                 </div>
+                </div>
+                </div>
             </div>
+            
             
             {/* Popup de Confirmação para Deletar */}
             {showConfirmPopup && (

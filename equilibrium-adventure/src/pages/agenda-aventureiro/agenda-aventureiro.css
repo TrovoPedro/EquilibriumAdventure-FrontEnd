@@ -232,12 +232,10 @@
 }
 
 .card-imagem:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 
-    0 24px 80px rgba(12, 81, 63, 0.15),
-    0 12px 32px rgba(0, 0, 0, 0.08),
-    inset 0 2px 0 rgba(255, 255, 255, 0.95);
-  border-color: rgba(51, 105, 72, 0.2);
+  /* remover movimento do card no hover; manter apenas a linha verde (::before) */
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
 }
 
 .card-imagem:hover::before {
@@ -281,9 +279,10 @@
 }
 
 .next-event-card:hover {
-  transform: translateY(-4px) scale(1.02);
-  border-color: #00695c;
-  box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15);
+  /* neutralizar movimento da área do evento no hover; manter apenas a linha verde */
+  transform: none !important;
+  border-color: transparent !important;
+  box-shadow: none !important;
 }
 
 .next-event-card img {
@@ -296,7 +295,7 @@
 }
 
 .next-event-card:hover img {
-  transform: scale(1.05);
+  transform: none !important;
 }
 
 /* Cards padrão - Agenda e Histórico (mesmo tamanho dos outros) */
@@ -336,12 +335,10 @@
 .agenda-aventureiro-card-evento:hover,
 .agenda-aventureiro-card-agenda:hover,
 .agenda-aventureiro-historico-container:hover {
-  transform: translateY(-8px) scale(1.02);
-  box-shadow: 
-    0 24px 80px rgba(12, 81, 63, 0.15),
-    0 12px 32px rgba(0, 0, 0, 0.08),
-    inset 0 2px 0 rgba(255, 255, 255, 0.95);
-  border-color: rgba(51, 105, 72, 0.2);
+  /* remover movimento/elevação no hover dos containers; manter apenas a linha verde (::before) */
+  transform: none !important;
+  box-shadow: none !important;
+  border-color: transparent !important;
 }
 
 .agenda-aventureiro-card-info:hover::before,
@@ -486,9 +483,10 @@
 }
 
 .agenda-aventureiro-item:hover {
+  /* manter alteração visual leve, mas remover movimento e sombra */
   background: linear-gradient(135deg, #f8fffe 0%, #f0f9f4 100%);
-  transform: translateX(12px);
-  box-shadow: 0 8px 32px rgba(12, 81, 63, 0.08);
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .agenda-aventureiro-item:hover::before {
@@ -628,9 +626,10 @@
 }
 
 .agenda-aventureiro-historico-item:hover {
+  /* remover movimento lateral e sombra no hover do histórico; manter apenas linha verde */
   background: linear-gradient(135deg, #f8fffe 0%, #f0f9f4 100%);
-  transform: translateX(8px);
-  box-shadow: 0 4px 20px rgba(12, 81, 63, 0.06);
+  transform: none !important;
+  box-shadow: none !important;
 }
 
 .agenda-aventureiro-historico-item:hover::before {

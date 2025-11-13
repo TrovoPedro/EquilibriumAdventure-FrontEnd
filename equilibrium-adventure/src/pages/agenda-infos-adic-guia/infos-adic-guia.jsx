@@ -3,11 +3,6 @@ import "./infos-adic-guia.css";
 import Header from "../../components/header/header-unified";
 import { listarAnamnesesPorResponsavel } from "../../services/apiAnamnese";
 import defaultAvatar from "../../assets/imagem-do-usuario-grande.png";
-import Trilha from "../../assets/cachoeiralago.jpg";
-import ButtonAlterar from "../../components/button-padrao/button-alterar"
-import Evento1 from "../../assets/cachoeiralago.jpg";
-import Evento2 from "../../assets/chile.jpg";
-import Evento3 from "../../assets/img12-catalogo.jpg";
 import EscolhaDataCard from "../escolher-data/escolher-data";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
 import { useNavigate } from "react-router-dom";

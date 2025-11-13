@@ -80,7 +80,8 @@
 /* Novos estilos para Informações Pessoais */
 .infos-adic-guia-page .card-info-guia {
     height: 527px;
-    width: 48.5%;
+    /* aumentar largura para ocupar ligeiramente mais espaço mantendo gap */
+    width: calc(50% - 12px);
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -107,12 +108,10 @@
 }
 
 .infos-adic-guia-page .card-info-guia:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 
-        0 24px 80px rgba(12, 81, 63, 0.15),
-        0 12px 32px rgba(0, 0, 0, 0.08),
-        inset 0 2px 0 rgba(255, 255, 255, 0.95);
-    border-color: rgba(51, 105, 72, 0.2);
+    /* Neutralizar movimento: manter apenas a animação da linha verde (::before e h2::after) */
+    transform: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
 }
 
 .infos-adic-guia-page .card-info-guia:hover::before {
@@ -262,7 +261,8 @@
 /* Próximo Eventos */
 .infos-adic-guia-page .card-imagem {
     height: 527px;
-    width: 48.5%;
+    /* aumentar largura da Próxima Trilha */
+    width: calc(50% - 12px);
     display: flex;
     flex-direction: column;
     align-items: start;
@@ -289,12 +289,10 @@
 }
 
 .infos-adic-guia-page .card-imagem:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 
-        0 24px 80px rgba(12, 81, 63, 0.15),
-        0 12px 32px rgba(0, 0, 0, 0.08),
-        inset 0 2px 0 rgba(255, 255, 255, 0.95);
-    border-color: rgba(51, 105, 72, 0.2);
+    /* neutralizar movimento: manter apenas a animação da linha verde (::before e h2::after) */
+    transform: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
 }
 
 .infos-adic-guia-page .card-imagem:hover::before {
@@ -338,9 +336,9 @@
 }
 
 .infos-adic-guia-page .next-event-card:hover {
-    transform: translateY(-4px) scale(1.02);
-    border-color: #00695c;
-    box-shadow: 0 8px 32px rgba(16, 185, 129, 0.15);
+    transform: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
 }
 
 .infos-adic-guia-page .next-event-card img {
@@ -352,7 +350,7 @@
 }
 
 .infos-adic-guia-page .next-event-card:hover img {
-    transform: scale(1.05);
+    transform: none !important;
 }
 /* Cards de Eventos e Anamneses */
 .infos-adic-guia-page .cards-eventos {
@@ -369,7 +367,8 @@
     background: linear-gradient(135deg, #ffffff 0%, #f8fffe 100%);
     border-radius: 20px;
     height: 460px;
-    width: 48.5%;
+    /* aumentar largura das Próximas Anamneses / Eventos Ativos */
+    width: calc(50% - 12px);
     display: flex;
     flex-direction: column;
     padding: 28px 24px;
@@ -393,12 +392,10 @@
 }
 
 .infos-adic-guia-page .eventos-anamnese-ativos:hover {
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 
-        0 24px 80px rgba(12, 81, 63, 0.15),
-        0 12px 32px rgba(0, 0, 0, 0.08),
-        inset 0 2px 0 rgba(255, 255, 255, 0.95);
-    border-color: rgba(51, 105, 72, 0.2);
+    /* neutralizar movimento: manter apenas a animação da linha verde (::before e h2::after) */
+    transform: none !important;
+    box-shadow: none !important;
+    border-color: transparent !important;
 }
 
 .infos-adic-guia-page .eventos-anamnese-ativos:hover::before {
@@ -610,7 +607,7 @@
     background-color: white;
     border-radius: 12px;
     padding: 15px;
-    width: 180px;
+    width: 220px; /* aumentado de 180px para 220px */
     min-height: 180px;
     transition: all 0.3s ease;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
@@ -622,10 +619,8 @@
 }
 
 .infos-adic-guia-page .anamnese-card:hover {
-    transform: translateY(-6px) scale(1.03);
-    box-shadow: 
-        0 12px 32px rgba(12, 81, 63, 0.12),
-        0 4px 16px rgba(0, 0, 0, 0.08);
+    transform: none !important; /* remove movimento no hover */
+    box-shadow: none !important;
 }
 
 .infos-adic-guia-page .anamnese-info {
@@ -655,8 +650,7 @@
 
 .infos-adic-guia-page .anamnese-relatorio-btn:hover {
     background: linear-gradient(135deg, #2a5a3a, #1e4b2c);
-    transform: translateY(-2px);
-    box-shadow: 0 4px 16px rgba(51, 105, 72, 0.3);
+    /* button vertical movement removed to match simplified hover behavior */
 }
 
 .infos-adic-guia-page .anamnese-initial {
@@ -722,12 +716,13 @@
 }
 
 /* Cards de Evento */
+
 .infos-adic-guia-page .evento-ativo-card {
     background-color: white;
     border-radius: 16px;
     padding: 0;
-    width: 200px;
-    min-width: 200px;
+    width: 260px; /* aumentado de 200px para 260px */
+    min-width: 260px;
     height: 320px;
     cursor: pointer;
     transition: all 0.3s ease;
@@ -756,7 +751,7 @@
 }
 
 .infos-adic-guia-page .evento-ativo-card:hover .evento-image img {
-    transform: scale(1.05);
+    transform: none !important;
 }
 
 .infos-adic-guia-page .evento-info {

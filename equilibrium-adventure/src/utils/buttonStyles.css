@@ -1,0 +1,95 @@
+/* Shared button styles utility
+   Import this file globally (e.g. in main.jsx) so all button components
+   pick up consistent styling. This file provides class names that match
+   the existing component classNames to avoid editing many components.
+
+   If you want to migrate components to a single Button component later,
+   prefer using the utility classes below (e.g. `.btn`, `.btn--primary`).
+*/
+
+:root{
+  --btn-bg: #226144; /* primary green (updated) */
+  --btn-bg-hover: #1b4d36; /* slightly darker hover for #226144 */
+  --cor-principal: #226144; /* project primary green used by header buttons */
+  --btn-color: #ffffff;
+  --btn-border-radius: 8px;
+  --btn-padding: 10px 16px;
+  --btn-font-size: 14px;
+  --btn-transition: 150ms ease-in-out;
+  --btn-danger-bg: #c23b3b;
+  --btn-danger-bg-hover: #9f2f2f;
+  --btn-outline-color: #2f7a5a;
+}
+
+/* Generic base */
+.btn, .auth-button, .btn-submit-form, .button-questionario, .btn-criar-evento, .btn-cancelar-evento, .btn-alterar, .btn-excluir, .btn-danger-form {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: var(--btn-padding);
+  font-size: var(--btn-font-size);
+  border-radius: var(--btn-border-radius);
+  border: none;
+  cursor: pointer;
+  transition: transform var(--btn-transition), background-color var(--btn-transition), box-shadow var(--btn-transition);
+  background: var(--btn-bg);
+  color: var(--btn-color);
+}
+
+.btn:active, .auth-button:active, .btn-submit-form:active, .button-questionario:active {
+  transform: translateY(1px);
+}
+
+.btn:hover, .auth-button:hover, .btn-submit-form:hover, .button-questionario:hover {
+  background: var(--btn-bg-hover);
+}
+
+.btn[disabled], .auth-button[disabled], .btn-submit-form[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Danger / destructive */
+.btn--danger, .btn-danger-form, .button-danger {
+  background: var(--btn-danger-bg);
+  color: var(--btn-color);
+}
+.btn--danger:hover, .btn-danger-form:hover {
+  background: var(--btn-danger-bg-hover);
+}
+
+/* Outline variant */
+.btn--outline {
+  background: transparent;
+  color: var(--btn-outline-color);
+  border: 2px solid var(--btn-outline-color);
+}
+.button-questionario-back, .btn--outline-secondary {
+  background: transparent;
+  color: var(--btn-outline-color);
+  border: 2px solid var(--btn-outline-color);
+}
+
+/* Small / compact */
+.btn--small {
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+/* Utility wrappers for specific uses (keeps compatibility with existing classNames) */
+.btn-submit-form { min-width: 120px; }
+.auth-button { min-width: 220px; font-weight: 600; }
+.button-questionario { min-width: 140px; }
+
+/* Accessibility focus */
+.btn:focus, .auth-button:focus, .btn-submit-form:focus {
+  outline: 3px solid rgba(34,97,68,0.18); /* focus ring matching #226144 */
+  outline-offset: 2px;
+}
+
+/* Small responsive tweak */
+@media (max-width: 480px){
+  .auth-button { width: 100%; padding: 12px 16px; }
+}

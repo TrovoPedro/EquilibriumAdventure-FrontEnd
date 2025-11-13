@@ -118,7 +118,8 @@ export default function AdicionarGuia() {
     return (
         <>
             <Header />
-            <div className="adicionar-guia-container">
+            <div className="adicionar-guia-page">
+                <div className="adicionar-guia-container">
                 <div className="adicionar-guia-header">
                     <span className="back-arrow-circle" onClick={handleVoltar}>
                         <img className="back-arrow" src={leftArrow} alt="Voltar" />
@@ -224,6 +225,7 @@ export default function AdicionarGuia() {
                         </label>
                     </div>
                 </form>
+                </div>
             </div>
         </>
     );
