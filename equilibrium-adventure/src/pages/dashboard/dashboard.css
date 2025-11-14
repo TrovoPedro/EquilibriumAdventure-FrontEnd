@@ -4,6 +4,8 @@
   box-sizing: border-box;
 }
 
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
+
 .dashboard {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
   background-color: #f8f9fa;
@@ -20,36 +22,55 @@
   margin-bottom: 32px;
 }
 
+.title-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Move title+back button slightly to the right */
+.title-row {
+  margin-left: 16px;
+}
+
 .dashboard-header h1 {
   font-size: 32px;
-  font-weight: 600;
+  font-weight: 400;
   color: #065f46;
   margin-top: 35px; 
+  font-family: "Raleway", sans-serif; /* usar Raleway nos títulos do dashboard */
 }
 
 .tab-buttons {
   display: flex;
   gap: 0;
-  background: white;
-  border-radius: 8px;
+  background: #ffffff;
+  border-radius: 10px;
   border: 2px solid #065f46;
-  overflow: hidden;
+  padding: 4px; /* create a small white gutter between outer border and button edges */
+  overflow: visible;
 }
 
 .tab-btn {
-  padding: 12px 24px;
+  padding: 8px 20px;
   border: none;
-  background: white;
+  background: #ffffff;
   color: #065f46;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
-  transition: all 0.3s;
+  transition: all 0.25s ease;
+  border-radius: 8px; /* rounded inner buttons */
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .tab-btn.active {
   background: #065f46;
   color: white;
+  box-shadow: none;
 }
 
 .tab-btn:hover:not(.active) {
@@ -77,12 +98,78 @@
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
 }
 
+/* Green top-line hover effect (same visual language as agenda-aventureiro) */
+.left-panel::before,
+.right-panel::before,
+.tendencias-section::before,
+.cities-panel::before,
+.events-panel::before,
+.feedback-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #336948, #226144, #0C513F);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 0 0 4px 4px;
+}
+
+.left-panel:hover::before,
+.right-panel:hover::before,
+.tendencias-section:hover::before,
+.cities-panel:hover::before,
+.events-panel:hover::before,
+.feedback-section:hover::before {
+  opacity: 1;
+}
+
+/* Ensure card containers are positioned relative so ::before lines up */
+.left-panel,
+.right-panel,
+.tendencias-section,
+.cities-panel,
+.events-panel,
+.feedback-section {
+  position: relative;
+}
+
+/* Expand small decorative underline on h2 when hovering the card */
+.left-panel h2::after,
+.right-panel h2::after,
+.tendencias-section h2::after,
+.cities-panel h2::after,
+.events-panel h2::after,
+.feedback-section h2::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #336948, #226144);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+}
+
+.left-panel:hover h2::after,
+.right-panel:hover h2::after,
+.tendencias-section:hover h2::after,
+.cities-panel:hover h2::after,
+.events-panel:hover h2::after,
+.feedback-section:hover h2::after {
+  width: 80px;
+}
+
 .left-panel h2,
 .right-panel h2 {
   font-size: 24px;
   font-weight: 600;
   color: #065f46;
   margin-bottom: 24px;
+  font-family: "Raleway", sans-serif;
 }
 
 .stat-card {
@@ -317,6 +404,7 @@
   font-weight: 600;
   color: #065f46;
   margin-bottom: 24px;
+  font-family: "Raleway", sans-serif;
 }
 
 .chart-container {
@@ -434,6 +522,7 @@
   font-weight: 600;
   color: #065f46;
   margin-bottom: 8px;
+  font-family: "Raleway", sans-serif;
 }
 
 .cities-list {
@@ -614,6 +703,7 @@
   font-weight: 600;
   color: #065f46;
   margin-bottom: 24px;
+  font-family: "Raleway", sans-serif;
 }
 
 .word-cloud {
@@ -687,5 +777,10 @@
     grid-column: 2 / 3;
     text-align: left;
     margin-top: 4px;
+  }
+
+  /* Reduce left offset on small screens */
+  .title-row {
+    margin-left: 8px;
   }
 }

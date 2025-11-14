@@ -6,6 +6,11 @@ body {
 	overflow-x: hidden;
 }
 
+/* Remover o fundo global #f6f7f8 apenas nesta tela */
+html, body, #root {
+    background: transparent !important;
+}
+
 .editar-dados-container {
 	min-height: 100vh;
 	width: 100vw;
@@ -78,7 +83,7 @@ body {
 	transition: all 0.3s ease;
 	text-transform: none;
 	letter-spacing: 0.5px;
-	margin-top: 32px;
+ 	margin-top: 12px; /* reduzido para subir o botão */
 }
 
 .salvar-btn:hover {

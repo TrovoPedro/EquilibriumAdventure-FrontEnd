@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+/* Background for entire app so page gutters match the pages */
+html, body, #root {
+  height: 100%;
+  background: #f6f7f8;
+}
+
 /* You can keep or re-add any base resets or custom styles below if needed */
 body {
   margin: 0;

@@ -237,25 +237,32 @@
 }
 
 .infos-adic-guia-page .edit-info-btn {
-    background: linear-gradient(135deg, #336948, #2a5a3a);
-    color: white;
-    border: none;
-    padding: 14px 32px;
-    border-radius: 12px;
-    font-size: 15px;
+    background: #226144;
+    color: #ffffff;
+    font-size: 1rem;
     font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    padding: 12px 24px;
     cursor: pointer;
+    box-shadow: 0 4px 12px rgba(34, 97, 68, 0.2);
     transition: all 0.3s ease;
-    align-self: flex-start;
-    box-shadow: 0 4px 12px rgba(51, 105, 72, 0.2);
     text-transform: none;
-    letter-spacing: 0.3px;
+    letter-spacing: 1.2px;
+    min-width: 140px;
+    height: 44px;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
 }
 
 .infos-adic-guia-page .edit-info-btn:hover {
-    background: linear-gradient(135deg, #2a5a3a, #1e4b2c);
+    background: #1a4d36;
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(51, 105, 72, 0.3);
+    box-shadow: 0 6px 20px rgba(34, 97, 68, 0.3);
 }
 
 /* Próximo Eventos */

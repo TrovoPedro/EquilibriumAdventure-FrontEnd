@@ -52,6 +52,12 @@ export default function AdicionarGuia() {
 
         const cadastrar = async () => {
             try {
+                // Valida se existe imagem selecionada (imagem é obrigatória)
+                if (!formData.imagem) {
+                    showWarning("Por favor, adicione uma foto do guia.");
+                    return;
+                }
+
                 // Validações básicas de campos obrigatórios
                 if (!formData.nome || !formData.nome.trim()) {
                     showWarning("Por favor, preencha o nome do guia.");
@@ -140,7 +146,7 @@ export default function AdicionarGuia() {
                                         alt="Pré-visualização"
                                         className="preview-img"
                                     />
-                                ) : formData.imagem ? (
+                                ) : (formData.imagem && typeof formData.imagem === 'string') ? (
                                     <img src={formData.imagem} alt="Pré-visualização" className="preview-img" />
                                 ) : (
                                     <div className="upload-placeholder">
