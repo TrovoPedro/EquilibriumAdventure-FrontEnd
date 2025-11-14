@@ -240,6 +240,34 @@
   background: #223026;
 }
 
+/* Novo layout: botões menores e lado a lado */
+.inscricao-trilha-container > .inscricao-trilha-btn {
+  display: inline-block !important;
+  width: calc(50% - 12px) !important;
+  margin: 8px 6px 24px 6px !important; /* aumentar margem inferior para separar dos comentários */
+  padding: 10px 0 !important; /* menor altura */
+  font-size: 1rem !important; /* texto menor */
+  font-weight: 600 !important; /* manter legibilidade, pode ajustar */
+  text-align: center !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+  border-radius: 10px !important;
+}
+
+/* Estilo do botão compartilhar: manter borda e texto verde */
+.inscricao-trilha-container > .inscricao-trilha-btn.btn-compartilhar {
+  background: #ffffff !important;
+  color: #226144 !important;
+  border: 2px solid #226144 !important;
+}
+
+/* Botão principal de inscrição: garantir cor e remover negrito se desejado */
+.inscricao-trilha-container > .inscricao-trilha-btn.btn-inscrever {
+  background: #226144 !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+}
+
 .inscricao-trilha-comentarios {
   background: #f5f5f5;
   border-radius: 14px;
@@ -345,6 +373,11 @@
   transition: all 0.3s ease;
 }
 
+/* Remover negrito especificamente do botão de inscrição principal */
+.inscricao-trilha-btn.btn-inscrever {
+  font-weight: 700; /* bold */
+}
+
 .btn-cancelar {
   background-color: #9c1d2a; /* vermelho */
 }
@@ -406,5 +439,11 @@
   }
   .inscricao-trilha-comentarios, .inscricao-trilha-mapa {
     padding: 18px 12px;
+  }
+  /* Em telas pequenas, empilhar os botões novamente */
+  .inscricao-trilha-container > .inscricao-trilha-btn {
+    display: block !important;
+    width: 100% !important;
+    margin: 8px 0 16px 0 !important; /* margem inferior maior no mobile */
   }
 }

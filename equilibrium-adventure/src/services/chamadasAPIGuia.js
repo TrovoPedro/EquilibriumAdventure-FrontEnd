@@ -21,13 +21,14 @@ export const cadastrarGuia = async (formData) => {
             fd.append("imagem", formData.imagem);
         }
 
-        const response = await axios.post("http://localhost:8080/administrador/cadastrar-guia", fd, {
-            headers: { "Content-Type": "multipart/form-data" }
-        });
+        // Do not set Content-Type explicitly: browser/axios will set the correct
+        // multipart boundary for FormData automatically.
+        const response = await axios.post("http://localhost:8080/administrador/cadastrar-guia", fd);
 
-        return true;
+        return response.data || true;
     } catch (error) {
         console.error("Erro ao cadastrar guia:", error);
-        return false;
+        // Propagate the error so the caller can show backend/network messages
+        throw error;
     }
 };

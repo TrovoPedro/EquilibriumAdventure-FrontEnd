@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Dashboard.css';
 import Header from '../../components/header/header-unified';
+import ButtonBack from '../../components/circle-back-button2/circle-back-button2';
+import useGoBack from '../../utils/useGoBack';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../../context/AuthContext';
 import {
@@ -32,6 +34,8 @@ const Dashboard = () => {
   const [participantsData, setParticipantsData] = useState({ frequentes: 0, novos: 0 });
   const [occupancyData, setOccupancyData] = useState([]);
   const [dataLoaded, setDataLoaded] = useState(false);
+
+  const goBack = useGoBack();
 
   useEffect(() => {
     if (dataLoaded) {
@@ -374,10 +378,13 @@ const Dashboard = () => {
       <Header />
       <div className="dashboard">
         <div className="dashboard-header">
-          <h1 className={activeTab === 'quantitativos' ? 'active-title' : ''}>
-            {activeTab === 'quantitativos' ? 'Dados Quantitativos' : 'Dados Qualitativos'}
-          </h1>
-          <div className="tab-buttons">
+            <div className="title-row">
+              <ButtonBack onClick={goBack} />
+              <h1 className={activeTab === 'quantitativos' ? 'active-title' : ''}>
+                {activeTab === 'quantitativos' ? 'Dados Quantitativos' : 'Dados Qualitativos'}
+              </h1>
+            </div>
+            <div className="tab-buttons">
             <button
               className={activeTab === 'quantitativos' ? 'tab-btn active' : 'tab-btn'}
               onClick={() => setActiveTab('quantitativos')}

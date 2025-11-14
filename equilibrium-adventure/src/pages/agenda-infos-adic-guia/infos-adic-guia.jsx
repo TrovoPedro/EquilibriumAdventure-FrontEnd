@@ -148,7 +148,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
     return (
         <>
             <Header />
-            <div className="infos-adic-guia-page" style={{ background: '#fff' }}>
+            <div className="infos-adic-guia-page">
                 <div className="home-container">
                     <div className="cards-father">
                         <div className="card-info-guia">
@@ -169,7 +169,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                                         <h3>{nomeUsuario}</h3>
                                         <span className="user-role">{tipoUsuario}</span>
                                     </div>
-                                    <button className="edit-info-btn" onClick={handleEditInfo}>Editar Informações</button>
+                                        <button className="edit-info-btn agenda-aventureiro-btn-info" onClick={handleEditInfo}>Editar Informações</button>
                                 </div>
                             </div>
                         </div>

@@ -65,12 +65,14 @@ body {
     align-items: center;
     gap: 18px;
     justify-content: flex-start;
-    /* reduzir margem inferior para alinhar o card ao mesmo espaçamento de outras páginas */
-    margin-bottom: 0;
+    /* reduzir espaçamento vertical para aproximar do formulário */
+    margin-bottom: 8px;
+    /* desloca o header um pouco para baixo (mantém formulário no lugar) */
+    margin-top: 24px;
     width: 100%;
     max-width: 1400px;
-    /* mover o botão e o título mais para a direita */
-    padding-left: 140px;
+    /* mover o botão e o título levemente para a direita (reduzido para aproximar do conteúdo) */
+    padding-left: 100px;
 }
 
 .adicionar-guia-title {
