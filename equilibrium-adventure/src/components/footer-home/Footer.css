@@ -246,6 +246,33 @@ html {
     color: #c8e6c9;
 }
 
+/* Accordion helpers (mobile-only behaviour activated via media queries) */
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.section-toggle {
+    display: none; /* visível apenas em mobile */
+    background: transparent;
+    border: none;
+    color: #c8e6c9;
+    font-size: 1rem;
+    padding: 6px 8px;
+    border-radius: 6px;
+}
+
+.section-toggle:focus {
+    outline: 2px solid rgba(102,187,106,0.25);
+}
+
+.section-body {
+    /* por padrão (desktop) o conteúdo permanece visível */
+}
+
+
 /* Responsive Design */
 @media (max-width: 1024px) {
     .footer-content {
@@ -284,6 +311,29 @@ html {
     .footer-section h4::after {
         left: 50%;
         transform: translateX(-50%);
+    }
+
+    /* Activar accordion: esconder conteúdo e mostrar toggle */
+    .section-toggle {
+        display: inline-block;
+    }
+
+    .section-body {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.36s ease, opacity 0.3s ease;
+        opacity: 0;
+    }
+
+    .footer-section.open .section-body {
+        max-height: 800px; /* espaço suficiente para o conteúdo */
+        opacity: 1;
+    }
+
+    .section-header h4,
+    .section-header h3 {
+        margin: 0;
+        text-align: left;
     }
 }
 

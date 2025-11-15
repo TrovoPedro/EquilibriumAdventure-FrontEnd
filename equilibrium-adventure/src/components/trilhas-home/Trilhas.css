@@ -5,13 +5,29 @@
     align-items: center;
     background-color: #f5f5f5;
     padding: 60px;
+        width: 100%;
+        box-sizing: border-box;
+        /* center snaps: when card width is 92vw, remaining space is 8vw -> half is 4vw */
+        scroll-padding-inline: 4vw;
+        scroll-padding-left: 4vw;
+        scroll-padding-right: 4vw;
+    }
+
+    .cards-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    scroll-snap-align: center;
 }
 
 .cards {
     display: flex;
     gap: 48px;
     justify-content: center;
-    flex-wrap: wrap;
+    /* keep three cards side-by-side on desktop by default */
+    flex-wrap: nowrap;
 }
 
 .card {
@@ -19,7 +35,11 @@
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
     overflow: hidden;
-    width: 480px; /* largura aumentada de 420px para 480px */
+    /* make each card take roughly one third of the available width
+       subtracting the gaps (2 * 48px) so three cards fit on one row */
+    flex: 0 0 calc((100% - 96px) / 3);
+    max-width: calc((100% - 96px) / 3);
+    min-width: 0;
     min-height: 450px;
     transition: transform 0.2s;
     display: flex;
@@ -31,6 +51,12 @@
     height: 290px;
     /* imagem mais alta */
     object-fit: cover;
+}
+
+/* make image follow rounded corners at top of card */
+.card img {
+    display: block;
+    border-radius: 16px 16px 0 0;
 }
 
 .trilhas h2 {
@@ -67,4 +93,143 @@
     color: #7bbf7f;
     font-size: 0.95rem;
     font-weight: 500;
+}
+
+/* navigation buttons for carousel */
+.trilhas-nav {
+        display: none;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 4;
+        background: rgba(0,0,0,0.6);
+        color: #fff;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 22px;
+        line-height: 1;
+}
+.trilhas-nav.prev { left: 8px; }
+.trilhas-nav.next { right: 8px; }
+
+.trilhas-nav:disabled {
+    opacity: 0.35;
+    pointer-events: none;
+}
+
+/* Mobile / small screens: show horizontal scroll carousel with snap */
+@media (max-width: 900px) {
+    /* reservar espaço extra no topo para os botões acima dos cards */
+    .cards-wrapper { position: relative; padding-top: 5px; }
+
+    .cards {
+        display: flex;
+        flex-direction: row;
+        gap: 16px;
+        align-items: stretch;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px 6vw;
+        overflow-x: auto;
+        scroll-snap-type: x mandatory;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .card {
+        flex: 0 0 86%;
+        max-width: 86%;
+        scroll-snap-align: center;
+        box-sizing: border-box;
+        /* manter mesma altura entre todos os cards no mobile */
+        min-height: 420px;
+        height: 420px;
+        margin: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start;
+    }
+
+    /* stacked deck style for mobile when JS-enabled (class applied in component) */
+    .cards.stacked {
+        position: relative;
+        /* reservar espaço para o card único em mobile */
+        height: 460px;
+        overflow: visible;
+        display: block;
+        padding: 12px 18px;
+    }
+
+    /* garantir que o wrapper reserve espaço suficiente quando usar o deck */
+    .cards-wrapper { min-height: 480px; }
+
+    .card.mobile-stack {
+        width: 86%;
+        max-width: 86%;
+        left: 50%;
+        transform-origin: center top;
+        border-radius: 14px;
+        box-shadow: 0 8px 28px rgba(0,0,0,0.12);
+        position: absolute;
+        margin: 0 auto;
+    }
+
+    /* estilo para o único card mostrado no mobile */
+    .card.mobile-single {
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 86%;
+        max-width: 86%;
+        z-index: 20;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.14);
+        border-radius: 14px;
+        background: #fff;
+        display: block;
+        /* garantir mesma altura que os demais cards */
+        height: 420px;
+    }
+
+    .card img { height: 220px; }
+
+    .cards::-webkit-scrollbar { display: none; }
+
+    /* show carousel nav buttons on mobile */
+    .trilhas-nav { display: block; }
+
+    /* reduce padding inside card content so image touches top corners */
+    .card-info { padding: 12px; }
+
+    .trilhas { padding: 40px 12px; }
+    /* adicionar padding inferior extra para separar da seção seguinte */
+    .trilhas { padding: 40px 12px 56px; }
+    .trilhas h2 { font-size: 1.4rem; text-align: center; }
+
+    .trilhas-nav {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        /* alinhar verticalmente ao centro do card: padding-top + metade da altura do card */
+        top: calc(80px + 210px);
+        transform: translateY(-50%);
+        /* colocar botões acima dos cards empilhados */
+        z-index: 200;
+        background: rgba(0,0,0,0.55);
+        color: #fff;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 22px;
+    }
+
+    /* posicionar os botões mais próximos às bordas da tela (lado externo dos cards) */
+    .trilhas-nav.prev { left: 0.25%; }
+    .trilhas-nav.next { right: 0.25%; }
+
+    .trilhas-nav:disabled { opacity: 0.35; pointer-events: none; }
 }

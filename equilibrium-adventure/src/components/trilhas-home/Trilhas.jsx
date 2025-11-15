@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Trilhas.css";
 import trilhasImg1 from "../../assets/trilha1.jpg";
 import trilhasImg2 from "../../assets/trilha2.jpg";
@@ -21,6 +21,60 @@ export default function Trilhas() {
   const handleCardClick = () => {
     navigate("/login");
   };
+
+  const cardsRef = useRef(null);
+  const [canPrev, setCanPrev] = useState(false);
+  const [canNext, setCanNext] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  const updateNav = () => {
+    const el = cardsRef.current;
+    if (!el) return;
+    setCanPrev(el.scrollLeft > 5);
+    setCanNext(el.scrollLeft + el.clientWidth + 5 < el.scrollWidth);
+  };
+
+  const scrollByCard = (dir = 1) => {
+    const el = cardsRef.current;
+    if (!el) return;
+    const firstCard = el.querySelector('.card');
+    const gapComputed = parseInt(getComputedStyle(el).gap || 16, 10) || 16;
+    const cardWidth = firstCard ? firstCard.offsetWidth + gapComputed : Math.round(el.clientWidth * 0.9);
+    el.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
+  };
+
+  // mobile navigation (deck)
+  const showNext = () => {
+    setActiveIndex((prev) => (visibleEventos.length ? (prev + 1) % visibleEventos.length : 0));
+  };
+
+  const showPrev = () => {
+    setActiveIndex((prev) => (visibleEventos.length ? (prev - 1 + visibleEventos.length) % visibleEventos.length : 0));
+  };
+
+  useEffect(() => {
+    updateNav();
+    const el = cardsRef.current;
+    if (!el) return;
+    const onScroll = () => updateNav();
+    window.addEventListener('resize', updateNav);
+    el.addEventListener('scroll', onScroll, { passive: true });
+    // detect mobile breakpoint and set state
+    const mql = window.matchMedia && window.matchMedia('(max-width: 900px)');
+    const setMq = () => setIsMobile(mql ? mql.matches : window.innerWidth <= 900);
+    setMq();
+    if (mql && mql.addEventListener) mql.addEventListener('change', setMq);
+    else if (mql && mql.addListener) mql.addListener(setMq);
+
+    return () => {
+      window.removeEventListener('resize', updateNav);
+      el.removeEventListener('scroll', onScroll);
+      if (mql && mql.removeEventListener) mql.removeEventListener('change', setMq);
+      else if (mql && mql.removeListener) mql.removeListener(setMq);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [loading, eventos.length]);
 
   useEffect(() => {
     let isMounted = true;
@@ -107,6 +161,21 @@ export default function Trilhas() {
     return `${ev.distancia_km} km`;
   };
 
+  const isPedraAzul = (ev) => {
+    if (!ev) return false;
+    const name = (ev.nome_evento || ev.title || ev.name || '').toString().toLowerCase();
+    return name.includes('pedra azul') || name.includes('trilha da pedra azul');
+  };
+
+  // Card customizado a ser exibido junto aos demais
+  const customCard = {
+    id: 'custom-trilha-mirante',
+    nome_evento: 'Trilha do Mirante',
+    imagemUrl: trilhasImg1,
+    distancia_km: 3.2,
+    dias: '1 Dia de Trilha'
+  };
+
   const formatDate = (raw) => {
     if (!raw) return null;
     // se já vier em formato YYYY-MM-DD, converte para DD/MM/YYYY
@@ -124,29 +193,85 @@ export default function Trilhas() {
     return String(raw).slice(0, 16);
   };
 
+  // preparar lista visível: filtrar Pedra Azul e garantir card custom
+  const visibleEventos = eventos.filter((t) => !isPedraAzul(t));
+  if (!visibleEventos.some(e => e && (e.id === customCard.id || e.nome_evento === customCard.nome_evento))) {
+    visibleEventos.push(customCard);
+  }
+
+  // keep activeIndex in range when visibleEventos changes
+  useEffect(() => {
+    if (activeIndex >= visibleEventos.length) setActiveIndex(0);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [visibleEventos.length]);
+
   return (
     <section className="trilhas">
       <h2>Seu próximo lugar favorito o aguarda</h2>
-      <div className="cards">
-        {loading ? (
-          <p>Carregando...</p>
-        ) : (
-          eventos.map((t, i) => {
-            const distance = getDistance(t);
-            const rawDate = t.data_ativacao || t.data_inicio || t.data || t.dataEvento || t.date || t.dias;
-            const dateStr = formatDate(rawDate);
-            return (
-              <div className="card" key={t.id || i} onClick={handleCardClick} style={{ cursor: "pointer" }}>
-                <img src={t.imagemUrl} alt={t.nome_evento || t.title || 'Trilha'} />
-                <div className="card-info">
-                  <h3>{t.nome_evento || t.title}</h3>
-                  {distance && <p>{distance}</p>}
-                  {dateStr && <span>{dateStr}</span>}
-                </div>
-              </div>
-            );
-          })
-        )}
+      <div className="cards-wrapper">
+        <button
+          className="trilhas-nav prev"
+          onClick={() => (isMobile ? showPrev() : scrollByCard(-1))}
+          aria-label="Anterior"
+          disabled={!canPrev && !isMobile}
+        >
+          ‹
+        </button>
+        <div className={`cards ${isMobile ? 'stacked' : ''}`} ref={cardsRef}>
+          {loading ? (
+            <p>Carregando...</p>
+          ) : (
+            isMobile ? (
+              // render apenas o card ativo na versão mobile
+              (() => {
+                if (visibleEventos.length === 0) return null;
+                const t = visibleEventos[activeIndex % visibleEventos.length];
+                const distance = getDistance(t);
+                const rawDate = t.data_ativacao || t.data_inicio || t.data || t.dataEvento || t.date || t.dias;
+                const dateStr = formatDate(rawDate);
+                return (
+                  <div
+                    className="card mobile-single"
+                    key={t.id || activeIndex}
+                    onClick={handleCardClick}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    <img src={t.imagemUrl} alt={t.nome_evento || t.title || 'Trilha'} />
+                    <div className="card-info">
+                      <h3>{t.nome_evento || t.title}</h3>
+                      {distance && <p>{distance}</p>}
+                      {dateStr && <span>{dateStr}</span>}
+                    </div>
+                  </div>
+                );
+              })()
+            ) : (
+              visibleEventos.map((t, i) => {
+                const distance = getDistance(t);
+                const rawDate = t.data_ativacao || t.data_inicio || t.data || t.dataEvento || t.date || t.dias;
+                const dateStr = formatDate(rawDate);
+                return (
+                  <div className="card" key={t.id || i} onClick={handleCardClick} style={{ cursor: "pointer" }}>
+                    <img src={t.imagemUrl} alt={t.nome_evento || t.title || 'Trilha'} />
+                    <div className="card-info">
+                      <h3>{t.nome_evento || t.title}</h3>
+                      {distance && <p>{distance}</p>}
+                      {dateStr && <span>{dateStr}</span>}
+                    </div>
+                  </div>
+                );
+              })
+            )
+          )}
+        </div>
+        <button
+          className="trilhas-nav next"
+          onClick={() => (isMobile ? showNext() : scrollByCard(1))}
+          aria-label="Próximo"
+          disabled={!canNext && !isMobile}
+        >
+          ›
+        </button>
       </div>
     </section>
   );
