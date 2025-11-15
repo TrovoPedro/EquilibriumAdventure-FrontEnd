@@ -208,6 +208,11 @@
     font-weight: 500;
 }
 
+/* Next button (mobile only) */
+.feedback-next-button {
+    display: none;
+}
+
 @keyframes fadeInUp {
     from {
         opacity: 0;
@@ -260,7 +265,10 @@
     
     .feedback-card {
         padding: 24px;
-        height: 280px;
+        height: auto; /* allow content to define height on mobile */
+        min-height: 200px; /* keep a comfortable card size when text is short */
+        transition: none; /* remove hover movement on mobile */
+        animation: none; /* remove entry animation movement on mobile */
     }
     
     .quote-mark {
@@ -271,26 +279,91 @@
     
     .feedback-texto {
         font-size: 1rem;
+        -webkit-line-clamp: 6; /* show more lines on smaller screens */
+        overflow: hidden;
+    }
+
+    /* place the button inside the card */
+    .feedback-card .feedback-next-button {
+        display: flex;
+        position: absolute;
+        right: 16px;
+        bottom: 18px;
+        width: 56px;
+        height: 56px;
+        border-radius: 999px;
+        background: #295c44; /* verde escuro */
+        color: #fff;
+        border: none;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.6rem;
+        box-shadow: 0 8px 20px rgba(41,92,68,0.18);
+        z-index: 6;
+        cursor: pointer;
+        transition: transform 0.12s ease, background-color 0.12s ease;
+    }
+
+    .feedback-card .feedback-next-button:hover {
+        background: #23423a; /* hover: um pouco mais escuro */
+    }
+
+    .feedback-card .feedback-next-button:active {
+        transform: scale(0.98);
+    }
+
+    /* ensure hover does not move the card on touch devices */
+    .feedback-card:hover {
+        transform: none !important;
+        box-shadow: 0 4px 20px rgba(41, 92, 68, 0.08);
+        border-color: rgba(233, 245, 238, 0.8);
     }
 }
 
 @media (max-width: 480px) {
     .feedback-card {
-        padding: 20px;
+        padding: 16px;
         border-radius: 16px;
-        height: 260px;
+        height: auto; /* let card grow with content */
+        min-height: unset;
     }
-    
+
     .feedback-avatar {
-        width: 48px;
-        height: 48px;
+        width: 40px;
+        height: 40px;
     }
-    
+
     .feedback-nome {
         font-size: 1rem;
     }
-    
+
     .feedback-user {
         font-size: 0.9rem;
+    }
+
+    .feedback-texto {
+        font-size: 0.95rem;
+        -webkit-line-clamp: unset; /* show full text on very small screens */
+        display: block;
+        overflow: visible;
+    }
+
+    .quote-mark {
+        font-size: 2.4rem;
+        top: -12px;
+        left: -6px;
+    }
+
+    .feedback-author {
+        gap: 12px;
+        padding-top: 12px;
+    }
+
+    .feedback-card .feedback-next-button {
+        right: 12px;
+        bottom: 12px;
+        width: 48px;
+        height: 48px;
+        font-size: 1.4rem;
     }
 }

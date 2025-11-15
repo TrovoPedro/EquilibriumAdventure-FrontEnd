@@ -118,3 +118,34 @@ input[type="checkbox"] {
 .forms input.error {
     border-bottom: 1px solid #dc3545;
 }
+
+/* Mobile layout: coloca o botão abaixo do texto e permite que o texto ocupe a largura */
+@media (max-width: 600px) {
+    .forms-footer {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 0.75rem;
+        margin-top: 1.5rem;
+    }
+
+    .forms-footer span {
+        display: block;
+        width: 100%;
+        line-height: 1.2rem;
+        color: #555;
+    }
+
+    /* força o botão de cadastro ficar numa linha abaixo do texto */
+    .forms-footer .button-cad {
+        display: inline-block;
+        margin-left: 0;
+        margin-top: 0.25rem;
+        padding: 0;
+    }
+
+    /* botão de login ocupa toda largura na tela pequena */
+    .auth-button {
+        width: 100% !important;
+        max-width: none;
+    }
+}

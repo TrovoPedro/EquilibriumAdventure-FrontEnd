@@ -79,23 +79,43 @@
   font-size: 1.2rem;
 }
 
+/* Group for auth buttons so they can display side-by-side when needed */
+.auth-group {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.auth-group .btn {
+  padding: 10px 16px;
+}
+
 
 .banner {
     position: relative;
-    width: 100%;
-    height: 700px;
+  width: 100%;
+  height: 820px; /* aumentada para ampliar a primeira dobra em desktop */
     overflow: hidden;
     display: flex;
     align-items: end;
     justify-content: center;
 }
 
+/* When menu is open, allow overflow so the overlay isn't clipped by the banner bounds */
+.banner.menu-open {
+  overflow: visible;
+}
+
+
+@media (max-width: 900px) {
+  .banner {
+    height: 420px; /* aumentada para telas menores, mantendo proporção */
+  }
+}
 
 @media (max-width: 600px) {
-    .banner {
-        height: 320px;
-        /* altura aumentada para mobile */
-    }
+  .banner {
+    height: 380px; /* ajuste específico para mobile mais estreito */
+  }
 
 }
 
@@ -148,4 +168,153 @@
     left: 0;
     width: 100%;
     z-index: 3;
+}
+
+/* Hamburger button - hidden on desktop */
+.hamburger {
+  display: none;
+  position: absolute;
+  top: 28px;
+  right: 24px;
+  width: 44px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  z-index: 6;
+  padding: 6px;
+}
+.hamburger span {
+  display: block;
+  width: 100%;
+  height: 3px;
+  margin: 5px 0;
+  background: #fff;
+  border-radius: 2px;
+  transition: transform 200ms ease, opacity 200ms ease;
+}
+.hamburger.is-active span:nth-child(1) {
+  transform: translateY(8px) rotate(45deg);
+}
+.hamburger.is-active span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger.is-active span:nth-child(3) {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+/* Mobile menu: hide default horizontal menu and show vertical overlay when opened */
+@media (max-width: 900px) {
+  .menu {
+    display: none; /* hide desktop menu on smaller screens */
+  }
+
+  .hamburger {
+    display: block;
+  }
+
+  /* When opened, raise the menu to start near the top and include the close X inside it */
+  .nav.open .menu.open {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: absolute;
+    top: 32px; /* raised to avoid being cut by next section */
+    right: 16px;
+    left: 16px;
+    background: rgba(0,0,0,0.9);
+    padding: 56px 12px 12px 12px; /* top padding to make space for X inside the black area */
+    border-radius: 10px;
+    min-width: auto;
+    max-width: calc(100% - 32px);
+    z-index: 10000;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+    max-height: calc(100vh - 48px); /* ensure it never exceeds the viewport */
+    overflow-y: auto; /* allow internal scroll instead of being cut */
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .menu.open li {
+    text-align: left;
+    display: block;
+    width: 100%;
+  }
+
+  /* Position hamburger (X) inside the opened menu area */
+  .nav.open .hamburger {
+    display: block;
+    position: absolute;
+    top: 12px; /* inside the black menu */
+    right: 20px;
+    z-index: 10001;
+  }
+
+  /* Slightly darken the overlay and ensure it's above following sections */
+  .nav.open .menu.open {
+    background: rgba(0,0,0,0.9);
+  }
+
+  /* Keep auth buttons side-by-side inside mobile overlay */
+  .menu.open .auth-group {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: space-between;
+    width: 100%;
+  }
+
+  .menu.open .auth-group .btn {
+    flex: 1 1 48%;
+    margin-top: 0;
+  }
+
+  .menu.open a {
+    color: #fff;
+    font-size: 1rem;
+    padding: 8px 6px;
+    display: block;
+  }
+
+  .menu.open .btn {
+    width: 100%;
+    box-sizing: border-box;
+    text-align: center;
+    padding: 10px 12px;
+    font-size: 1rem;
+    border-radius: 6px;
+    margin-top: 6px;
+  }
+
+  /* Make 'CRIAR CONTA' clearly visible as a filled button on mobile */
+  .menu.open .btn-create {
+    background: #ffffff !important;
+    color: var(--cor-principal, #2f7a5a) !important;
+    border: 2px solid transparent !important;
+  }
+
+  /* Make 'ENTRAR' visible with white border and transparent background */
+  .menu.open .btn-enter {
+    background: transparent !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+  }
+
+  /* banner text adjustments for smaller viewports */
+  .banner-text {
+    padding-left: 24px;
+    transform: translate(0, -40%);
+  }
+
+  .banner-text h1 {
+    font-size: 2.1rem;
+  }
+
+  .banner-text h2 {
+    font-size: 1.2rem;
+  }
+
+  .banner {
+    height: 360px;
+    align-items: center;
+  }
 }

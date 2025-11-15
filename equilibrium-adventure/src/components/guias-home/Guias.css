@@ -10,6 +10,8 @@
 
 .guia-texto {
   max-width: 50%;
+  flex: 1 1 50%;
+  text-align: left;
 }
 
 .guia-texto h2 {
@@ -60,10 +62,208 @@
   background-color: #0b6330;
 }
 
+.guia-imagem {
+  flex: 1 1 40%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  margin-left: 24px;
+}
+
+/* default image height (desktop) — can be overridden in media queries */
+.guia-imagem {
+  --guia-img-height: 450px;
+}
 .guia-imagem img {
-  width: 350px;         /* Largura fixa */
-  height: 450px;        /* Altura fixa */
-  object-fit: cover;    /* Garante que a imagem preencha sem distorcer */
+  width: 520px; /* aumentei a largura conforme solicitado */
+  height: var(--guia-img-height);
+  object-fit: cover;
   border-radius: 12px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  display: block;
+}
+
+/* show/hide buttons by context */
+.guia-proximo-full { display: none; }
+.guia-proximo-desktop { display: inline-block; }
+
+/* Overlay with guide info (appears on hover desktop, tap on mobile) */
+.guia-overlay {
+  /* hidden by default on desktop */
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 20px;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 220ms ease, transform 220ms ease;
+  transform: translateY(8px);
+  z-index: 3;
+}
+.guia-overlay.active {
+  /* keep active state available for desktop JS toggles if needed, but still hidden */
+  opacity: 0;
+  transform: translateY(8px);
+  pointer-events: none;
+}
+.overlay-content {
+  background: linear-gradient(180deg, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.45) 40%, rgba(0,0,0,0.65) 100%);
+  color: #fff;
+  width: var(--img-w, 100%);
+  max-width: 100%;
+  padding: 16px;
+  border-radius: 8px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+.overlay-depo {
+  font-style: italic;
+  margin-bottom: 8px;
+}
+.overlay-nome {
+  display: block;
+  font-weight: 700;
+  margin-top: 6px;
+}
+.overlay-cidade {
+  display: block;
+  font-size: 0.9rem;
+  color: rgba(255,255,255,0.85);
+}
+
+/* Responsividade: tablets e celulares */
+@media (max-width: 1024px) {
+  .guia-section {
+    padding: 40px;
+    gap: 24px;
+  }
+  .guia-texto h2 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .guia-section {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 28px 16px;
+    gap: 20px;
+  }
+  .guia-texto {
+    max-width: 100%;
+    text-align: center;
+    padding: 0 12px;
+  }
+  /* Mobile: esconder título secundário e reduzir espaçamento */
+  .guia-texto h2 {
+    display: none;
+  }
+  .guia-texto h4 {
+    margin-bottom: 6px;
+  }
+  .guia-texto p {
+    margin-top: 4px;
+    margin-bottom: 12px;
+  }
+  /* Hide desktop depo/button on mobile - depo will appear inside overlay */
+  .guia-depoimento { display: none; }
+  .guia-proximo-desktop { display: none; }
+
+  /* Mobile layout: image fills the content width (not full-bleed) */
+  .guia-imagem {
+    width: 100%;
+    padding-top: 6px;
+    margin-left: 0;
+    border-radius: 12px;
+    overflow: hidden;
+    /* fixed height container so all images share same visual height */
+    --guia-img-height: 340px;
+    height: var(--guia-img-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .guia-imagem img {
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    height: var(--guia-img-height); /* fill container height to ensure uniform size */
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: none;
+    display: block;
+  }
+
+  /* Overlay behavior on mobile: visible only when `.active` is set (toggled by JS) */
+  .guia-overlay {
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    padding: 12px;
+    pointer-events: auto;
+    opacity: 1;
+    transition: opacity 220ms ease, transform 220ms ease;
+    transform: translateY(0);
+    z-index: 3;
+  }
+  .guia-overlay.active {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+  .overlay-content {
+    padding: 12px;
+    border-radius: 8px;
+    width: var(--img-w, 100%);
+    max-width: 100%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    /* make the overlay card sit flush with the bottom edge of the image */
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    /* round only the bottom corners so it appears attached to image */
+    border-radius: 0 0 12px 12px;
+  }
+
+  /* hide the city/location line on mobile as requested */
+  .overlay-cidade {
+    display: none;
+  }
+
+  /* hide desktop-only button on mobile; keep shared `.guia-proximo` for the full button */
+  .guia-proximo-desktop { display: none !important; }
+  .guia-proximo-full {
+    display: block !important;
+    /* make the button match the image width and center it */
+    width: var(--img-w, 100%);
+    margin: 12px auto 0;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    border-radius: 8px;
+  }
+}
+
+@media (max-width: 420px) {
+  .guia-texto h2 {
+    font-size: 1.4rem;
+  }
+  .guia-texto p {
+    font-size: 15px;
+  }
+  .guia-imagem img {
+    width: 88%;
+    max-width: 300px;
+  }
+  .guia-proximo {
+    width: 100%;
+    padding: 12px 16px;
+    margin-top: 8px;
+  }
 }
