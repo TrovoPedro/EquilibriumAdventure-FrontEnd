@@ -14,7 +14,7 @@ import questionnaireIcon from '../../assets/questionnaire.png';
 
 const Login = () => {
   const navigate = useNavigate();
-  const title = "LOG IN";
+  const title = "LOG IN"; 
   const text = "Cadastre-se";
   const { login } = useAuth();
   const { salvarPontuacao } = useScore();
