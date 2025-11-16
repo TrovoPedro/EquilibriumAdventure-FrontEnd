@@ -475,14 +475,25 @@ const InscricaoTrilhasLimitado = () => {
 
       <div className="card inscricao-trilha-mapa">
         <h3>Mapa da Trilha</h3>
-        <MapaTrilha
-          gpxFile={
-            gpxData
-              ? URL.createObjectURL(new Blob([gpxData], { type: "application/gpx+xml" }))
-              : "/assets/gpx-files/trilha-cachoeira-dos-grampos-fumaca.gpx"
-          }
-          altura="450px"
-        />
+        {gpxData ? (
+          <MapaTrilha
+            gpxFile={URL.createObjectURL(new Blob([gpxData], { type: "application/gpx+xml" }))}
+            altura="450px"
+          />
+        ) : (
+          <div style={{
+            height: '450px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#666',
+            background: '#f8f9f9',
+            borderRadius: '8px',
+            border: '1px dashed #e6e6e6'
+          }}>
+            <strong>Percurso não disponível</strong>
+          </div>
+        )}
       </div>
     </div >
   );

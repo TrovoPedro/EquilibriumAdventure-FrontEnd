@@ -6,8 +6,10 @@ import BackButton from "../../components/circle-back-button/circle-back-button";
 import useGoBack from "../../utils/useGoBack";
 import { FaCloudUploadAlt } from "react-icons/fa";
 import { useAuth } from "../../context/AuthContext";
-import { atualizarGuia } from "../../services/apiAdministrador";
-import { buscarImagemUsuario } from "../../services/apiUsuario";
+import { buscarGuiaPorId, buscarGuiasAdm } from "../../services/apiAdministrador";
+import { atualizarGuia } from "../../services/apiGuia";
+import { buscarImagemUsuario, buscarDadosUsuario } from "../../services/apiUsuario";
+import { buscarGuias } from "../../services/apiTrilhas";
 import PopUpOk from "../../components/pop-up-ok/pop-up-ok";
 
 export default function DadosGuia() {
@@ -16,43 +18,104 @@ export default function DadosGuia() {
     const goBack = useGoBack();
     const { usuario } = useAuth();
     
-    // Receber dados do guia selecionado via location.state
-    const guiaData = location.state?.guiaData;
-    const guiaId = location.state?.guiaId;
+    const guiaDataFromState = location.state?.guiaData;
+    const guiaIdFromState = location.state?.guiaId;
+    const guiaId = guiaIdFromState || usuario?.id;
 
     const [formData, setFormData] = useState({
         nome: "",
         email: "",
         descricao: "",
-        imagem: null, // arquivo selecionado pelo input
-        imagemPreview: null // url da imagem atual fornecida pelo backend
+        imagem: null,
+        imagemPreview: null
     });
 
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
     useEffect(() => {
-        // Preencher os campos com os dados do guia selecionado
-        if (guiaData) {
-            setFormData({
-                nome: guiaData.nome || "",
-                email: guiaData.email || "",
-                descricao: guiaData.descricao_guia || "",
-                imagem: null // A imagem será carregada separadamente se necessário
-            });
-        }
-    }, [guiaData]);
+        const preencher = async () => {
+            try {
+                let data = guiaDataFromState;
 
-    // ref para armazenar URL criado e limpar quando o componente desmontar
+                if (!data && guiaIdFromState) {
+                    try {
+                        data = await buscarGuiaPorId(guiaIdFromState);
+                    } catch (fetchErr) {
+                        const status = fetchErr?.response?.status || null;
+                        if (status !== 404) throw fetchErr;
+                    }
+                }
+
+                if (!data && guiaId) {
+                    try {
+                        data = await buscarGuiaPorId(guiaId);
+                    } catch (fetchErr) {
+                        console.log('Tentando buscar por endpoint alternativo...');
+                        try {
+                            const todosGuias = await buscarGuias();
+                            const guiaEncontrado = todosGuias.find(g => 
+                                String(g.idUsuario) === String(guiaId) || 
+                                String(g.id_usuario) === String(guiaId) ||
+                                String(g.id) === String(guiaId)
+                            );
+                            
+                            if (guiaEncontrado) {
+                                data = guiaEncontrado;
+                            } else {
+                                const dadosUsuario = await buscarDadosUsuario(guiaId);
+                                data = {
+                                    ...dadosUsuario,
+                                    descricao_guia: dadosUsuario?.descricao_guia || dadosUsuario?.descricao || ''
+                                };
+                            }
+                        } catch (fetchErr2) {
+                            console.error('Erro ao buscar dados do guia logado por endpoints alternativos:', fetchErr2);
+                            data = {
+                                nome: usuario?.nome || "",
+                                email: usuario?.email || usuario?.login || "",
+                                descricao: ''
+                            };
+                        }
+                    }
+                }
+
+                if (data) {
+                    const guia = Array.isArray(data) ? (data[0] || {}) : data;
+                    const nome = guia.nome || guia.nomeUsuario || guia.nome_guia || guia.usuario?.nome || guia.pessoa?.nome || guia.usuario?.nomeUsuario || usuario?.nome || "";
+                    const email = guia.email || guia.usuario?.email || guia.emailGuia || guia.usuario?.login || usuario?.email || "";
+                    const descricao = guia.descricao_guia || guia.descricao || guia.descricaoGuia || guia.perfil?.descricao || guia.usuario?.descricao_guia || "";
+
+                    setFormData(prev => ({
+                        ...prev,
+                        nome: nome,
+                        email: email,
+                        descricao: descricao,
+                        imagem: null
+                    }));
+                }
+            } catch (err) {
+                console.error('Erro ao obter dados do guia para preencher o formulário:', err);
+            }
+        };
+
+        preencher();
+    }, [guiaDataFromState, guiaId, usuario]);
+
     const imagemUrlRef = useRef(null);
 
-    // Busca a imagem do usuário (guia) pelo id e preenche imagemPreview
+    const isOwnProfile = String(guiaId) === String(usuario?.id);
+
     useEffect(() => {
         const carregarImagem = async () => {
-            if (!guiaId) return;
+            if (!guiaId) {
+                console.log('guiaId não definido, não é possível carregar imagem');
+                return;
+            }
+            console.log('Carregando imagem para guiaId:', guiaId);
             try {
                 const url = await buscarImagemUsuario(guiaId);
+                console.log('URL da imagem recebida:', url);
                 if (url) {
-                    // limpa url anterior, se houver
                     if (imagemUrlRef.current) {
                         try { URL.revokeObjectURL(imagemUrlRef.current); } catch (e) { /* ignore */ }
                     }
@@ -72,12 +135,11 @@ export default function DadosGuia() {
                 imagemUrlRef.current = null;
             }
         };
-    }, [guiaId]);
+    }, [guiaId, usuario]);
 
     const handleChange = (e) => {
         const { name, value, files } = e.target;
         if (files && files[0]) {
-            // arquivo selecionado -> atualiza `imagem` e limpa imagemPreview
             setFormData((prev) => ({ ...prev, imagem: files[0] }));
         } else {
             setFormData((prev) => ({ ...prev, [name]: value }));
@@ -95,15 +157,18 @@ export default function DadosGuia() {
         try {
             console.log("Atualizando guia:", {
                 id: guiaId,
+                nome: formData.nome,
+                email: formData.email,
                 descricao: formData.descricao,
                 imagem: formData.imagem
             });
-            
-            const result = await atualizarGuia(
-                guiaId, 
-                formData.descricao, 
-                formData.imagem
-            );
+
+            const result = await atualizarGuia(guiaId, {
+                nome: formData.nome,
+                email: formData.email,
+                descricao: formData.descricao,
+                imagem: formData.imagem
+            });
             
             console.log("Guia atualizado com sucesso:", result);
             setShowSuccessPopup(true);
@@ -205,7 +270,6 @@ export default function DadosGuia() {
                     message="Dados do guia atualizados com sucesso!"
                     onConfirm={() => {
                         setShowSuccessPopup(false);
-                        navigate(routeUrls.VER_GUIAS);
                     }}
                 />
             )}
