@@ -200,10 +200,8 @@ const InscricaoTrilhasLimitado = () => {
       idAtivacaoEvento: id // ⚠ aqui mudou
     });
 
-    setComentarios(prev => [...prev, {
-      nome: comentarioCriado.nomeUsuario,
-      texto: comentarioCriado.texto
-    }]);
+    // Adiciona o comentário retornado pelo backend (preserva tipoUsuario e demais campos)
+    setComentarios(prev => [...prev, comentarioCriado]);
   };
 
 
