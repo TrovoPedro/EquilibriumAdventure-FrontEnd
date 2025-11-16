@@ -57,9 +57,7 @@ const Login = () => {
           const informacoes = await buscarInformacoesPerfil(usuario.id);
           const nivel = await buscarNivelPerfil(usuario.id);
           if (nivel.nivel) {
-            salvarPontuacao(nivel.nivel);
-            
-            // Mostra aviso antes de ir para escolher guia
+            salvarPontuacao(nivel.nivel, nivel.pontuacaoTotal);
             const result = await Swal.fire({
               title: 'Login realizado com sucesso!',
               text: 'Você será redirecionado para escolher seu guia.',
@@ -69,7 +67,8 @@ const Login = () => {
               timer: 2000,
               timerProgressBar: true
             });
-            
+            // Marca que está vindo do login para limpeza posterior
+            sessionStorage.setItem('vemDoLogin', 'true');
             nextRoute = routeUrls.ESCOLHER_GUIA;
           } else {
             // Mostra aviso antes de ir para o questionário
