@@ -36,7 +36,9 @@ export default function Trilhas() {
           guiasExibidos.map(async (guia) => {
             try {
               const evs = await buscarEventosAtivosPorGuia(guia.id || guia.id_guia || guia.idGuia);
-              return (evs || []).map(e => ({ ...e, guiaNome: guia.nome || guia.nome_completo || guia.nomeGuia }));
+              return (evs || [])
+                .filter(e => (e.log || "").trim().toUpperCase() !== "FINALIZADO")
+                .map(e => ({ ...e, guiaNome: guia.nome || guia.nome_completo || guia.nomeGuia }));
             } catch (err) {
               return [];
             }
