@@ -18,27 +18,36 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
-  // Carrega anamnese assim que o usuário for definido
   useEffect(() => {
     const carregarAnamnese = async () => {
       if (usuario?.id) {
-        const dados = await buscarAnamnesePorAventureiro(usuario.id);
-        setAnamnese(dados);
-        sessionStorage.setItem("anamnese", JSON.stringify(dados));
+        try {
+          const dados = await buscarAnamnesePorAventureiro(usuario.id);
+          setAnamnese(dados);
+          sessionStorage.setItem("anamnese", JSON.stringify(dados));
+        } catch (error) {
+          console.error("Erro ao carregar anamnese:", error);
+          setAnamnese([]);
+        }
+      } else {
+        setAnamnese([]);
       }
     };
     carregarAnamnese();
-  }, [usuario]);
+  }, [usuario?.id]);
 
   const login = (userData) => {
+    setAnamnese([]);
     setUsuario(userData);
     sessionStorage.setItem("usuario", JSON.stringify(userData));
+    window.dispatchEvent(new Event('userChanged'));
   };
 
   const logout = () => {
     setUsuario(null);
     setAnamnese([]);
     sessionStorage.clear();
+    window.location.href = '/';
   };
 
   return (

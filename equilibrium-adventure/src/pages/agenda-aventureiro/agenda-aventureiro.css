@@ -314,6 +314,7 @@
   position: relative;
   overflow: hidden;
   border: none;
+  row-gap: 5vh;
 }
 
 .agenda-aventureiro-card-info::before,
@@ -353,7 +354,7 @@
   font-weight: 600;
   color: #0C513F;
   margin: 0;
-  padding: 0 0 20px 0;
+  padding: 0 0 0 0;
   border-bottom: 3px solid rgba(51, 105, 72, 0.1);
   letter-spacing: -0.025em;
   position: relative;
