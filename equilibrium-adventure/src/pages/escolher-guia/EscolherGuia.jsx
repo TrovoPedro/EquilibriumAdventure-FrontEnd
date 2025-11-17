@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./EscolherGuia.css";
 import { buscarGuias } from "../../services/apiTrilhas";
 import routeUrls from "../../routes/routeUrls";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useGuide } from "../../context/GuideContext";
+import { useScore } from "../../context/ScoreContext";
 import useGoBack from "../../utils/useGoBack";
 
 function EscolherGuia() {
@@ -11,10 +12,29 @@ function EscolherGuia() {
   const [loading, setLoading] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
   const navigate = useNavigate();
+  const location = useLocation();
   const { escolherGuia } = useGuide();
-  const goBack = useGoBack(); // 👈 chama o hook e armazena a função
+  const { resetarPontuacao } = useScore();
+  const goBack = useGoBack();
 
   const CARDS_PER_SLIDE = 4;
+
+  const handleGoBack = () => {
+    // Verifica se veio do login marcando uma flag no sessionStorage
+    const vemDoLogin = sessionStorage.getItem('vemDoLogin');
+    
+    if (vemDoLogin === 'true') {
+      // Limpa a sessão apenas se veio do login
+      resetarPontuacao();
+      sessionStorage.removeItem('usuario')
+      sessionStorage.removeItem('anamnese');
+      sessionStorage.removeItem('encaminharParaAnamnese');
+      sessionStorage.removeItem('guiaSelecionado');
+      sessionStorage.removeItem('vemDoLogin');
+    }
+    
+    goBack();
+  };
 
   useEffect(() => {
     const fetchGuias = async () => {
@@ -86,7 +106,7 @@ function EscolherGuia() {
         <button
           className="close-btn-escolher-guia"
           aria-label="Fechar"
-          onClick={goBack} // 👈 usa a função retornada
+          onClick={handleGoBack}
         >
           ✕
         </button>

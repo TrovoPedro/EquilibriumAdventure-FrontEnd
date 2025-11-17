@@ -99,11 +99,10 @@
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
     position: relative;
     overflow: hidden;
-    padding: 16px 20px;
+    padding: 12px 18px 12px 18px;
+    padding-right: 140px;
     animation: slideIn 0.3s ease-out;
-    /* Altura fixa por card para caber 3 por vez */
-    min-height: 110px;
-    max-height: 110px;
+    min-height: 64px;
     display: flex;
     flex-direction: column;
 }
@@ -129,7 +128,7 @@
 }
 
 .comentario-header {
-    margin-bottom: 8px;
+    margin-bottom: 2px;
 }
 
 .comentario-autor {
@@ -147,7 +146,6 @@
     margin: 0;
     font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     font-weight: 400;
-    /* Limitar texto para não ultrapassar a altura do card */
     display: -webkit-box;
     line-clamp: 3;
     -webkit-line-clamp: 3;
@@ -165,7 +163,6 @@
     z-index: 2;
     display: flex;
     gap: 16px;
-    /* centraliza verticalmente input e botão para terem mesma altura visual */
     align-items: center;
 }
 
@@ -231,10 +228,11 @@
 }
 
 .comentario-header {
-  display: flex;
-  justify-content: space-between; /* nome à esquerda, data à direita */
-  align-items: center; /* alinha verticalmente */
-  margin-bottom: 8px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    /* pequeno aumento para afastar o texto do nome */
+    margin-bottom: 10px;
 }
 
 .comentario-autor {
@@ -243,9 +241,45 @@
   font-size: 1rem;
 }
 
+.comentario-author-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.comentario-right-area {
+    /* Position absolute so it doesn't affect document flow or push the text down */
+    position: absolute;
+    top: 12px;
+    right: 18px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    z-index: 12;
+    /* keep a fixed narrow column for date+button to avoid layout shifts */
+    width: 120px;
+}
+
 .comentario-data {
   font-size: 0.85rem;
   color: #888; /* cor mais clara para diferenciar */
+}
+
+.comentario-delete {
+    background: transparent;
+    border: none;
+    color: #c0392b;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 6px 12px;
+    font-size: 0.95rem;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 92px;
+    text-align: center;
 }
 
 .comentario-vazio {
@@ -253,5 +287,46 @@
   color: #888;
   font-style: italic;
   padding: 16px 0;
+}
+
+/* Badge that marks comments from guides/admins */
+.comentario-badge {
+    background: #226144;
+    color: #fff;
+    font-size: 0.7rem;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+}
+
+.comentario-delete {
+    background: transparent;
+    border: none;
+    color: #c0392b;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 6px 8px;
+    border-radius: 6px;
+}
+
+.comentario-delete:hover {
+    background: rgba(192, 57, 43, 0.12);
+    box-shadow: none;
+}
+
+/* Specific overrides when Comentarios is rendered inside DetalhesEvento which forces wide buttons */
+.detalhes-evento-content .comentario-delete {
+    width: 92px !important;
+    min-width: 0 !important;
+    padding: 6px 12px !important;
+    font-size: 0.95rem !important;
+    border-radius: 8px !important;
+}
+
+.detalhes-evento-content .comentario-right-area {
+    right: 18px !important;
+    width: 120px !important;
 }
 

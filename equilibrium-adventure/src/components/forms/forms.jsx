@@ -152,7 +152,28 @@ const Forms = ({ title, handleSubmit, text, handleNavigate, isSubmitting = false
                         onChange={handleChange}
                         required
                     />
-                    <span className="checkbox-text">Concordo com os Termos e Condições</span>
+                    <span className="checkbox-text">
+                        Concordo com os{' '}
+                        <a 
+                            onClick={(e) => {
+                                e.preventDefault();
+                                const link = document.createElement('a');
+                                link.href = '/termos_uso_equilibrium_adventure_v2.pdf';
+                                link.download = 'Termos-de-Uso.pdf';
+                                document.body.appendChild(link);
+                                link.click();
+                                document.body.removeChild(link);
+                            }}
+                            style={{
+                                color: '#226144',
+                                textDecoration: 'underline',
+                                fontWeight: 600,
+                                cursor: 'pointer'
+                            }}
+                        >
+                            Termos e Condições
+                        </a>
+                    </span>
                 </label>
             </>
         );

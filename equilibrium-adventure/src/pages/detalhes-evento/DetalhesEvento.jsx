@@ -84,13 +84,10 @@ const DetalhesEvento = () => {
     const comentarioCriado = await adicionarComentario({
       texto: comentarioObj.texto,
       idUsuario: usuario.id,
-      idAtivacaoEvento: id // ⚠ aqui mudou
+      idAtivacaoEvento: id 
     });
 
-    setComentarios(prev => [...prev, {
-      nome: comentarioCriado.nomeUsuario,
-      texto: comentarioCriado.texto
-    }]);
+    setComentarios(prev => [...prev, comentarioCriado]);
   };
 
   useEffect(() => {

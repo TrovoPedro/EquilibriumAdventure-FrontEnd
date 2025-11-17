@@ -200,10 +200,8 @@ const InscricaoTrilhasLimitado = () => {
       idAtivacaoEvento: id // ⚠ aqui mudou
     });
 
-    setComentarios(prev => [...prev, {
-      nome: comentarioCriado.nomeUsuario,
-      texto: comentarioCriado.texto
-    }]);
+    // Adiciona o comentário retornado pelo backend (preserva tipoUsuario e demais campos)
+    setComentarios(prev => [...prev, comentarioCriado]);
   };
 
 
@@ -382,18 +380,32 @@ const InscricaoTrilhasLimitado = () => {
             estado: evento.estado,
             imagemUrl: imagemEvento || trilhaImg
           }}
+          inscritosCount={inscritosCount}
           editavel={false}
           showBackButton={false}
         >
           {/* Informações adicionais (reduzidas) dentro do card EventoInfo: apenas endereço para evitar duplicação */}
           <div style={{ marginTop: '1.5rem' }}>
-            <div className="evento-descricao" style={{ marginTop: '1rem' }}>
-              <label>Endereço:</label>
-              <p>
-                {evento.endereco
-                  ? `${evento.endereco.rua || ""}${evento.endereco.numero ? ', ' + evento.endereco.numero : ''} - ${evento.endereco.bairro || ""}, ${evento.endereco.cidade || ""} - ${evento.endereco.estado || ""}, CEP: ${evento.endereco.cep || ""}`
-                  : 'Endereço não disponível'}
-              </p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', width: '100%' }}>
+              <div className="evento-descricao" style={{ gridColumn: '1 / 3', marginTop: 0 }}>
+                <label>Endereço:</label>
+                <p>
+                  {evento.endereco
+                    ? `${evento.endereco.rua || ""}${evento.endereco.numero ? ', ' + evento.endereco.numero : ''} - ${evento.endereco.bairro || ""}, ${evento.endereco.cidade || ""} - ${evento.endereco.estado || ""}, CEP: ${evento.endereco.cep || ""}`
+                    : 'Endereço não disponível'}
+                </p>
+              </div>
+              <div className="campo-info" style={{ gridColumn: '3 / 4' }}>
+                <label>Nível:</label>
+                <span style={{ 
+                  fontWeight: '600',
+                  color: evento.nivel_dificuldade === 'Explorador' ? '#2e7d32' : 
+                         evento.nivel_dificuldade === 'Aventureiro' ? '#ed6c02' : 
+                         evento.nivel_dificuldade === 'Desbravador' ? '#d32f2f' : '#2c3e2c'
+                }}>
+                  {evento.nivel_dificuldade || 'Não especificado'}
+                </span>
+              </div>
             </div>
           </div>
         </EventoInfo>
@@ -477,14 +489,25 @@ const InscricaoTrilhasLimitado = () => {
 
       <div className="card inscricao-trilha-mapa">
         <h3>Mapa da Trilha</h3>
-        <MapaTrilha
-          gpxFile={
-            gpxData
-              ? URL.createObjectURL(new Blob([gpxData], { type: "application/gpx+xml" }))
-              : "/assets/gpx-files/trilha-cachoeira-dos-grampos-fumaca.gpx"
-          }
-          altura="450px"
-        />
+        {gpxData ? (
+          <MapaTrilha
+            gpxFile={URL.createObjectURL(new Blob([gpxData], { type: "application/gpx+xml" }))}
+            altura="450px"
+          />
+        ) : (
+          <div style={{
+            height: '450px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#666',
+            background: '#f8f9f9',
+            borderRadius: '8px',
+            border: '1px dashed #e6e6e6'
+          }}>
+            <strong>Percurso não disponível</strong>
+          </div>
+        )}
       </div>
     </div >
   );

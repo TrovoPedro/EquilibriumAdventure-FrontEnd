@@ -17,3 +17,26 @@ export const adicionarComentario = async ({ texto, idUsuario, idAtivacaoEvento }
   });
   return response.data;
 };
+
+export const excluirComentario = async (idComentario) => {
+  const candidates = [
+    `/excluir/${idComentario}`,
+    `/comentarios/excluir/${idComentario}`,
+    `/comentario/excluir/${idComentario}`,
+    `/comentarios/${idComentario}`,
+    `/comentario/${idComentario}`
+  ];
+
+  for (let path of candidates) {
+    try {
+      const response = await api.delete(path);
+      if (response.status === 204 || response.status === 200) return true;
+    } catch (err) {
+      const status = err?.response?.status;
+      if (status === 404) continue;
+      throw err.response?.data || err.message || err;
+    }
+  }
+
+  throw { message: 'Nenhum endpoint de exclusão encontrado (404).', pathCandidates: candidates };
+};
