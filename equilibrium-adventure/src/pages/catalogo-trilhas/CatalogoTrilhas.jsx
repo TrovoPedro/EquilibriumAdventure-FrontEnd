@@ -16,7 +16,12 @@ const CatalogoTrilhas = () => {
   const [error, setError] = useState({ trilhas: null, anuncios: null });
   const [termoPesquisa, setTermoPesquisa] = useState("");
   
-  // Estados dos filtros
+  // Estados dos filtros temporários (antes de aplicar)
+  const [filtroDataTemp, setFiltroDataTemp] = useState("");
+  const [filtroNivelTemp, setFiltroNivelTemp] = useState("");
+  const [filtroCategoriaTemp, setFiltroCategoriaTemp] = useState("");
+  
+  // Estados dos filtros aplicados
   const [filtroData, setFiltroData] = useState("");
   const [filtroNivel, setFiltroNivel] = useState("");
   const [filtroCategoria, setFiltroCategoria] = useState("");
@@ -133,10 +138,19 @@ const CatalogoTrilhas = () => {
   };
 
   const limparFiltros = () => {
+    setFiltroDataTemp("");
+    setFiltroNivelTemp("");
+    setFiltroCategoriaTemp("");
     setFiltroData("");
     setFiltroNivel("");
     setFiltroCategoria("");
     setTermoPesquisa("");
+  };
+
+  const aplicarFiltros = () => {
+    setFiltroData(filtroDataTemp);
+    setFiltroNivel(filtroNivelTemp);
+    setFiltroCategoria(filtroCategoriaTemp);
   };
 
   return (
@@ -168,9 +182,14 @@ const CatalogoTrilhas = () => {
           <div className="filtros-container">
             <div className="filtros-titulo-grupo">
               <h3 className="filtros-titulo">Filtrar Resultados</h3>
-              <button className="limpar-filtros-btn" onClick={limparFiltros}>
-                Limpar Filtros
-              </button>
+              <div style={{ display: 'flex', gap: '12px' }}>
+                <button className="limpar-filtros-btn" onClick={limparFiltros}>
+                  Limpar Filtros
+                </button>
+                <button className="limpar-filtros-btn" onClick={aplicarFiltros}>
+                  Aplicar Filtros
+                </button>
+              </div>
             </div>
             
             <div className="filtros-grid">
@@ -180,8 +199,8 @@ const CatalogoTrilhas = () => {
                 <input
                   id="filtro-data"
                   type="date"
-                  value={filtroData}
-                  onChange={(e) => setFiltroData(e.target.value)}
+                  value={filtroDataTemp}
+                  onChange={(e) => setFiltroDataTemp(e.target.value)}
                   className="filtro-input"
                 />
               </div>
@@ -191,8 +210,8 @@ const CatalogoTrilhas = () => {
                 <label htmlFor="filtro-nivel">Nível de Dificuldade</label>
                 <select
                   id="filtro-nivel"
-                  value={filtroNivel}
-                  onChange={(e) => setFiltroNivel(e.target.value)}
+                  value={filtroNivelTemp}
+                  onChange={(e) => setFiltroNivelTemp(e.target.value)}
                   className="filtro-select"
                 >
                   <option value="">Todos os níveis</option>
@@ -207,8 +226,8 @@ const CatalogoTrilhas = () => {
                 <label htmlFor="filtro-categoria">Categoria</label>
                 <select
                   id="filtro-categoria"
-                  value={filtroCategoria}
-                  onChange={(e) => setFiltroCategoria(e.target.value)}
+                  value={filtroCategoriaTemp}
+                  onChange={(e) => setFiltroCategoriaTemp(e.target.value)}
                   className="filtro-select"
                 >
                   <option value="">Todas as categorias</option>
