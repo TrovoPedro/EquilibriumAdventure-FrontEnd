@@ -267,3 +267,25 @@
     margin-top: 8px;
   }
 }
+
+/* Desktop tweak: nudge the text/content more to the right */
+@media (min-width: 1025px) {
+  .guia-section {
+    /* keep vertical padding but add extra left spacing */
+    padding-left: 140px;
+    padding-right: 60px;
+  }
+  .guia-texto {
+    /* slightly reduce max width and add left spacing so content sits more to the right */
+    max-width: 40%;
+    padding-left: 80px;
+    margin-left: 80px;
+  }
+  /* keep the image positioned to the right of the text with a modest gap */
+  .guia-imagem {
+    margin-left: 24px;
+    /* move image a bit left visually without changing document flow */
+    transform: translateX(-30px);
+    transition: transform 180ms ease;
+  }
+}

@@ -5,29 +5,17 @@
     align-items: center;
     background-color: #f5f5f5;
     padding: 60px;
-        width: 100%;
-        box-sizing: border-box;
-        /* center snaps: when card width is 92vw, remaining space is 8vw -> half is 4vw */
-        scroll-padding-inline: 4vw;
-        scroll-padding-left: 4vw;
-        scroll-padding-right: 4vw;
-    }
-
-    .cards-wrapper {
-    position: relative;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    scroll-snap-align: center;
 }
 
 .cards {
     display: flex;
     gap: 48px;
     justify-content: center;
-    /* keep three cards side-by-side on desktop by default */
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
+}
+
+.cards-wrapper {
+    width: 100%;
 }
 
 .card {
@@ -35,11 +23,7 @@
     border-radius: 16px;
     box-shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
     overflow: hidden;
-    /* make each card take roughly one third of the available width
-       subtracting the gaps (2 * 48px) so three cards fit on one row */
-    flex: 0 0 calc((100% - 96px) / 3);
-    max-width: calc((100% - 96px) / 3);
-    min-width: 0;
+    width: 480px; /* largura aumentada de 420px para 480px */
     min-height: 450px;
     transition: transform 0.2s;
     display: flex;
@@ -51,12 +35,6 @@
     height: 290px;
     /* imagem mais alta */
     object-fit: cover;
-}
-
-/* make image follow rounded corners at top of card */
-.card img {
-    display: block;
-    border-radius: 16px 16px 0 0;
 }
 
 .trilhas h2 {
@@ -95,141 +73,118 @@
     font-weight: 500;
 }
 
-/* navigation buttons for carousel */
-.trilhas-nav {
-        display: none;
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        z-index: 4;
-        background: rgba(0,0,0,0.6);
-        color: #fff;
-        border: none;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        cursor: pointer;
-        font-size: 22px;
-        line-height: 1;
-}
-.trilhas-nav.prev { left: 8px; }
-.trilhas-nav.next { right: 8px; }
+/* Mobile-specific carousel styling */
+@media (max-width: 768px) {
+    .trilhas {
+        padding: 32px 20px;
+        align-items: stretch;
+    }
 
-.trilhas-nav:disabled {
-    opacity: 0.35;
-    pointer-events: none;
-}
+    /* reduce title size on mobile for better visual balance */
+    .trilhas h2 {
+        font-size: 1.25rem;
+        line-height: 1.25;
+        margin-bottom: 12px;
+        font-weight: 500;
+        text-align: center; /* center title relative to card */
+    }
 
-/* Mobile / small screens: show horizontal scroll carousel with snap */
-@media (max-width: 900px) {
-    /* reservar espaço extra no topo para os botões acima dos cards */
-    .cards-wrapper { position: relative; padding-top: 5px; }
+    .cards-wrapper {
+        position: relative;
+        overflow: hidden;
+        padding-bottom: 48px; /* espaço maior para os dots pílula */
+    }
 
     .cards {
         display: flex;
-        flex-direction: row;
-        gap: 16px;
-        align-items: stretch;
-        width: 100%;
-        box-sizing: border-box;
-        padding: 12px 6vw;
-        overflow-x: auto;
-        scroll-snap-type: x mandatory;
-        -webkit-overflow-scrolling: touch;
+        gap: 0; /* no gap to keep width calculations predictable */
+        transition: transform 0.5s ease;
+        will-change: transform;
+        flex-wrap: nowrap; /* ensure slides stay in a single row on mobile */
     }
 
     .card {
-        flex: 0 0 86%;
-        max-width: 86%;
-        scroll-snap-align: center;
-        box-sizing: border-box;
-        /* manter mesma altura entre todos os cards no mobile */
-        min-height: 420px;
-        height: 420px;
+        flex: 0 0 100%;
+        width: 100%;
         margin: 0;
-        display: flex;
-        flex-direction: column;
-        justify-content: flex-start;
-    }
-
-    /* stacked deck style for mobile when JS-enabled (class applied in component) */
-    .cards.stacked {
-        position: relative;
-        /* reservar espaço para o card único em mobile */
-        height: 460px;
-        overflow: visible;
-        display: block;
-        padding: 12px 18px;
-    }
-
-    /* garantir que o wrapper reserve espaço suficiente quando usar o deck */
-    .cards-wrapper { min-height: 480px; }
-
-    .card.mobile-stack {
-        width: 86%;
-        max-width: 86%;
-        left: 50%;
-        transform-origin: center top;
+        min-height: 320px;
         border-radius: 14px;
-        box-shadow: 0 8px 28px rgba(0,0,0,0.12);
-        position: absolute;
-        margin: 0 auto;
+        box-shadow: none; /* remove outline shadow on mobile */
+        box-sizing: border-box;
+        padding: 0; /* remove lateral padding so image can touch card edges */
+        overflow: hidden; /* ensure image respects border-radius */
+        border: 1px solid rgba(0,0,0,0.04); /* subtle border instead of shadow */
+        background-clip: padding-box;
     }
 
-    /* estilo para o único card mostrado no mobile */
-    .card.mobile-single {
-        position: relative;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 86%;
-        max-width: 86%;
-        z-index: 20;
-        box-shadow: 0 10px 30px rgba(0,0,0,0.14);
-        border-radius: 14px;
-        background: #fff;
+    .card img {
         display: block;
-        /* garantir mesma altura que os demais cards */
-        height: 420px;
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
     }
 
-    .card img { height: 220px; }
+    /* ensure card content has spacing while image stretches edge-to-edge */
+    .card .card-info {
+        padding: 20px;
+    }
 
-    .cards::-webkit-scrollbar { display: none; }
-
-    /* show carousel nav buttons on mobile */
-    .trilhas-nav { display: block; }
-
-    /* reduce padding inside card content so image touches top corners */
-    .card-info { padding: 12px; }
-
-    .trilhas { padding: 40px 12px; }
-    /* adicionar padding inferior extra para separar da seção seguinte */
-    .trilhas { padding: 40px 12px 56px; }
-    .trilhas h2 { font-size: 1.4rem; text-align: center; }
-
-    .trilhas-nav {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+    .carousel-btn {
         position: absolute;
-        /* alinhar verticalmente ao centro do card: padding-top + metade da altura do card */
-        top: calc(80px + 210px);
+        top: 50%;
         transform: translateY(-50%);
-        /* colocar botões acima dos cards empilhados */
-        z-index: 200;
-        background: rgba(0,0,0,0.55);
+        background: rgba(35,66,58,0.9);
         color: #fff;
         border: none;
         width: 40px;
         height: 40px;
         border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
         cursor: pointer;
-        font-size: 22px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+        z-index: 10;
     }
 
-    /* posicionar os botões mais próximos às bordas da tela (lado externo dos cards) */
-    .trilhas-nav.prev { left: 0.25%; }
-    .trilhas-nav.next { right: 0.25%; }
+    .carousel-btn.prev { left: 8px; }
+    .carousel-btn.next { right: 8px; }
 
-    .trilhas-nav:disabled { opacity: 0.35; pointer-events: none; }
+    .carousel-dots {
+        position: absolute;
+        bottom: -28px; /* moved further down so dots are clearly below card */
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 12px;
+        z-index: 40;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 14px; /* larger pill for visibility */
+        background: #ffffff; /* solid white for max contrast over images */
+        border-radius: 16px;
+        border: 1px solid rgba(0,0,0,0.06);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        pointer-events: auto;
+    }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.18);
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: transform 0.18s ease, background-color 0.18s ease;
+    }
+
+    .dot:hover { transform: scale(1.05); }
+
+    .dot.active {
+        background: #23423a;
+        width: 14px;
+        height: 14px;
+        box-shadow: 0 6px 16px rgba(35,66,58,0.14);
+    }
 }
