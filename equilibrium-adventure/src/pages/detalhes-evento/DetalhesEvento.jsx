@@ -6,7 +6,7 @@ import EventoInfo from '../../components/evento-info/EventoInfo';
 import UsuariosInscritos from '../../components/usuarios-inscritos/UsuariosInscritos';
 import Comentarios from '../../components/comentarios/Comentarios';
 import './DetalhesEvento.css';
-import { buscarImagemEvento, buscarEventoAtivoPorId, buscarMediaAvaliacoes } from "../../services/apiEvento";
+import { buscarImagemEvento, buscarEventoAtivoPorId, buscarMediaAvaliacoesPorEventoBase } from "../../services/apiEvento";
 import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
 import { listarInscritos, cancelarInscricao } from '../../services/apiInscricao';
 import { useAuth } from "../../context/AuthContext";
@@ -105,21 +105,18 @@ const DetalhesEvento = () => {
     carregarInscritos();
   }, [id]);
 
-  // Carregar média de avaliações
   useEffect(() => {
     const carregarMediaAvaliacoes = async () => {
       try {
-        if (id) {
-          console.log('Buscando média de avaliações para ID:', id);
-          const resultado = await buscarMediaAvaliacoes(id);
-          console.log('Resultado da média:', resultado);
+        if (evento?.idEvento) {
+          const resultado = await buscarMediaAvaliacoesPorEventoBase(evento.idEvento);
           
           if (resultado.mediaAvaliacoes !== undefined) {
             setMediaAvaliacoes(resultado.mediaAvaliacoes);
-            console.log('Média de avaliações definida:', resultado.mediaAvaliacoes);
+            setMensagemAvaliacao('');
           } else if (resultado.mensagem) {
+            setMediaAvaliacoes(0);
             setMensagemAvaliacao(resultado.mensagem);
-            console.log('Mensagem:', resultado.mensagem);
           }
         }
       } catch (error) {
@@ -128,7 +125,7 @@ const DetalhesEvento = () => {
     };
 
     carregarMediaAvaliacoes();
-  }, [id]);
+  }, [evento?.idEvento]);
 
   const handleEventoChange = (campo, valor) => {
     setEvento(prev => ({

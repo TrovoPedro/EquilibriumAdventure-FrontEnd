@@ -10,7 +10,7 @@ import { useScore } from "../../context/ScoreContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Comentarios from '../../components/comentarios/Comentarios';
 import EventoInfo from '../../components/evento-info/EventoInfo';
-import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx, buscarMediaAvaliacoes } from "../../services/apiEvento";
+import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx, buscarMediaAvaliacoesPorEventoBase } from "../../services/apiEvento";
 import trilhaImg from "../../assets/cachoeiralago.jpg";
 import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
 import { verificarInscricao, criarInscricao, cancelarInscricao, listarInscritos } from "../../services/apiInscricao";
@@ -64,8 +64,10 @@ const InscricaoTrilhasLimitado = () => {
 
         if (eventoData.length > 0) {
           const ativacao = eventoData[0];
+          
           setEvento({
             idAtivacao: ativacao.idAtivacao,
+            idEvento: ativacao.evento?.idEvento || null,
             nome: ativacao.evento?.nome || "",
             descricao: ativacao.evento?.descricao || "",
             nivel_dificuldade: ativacao.evento?.nivelDificuldade || "",
@@ -87,12 +89,9 @@ const InscricaoTrilhasLimitado = () => {
           setImagemEvento(imagemUrl || null);
 
           if (ativacao.idAtivacao) {
-            console.log("Buscando GPX:", ativacao.evento.idEvento);
             const gpx = await buscarGpx(ativacao.evento.idEvento);
             setGpxData(gpx);
           }
-
-          console.log("Evento carregado:", ativacao);
         } else {
           console.error("Nenhuma ativação encontrada para este evento");
         }
@@ -134,21 +133,18 @@ const InscricaoTrilhasLimitado = () => {
     carregarInscritos();
   }, [id]);
 
-  // Carregar média de avaliações
   useEffect(() => {
     const carregarMediaAvaliacoes = async () => {
       try {
-        if (id) {
-          console.log('Buscando média de avaliações para ID:', id);
-          const resultado = await buscarMediaAvaliacoes(id);
-          console.log('Resultado da média:', resultado);
+        if (evento?.idEvento) {
+          const resultado = await buscarMediaAvaliacoesPorEventoBase(evento.idEvento);
           
           if (resultado.mediaAvaliacoes !== undefined) {
             setMediaAvaliacoes(resultado.mediaAvaliacoes);
-            console.log('Média de avaliações definida:', resultado.mediaAvaliacoes);
+            setMensagemAvaliacao('');
           } else if (resultado.mensagem) {
+            setMediaAvaliacoes(0);
             setMensagemAvaliacao(resultado.mensagem);
-            console.log('Mensagem:', resultado.mensagem);
           }
         }
       } catch (error) {
@@ -157,34 +153,8 @@ const InscricaoTrilhasLimitado = () => {
     };
 
     carregarMediaAvaliacoes();
-  }, [id]);
+  }, [evento?.idEvento]);
 
-  // Carregar média de avaliações
-  useEffect(() => {
-    const carregarMediaAvaliacoes = async () => {
-      try {
-        if (id) {
-          console.log('Buscando média de avaliações para ID:', id);
-          const resultado = await buscarMediaAvaliacoes(id);
-          console.log('Resultado da média:', resultado);
-          
-          if (resultado.mediaAvaliacoes !== undefined) {
-            setMediaAvaliacoes(resultado.mediaAvaliacoes);
-            console.log('Média de avaliações definida:', resultado.mediaAvaliacoes);
-          } else if (resultado.mensagem) {
-            setMensagemAvaliacao(resultado.mensagem);
-            console.log('Mensagem:', resultado.mensagem);
-          }
-        }
-      } catch (error) {
-        console.error('Erro ao carregar média de avaliações:', error);
-      }
-    };
-
-    carregarMediaAvaliacoes();
-  }, [id]);
-
-  {inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
   const handleEnviarComentario = async (comentarioObj) => {
 
     <button
