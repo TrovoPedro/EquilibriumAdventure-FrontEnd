@@ -19,6 +19,7 @@ const Questionario = () => {
   const [nivel, setNivel] = useState(null);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [nivelObtido, setNivelObtido] = useState('');
+  const [precisaAnamnese, setPrecisaAnamnese] = useState(false);
   const { salvarPontuacao } = useScore();
   const { usuario } = useAuth();
 
@@ -74,10 +75,10 @@ const Questionario = () => {
 
         setNivel(nivelObtido);
         setNivelObtido(nivelObtido);
+        setPrecisaAnamnese(encaminharParaAnamnese);
         salvarPontuacao(nivelObtido);
         setShowSuccessPopup(true);
 
-        // Guardar informação de anamnese no localStorage para uso posterior
         sessionStorage.setItem('encaminharParaAnamnese', JSON.stringify(encaminharParaAnamnese));
 
         setAnswers({});
@@ -218,7 +219,11 @@ const Questionario = () => {
       {showSuccessPopup && (
         <PopUpOk
           title="Questionário Concluído!"
-          message={`Parabéns! Suas respostas foram enviadas com sucesso! Você foi classificado como: ${nivelObtido.toUpperCase()}`}
+          message={
+            precisaAnamnese
+              ? `Parabéns! Suas respostas foram enviadas com sucesso! Você foi classificado como: ${nivelObtido.toUpperCase()}\n\n⚠️ IMPORTANTE: Você precisará fazer um agendamento de anamnese após escolher o guia. Esta conversa inicial é necessária para avaliar suas condições e garantir sua segurança nas trilhas.`
+              : `Parabéns! Suas respostas foram enviadas com sucesso! Você foi classificado como: ${nivelObtido.toUpperCase()}`
+          }
           onConfirm={() => {
             setShowSuccessPopup(false);
             navigate(routeUrls.ESCOLHER_GUIA, { state: { nivel: nivelObtido } });
@@ -226,6 +231,7 @@ const Questionario = () => {
             setCurrentQuestionIndex(0);
             setSelectedOption(null);
             setTitleButton("Próxima Questão");
+            setPrecisaAnamnese(false);
           }}
         />
       )}

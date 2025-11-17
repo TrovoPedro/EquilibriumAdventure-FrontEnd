@@ -11,6 +11,7 @@ const EventoInfo = ({
   onChange,
   editavel = false,
   showBackButton = false,
+  inscritosCount,
   children
 }) => {
   // Back button removed from this card as requested
@@ -84,7 +85,7 @@ const EventoInfo = ({
               )}
             </div>
             <div className="campo-info">
-              <label>Limite de Inscritos:</label>
+              <label>{inscritosCount !== undefined ? 'Inscritos:' : 'Limite de Inscritos:'}</label>
               {editavel ? (
                 <input
                   type="number"
@@ -92,7 +93,15 @@ const EventoInfo = ({
                   onChange={(e) => onChange('limiteInscritos', e.target.value)}
                 />
               ) : (
-                <span>{evento.limiteInscritos}</span>
+                <span style={inscritosCount !== undefined ? { 
+                  fontWeight: '600',
+                  color: inscritosCount >= evento.limiteInscritos ? '#d32f2f' : '#2c3e2c'
+                } : {}}>
+                  {inscritosCount !== undefined 
+                    ? `${inscritosCount} / ${evento.limiteInscritos || 'Sem limite'}${inscritosCount >= evento.limiteInscritos ? ' (Lotado)' : ''}`
+                    : evento.limiteInscritos
+                  }
+                </span>
               )}
             </div>
           </div>

@@ -380,18 +380,32 @@ const InscricaoTrilhasLimitado = () => {
             estado: evento.estado,
             imagemUrl: imagemEvento || trilhaImg
           }}
+          inscritosCount={inscritosCount}
           editavel={false}
           showBackButton={false}
         >
           {/* Informações adicionais (reduzidas) dentro do card EventoInfo: apenas endereço para evitar duplicação */}
           <div style={{ marginTop: '1.5rem' }}>
-            <div className="evento-descricao" style={{ marginTop: '1rem' }}>
-              <label>Endereço:</label>
-              <p>
-                {evento.endereco
-                  ? `${evento.endereco.rua || ""}${evento.endereco.numero ? ', ' + evento.endereco.numero : ''} - ${evento.endereco.bairro || ""}, ${evento.endereco.cidade || ""} - ${evento.endereco.estado || ""}, CEP: ${evento.endereco.cep || ""}`
-                  : 'Endereço não disponível'}
-              </p>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', width: '100%' }}>
+              <div className="evento-descricao" style={{ gridColumn: '1 / 3', marginTop: 0 }}>
+                <label>Endereço:</label>
+                <p>
+                  {evento.endereco
+                    ? `${evento.endereco.rua || ""}${evento.endereco.numero ? ', ' + evento.endereco.numero : ''} - ${evento.endereco.bairro || ""}, ${evento.endereco.cidade || ""} - ${evento.endereco.estado || ""}, CEP: ${evento.endereco.cep || ""}`
+                    : 'Endereço não disponível'}
+                </p>
+              </div>
+              <div className="campo-info" style={{ gridColumn: '3 / 4' }}>
+                <label>Nível:</label>
+                <span style={{ 
+                  fontWeight: '600',
+                  color: evento.nivel_dificuldade === 'Explorador' ? '#2e7d32' : 
+                         evento.nivel_dificuldade === 'Aventureiro' ? '#ed6c02' : 
+                         evento.nivel_dificuldade === 'Desbravador' ? '#d32f2f' : '#2c3e2c'
+                }}>
+                  {evento.nivel_dificuldade || 'Não especificado'}
+                </span>
+              </div>
             </div>
           </div>
         </EventoInfo>
