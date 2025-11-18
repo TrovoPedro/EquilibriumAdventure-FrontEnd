@@ -14,6 +14,7 @@ import { alterarEstadoEvento, atualizarAtivacaoEvento } from "../../services/cha
 import { showSuccess, showError, showWarning } from '../../utils/swalHelper';
 import { useNavigate } from 'react-router-dom';
 import routeUrls from '../../routes/routeUrls';
+import catalogoFallback from "../../assets/img12-catalogo.jpg";
 
 const DetalhesEvento = () => {
   const { id } = useParams();
@@ -52,7 +53,7 @@ const DetalhesEvento = () => {
             dataEvento: ativacao.dataAtivacao,
             categoria: ativacao.tipo,
             estado: ativacao.estado,
-            imagemUrl: imagemUrl || ""
+            imagemUrl: imagemUrl || catalogoFallback
           });
 
           console.log("Evento carregado:", ativacao);
