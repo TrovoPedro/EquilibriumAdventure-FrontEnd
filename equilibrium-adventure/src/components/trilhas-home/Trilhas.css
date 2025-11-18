@@ -14,6 +14,10 @@
     flex-wrap: wrap;
 }
 
+.cards-wrapper {
+    width: 100%;
+}
+
 .card {
     background: #fff;
     border-radius: 16px;
@@ -67,4 +71,120 @@
     color: #7bbf7f;
     font-size: 0.95rem;
     font-weight: 500;
+}
+
+/* Mobile-specific carousel styling */
+@media (max-width: 768px) {
+    .trilhas {
+        padding: 32px 20px;
+        align-items: stretch;
+    }
+
+    /* reduce title size on mobile for better visual balance */
+    .trilhas h2 {
+        font-size: 1.25rem;
+        line-height: 1.25;
+        margin-bottom: 12px;
+        font-weight: 500;
+        text-align: center; /* center title relative to card */
+    }
+
+    .cards-wrapper {
+        position: relative;
+        overflow: hidden;
+        padding-bottom: 48px; /* espaço maior para os dots pílula */
+    }
+
+    .cards {
+        display: flex;
+        gap: 0; /* no gap to keep width calculations predictable */
+        transition: transform 0.5s ease;
+        will-change: transform;
+        flex-wrap: nowrap; /* ensure slides stay in a single row on mobile */
+    }
+
+    .card {
+        flex: 0 0 100%;
+        width: 100%;
+        margin: 0;
+        min-height: 320px;
+        border-radius: 14px;
+        box-shadow: none; /* remove outline shadow on mobile */
+        box-sizing: border-box;
+        padding: 0; /* remove lateral padding so image can touch card edges */
+        overflow: hidden; /* ensure image respects border-radius */
+        border: 1px solid rgba(0,0,0,0.04); /* subtle border instead of shadow */
+        background-clip: padding-box;
+    }
+
+    .card img {
+        display: block;
+        width: 100%;
+        height: 220px;
+        object-fit: cover;
+    }
+
+    /* ensure card content has spacing while image stretches edge-to-edge */
+    .card .card-info {
+        padding: 20px;
+    }
+
+    .carousel-btn {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background: rgba(35,66,58,0.9);
+        color: #fff;
+        border: none;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.18);
+        z-index: 10;
+    }
+
+    .carousel-btn.prev { left: 8px; }
+    .carousel-btn.next { right: 8px; }
+
+    .carousel-dots {
+        position: absolute;
+        bottom: -28px; /* moved further down so dots are clearly below card */
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 12px;
+        z-index: 40;
+        align-items: center;
+        justify-content: center;
+        padding: 8px 14px; /* larger pill for visibility */
+        background: #ffffff; /* solid white for max contrast over images */
+        border-radius: 16px;
+        border: 1px solid rgba(0,0,0,0.06);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        pointer-events: auto;
+    }
+
+    .dot {
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        background: rgba(0,0,0,0.18);
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: transform 0.18s ease, background-color 0.18s ease;
+    }
+
+    .dot:hover { transform: scale(1.05); }
+
+    .dot.active {
+        background: #23423a;
+        width: 14px;
+        height: 14px;
+        box-shadow: 0 6px 16px rgba(35,66,58,0.14);
+    }
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import "./Trilhas.css";
 import trilhasImg1 from "../../assets/trilha1.jpg";
 import trilhasImg2 from "../../assets/trilha2.jpg";
@@ -17,6 +17,11 @@ export default function Trilhas() {
   const navigate = useNavigate();
   const [eventos, setEventos] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMobile, setIsMobile] = useState(false);
+  const touchStartX = useRef(null);
+  const touchEndX = useRef(null);
+  const autoPlayRef = useRef(null);
 
   const handleCardClick = () => {
     navigate("/login");
@@ -104,6 +109,30 @@ export default function Trilhas() {
     return () => { isMounted = false; };
   }, []);
 
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    handleResize();
+    window.addEventListener('resize', handleResize);
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!isMobile) {
+      setCurrentIndex(0);
+      return;
+    }
+    if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    autoPlayRef.current = setInterval(() => {
+      setCurrentIndex(prev => (prev + 1) % Math.max(1, eventos.length));
+    }, 5000);
+    return () => {
+      if (autoPlayRef.current) clearInterval(autoPlayRef.current);
+    };
+  }, [isMobile, eventos.length]);
+
   const getDistance = (ev) => {
     if (!ev || ev.distancia_km == null) return null;
     return `${ev.distancia_km} km`;
@@ -126,29 +155,77 @@ export default function Trilhas() {
     return String(raw).slice(0, 16);
   };
 
+  const next = (e) => {
+    if (e) e.stopPropagation();
+    setCurrentIndex((prev) => (prev + 1) % Math.max(1, eventos.length));
+  };
+
+  const prev = (e) => {
+    if (e) e.stopPropagation();
+    setCurrentIndex((prev) => (prev - 1 + Math.max(1, eventos.length)) % Math.max(1, eventos.length));
+  };
+
+  const handleTouchStart = (e) => {
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchMove = (e) => {
+    touchEndX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = () => {
+    if (touchStartX.current == null || touchEndX.current == null) return;
+    const diff = touchStartX.current - touchEndX.current;
+    const threshold = 50; // swipe threshold px
+    if (diff > threshold) next();
+    else if (diff < -threshold) prev();
+    touchStartX.current = null;
+    touchEndX.current = null;
+  };
+
   return (
     <section className="trilhas">
       <h2>Seu próximo lugar favorito o aguarda</h2>
-      <div className="cards">
-        {loading ? (
-          <p>Carregando...</p>
-        ) : (
-          eventos.map((t, i) => {
-            const distance = getDistance(t);
-            const rawDate = t.data_ativacao || t.data_inicio || t.data || t.dataEvento || t.date || t.dias;
-            const dateStr = formatDate(rawDate);
-            return (
-              <div className="card" key={t.id || i} onClick={handleCardClick} style={{ cursor: "pointer" }}>
-                <img src={t.imagemUrl} alt={t.nome_evento || t.title || 'Trilha'} />
-                <div className="card-info">
-                  <h3>{t.nome_evento || t.title}</h3>
-                  {distance && <p>{distance}</p>}
-                  {dateStr && <span>{dateStr}</span>}
+      <div className="cards-wrapper">
+        {/* calculamos largura total das cards e o deslocamento em porcentagem relativo à própria largura */}
+        {(() => {
+          const count = Math.max(1, eventos.length);
+          const cardsWidth = `${count * 100}%`;
+          const shiftPercent = (currentIndex * (100 / count));
+          const cardsStyle = isMobile ? { width: cardsWidth, transform: `translateX(-${shiftPercent}%)`, transition: 'transform 0.5s ease' } : {};
+          return (
+            <div
+              className="cards"
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+              style={cardsStyle}
+            >
+          {loading ? (
+            <p>Carregando...</p>
+          ) : (
+            eventos.map((t, i) => {
+              const distance = getDistance(t);
+              const rawDate = t.data_ativacao || t.data_inicio || t.data || t.dataEvento || t.date || t.dias;
+              const dateStr = formatDate(rawDate);
+              const cardDynamicStyle = isMobile ? { cursor: 'pointer', flex: `0 0 ${100 / Math.max(1, eventos.length)}%`, width: `${100 / Math.max(1, eventos.length)}%` } : { cursor: 'pointer' };
+              return (
+                <div className="card" key={t.id || i} onClick={handleCardClick} style={cardDynamicStyle}>
+                  <img src={t.imagemUrl} alt={t.nome_evento || t.title || 'Trilha'} />
+                  <div className="card-info">
+                    <h3>{t.nome_evento || t.title}</h3>
+                    {distance && <p>{distance}</p>}
+                    {dateStr && <span>{dateStr}</span>}
+                  </div>
                 </div>
-              </div>
-            );
-          })
-        )}
+              );
+            })
+          )}
+            </div>
+          );
+        })()}
+
+        {/* dots removed for mobile as requested */}
       </div>
     </section>
   );

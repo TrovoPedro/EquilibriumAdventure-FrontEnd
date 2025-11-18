@@ -477,16 +477,178 @@ h2,
   .destinos-grid .destino-card:nth-child(n) {
     grid-column: auto;
   }
+
+  /* Torna a sessão de anúncios um carrossel horizontal em tablets/phones (<=900px)
+     para reduzir scroll vertical sem afetar desktop maior. */
+  .anuncios-grid {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+  }
+
+  .anuncio-card {
+    flex: 0 0 72%;
+    min-width: 72%;
+    scroll-snap-align: start;
+    border-radius: 14px;
+  }
+
+  .anuncio-img-wrap {
+    height: 190px;
+  }
+
+  .anuncios-titulo {
+    text-align: left;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
 }
 
 @media (max-width: 600px) {
+  /* Mobile: transformar as grades em carrosséis horizontais com scroll-snap
+     inspirado em apps de viagem — mantém o layout desktop intacto. */
+
+  .destinos {
+    padding: 28px 12px;
+  }
+
   .destinos-grid {
-    grid-template-columns: 1fr;
+    display: flex;
+    flex-direction: row;
+    gap: 14px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+    /* remove grid rules para garantir que não se quebre em coluna longa */
+    grid-template-columns: none;
+    grid-template-rows: none;
+  }
+
+  .destinos-grid .destino-card {
+    flex: 0 0 82%; /* cada card ocupa ~82% da largura da viewport no mobile */
+    min-width: 82%;
+    scroll-snap-align: start;
+    border-radius: 16px;
+    height: auto;
   }
 
   .destino-img {
+    height: 220px;
+  }
+
+  /* Anúncios também em carrossel horizontal no mobile */
+  .anuncios-grid {
+    display: flex;
+    gap: 14px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+  }
+
+  .anuncio-card {
+    flex: 0 0 86%;
+    min-width: 86%;
+    scroll-snap-align: start;
+    border-radius: 14px;
+  }
+
+  .anuncio-img-wrap {
     height: 200px;
   }
+
+  /* diminuir margem do título para caber melhor */
+  .anuncios-titulo {
+    text-align: left;
+    font-size: 1.4rem;
+    margin-bottom: 18px;
+  }
+
+  /* esconder o overflow vertical em mobile para evitar jump ao scrollar */
+  body, html {
+    overscroll-behavior-y: none;
+  }
+}
+
+/* show/hide helpers for native vs custom controls */
+.desktop-only { display: inline-block; }
+.mobile-only { display: none; }
+
+@media (max-width: 600px) {
+  .desktop-only { display: none !important; }
+  .mobile-only { display: block !important; }
+
+  /* Mobile custom select styles */
+  .mobile-select {
+    position: relative;
+    width: 100%;
+    margin-top: 6px;
+  }
+
+  .mobile-select-toggle {
+    width: 100%;
+    background: #fff;
+    border: 2px solid #e0e0e0;
+    padding: 12px 14px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 1rem;
+    color: #00331f;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    cursor: pointer;
+  }
+
+  .mobile-select-label { flex: 1; text-align: left; }
+
+  .mobile-select-caret {
+    width: 12px;
+    height: 12px;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 8px solid #00331f;
+    margin-left: 12px;
+    transition: transform 0.18s ease;
+  }
+
+  .mobile-select-caret.open { transform: rotate(180deg); }
+
+  .mobile-select-options {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 10px;
+    max-height: 280px;
+    overflow-y: auto;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    z-index: 40;
+  }
+
+  .mobile-select-option {
+    padding: 12px 14px;
+    cursor: pointer;
+    color: #00331f;
+    border-bottom: 1px solid #f2f2f2;
+    background: #fff;
+  }
+
+  .mobile-select-option.selected {
+    background: #f5fff7;
+    font-weight: 700;
+  }
+
+  .mobile-select-option:hover { background: #f7f7f7; }
 }
 
 /* ANÚNCIO DE TRILHAS */
@@ -689,4 +851,35 @@ h2,
 .anuncio-detalhes-btn:hover {
   background: #e0e0e0;
   border-color: #bbb;
+}
+
+/* Mobile/tablet overrides for announcements placed after base rules
+   to ensure they take effect (no more stacking of cards). */
+@media (max-width: 900px) {
+  .anuncios-grid {
+    display: flex;
+    gap: 16px;
+    overflow-x: auto;
+    padding-bottom: 8px;
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
+    scroll-behavior: smooth;
+  }
+
+  .anuncio-card {
+    flex: 0 0 72%;
+    min-width: 72%;
+    scroll-snap-align: start;
+    border-radius: 14px;
+  }
+
+  .anuncio-img-wrap {
+    height: 190px;
+  }
+
+  .anuncios-titulo {
+    text-align: left;
+    font-size: 1.6rem;
+    margin-bottom: 20px;
+  }
 }
