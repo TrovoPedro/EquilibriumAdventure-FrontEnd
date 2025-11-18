@@ -123,6 +123,18 @@ const Header = () => {
               {item.label}
             </li>
           ))}
+          {/* Botão de sair visível dentro do menu lateral (mobile) */}
+          <li
+            className="mobile-logout"
+            onClick={() => {
+              setMenuOpen(false);
+              logout();
+              navigate(routeUrls.HOME);
+              resetarDados();
+            }}
+          >
+            SAIR
+          </li>
         </ul>
       </nav>
 

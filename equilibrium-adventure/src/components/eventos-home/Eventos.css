@@ -223,16 +223,17 @@
     }
     
     .evento-card {
-        width: 100%;
-        max-width: 400px;
-        min-height: auto;
+        /* no mobile we hide the event card so only the tipos (levels) are shown */
+        display: none;
     }
     
     .evento-tipos {
         max-width: 100%;
+        width: 100%;
     }
     
     .evento-tipos h2 {
-        font-size: 1.6rem;
+        /* reduzido para melhor leitura em telas menores */
+        font-size: 1.25rem;
     }
 }

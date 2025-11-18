@@ -223,3 +223,72 @@ h1 {
   color: #00E676; /* apenas o verde, sem efeitos */
   text-shadow: none;
 }
+
+/* Mobile: grid 2x2 com cards iguais (mesma largura e altura) */
+@media (max-width: 768px) {
+  .overlay {
+    padding: 20px;
+  }
+
+  h1 {
+    font-size: 1.6em;
+    margin-bottom: 18px;
+  }
+
+  .guides-carousel-container {
+    max-width: 100%;
+    padding: 0 8px;
+    gap: 8px;
+  }
+
+  .guides-wrapper {
+    padding: 0;
+  }
+
+  /* Exibe os cards em grid 2x2 */
+  .guides {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-auto-rows: 1fr;
+    gap: 12px;
+    width: 100%;
+    align-items: stretch;
+    justify-items: center;
+    padding: 6px;
+    transform: none;
+    animation: none;
+  }
+
+  /* Tornar cada card quadrado (mesma largura e altura) */
+  .card-escolher-guia {
+    width: 100%;
+    max-width: 320px;
+    aspect-ratio: 1 / 1; /* assegura largura = altura */
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  .card-escolher-guia img {
+    height: calc(100% - 56px);
+    object-fit: cover;
+    border-radius: 8px;
+  }
+
+  .card-escolher-guia p {
+    margin: 0;
+    font-size: 1em;
+    text-align: center;
+  }
+
+  /* Esconder os botões do carrossel na primeira implementação mobile (menos poluição) */
+  .carousel-button {
+    display: none;
+  }
+
+  .carousel-indicators {
+    margin-top: 12px;
+  }
+}

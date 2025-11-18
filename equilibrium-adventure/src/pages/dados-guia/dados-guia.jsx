@@ -252,6 +252,7 @@ export default function DadosGuia() {
                                     onChange={handleChange}
                                     accept="image/*"
                                     style={{ display: "none" }}
+                                    required={true}
                                 />
                             </div>
                         </label>
