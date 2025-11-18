@@ -1,9 +1,19 @@
-import React, { createContext, useContext, useState } from 'react';
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const GuideContext = createContext();
 
 export function GuideProvider({ children }) {
     const [guiaSelecionado, setGuiaSelecionado] = useState(null);
+
+    useEffect(() => {
+        const handleUserChange = () => {
+            setGuiaSelecionado(null);
+            sessionStorage.removeItem("guiaSelecionado");
+        };
+
+        window.addEventListener('userChanged', handleUserChange);
+        return () => window.removeEventListener('userChanged', handleUserChange);
+    }, []);
 
     const escolherGuia = async (guia) => {
         try {

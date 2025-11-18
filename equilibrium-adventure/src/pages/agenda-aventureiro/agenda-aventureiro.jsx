@@ -310,7 +310,6 @@ const CriarAgendaAventureiro = () => {
             <div className="agenda-aventureiro-list">
               {anamnese && anamnese.length > 0 ? (
                 <div className="agenda-aventureiro-anamnese-section">
-                  <h4 style={{ marginBottom: '12px', color: '#226144', fontWeight: 600 }}>Agendamento de Anamnese</h4>
                   {anamnese.map((item, idx) => (
                     <div key={`anamnese-${idx}`} className="agenda-aventureiro-item agenda-aventureiro-anamnese-item" style={{ borderLeft: '4px solid #ff9800' }}>
                       <div className="agenda-aventureiro-item-info">

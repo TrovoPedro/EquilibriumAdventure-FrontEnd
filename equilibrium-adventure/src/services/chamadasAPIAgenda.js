@@ -1,4 +1,6 @@
 import axios from "axios";
+import { buscarEventosPorGuia } from "./apiEvento"; 
+import { listarAnamnesesPorResponsavel} from "./apiAnamnese";
 
 const BASE_URL_AGENDAS = "http://localhost:8080/agendas";
 
@@ -51,3 +53,22 @@ export const gerarRelatorioAnamnese = async ({ userId, relatorio }) => {
     throw err;
   }
 };
+
+export async function buscarItensDoCalendario(idGuia) {
+  try {
+    const [anamneses, eventos, agenda] = await Promise.all([
+      listarAnamnesesPorResponsavel(idGuia),
+      buscarEventosPorGuia(idGuia),
+      listarAgenda()
+    ]);
+
+    return {
+      anamneses,
+      eventos,
+      agenda
+    };
+  } catch (err) {
+    console.error("Erro ao carregar itens do calendário:", err);
+    throw err;
+  }
+}

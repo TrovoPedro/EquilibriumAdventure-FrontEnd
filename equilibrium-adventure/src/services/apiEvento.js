@@ -91,3 +91,13 @@ export const buscarMediaAvaliacoes = async (idAtivacao) => {
     return { mediaAvaliacoes: 0 };
   }
 };
+
+export const buscarMediaAvaliacoesPorEventoBase = async (idEventoBase) => {
+  try {
+    const response = await api.get(`/ativacoes/media-avaliacoes/evento-base/${idEventoBase}`);
+    return response.data;
+  } catch (error) {
+    console.error("Erro ao buscar média de avaliações por evento base:", error);
+    return { mediaAvaliacoes: 0 };
+  }
+};

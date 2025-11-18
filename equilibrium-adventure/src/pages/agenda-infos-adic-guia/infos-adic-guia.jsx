@@ -126,7 +126,11 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                         })
                     );
 
-                    const eventosOrdenados = eventosComImagens.sort((a, b) => 
+                    const eventosFiltrados = eventosComImagens.filter(evento => 
+                        (evento.log || "").trim().toUpperCase() !== "FINALIZADO"
+                    );
+
+                    const eventosOrdenados = eventosFiltrados.sort((a, b) => 
                         new Date(a.data_ativacao) - new Date(b.data_ativacao)
                     );
 

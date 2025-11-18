@@ -28,6 +28,8 @@ const Login = () => {
     };
 
     try {
+      sessionStorage.clear();
+      
       const usuario = await loginUsuario(credentials);
       login(usuario);
       // Salva navegação pendente, mostra popup e só navega após confirmação

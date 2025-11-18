@@ -14,9 +14,10 @@ import {
   MenuItem,
   Select,
   IconButton,
+  Tooltip,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useAuth } from "../../context/AuthContext"; // ✅ Importa o contexto
+import { useAuth } from "../../context/AuthContext";
 import { showSuccess, showError, showWarning } from "../../utils/swalHelper";
 
 import "../escolher-data/escolher-data.css";
@@ -24,43 +25,154 @@ import {
   listarAgenda,
   adicionarDisponibilidade,
 } from "../../services/chamadasAPIAgenda";
+import { listarAnamnesesPorResponsavel } from "../../services/apiAnamnese";
+import { buscarEventosAtivosPorGuia } from "../../services/apiEvento";
 
 dayjs.extend(updateLocale);
 dayjs.updateLocale("pt-br", { weekStart: 1 });
 dayjs.locale("pt-br");
 
 export default function EscolhaDataCard({ onClose }) {
-  const { usuario } = useAuth(); // ✅ Pega o usuário logado
+  const { usuario } = useAuth();
   const [value, setValue] = React.useState(null);
   const [hora, setHora] = React.useState("");
-  const [datasExistentes, setDatasExistentes] = React.useState([]);
   const [horariosDisponiveis, setHorariosDisponiveis] = React.useState([]);
-
-  React.useEffect(() => {
-    async function fetchDatas() {
-      try {
-        const datas = await listarAgenda();
-        setDatasExistentes(datas.map((d) => d.dataDisponivel));
-        console.log("Datas existentes:", datas.map((d) => d.dataDisponivel));
-      } catch (err) {
-    showError("Erro ao buscar datas já cadastradas.");
-        console.error(err);
-      }
-    }
-    fetchDatas();
-  }, []);
+  const [datasCalendario, setDatasCalendario] = React.useState([]);
 
   React.useEffect(() => {
     const horarios = [];
     let horaAtual = dayjs().hour(9).minute(0).second(0);
     const horaFinal = dayjs().hour(17).minute(0).second(0);
-
     while (horaAtual.isBefore(horaFinal)) {
       horarios.push(horaAtual.format("HH:mm"));
       horaAtual = horaAtual.add(30, "minute");
     }
     setHorariosDisponiveis(horarios);
   }, []);
+
+  React.useEffect(() => {
+    // só executa se usuario e usuario.id existem
+    if (!usuario || !usuario.id) {
+      console.log("usuario não disponível ainda");
+      return;
+    }
+
+    async function fetchDatas() {
+      try {
+        const dateMap = {};
+
+        const agenda = await listarAgenda();
+        agenda.forEach(a => {
+          if (a.dataDisponivel) {
+            const dateKey = dayjs(a.dataDisponivel).format("YYYY-MM-DD");
+            if (!dateMap[dateKey]) {
+              dateMap[dateKey] = {
+                data: dateKey,
+                tipo: "DISP",
+                cor: "#C0C0C0",
+                descricao: "Disponível",
+              };
+            }
+          }
+        });
+
+        const anamneses = await listarAnamnesesPorResponsavel(usuario.id);
+        anamneses.forEach(a => {
+          if (a.dataDisponivel) {
+            const dateKey = dayjs(a.dataDisponivel).format("YYYY-MM-DD");
+            dateMap[dateKey] = {
+              data: dateKey,
+              tipo: "ANAM",
+              cor: "#FFA500",
+              descricao: a.nomeAventureiro,
+            };
+          }
+        });
+
+        const eventos = await buscarEventosAtivosPorGuia(usuario.id);
+        console.log("eventos raw:", eventos);
+        eventos.forEach(e => {
+          const possibleDateFields = [
+            "data_ativacao",
+            "data_inicio",
+            "data",
+            "data_evento",
+            "dataEvento",
+            "data_inicio_evento"
+          ];
+          const possibleTimeFields = [
+            "hora_inicio",
+            "hora",
+            "horario_inicio",
+            "horario"
+          ];
+
+          let dateStr = null;
+          for (const f of possibleDateFields) {
+            if (e[f]) {
+              dateStr = e[f];
+              break;
+            }
+          }
+
+          if (!dateStr) {
+            console.log("evento sem campo de data conhecido:", e);
+            return;
+          }
+
+          let timeStr = null;
+          for (const t of possibleTimeFields) {
+            if (e[t]) {
+              timeStr = e[t];
+              break;
+            }
+          }
+
+          const candidates = [];
+          if (timeStr) {
+            candidates.push(`${dateStr}T${timeStr}`);
+            if (/^\d{2}:\d{2}$/.test(timeStr)) candidates.push(`${dateStr}T${timeStr}:00`);
+          }
+          candidates.push(`${dateStr}T00:00:00`, dateStr);
+
+          let dataEvento = null;
+          let usedCandidate = null;
+          for (const c of candidates) {
+            const maybe = dayjs(c);
+            if (maybe.isValid()) {
+              dataEvento = maybe;
+              usedCandidate = c;
+              break;
+            }
+          }
+
+          if (!dataEvento) {
+            console.log("não conseguiu parsear evento:", e, "candidatos:", candidates);
+            return;
+          }
+
+          const dateKey = dataEvento.format("YYYY-MM-DD");
+          if (!dateMap[dateKey] || dateMap[dateKey].tipo === "DISP") {
+            dateMap[dateKey] = {
+              data: dateKey,
+              tipo: "EVENTO",
+              cor: "#4CAF50",
+              descricao: e.nome_evento || e.titulo || e.descricao || "Evento",
+            };
+            console.log("evento registrado em", dateKey, "->", dateMap[dateKey].descricao, "via", usedCandidate);
+          }
+        });
+
+        const datas = Object.values(dateMap);
+        console.log("datasCalendario fetched:", datas);
+        setDatasCalendario(datas);
+      } catch (err) {
+        console.error("Erro ao carregar datas do calendário:", err);
+      }
+    }
+
+    fetchDatas();
+  }, [usuario.id]);
 
   const handleClose = () => onClose();
 
@@ -75,7 +187,6 @@ export default function EscolhaDataCard({ onClose }) {
       return;
     }
 
-    // confirma antes de salvar
     const confirm = await showWarning(
       "Deseja salvar esta data e horário?",
       "Confirmar salvamento",
@@ -94,7 +205,7 @@ export default function EscolhaDataCard({ onClose }) {
         .format("YYYY-MM-DDTHH:mm:ss");
 
       await adicionarDisponibilidade({
-        fkGuia: usuario.id, // ✅ passa o ID do usuário logado
+        fkGuia: usuario.id,
         dataDisponivel: dataHoraISO,
       });
 
@@ -110,42 +221,52 @@ export default function EscolhaDataCard({ onClose }) {
   };
 
   function CustomPickersDay(props) {
-    const { day, datasExistentes, selected, ...other } = props;
-    const diaAtual = dayjs(day).format("YYYY-MM-DD");
-    const existe = datasExistentes.some(
-      (d) => dayjs(d).format("YYYY-MM-DD") === diaAtual
-    );
+    const { day, selected, ...other } = props;
+    const dayKey = day.format("YYYY-MM-DD");
+    const itemDoDia = datasCalendario.find(d => d.data === dayKey);
+
+    const bgColor = itemDoDia
+      ? itemDoDia.cor
+      : selected
+      ? "#27ae60"
+      : undefined;
+
+    const hoverColor = itemDoDia
+      ? itemDoDia.tipo === "ANAM"
+        ? "#e59400"
+        : itemDoDia.tipo === "EVENTO"
+        ? "#358a39"
+        : "#b0b0b0"
+      : selected
+      ? "#219150"
+      : "#f0f0f0";
 
     return (
-      <PickersDay
-        {...other}
-        day={day}
-        selected={selected}
-        disabled={existe}
-        sx={{
-          borderRadius: "50%",
-          backgroundColor: existe
-            ? "#e0e0e0"
-            : selected
-            ? "#27ae60"
-            : undefined,
-          color: existe ? "#999" : selected ? "#fff" : undefined,
-          "&:hover": {
-            backgroundColor: existe
-              ? "#ccc"
-              : selected
-              ? "#219150"
-              : "#f0f0f0",
-          },
-          "&.Mui-selected": {
-            backgroundColor: "#27ae60 !important",
-            color: "#fff",
-          },
-          "&.Mui-selected:hover": {
-            backgroundColor: "#219150 !important",
-          },
-        }}
-      />
+      <Tooltip title={itemDoDia?.descricao || ""} arrow>
+        <span style={{ display: "inline-block" }}>
+          <PickersDay
+            {...other}
+            day={day}
+            selected={selected}
+            disabled={!!itemDoDia}
+            sx={{
+              borderRadius: "50%",
+              backgroundColor: bgColor,
+              color: itemDoDia ? "#fff" : undefined,
+              "&:hover": { 
+                backgroundColor: !!itemDoDia ? bgColor : hoverColor,
+              },
+              "&.Mui-selected": {
+                backgroundColor: (itemDoDia ? bgColor : "#27ae60") + " !important",
+                color: "#fff",
+              },
+              "&.Mui-selected:hover": {
+                backgroundColor: (itemDoDia ? hoverColor : "#219150") + " !important",
+              },
+            }}
+          />
+        </span>
+      </Tooltip>
     );
   }
 
@@ -155,10 +276,7 @@ export default function EscolhaDataCard({ onClose }) {
       style={{ position: "fixed", zIndex: 99999, top: 0, left: 0, right: 0, bottom: 0 }}
       onClick={(e) => e.target.classList.contains("overlay") && handleClose()}
     >
-      <Card
-        className="card-escolha"
-        style={{ position: "relative", zIndex: 100000 }}
-      >
+      <Card className="card-escolha" style={{ position: "relative", zIndex: 100000 }}>
         <CardContent>
           <Box display="flex" justifyContent="flex-end">
             <IconButton size="small" onClick={handleClose}>
@@ -166,42 +284,22 @@ export default function EscolhaDataCard({ onClose }) {
             </IconButton>
           </Box>
 
-          <Typography
-            variant="h6"
-            align="center"
-            style={{ marginBottom: 8, color: "#226144" }}
-          >
+          <Typography variant="h6" align="center" style={{ marginBottom: 8, color: "#226144" }}>
             Escolha uma data:
           </Typography>
 
-          <LocalizationProvider
-            dateAdapter={AdapterDayjs}
-            adapterLocale="pt-br"
-          >
+          <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
             <DateCalendar
               value={value}
               onChange={(newValue) => newValue && setValue(newValue)}
               dayOfWeekFormatter={(day) => day.format("ddd")}
               slots={{
-                day: (props) => (
-                  <CustomPickersDay
-                    {...props}
-                    datasExistentes={datasExistentes}
-                  />
-                ),
+                day: (props) => <CustomPickersDay {...props} />,
               }}
             />
           </LocalizationProvider>
 
-          <Typography
-            variant="h6"
-            align="center"
-            style={{
-              marginTop: 16,
-              marginBottom: 8,
-              color: "#226144",
-            }}
-          >
+          <Typography variant="h6" align="center" style={{ marginTop: 16, marginBottom: 8, color: "#226144" }}>
             Escolha um horário:
           </Typography>
 
@@ -246,8 +344,6 @@ export default function EscolhaDataCard({ onClose }) {
             >
               Salvar Data
             </Button>
-
-            {/* "Ver Calendário" button removed as requested */}
           </Box>
         </CardContent>
       </Card>
