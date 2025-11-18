@@ -318,3 +318,49 @@
     align-items: center;
   }
 }
+
+/* Ajuste mobile adicional: centralizar a sessão do banner na tela */
+@media (max-width: 768px) {
+  .banner {
+    height: 440px !important; /* aumenta um pouco a altura somente em mobile */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px;
+  }
+
+  /* Limitar largura do bloco do banner e centralizar (não full-bleed) */
+  .imagem-pai {
+    width: 100%;
+    max-width: 520px; /* largura máxima do bloco centralizado */
+    margin: 0 auto;
+    box-sizing: border-box;
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .banner-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover;
+    display: block;
+  }
+
+  /* Restaurar posicionamento do texto para a mesma posição que estava antes (mobile) */
+  .banner-text {
+    position: static; /* retirar absolute para que o texto volte ao fluxo */
+    left: auto;
+    top: auto;
+    transform: translate(0, -40%); /* mesmo deslocamento usado anteriormente */
+    width: 100%;
+    padding-left: 24px !important; /* mesma folga mobile anterior */
+    padding-right: 12px !important;
+    text-align: left;
+    z-index: 3;
+    color: #ffffff;
+  }
+
+  .banner-text h1 { font-size: 2.1rem !important; }
+  .banner-text h2 { font-size: 1.2rem !important; margin-top: 8px; }
+}
