@@ -1,0 +1,62 @@
+/* Mobile-only adjustments for Home page
+   - Prevent horizontal scrolling (overflow-x)
+   - Ensure sections and their contents adapt to any mobile width
+   - Restrict touch panning to vertical only (touch-action: pan-y)
+*/
+
+@media (max-width: 768px) {
+  /* Prevent any horizontal overflow at root and page level */
+  html, body, #root {
+    overflow-x: hidden !important;
+    touch-action: pan-y;
+    width: 100%;
+  }
+
+  /* Main container and sections should not overflow horizontally */
+  main, #home, #trilhas-section, #eventos-section, #guias-section, #feedbacks-section {
+    overflow-x: hidden;
+    width: 100%;
+    box-sizing: border-box;
+    touch-action: pan-y;
+  }
+
+  /* Ensure direct section wrappers fit the screen and are centered */
+  main > div, #home > *, #trilhas-section > *, #eventos-section > *, #guias-section > *, #feedbacks-section > * {
+    max-width: 100%;
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    box-sizing: border-box;
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+
+  /* Make images, iframes and media responsive */
+  img, picture, video, iframe {
+    max-width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  /* Ensure any cards/inner containers don't exceed parent width */
+  .card, .card-body, .container, .section-inner {
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+
+  /* If some components use absolute positioning near edges, reduce side offsets */
+  [class*="-floating"], .close-btn, .chat-floating {
+    right: 12px !important;
+    left: auto !important;
+  }
+
+  /* Optional: force body touch scrolling only vertically on mobile browsers */
+  body {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Espaçamento entre a primeira dobra (banner) e a sessão de trilhas somente em mobile */
+  #trilhas-section {
+    margin-top: 2rem; /* ajuste: 2rem ~ 32px em mobile; altere se quiser mais/menos */
+  }
+}

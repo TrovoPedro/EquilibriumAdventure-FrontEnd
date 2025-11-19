@@ -1,6 +1,7 @@
 // import Header from "./pages/Header.jsx";
 
 import BannerComHeader from "../../components/banner-header/BannerComHeader.jsx";
+import './Home.css';
 import Trilhas from "../../components/trilhas-home/Trilhas.jsx";
 import Eventos from "../../components/eventos-home/Eventos.jsx";
 import Guias from "../../components/guias-home/Guias.jsx";
