@@ -5,11 +5,36 @@ const AuthContext = createContext();
 
 export const useAuth = () => useContext(AuthContext);
 
+// --------------------------
+// Funções de tratamento de data
+// --------------------------
+const parseDataAnamnese = (dataString) => {
+  if (!dataString) return null;
+
+  // Remove tudo após o T (pois vem "2025-11-15T0")
+  const [dataPura] = dataString.split("T");
+
+  // Garante formato ISO válido
+  return new Date(`${dataPura}T00:00:00`);
+};
+
+const isAnamneseValida = (dataString) => {
+  const dataAnamnese = parseDataAnamnese(dataString);
+  if (!dataAnamnese) return false;
+
+  const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+
+  return dataAnamnese >= hoje; // válida se for hoje ou futura
+};
+
+// --------------------------
+
 export const AuthProvider = ({ children }) => {
   const [usuario, setUsuario] = useState(null);
   const [anamnese, setAnamnese] = useState([]);
 
-  // Carrega usuário salvo
+  // Carrega usuário salvo no sessionStorage
   useEffect(() => {
     const storedUser = sessionStorage.getItem("usuario");
     if (storedUser) {
@@ -18,13 +43,26 @@ export const AuthProvider = ({ children }) => {
     }
   }, []);
 
+  // Busca e valida anamnese
   useEffect(() => {
     const carregarAnamnese = async () => {
       if (usuario?.id) {
         try {
           const dados = await buscarAnamnesePorAventureiro(usuario.id);
-          setAnamnese(dados);
-          sessionStorage.setItem("anamnese", JSON.stringify(dados));
+
+          // filtra apenas anamnese com data válida
+          const anamneseValida = dados?.filter(a =>
+            isAnamneseValida(a.dataDisponivel)
+          );
+
+          if (anamneseValida.length > 0) {
+            setAnamnese(anamneseValida);
+            sessionStorage.setItem("anamnese", JSON.stringify(anamneseValida));
+          } else {
+            setAnamnese([]);
+            sessionStorage.removeItem("anamnese");
+          }
+
         } catch (error) {
           console.error("Erro ao carregar anamnese:", error);
           setAnamnese([]);
@@ -33,6 +71,7 @@ export const AuthProvider = ({ children }) => {
         setAnamnese([]);
       }
     };
+
     carregarAnamnese();
   }, [usuario?.id]);
 
