@@ -11,7 +11,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import Comentarios from '../../components/comentarios/Comentarios';
 import EventoInfo from '../../components/evento-info/EventoInfo';
 import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx, buscarMediaAvaliacoesPorEventoBase } from "../../services/apiEvento";
-import trilhaImg from "../../assets/cachoeiralago.jpg";
+import catalogoFallback from "../../assets/img12-catalogo.jpg";
 import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
 import { verificarInscricao, criarInscricao, cancelarInscricao, listarInscritos } from "../../services/apiInscricao";
 import Swal from 'sweetalert2';
@@ -348,7 +348,7 @@ const InscricaoTrilhasLimitado = () => {
             dataEvento: evento.dataAtivacao,
             categoria: evento.tipo,
             estado: evento.estado,
-            imagemUrl: imagemEvento || trilhaImg
+            imagemUrl: imagemEvento || catalogoFallback
           }}
           inscritosCount={inscritosCount}
           editavel={false}
