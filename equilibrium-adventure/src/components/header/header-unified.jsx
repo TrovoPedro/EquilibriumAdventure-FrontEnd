@@ -13,6 +13,7 @@ const Header = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' ? window.innerWidth <= 768 : false);
   const { resetarPontuacao } = useScore();
   const { resetarEscolhaGuia } = useGuide();
   const { usuario, logout } = useAuth();
@@ -35,6 +36,12 @@ const Header = () => {
 
     buscaImagemHeader();
   }, [idUsuario]);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 768);
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const userConfigs = {
     ADMINISTRADOR: {
@@ -67,8 +74,15 @@ const Header = () => {
     },
   };
 
-  // Pega configuração do usuário atual ou usa a do aventureiro
-  const currentConfig = userConfigs[tipoUsuario] || userConfigs.AVENTUREIRO;
+  // Em mobile, forçar header de GUIA para a tela Criar Evento; caso contrário utilizar o tipo real do usuário
+  const effectiveTipo = isMobile && location?.pathname === routeUrls.CRIAR_EVENTO ? "GUIA" : tipoUsuario;
+  const currentConfig = userConfigs[effectiveTipo] || userConfigs.AVENTUREIRO;
+
+  // Para o menu lateral móvel, quando estivermos na página de criar evento, usar os mesmos itens
+  // do catálogo de trilhas do guia (GUIA). Isso altera apenas o menu mobile.
+  const mobileMenuItems = isMobile && location?.pathname === routeUrls.CRIAR_EVENTO
+    ? userConfigs.GUIA.menuItems
+    : currentConfig.menuItems;
   // detecta rota do relatório de anamnese para aplicar spacer específico
   const isRelatorioAnamnese = location?.pathname?.startsWith("/relatorio-anamnese");
 
@@ -88,7 +102,7 @@ const Header = () => {
       {/* 🧭 Menu principal */}
       <nav className={`header-center ${menuOpen ? "open" : ""}`}>
         <ul>
-          {currentConfig.menuItems.map((item, index) => (
+          {mobileMenuItems.map((item, index) => (
             <li
               key={index}
               onClick={() => {
@@ -123,6 +137,33 @@ const Header = () => {
               {item.label}
             </li>
           ))}
+
+          {/* Versão mobile: quando estiver no catálogo do guia, exibe botão AGENDA que leva para infos-adic-guia */}
+          {(location?.pathname === routeUrls.CATALOGO_TRILHAS_ADM || location?.pathname === routeUrls.CRIAR_EVENTO) && (
+            <li
+              className="mobile-agenda"
+              onClick={() => {
+                setMenuOpen(false);
+                navigate(routeUrls.INFOS_ADICIONAIS_GUIA);
+              }}
+            >
+              AGENDA
+            </li>
+          )}
+
+          {/* Versão mobile: quando estiver no catálogo do aventureiro, exibe botão AGENDA que leva para agenda-aventureiro */}
+          {location?.pathname === routeUrls.CATALOGO_TRILHA && (
+            <li
+              className="mobile-agenda"
+              onClick={() => {
+                setMenuOpen(false);
+                navigate(routeUrls.AGENDA_AVENTUREIRO);
+              }}
+            >
+              AGENDA
+            </li>
+          )}
+
           {/* Botão de sair visível dentro do menu lateral (mobile) */}
           <li
             className="mobile-logout"
