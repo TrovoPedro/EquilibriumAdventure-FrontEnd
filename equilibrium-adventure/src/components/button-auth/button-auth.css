@@ -2,8 +2,8 @@
     background-color: #336948;
     color: white;
     border: none;
-    border-radius: 3px; /* menos arredondado (alinhado ao cabeçalho) */
-    width: 150px;        
+    border-radius: 50px; 
+    width: 100px;        
     height: 50px;        
     font-size: 0.75rem;   
     font-weight: 600;
@@ -13,6 +13,7 @@
     align-items: center;
     justify-content: center; 
 }
+
 
 .auth-button:hover {
     /* manter mesma cor no hover: não alteramos cor/fundo */
