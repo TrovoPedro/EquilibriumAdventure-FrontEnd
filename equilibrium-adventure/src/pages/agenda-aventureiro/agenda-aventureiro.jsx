@@ -23,7 +23,7 @@ import { convertDateToBrazilian } from "../../utils/dateConversions";
 
 const CriarAgendaAventureiro = () => {
   const navigate = useNavigate();
-  const { usuario, anamnese } = useAuth();
+  const { usuario, anamnese, recarregarAnamnese } = useAuth();
   const idUsuario = usuario?.id;
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [agenda, setAgenda] = useState([]);
@@ -68,6 +68,7 @@ const CriarAgendaAventureiro = () => {
     const carregarHistorico = async () => {
       if (!idUsuario) return;
       try {
+        await recarregarAnamnese();
         const data = await buscarHistoricoPorUsuario(idUsuario);
         const historicoFormatado = data.map((item) => ({
           idInscricao: item.idInscricao ?? item.idInscricaoEvento ?? null,

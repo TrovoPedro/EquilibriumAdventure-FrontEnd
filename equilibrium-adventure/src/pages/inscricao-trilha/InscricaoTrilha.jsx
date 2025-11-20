@@ -9,8 +9,7 @@ import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Comentarios from '../../components/comentarios/Comentarios';
-import EventoInfo from '../../components/evento-info/EventoInfo';
-import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx, buscarMediaAvaliacoesPorEventoBase } from "../../services/apiEvento";
+import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx, buscarMediaAvaliacoes } from "../../services/apiEvento";
 import catalogoFallback from "../../assets/img12-catalogo.jpg";
 import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
 import { verificarInscricao, criarInscricao, cancelarInscricao, listarInscritos } from "../../services/apiInscricao";
@@ -43,13 +42,13 @@ const InscricaoTrilhasLimitado = () => {
   const [mediaAvaliacoes, setMediaAvaliacoes] = useState(0);
   const [mensagemAvaliacao, setMensagemAvaliacao] = useState('');
   const { usuario, anamnese } = useAuth()
-  const { nivel } = useScore();
+  const { nivel, pontuacaoTotal } = useScore();
   const [nivelInsuficiente, setNivelInsuficiente] = useState(false);
   const navigate = useNavigate();
   const nivelOrdem = {
-    'Explorador': 1,
-    'Aventureiro': 2,
-    'Desbravador': 3
+    'EXPLORADOR': 1,
+    'AVENTUREIRO': 2,
+    'DESBRAVADOR': 3
   };
 
   useEffect(() => {
@@ -64,10 +63,8 @@ const InscricaoTrilhasLimitado = () => {
 
         if (eventoData.length > 0) {
           const ativacao = eventoData[0];
-          
           setEvento({
             idAtivacao: ativacao.idAtivacao,
-            idEvento: ativacao.evento?.idEvento || null,
             nome: ativacao.evento?.nome || "",
             descricao: ativacao.evento?.descricao || "",
             nivel_dificuldade: ativacao.evento?.nivelDificuldade || "",
@@ -89,9 +86,12 @@ const InscricaoTrilhasLimitado = () => {
           setImagemEvento(imagemUrl || null);
 
           if (ativacao.idAtivacao) {
+            console.log("Buscando GPX:", ativacao.evento.idEvento);
             const gpx = await buscarGpx(ativacao.evento.idEvento);
             setGpxData(gpx);
           }
+
+          console.log("Evento carregado:", ativacao);
         } else {
           console.error("Nenhuma ativação encontrada para este evento");
         }
@@ -133,18 +133,21 @@ const InscricaoTrilhasLimitado = () => {
     carregarInscritos();
   }, [id]);
 
+  // Carregar média de avaliações
   useEffect(() => {
     const carregarMediaAvaliacoes = async () => {
       try {
-        if (evento?.idEvento) {
-          const resultado = await buscarMediaAvaliacoesPorEventoBase(evento.idEvento);
+        if (id) {
+          console.log('Buscando média de avaliações para ID:', id);
+          const resultado = await buscarMediaAvaliacoes(id);
+          console.log('Resultado da média:', resultado);
           
           if (resultado.mediaAvaliacoes !== undefined) {
             setMediaAvaliacoes(resultado.mediaAvaliacoes);
-            setMensagemAvaliacao('');
+            console.log('Média de avaliações definida:', resultado.mediaAvaliacoes);
           } else if (resultado.mensagem) {
-            setMediaAvaliacoes(0);
             setMensagemAvaliacao(resultado.mensagem);
+            console.log('Mensagem:', resultado.mensagem);
           }
         }
       } catch (error) {
@@ -153,8 +156,34 @@ const InscricaoTrilhasLimitado = () => {
     };
 
     carregarMediaAvaliacoes();
-  }, [evento?.idEvento]);
+  }, [id]);
 
+  // Carregar média de avaliações
+  useEffect(() => {
+    const carregarMediaAvaliacoes = async () => {
+      try {
+        if (id) {
+          console.log('Buscando média de avaliações para ID:', id);
+          const resultado = await buscarMediaAvaliacoes(id);
+          console.log('Resultado da média:', resultado);
+          
+          if (resultado.mediaAvaliacoes !== undefined) {
+            setMediaAvaliacoes(resultado.mediaAvaliacoes);
+            console.log('Média de avaliações definida:', resultado.mediaAvaliacoes);
+          } else if (resultado.mensagem) {
+            setMensagemAvaliacao(resultado.mensagem);
+            console.log('Mensagem:', resultado.mensagem);
+          }
+        }
+      } catch (error) {
+        console.error('Erro ao carregar média de avaliações:', error);
+      }
+    };
+
+    carregarMediaAvaliacoes();
+  }, [id]);
+
+  {inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
   const handleEnviarComentario = async (comentarioObj) => {
 
     <button
@@ -170,8 +199,10 @@ const InscricaoTrilhasLimitado = () => {
       idAtivacaoEvento: id // ⚠ aqui mudou
     });
 
-    // Adiciona o comentário retornado pelo backend (preserva tipoUsuario e demais campos)
-    setComentarios(prev => [...prev, comentarioCriado]);
+    setComentarios(prev => [...prev, {
+      nome: comentarioCriado.nomeUsuario,
+      texto: comentarioCriado.texto
+    }]);
   };
 
 
@@ -194,9 +225,60 @@ const InscricaoTrilhasLimitado = () => {
   // mostra alerta e esconde botões se o usuário não tiver nível suficiente
   useEffect(() => {
     if (!evento) return;
+    
+    console.log('🔍 DEBUG NIVEL:');
+    console.log('  nivel recebido do context:', nivel);
+    console.log('  pontuacaoTotal:', pontuacaoTotal);
+    console.log('  tipo do nivel:', typeof nivel);
+    console.log('  evento.nivel_dificuldade:', evento.nivel_dificuldade);
+    console.log('  nivelOrdem:', nivelOrdem);
+    
     const nivelUsuario = nivelOrdem[nivel] || 0;
     const nivelTrilha = nivelOrdem[evento.nivel_dificuldade] || 0;
+    
+    console.log('  nivelUsuario calculado:', nivelUsuario);
+    console.log('  nivelTrilha calculado:', nivelTrilha);
+    
+    // Verificação especial para EXPLORADOR com pontuação baixa
+    if (nivel === 'EXPLORADOR' && pontuacaoTotal != null && pontuacaoTotal <= 7) {
+      console.log('  ⚠️ EXPLORADOR com pontuação <= 7, precisa de anamnese');
+      
+      // Verifica se já tem anamnese agendada
+      if (anamnese && anamnese.length > 0) {
+        console.log('Já possui anamnese agendada');
+        setNivelInsuficiente(true);
+        showWarning(
+          'Você já possui uma anamnese agendada. Aguarde a conversa com o guia antes de se inscrever nesta trilha.',
+          'Atenção',
+          'OK'
+        );
+      } else {
+        console.log('Não possui anamnese agendada, mostrando alerta');
+        setNivelInsuficiente(true);
+        
+        // Mostra alerta com opção de agendar anamnese
+        Swal.fire({
+          title: 'Anamnese Necessária',
+          text: 'Para participar desta trilha, é necessário agendar uma conversa com um guia para avaliação do seu perfil e orientações personalizadas.',
+          icon: 'info',
+          showCancelButton: true,
+          showCloseButton: true,
+          confirmButtonText: 'Agendar Anamnese',
+          cancelButtonText: 'Voltar',
+          confirmButtonColor: '#295c44',
+          cancelButtonColor: '#6c757d'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            navigate('/agendamento-anamnese');
+          }
+        });
+      }
+      return;
+    }
+    
     const insuf = nivelUsuario < nivelTrilha;
+    console.log('  insuficiente?', insuf);
+    
     setNivelInsuficiente(insuf);
     if (insuf) {
       // mostra alerta apenas uma vez ao abrir a tela
@@ -206,7 +288,7 @@ const InscricaoTrilhasLimitado = () => {
         'OK'
       );
     }
-  }, [evento, nivel]);
+  }, [evento, nivel, pontuacaoTotal, anamnese]);
 
   // Cancelar inscrição
   const handleCancelarInscricao = async () => {
@@ -298,88 +380,95 @@ const InscricaoTrilhasLimitado = () => {
       <CircleBackButton onClick={() => navigate(-1)} />
 
       <div className="inscricao-trilha-header" style={{ position: 'relative' }}>
-        {/* Avaliação média no canto superior direito do card (mantemos visual semelhante ao detalhes-evento) */}
+        {/* Avaliação média no canto superior direito do header */}
         {(mediaAvaliacoes > 0 || mensagemAvaliacao) && (
           <div style={{
             position: 'absolute',
-            top: '20px',
-            right: '20px',
-            background: 'transparent', /* removido fundo branco */
-            padding: '12px 18px',
-            borderRadius: '12px',
-            boxShadow: 'none',
+            top: '10px',
+            right: '10px',
+            background: 'rgba(255, 255, 255, 0.98)',
+            padding: '10px 16px',
+            borderRadius: '10px',
+            boxShadow: '0 3px 10px rgba(0,0,0,0.12)',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
-            gap: '6px',
+            gap: '5px',
             zIndex: 10,
-            border: 'none'
+            border: '1px solid #e0e0e0'
           }}>
             {mediaAvaliacoes > 0 ? (
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span style={{ fontSize: '1.4rem', fontWeight: '700', color: '#226144' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
+                <span style={{ fontSize: '1.3rem', fontWeight: '700', color: '#226144' }}>
                   {mediaAvaliacoes.toFixed(1)}
                 </span>
                 {renderStars(mediaAvaliacoes)}
               </div>
             ) : (
-              <span style={{ fontSize: '0.85rem', color: '#666', fontWeight: '500', textAlign: 'center' }}>
+              <span style={{ fontSize: '0.8rem', color: '#666', fontWeight: '500', textAlign: 'center', maxWidth: '150px' }}>
                 {mensagemAvaliacao.replace('tem', 'possui')}
               </span>
             )}
           </div>
         )}
 
-        {/* Reusar o componente EventoInfo para aplicar o mesmo layout/estilização da tela de detalhes */}
-        <EventoInfo
-          evento={{
-            titulo: evento.nome,
-            descricao: evento.descricao,
-            nivelDificuldade: evento.nivel_dificuldade,
-            distanciaKm: evento.distancia_km,
-            responsavel: evento.responsavel,
-            endereco: evento.endereco,
-            caminhoArquivoEvento: evento.caminho_arquivo_evento,
-            preco: evento.preco,
-            horaInicio: evento.horaInicio,
-            horaFim: evento.horaFinal,
-            tempoEstimado: evento.tempoEstimado,
-            limiteInscritos: evento.limiteInscritos,
-            dataEvento: evento.dataAtivacao,
-            categoria: evento.tipo,
-            estado: evento.estado,
-            imagemUrl: imagemEvento || catalogoFallback
-          }}
-          inscritosCount={inscritosCount}
-          editavel={false}
-          showBackButton={false}
-        >
-          {/* Informações adicionais (reduzidas) dentro do card EventoInfo: apenas endereço para evitar duplicação */}
-          <div style={{ marginTop: '1.5rem' }}>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', width: '100%' }}>
-              <div className="evento-descricao" style={{ gridColumn: '1 / 3', marginTop: 0 }}>
-                <label>Endereço:</label>
-                <p>
-                  {evento.endereco
-                    ? `${evento.endereco.rua || ""}${evento.endereco.numero ? ', ' + evento.endereco.numero : ''} - ${evento.endereco.bairro || ""}, ${evento.endereco.cidade || ""} - ${evento.endereco.estado || ""}, CEP: ${evento.endereco.cep || ""}`
-                    : 'Endereço não disponível'}
-                </p>
-              </div>
-              <div className="campo-info" style={{ gridColumn: '3 / 4' }}>
-                <label>Nível:</label>
-                <span style={{ 
-                  fontWeight: '600',
-                  color: evento.nivel_dificuldade === 'Explorador' ? '#2e7d32' : 
-                         evento.nivel_dificuldade === 'Aventureiro' ? '#ed6c02' : 
-                         evento.nivel_dificuldade === 'Desbravador' ? '#d32f2f' : '#2c3e2c'
-                }}>
-                  {evento.nivel_dificuldade || 'Não especificado'}
-                </span>
-              </div>
-            </div>
-          </div>
-        </EventoInfo>
+        <img src={imagemEvento || catalogoFallback} alt={evento.nome} />
+        <div className="inscricao-trilha-info">
+          <div><b>Título:</b> {evento.nome}</div>
+          <div><b>Nível:</b> {evento.nivel_dificuldade}</div>
+          <div><b>Data:</b> {evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"}</div>
+          <div><b>Limite de Inscritos:</b> {evento.limiteInscritos || 'N/A'} <span style={{ color: '#226144' }}>({inscritosCount} inscritos)</span></div>
+          <div><b>Descrição:</b> {evento.descricao}</div>
+        </div>
       </div>
+
+      <form className="inscricao-trilha-dados">
+        <div className="inscricao-trilha-form-row">
+          <div className="inscricao-trilha-form-group">
+            <label>Distância:</label>
+            <input type="text" value={`${evento.distancia_km} km`} disabled />
+          </div>
+          <div className="inscricao-trilha-form-group">
+            <label>Categoria:</label>
+            <input type="text" value={evento.tipo || "N/A"} disabled />
+          </div>
+          <div className="inscricao-trilha-form-group">
+            <label>Preço:</label>
+            <input type="text" value={`R$ ${evento.preco?.toFixed(2) || "0,00"}`} disabled />
+          </div>
+        </div>
+
+        <div className="inscricao-trilha-form-row">
+          <div className="inscricao-trilha-form-group">
+            <label>Hora de Início:</label>
+            <input type="text" value={evento.horaInicio || "N/A"} disabled />
+          </div>
+          <div className="inscricao-trilha-form-group">
+            <label>Hora de Término:</label>
+            <input type="text" value={evento.horaFinal || "N/A"} disabled />
+          </div>
+          <div className="inscricao-trilha-form-group">
+            <label>Data:</label>
+            <input type="text" value={evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"} disabled />
+          </div>
+        </div>
+
+        <div className="inscricao-trilha-form-row endereco-row">
+          <div className="inscricao-trilha-form-group full-width">
+            <label>Endereço:</label>
+            <input
+              type="text"
+              disabled
+              className="endereco-input"
+              value={
+                evento.endereco
+                  ? `${evento.endereco.rua || ""}, ${evento.endereco.numero || ""} - ${evento.endereco.bairro || ""}, ${evento.endereco.cidade || ""} - ${evento.endereco.estado || ""}, CEP: ${evento.endereco.cep || ""}`
+                  : "Endereço não disponível"
+              }
+            />
+          </div>
+        </div>
+      </form >
 
       {!nivelInsuficiente && (
         <button
@@ -459,25 +548,14 @@ const InscricaoTrilhasLimitado = () => {
 
       <div className="card inscricao-trilha-mapa">
         <h3>Mapa da Trilha</h3>
-        {gpxData ? (
-          <MapaTrilha
-            gpxFile={URL.createObjectURL(new Blob([gpxData], { type: "application/gpx+xml" }))}
-            altura="450px"
-          />
-        ) : (
-          <div style={{
-            height: '450px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#666',
-            background: '#f8f9f9',
-            borderRadius: '8px',
-            border: '1px dashed #e6e6e6'
-          }}>
-            <strong>Percurso não disponível</strong>
-          </div>
-        )}
+        <MapaTrilha
+          gpxFile={
+            gpxData
+              ? URL.createObjectURL(new Blob([gpxData], { type: "application/gpx+xml" }))
+              : "/assets/gpx-files/trilha-cachoeira-dos-grampos-fumaca.gpx"
+          }
+          altura="450px"
+        />
       </div>
     </div >
   );
