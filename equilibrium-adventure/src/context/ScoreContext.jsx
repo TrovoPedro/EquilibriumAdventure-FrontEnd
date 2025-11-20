@@ -9,34 +9,12 @@ export const ScoreProvider = ({ children }) => {
   const [nivel, setNivel] = useState();
   const [pontuacaoTotal, setPontuacaoTotal] = useState();
 
+  // Carregar dados do sessionStorage ao iniciar
   useEffect(() => {
-    const carregarDados = () => {
-      const storedNivel = sessionStorage.getItem("nivel");
-      const storedPontuacao = sessionStorage.getItem("pontuacaoTotal");
-      
-      if (storedNivel) {
-        setNivel(storedNivel);
-      } else {
-        setNivel(undefined);
-      }
-      
-      if (storedPontuacao) {
-        setPontuacaoTotal(Number(storedPontuacao));
-      } else {
-        setPontuacaoTotal(undefined);
-      }
-    };
-
-    carregarDados();
-
-    const handleUserChange = () => {
-      setNivel(undefined);
-      setPontuacaoTotal(undefined);
-      carregarDados();
-    };
-
-    window.addEventListener('userChanged', handleUserChange);
-    return () => window.removeEventListener('userChanged', handleUserChange);
+    const storedNivel = sessionStorage.getItem("nivel");
+    const storedPontuacao = sessionStorage.getItem("pontuacaoTotal");
+    if (storedNivel) setNivel(storedNivel);
+    if (storedPontuacao) setPontuacaoTotal(Number(storedPontuacao));
   }, []);
 
   // Salvar dados

@@ -103,7 +103,7 @@ const AgendamentoAnamnese = () => {
         fkAventureiro: usuario.id,
       };
 
-      await agendarAnamnese(payload);
+      await agendarAnamnese(payload);    
       await showSuccess('Agendamento realizado com sucesso!');
       navigate(routeUrls.AGENDA_AVENTUREIRO);
     } catch (err) {
