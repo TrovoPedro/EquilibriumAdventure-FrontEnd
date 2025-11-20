@@ -562,7 +562,7 @@ const InscricaoTrilhasLimitado = () => {
           border: '1px solid #ffeeba',
           borderRadius: 8
         }}>
-          <strong>Atenção:</strong> Seu nível atual não permite participar desta trilha. Entre em contato com um guia para orientação ou realize os treinamentos necessários.
+          <strong>Atenção:</strong> Seu nível atual não permite participar desta trilha. Entre em contato com um guia para orientação ou participe de eventos para subir de nível.
         </div>
       )}
 

@@ -19,11 +19,13 @@ import Swal from 'sweetalert2';
 import { showError, showSuccess, showWarning } from "../../utils/swalHelper";
 import { buscarImagemUsuario } from "../../services/apiUsuario";
 import { useAuth } from "../../context/AuthContext";
+import { useScore } from "../../context/ScoreContext";
 import { convertDateToBrazilian } from "../../utils/dateConversions";
 
 const CriarAgendaAventureiro = () => {
   const navigate = useNavigate();
   const { usuario, anamnese, recarregarAnamnese } = useAuth();
+  const { nivel } = useScore();
   const idUsuario = usuario?.id;
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [agenda, setAgenda] = useState([]);
@@ -264,7 +266,7 @@ const CriarAgendaAventureiro = () => {
               <div className="user-info-content">
                 <div className="user-info">
                   <h3>{nomeUsuario}</h3>
-                  <span className="user-role">{tipoUsuario}</span>
+                  <span className="user-role">{nivel || tipoUsuario}</span>
                 </div>
                 <ButtonSubmitForm
                   title="Mais Informações"
