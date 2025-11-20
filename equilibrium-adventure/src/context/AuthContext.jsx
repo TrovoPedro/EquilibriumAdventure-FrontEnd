@@ -82,6 +82,25 @@ export const AuthProvider = ({ children }) => {
     window.dispatchEvent(new Event('userChanged'));
   };
 
+  const recarregarAnamnese = async () => {
+    if (usuario?.id) {
+      try {
+        const dados = await buscarAnamnesePorAventureiro(usuario.id);
+        const anamneseValida = dados?.filter(a => isAnamneseValida(a.dataDisponivel));
+        
+        if (anamneseValida.length > 0) {
+          setAnamnese(anamneseValida);
+          sessionStorage.setItem("anamnese", JSON.stringify(anamneseValida));
+        } else {
+          setAnamnese([]);
+          sessionStorage.removeItem("anamnese");
+        }
+      } catch (error) {
+        console.error("Erro ao recarregar anamnese:", error);
+      }
+    }
+  };
+
   const logout = () => {
     setUsuario(null);
     setAnamnese([]);
@@ -90,7 +109,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ usuario, anamnese, login, logout }}>
+    <AuthContext.Provider value={{ usuario, anamnese, login, logout, recarregarAnamnese }}>
       {children}
     </AuthContext.Provider>
   );
