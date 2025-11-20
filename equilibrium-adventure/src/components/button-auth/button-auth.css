@@ -23,3 +23,11 @@
 .auth-button:active {
     transform: scale(0.98);
 }
+
+@media (max-width: 600px) {
+    .auth-button {
+        width: 100%;
+        height: 48px;
+        font-size: 0.9rem;
+    }
+}

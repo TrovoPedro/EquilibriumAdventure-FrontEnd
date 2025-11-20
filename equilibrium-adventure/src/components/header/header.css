@@ -190,6 +190,22 @@
     border-bottom: 1px solid #eee;
   }
 
+  /* Estilo específico para o botão 'SAIR' exibido no menu lateral (mobile) */
+  .header-side-menu li.mobile-logout {
+    color: #ffffff;
+    background: #004d40; /* verde da paleta (padronizado com o header) */
+    padding: 12px 16px;
+    border-radius: 8px;
+    text-align: center;
+    margin-top: 16px;
+    border-bottom: none;
+    font-weight: 400; /* remover negrito */
+  }
+
+  .header-side-menu li.mobile-logout:hover {
+    background: #00332e;
+  }
+
   .close-menu {
     background: none;
     border: none;

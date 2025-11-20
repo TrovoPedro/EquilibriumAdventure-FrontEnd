@@ -10,7 +10,7 @@ import { useScore } from "../../context/ScoreContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Comentarios from '../../components/comentarios/Comentarios';
 import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx, buscarMediaAvaliacoes } from "../../services/apiEvento";
-import trilhaImg from "../../assets/cachoeiralago.jpg";
+import catalogoFallback from "../../assets/img12-catalogo.jpg";
 import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
 import { verificarInscricao, criarInscricao, cancelarInscricao, listarInscritos } from "../../services/apiInscricao";
 import Swal from 'sweetalert2';
@@ -412,7 +412,7 @@ const InscricaoTrilhasLimitado = () => {
           </div>
         )}
 
-        <img src={imagemEvento || trilhaImg} alt={evento.nome} />
+        <img src={imagemEvento || catalogoFallback} alt={evento.nome} />
         <div className="inscricao-trilha-info">
           <div><b>Título:</b> {evento.nome}</div>
           <div><b>Nível:</b> {evento.nivel_dificuldade}</div>

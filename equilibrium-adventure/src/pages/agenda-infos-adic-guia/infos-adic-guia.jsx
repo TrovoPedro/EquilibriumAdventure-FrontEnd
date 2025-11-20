@@ -224,38 +224,67 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                                             .filter(anamnese => {
                                                 const dataAgendada = new Date(anamnese.dataDisponivel);
                                                 const agora = new Date();
-                                                // Só exibe se ainda não passou 1 hora da data/hora agendada
                                                 return agora.getTime() <= dataAgendada.getTime() + 60 * 60 * 1000;
                                             })
-                                            .map((anamnese, idx) => {
-                                                const nome = anamnese.nomeAventureiro || "?";
-                                                const inicial = nome.charAt(0).toUpperCase();
-                                                const dataObj = new Date(anamnese.dataDisponivel);
-                                                const dataFormatada = `${dataObj.toLocaleDateString()} , ${dataObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
-                                                const cores = ["#9c27b0", "#26c6da", "#f44336", "#ff9800", "#4caf50"];
-                                                const handleRelatorioClick = () => {
-                                                    sessionStorage.setItem('fkAventureiro', anamnese.fkAventureiro);
-                                                    redirect(`/relatorio-anamnese/${anamnese.fkAventureiro}`);
-                                                };
-                                                return (
-                                                    <div className="anamnese-card" key={`${anamnese.id}-${idx}`}>
-                                                        <div className="anamnese-info" onClick={() => handleOnClickCard()}>
-                                                            <div className="anamnese-initial" style={{ backgroundColor: cores[idx % cores.length] }}>
-                                                                {inicial}
+                                            .length > 0 ? (
+                                            anamneses
+                                                .filter(anamnese => {
+                                                    const dataAgendada = new Date(anamnese.dataDisponivel);
+                                                    const agora = new Date();
+                                                    return agora.getTime() <= dataAgendada.getTime() + 60 * 60 * 1000;
+                                                })
+                                                .map((anamnese, idx) => {
+                                                    const nome = anamnese.nomeAventureiro || "?";
+                                                    const inicial = nome.charAt(0).toUpperCase();
+                                                    const dataObj = new Date(anamnese.dataDisponivel);
+                                                    const dataFormatada = `${dataObj.toLocaleDateString()} , ${dataObj.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+                                                    const cores = ["#9c27b0", "#26c6da", "#f44336", "#ff9800", "#4caf50"];
+                                                    const handleRelatorioClick = () => {
+                                                        sessionStorage.setItem('fkAventureiro', anamnese.fkAventureiro);
+                                                        redirect(`/relatorio-anamnese/${anamnese.fkAventureiro}`);
+                                                    };
+                                                    return (
+                                                        <div className="anamnese-card" key={`${anamnese.id}-${idx}`}>
+                                                            <div className="anamnese-info" onClick={() => handleOnClickCard()}>
+                                                                <div className="anamnese-initial" style={{ backgroundColor: cores[idx % cores.length] }}>
+                                                                    {inicial}
+                                                                </div>
+                                                                <div className="anamnese-details">
+                                                                    <span className="anamnese-date">{dataFormatada}</span>
+                                                                    <h4>{nome}</h4>
+                                                                </div>
                                                             </div>
-                                                            <div className="anamnese-details">
-                                                                <span className="anamnese-date">{dataFormatada}</span>
-                                                                <h4>{nome}</h4>
-                                                            </div>
+                                                            <button className="anamnese-relatorio-btn" onClick={handleRelatorioClick}>
+                                                                Relatório
+                                                            </button>
                                                         </div>
-                                                        <button className="anamnese-relatorio-btn" onClick={handleRelatorioClick}>
-                                                            Relatório
-                                                        </button>
+                                                    );
+                                                })
+                                        ) : (
+                                            <div className="anamnese-card">
+                                                <div className="anamnese-info">
+                                                    <div className="anamnese-initial" style={{ backgroundColor: '#9c27b0' }}>
+                                                        ?
                                                     </div>
-                                                );
-                                            })
+                                                    <div className="anamnese-details">
+                                                        <span className="anamnese-date">Sem anamneses</span>
+                                                        <h4>Nenhuma anamnese agendada</h4>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )
                                     ) : (
-                                        <span className="no-events-text">Nenhuma anamnese encontrada.</span>
+                                        <div className="anamnese-card">
+                                            <div className="anamnese-info">
+                                                <div className="anamnese-initial" style={{ backgroundColor: '#9c27b0' }}>
+                                                    ?
+                                                </div>
+                                                <div className="anamnese-details">
+                                                    <span className="anamnese-date">Sem anamneses</span>
+                                                    <h4>Nenhuma anamnese encontrada</h4>
+                                                </div>
+                                            </div>
+                                        </div>
                                     )}
                                 </div>
 
