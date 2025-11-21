@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "./agenda-aventureiro.css";
 import defaultAvatar from "../../assets/imagem-do-usuario-grande.png";
-import Trilha from "../../assets/cachoeiralago.jpg";
+import catalogoFallback from "../../assets/img12-catalogo.jpg";
 import Header from "../../components/header/header-unified";
 import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
 import ButtonDangerForm from "../../components/button-padrao/button-danger-form";
@@ -19,13 +19,11 @@ import Swal from 'sweetalert2';
 import { showError, showSuccess, showWarning } from "../../utils/swalHelper";
 import { buscarImagemUsuario } from "../../services/apiUsuario";
 import { useAuth } from "../../context/AuthContext";
-import { useScore } from "../../context/ScoreContext";
 import { convertDateToBrazilian } from "../../utils/dateConversions";
 
 const CriarAgendaAventureiro = () => {
   const navigate = useNavigate();
   const { usuario, anamnese, recarregarAnamnese } = useAuth();
-  const { nivel } = useScore();
   const idUsuario = usuario?.id;
   const [avatarUrl, setAvatarUrl] = useState(null);
   const [agenda, setAgenda] = useState([]);
@@ -266,7 +264,7 @@ const CriarAgendaAventureiro = () => {
               <div className="user-info-content">
                 <div className="user-info">
                   <h3>{nomeUsuario}</h3>
-                  <span className="user-role">{nivel || tipoUsuario}</span>
+                  <span className="user-role">{tipoUsuario}</span>
                 </div>
                 <ButtonSubmitForm
                   title="Mais Informações"
@@ -289,10 +287,10 @@ const CriarAgendaAventureiro = () => {
                     src={
                       proximoEventoComImagem?.imagem
                         ? `data:image/jpeg;base64,${proximoEventoComImagem.imagem}`
-                        : Trilha
+                        : catalogoFallback
                     }
                     alt="EVENTO"
-                    onError={(e) => (e.target.src = Trilha)}
+                    onError={(e) => (e.target.src = catalogoFallback)}
                     onClick={() => {
                       if (proximoEventoComImagem && proximoEventoComImagem.idEvento) {
                         navigate(routeUrls.INSCRICAO_TRILHAS.replace(':id', proximoEventoComImagem.idEvento));
