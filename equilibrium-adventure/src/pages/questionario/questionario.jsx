@@ -70,8 +70,8 @@ const Questionario = () => {
         const encaminharParaAnamnese = resultadoNivel?.encaminharParaAnamnese || false;
 
         const nivelObtido = typeof nivelCalculado === "string"
-          ? nivelCalculado.toLowerCase()
-          : String(nivelCalculado?.nivel ?? "EXPLORADOR").toLowerCase();
+          ? nivelCalculado
+          : String(nivelCalculado?.nivel ?? "EXPLORADOR");
 
         setNivel(nivelObtido);
         setNivelObtido(nivelObtido);

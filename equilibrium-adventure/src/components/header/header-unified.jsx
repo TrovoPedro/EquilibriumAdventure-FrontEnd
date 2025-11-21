@@ -62,6 +62,7 @@ const Header = () => {
       menuItems: [
         { label: "HOME", route: routeUrls.CATALOGO_TRILHA },
         { label: "ESCOLHER GUIA", route: routeUrls.ESCOLHER_GUIA },
+        { label: "AGENDA", route: routeUrls.AGENDA_AVENTUREIRO },
       ],
       agendaRoute: routeUrls.AGENDA_AVENTUREIRO,
     },
@@ -75,100 +76,100 @@ const Header = () => {
   return (
     <>
       <header className="header">
-      {/* 🖼️ Imagem do usuário */}
-      <div className="header-left" onClick={() => navigate(currentConfig.agendaRoute)}>
-        <img
-          src={avatarUrl || currentConfig.defaultAvatar}
-          alt="Usuário"
-          className="header-avatar"
-          onError={(e) => (e.target.src = currentConfig.defaultAvatar)}
-        />
-      </div>
+        {/* 🖼️ Imagem do usuário */}
+        <div className="header-left" onClick={() => navigate(currentConfig.agendaRoute)}>
+          <img
+            src={avatarUrl || currentConfig.defaultAvatar}
+            alt="Usuário"
+            className="header-avatar"
+            onError={(e) => (e.target.src = currentConfig.defaultAvatar)}
+          />
+        </div>
 
-      {/* 🧭 Menu principal */}
-      <nav className={`header-center ${menuOpen ? "open" : ""}`}>
-        <ul>
-          {currentConfig.menuItems.map((item, index) => (
+        {/* 🧭 Menu principal */}
+        <nav className={`header-center ${menuOpen ? "open" : ""}`}>
+          <ul>
+            {currentConfig.menuItems.map((item, index) => (
+              <li
+                key={index}
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate(item.route);
+                }}
+              >
+                {item.label}
+              </li>
+            ))}
+          </ul>
+        </nav>
+
+        {/* 📱 Menu lateral (mobile) */}
+        <nav className={`header-side-menu ${menuOpen ? "open" : ""}`}>
+          <button
+            className="close-menu"
+            aria-label="Fechar menu"
+            onClick={() => setMenuOpen(false)}
+          >
+            ✕
+          </button>
+          <ul>
+            {currentConfig.menuItems.map((item, index) => (
+              <li
+                key={index}
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate(item.route);
+                }}
+              >
+                {item.label}
+              </li>
+            ))}
+            {/* Botão de sair visível dentro do menu lateral (mobile) */}
             <li
-              key={index}
+              className="mobile-logout"
               onClick={() => {
                 setMenuOpen(false);
-                navigate(item.route);
+                logout();
+                navigate(routeUrls.HOME);
+                resetarDados();
               }}
             >
-              {item.label}
+              SAIR
             </li>
-          ))}
-        </ul>
-      </nav>
+          </ul>
+        </nav>
 
-      {/* 📱 Menu lateral (mobile) */}
-      <nav className={`header-side-menu ${menuOpen ? "open" : ""}`}>
-        <button
-          className="close-menu"
-          aria-label="Fechar menu"
-          onClick={() => setMenuOpen(false)}
-        >
-          ✕
-        </button>
-        <ul>
-          {currentConfig.menuItems.map((item, index) => (
-            <li
-              key={index}
-              onClick={() => {
-                setMenuOpen(false);
-                navigate(item.route);
-              }}
-            >
-              {item.label}
-            </li>
-          ))}
-          {/* Botão de sair visível dentro do menu lateral (mobile) */}
-          <li
-            className="mobile-logout"
+        {/* ⚙️ Botões da direita */}
+        <div className="header-right">
+          <button
+            className="agendar"
+            onClick={() => navigate(currentConfig.agendaRoute)}
+          >
+            AGENDA
+          </button>
+          <button
+            className="sair"
             onClick={() => {
-              setMenuOpen(false);
               logout();
               navigate(routeUrls.HOME);
               resetarDados();
             }}
           >
             SAIR
-          </li>
-        </ul>
-      </nav>
+          </button>
+        </div>
 
-      {/* ⚙️ Botões da direita */}
-      <div className="header-right">
+        {/* 🍔 Menu mobile */}
         <button
-          className="agendar"
-          onClick={() => navigate(currentConfig.agendaRoute)}
+          className="hamburger-menu"
+          aria-label="Abrir menu"
+          onClick={() => setMenuOpen(!menuOpen)}
         >
-          AGENDA
+          <span className="hamburger-bar"></span>
+          <span className="hamburger-bar"></span>
+          <span className="hamburger-bar"></span>
         </button>
-        <button
-          className="sair"
-          onClick={() => {
-            logout();
-            navigate(routeUrls.HOME);
-            resetarDados();
-          }}
-        >
-          SAIR
-        </button>
-      </div>
-
-      {/* 🍔 Menu mobile */}
-      <button
-        className="hamburger-menu"
-        aria-label="Abrir menu"
-        onClick={() => setMenuOpen(!menuOpen)}
-      >
-        <span className="hamburger-bar"></span>
-        <span className="hamburger-bar"></span>
-        <span className="hamburger-bar"></span>
-      </button>
-    </header>
+      </header>
       {/* Spacer visível apenas na rota de relatório de anamnese para evitar que o conteúdo fique abaixo do header fixo */}
       {isRelatorioAnamnese && <div className="header-spacer" aria-hidden="true" />}
     </>

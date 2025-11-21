@@ -362,3 +362,152 @@
     width: 100%;
     gap: 16px;
 }
+
+/* Responsividade para Tablet */
+@media (max-width: 1020px) {
+    .evento-info-container {
+        padding: 28px 24px;
+        min-width: unset;
+    }
+
+    .evento-header {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .evento-imagem {
+        width: 100%;
+        height: 280px;
+    }
+
+    .evento-detalhes {
+        padding: 0;
+    }
+
+    .campos-linha {
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .campo-info {
+        max-width: calc(50% - 10px);
+        min-width: calc(50% - 10px);
+    }
+}
+
+/* Responsividade para Celular */
+@media (max-width: 500px) {
+    .evento-info-container {
+        padding: 16px 12px;
+        min-width: unset;
+        border-radius: 12px;
+        margin-bottom: 16px;
+    }
+
+    .evento-info-top-bar {
+        height: auto;
+        margin-bottom: 12px;
+        padding-left: 4px;
+    }
+
+    .evento-info-top-bar .evento-card-title {
+        font-size: 1rem;
+        margin: 0 0 0 8px;
+    }
+
+    .evento-header {
+        flex-direction: column;
+        gap: 16px;
+        margin-bottom: 20px;
+    }
+
+    .evento-imagem {
+        width: 100%;
+        height: 200px;
+        border-radius: 10px;
+    }
+
+    .evento-detalhes {
+        padding: 0;
+        gap: 16px;
+    }
+
+    .campo-info-titulo {
+        margin-bottom: 8px;
+    }
+
+    .campo-info-titulo label,
+    .campo-info label {
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+    }
+
+    .campo-info-titulo input,
+    .campo-info input,
+    .campo-info span {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+        border-radius: 8px;
+    }
+
+    .campos-linha {
+        flex-direction: row;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+
+    .campo-info {
+        max-width: calc(50% - 5px);
+        min-width: calc(50% - 5px);
+        flex: 1;
+    }
+
+    /* Grid de categoria/duração/preço em linha dupla */
+    .campos-linha[style*="grid-template-columns"] {
+        display: flex !important;
+        flex-direction: row !important;
+        flex-wrap: wrap !important;
+        gap: 10px !important;
+        margin-top: 16px !important;
+    }
+
+    .campos-linha[style*="grid-template-columns"] .campo-info {
+        width: calc(50% - 5px) !important;
+        max-width: calc(50% - 5px) !important;
+        min-width: calc(50% - 5px) !important;
+        flex: 1 !important;
+    }
+
+    /* Categoria ocupa linha inteira */
+    .campos-linha[style*="grid-template-columns"] .campo-info:first-child {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-width: 100% !important;
+    }
+
+    .evento-descricao {
+        margin-top: 16px;
+    }
+
+    .evento-descricao label {
+        font-size: 0.85rem;
+        margin-bottom: 4px;
+    }
+
+    .evento-descricao p,
+    .evento-descricao textarea {
+        padding: 10px 12px;
+        font-size: 0.9rem;
+        border-radius: 8px;
+    }
+
+    .evento-acoes {
+        margin-top: 20px;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .evento-acoes button {
+        width: 100%;
+    }
+}
