@@ -12,6 +12,15 @@
     transform: translateY(0);
   }
 }
+/* Page background to match criar-evento look */
+.inscricao-trilha-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #f6f7f8;
+  /* reduzir espaçamento superior para aproximar formulário do topo */
+  padding: 80px 20px 70px 20px;
+  box-sizing: border-box;
+}
 /* Mensagem de alerta para experiência necessária */
 .inscricao-trilha-alerta {
   background: #fdf3c3;
@@ -33,7 +42,7 @@
   box-shadow: 0 4px 24px rgba(0,0,0,0.10);
   padding: 40px 48px 48px 48px;
   font-family: 'Segoe UI', Arial, sans-serif;
-  margin-top: 7%;
+  margin-top: 20px;
 }
 
 .inscricao-trilha-header-separator {

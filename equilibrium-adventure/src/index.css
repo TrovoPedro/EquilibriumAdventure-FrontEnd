@@ -3,7 +3,9 @@
 /* Background for entire app so page gutters match the pages */
 html, body, #root {
   height: 100%;
-  background: #f6f7f8;
+  min-height: 100vh;
+  /* Garantir que o fundo cinza padrão seja aplicado em todas as larguras e dispositivos */
+  background: #f6f7f8 !important;
 }
 
 /* You can keep or re-add any base resets or custom styles below if needed */
@@ -11,6 +13,15 @@ body {
   margin: 0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Camada fixa de fundo para evitar bordas/brancos indesejados causados por elementos posicionados */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: #f6f7f8;
+  z-index: -9999;
 }
 
 

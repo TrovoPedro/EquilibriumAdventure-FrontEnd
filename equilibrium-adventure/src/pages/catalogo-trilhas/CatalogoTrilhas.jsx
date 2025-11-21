@@ -288,7 +288,7 @@ const CatalogoTrilhas = () => {
         {/* Seção de anúncios */}
         <section className="anuncios-trilhas">
           <h2 className="anuncios-titulo">
-            Um mundo de opções para você escolher
+            Um mundo de opções para escolher
           </h2>
           {loading.trilhas ? (
             <p>Carregando anúncios...</p>

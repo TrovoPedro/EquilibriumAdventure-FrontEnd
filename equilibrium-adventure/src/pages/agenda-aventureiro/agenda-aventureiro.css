@@ -4,7 +4,7 @@
   color: #0C513F;
   padding: 8px 160px 80px 160px;
   min-height: calc(100vh - 80px);
-  background: transparent;
+  background: #f6f7f8;
   margin-top: 95px;
   /* Nenhuma animação ou transição */
 }
@@ -200,6 +200,13 @@
 /* Botão Mais Informações na seção de informações pessoais */
 .personal-info-card .btn-submit-form {
   white-space: nowrap;
+}
+
+/* Diminuir largura do botão 'Mais Informações' no desktop */
+.personal-info-card .btn-submit-form {
+  width: 220px;
+  min-width: 160px;
+  max-width: 280px;
 }
 
 /* Próximo Eventos */
@@ -762,15 +769,48 @@
     text-align: center;
   }
   
+  /* Empilha os cards e permite que se ajustem conforme a altura do conteúdo */
   .agenda-aventureiro-cards {
-    grid-template-columns: 1fr;
-    gap: 32px;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 24px;
     margin-bottom: 48px;
   }
-  
-  .agenda-aventureiro-card-info,
-  .agenda-aventureiro-card-evento {
-    height: 340px;
+
+  /* Tornar os cards fluídos no mobile (altura automática) sem afetar desktop */
+  .card-info-guia,
+  .card-imagem,
+  .agenda-aventureiro-card-agenda,
+  .agenda-aventureiro-historico-container {
+    height: auto !important;
+    max-height: none !important;
+    width: 100% !important;
+    padding: 20px !important;
+  }
+
+  .personal-info-card {
+    flex-direction: column;
+    align-items: center;
+    padding: 18px;
+    gap: 16px;
+  }
+
+  .user-photo {
+    width: 120px;
+    height: 120px;
+    border-width: 3px;
+  }
+
+  /* For mobile/tablet: make "Próximo Evento" card match personal info card height */
+  .agenda-aventureiro-cards {
+    /* increased mobile card height */
+    --ea-mobile-card-height: 420px;
+  }
+
+  .card-info-guia,
+  .card-imagem {
+    height: var(--ea-mobile-card-height) !important;
+    max-height: var(--ea-mobile-card-height) !important;
   }
   
   .agenda-aventureiro-section-title {
@@ -786,7 +826,12 @@
   }
   
   .agenda-aventureiro-item-info {
-    text-align: center;
+    /* On tablet/mobile show name and date on a single row for compactness */
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
   }
   
   .agenda-aventureiro-item-actions {
@@ -794,11 +839,48 @@
     width: 100%;
     gap: 16px;
   }
+
+  /* Make agenda item buttons full-width but side-by-side when enough space */
+  .agenda-aventureiro-item-actions {
+    display: flex;
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+  }
+
+  .agenda-aventureiro-item-actions .btn-submit-form,
+  .agenda-aventureiro-item-actions .btn-danger-form,
+  .agenda-aventureiro-item-actions .agenda-aventureiro-btn-info,
+  .agenda-aventureiro-item-actions .agenda-aventureiro-btn-cancel {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
   
   .agenda-aventureiro-btn-info,
   .agenda-aventureiro-btn-cancel {
     min-width: 140px;
     height: 48px;
+  }
+
+  /* Normalize agenda action buttons on tablet/mobile so they match visually */
+  .agenda-aventureiro-item-actions .agenda-aventureiro-btn-info,
+  .agenda-aventureiro-item-actions .agenda-aventureiro-btn-cancel,
+  .agenda-aventureiro-item-actions .btn-submit-form,
+  .agenda-aventureiro-item-actions .btn-danger-form {
+    flex: 1 1 0;
+    min-width: 0;
+    height: 52px;
+    padding: 10px 14px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 0.95rem;
+    line-height: 1.1;
+    box-sizing: border-box;
   }
   
   .agenda-aventureiro-historico-info {
@@ -870,12 +952,40 @@
   }
   
   .agenda-aventureiro-item {
-    padding: 24px 20px;
+    padding: 18px 16px;
+    gap: 12px;
   }
-  
+  /* On small phones stack name/date/actions vertically for clarity */
+  .agenda-aventureiro-item-info {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+
+  .agenda-aventureiro-item-name {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    word-break: break-word;
+  }
+
+  .agenda-aventureiro-item-date {
+    font-size: 0.95rem;
+    color: #336948;
+    opacity: 0.95;
+  }
+
   .agenda-aventureiro-item-actions {
     flex-direction: column;
-    gap: 16px;
+    width: 100%;
+    gap: 10px;
+  }
+
+  .agenda-aventureiro-item-actions .btn-submit-form,
+  .agenda-aventureiro-item-actions .btn-danger-form,
+  .agenda-aventureiro-item-actions .agenda-aventureiro-btn-info,
+  .agenda-aventureiro-item-actions .agenda-aventureiro-btn-cancel {
+    width: 100%;
   }
   
   .agenda-aventureiro-btn-info,
@@ -885,6 +995,19 @@
     height: 52px;
     font-size: 1rem;
   }
+
+  /* Ensure stacked buttons have consistent radius, padding and alignment on very small screens */
+  .agenda-aventureiro-item-actions .agenda-aventureiro-btn-info,
+  .agenda-aventureiro-item-actions .agenda-aventureiro-btn-cancel,
+  .agenda-aventureiro-item-actions .btn-submit-form,
+  .agenda-aventureiro-item-actions .btn-danger-form {
+    border-radius: 12px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+  }
   
   .agenda-aventureiro-historico-item {
     padding: 20px;
@@ -892,6 +1015,37 @@
   
   .agenda-aventureiro-historico-info {
     gap: 12px;
+  }
+
+  /* Diminuir o card "Próximo Evento" somente em telas muito pequenas */
+  .card-imagem {
+    padding: 16px !important;
+  }
+
+  .card-imagem .next-event-card {
+    height: 180px;
+    max-height: 180px;
+    border-radius: 12px;
+  }
+
+  .card-imagem h2 {
+    font-size: 1.125rem;
+  }
+
+  .user-photo {
+    width: 100px;
+    height: 100px;
+  }
+
+  /* On very small screens increase the shared card height so both cards match */
+  .agenda-aventureiro-cards {
+    --ea-mobile-card-height: 300px;
+  }
+
+  .card-info-guia,
+  .card-imagem {
+    height: var(--ea-mobile-card-height) !important;
+    max-height: var(--ea-mobile-card-height) !important;
   }
 }
 
@@ -973,4 +1127,97 @@
   padding: 40px;
   color: #6B7280;
   font-style: italic;
+}
+
+/* === Force personal-info card on mobile to match desktop visual ===
+   Keep layout identical to desktop for all mobile widths (<=768px).
+   This block is appended last so it overrides earlier mobile rules. */
+@media (max-width: 768px) {
+  .personal-info-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 32px !important;
+    gap: 32px !important;
+    height: calc(100% - 80px) !important;
+  }
+
+  /* Smaller avatar on mobile to avoid large visual weight */
+  .personal-info-card .user-photo {
+    width: 100px !important;
+    height: 100px !important;
+    border-width: 3px !important;
+    margin: 0 !important;
+    flex-shrink: 0 !important;
+  }
+
+  .personal-info-card .user-info-content {
+    flex: 1 1 auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    padding-left: 12px !important;
+  }
+
+  .personal-info-card .user-info h3 {
+    font-size: 24px !important;
+    margin: 0 0 8px 0 !important;
+    line-height: 1.2 !important;
+  }
+
+  .personal-info-card .user-role {
+    display: inline-block !important;
+    margin-top: 4px !important;
+    padding: 4px 12px !important;
+    font-size: 0.95rem !important;
+    background-color: #D1FAE5 !important;
+  }
+
+  .personal-info-card .btn-submit-form,
+  .personal-info-card .edit-info-btn {
+    width: 160px !important;
+    height: 44px !important;
+    border-radius: 12px !important;
+    align-self: flex-start !important;
+    justify-self: start !important;
+    margin-left: 0 !important;
+    margin-top: 6px !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    font-size: 1rem !important;
+  }
+}
+
+/* Also enforce same on very small phones (ensure it overrides later 480 rules) */
+@media (max-width: 480px) {
+  .personal-info-card {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 32px !important;
+    gap: 24px !important;
+  }
+
+  /* Even on very small phones keep a reduced avatar */
+  .personal-info-card .user-photo {
+    width: 100px !important;
+    height: 100px !important;
+    border-width: 3px !important;
+  }
+
+  .personal-info-card .btn-submit-form,
+  .personal-info-card .edit-info-btn {
+    width: 140px !important;
+    height: 40px !important;
+    align-self: flex-start !important;
+    margin-top: 4px !important;
+    margin-left: 0 !important;
+  }
 }
