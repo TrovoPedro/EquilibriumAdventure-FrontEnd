@@ -47,7 +47,7 @@ const InscricaoTrilhasLimitado = () => {
   const [nivelInsuficiente, setNivelInsuficiente] = useState(false);
   const navigate = useNavigate();
   const nivelOrdem = {
-    'EXPLORADOR': 1,
+    'EXPLORADOR' : 1,
     'AVENTUREIRO': 2,
     'DESBRAVADOR': 3
   };
@@ -164,9 +164,7 @@ const InscricaoTrilhasLimitado = () => {
     const carregarMediaAvaliacoes = async () => {
       try {
         if (id) {
-          console.log('Buscando média de avaliações para ID:', id);
           const resultado = await buscarMediaAvaliacoes(id);
-          console.log('Resultado da média:', resultado);
           
           if (resultado.mediaAvaliacoes !== undefined) {
             setMediaAvaliacoes(resultado.mediaAvaliacoes);
@@ -197,7 +195,7 @@ const InscricaoTrilhasLimitado = () => {
     const comentarioCriado = await adicionarComentario({
       texto: comentarioObj.texto,
       idUsuario: usuario.id,
-      idAtivacaoEvento: id // ⚠ aqui mudou
+      idAtivacaoEvento: id 
     });
 
     setComentarios(prev => [...prev, {
@@ -227,24 +225,13 @@ const InscricaoTrilhasLimitado = () => {
   useEffect(() => {
     if (!evento) return;
     
-    console.log('🔍 DEBUG NIVEL:');
-    console.log('  nivel recebido do context:', nivel);
-    console.log('  pontuacaoTotal:', pontuacaoTotal);
-    console.log('  tipo do nivel:', typeof nivel);
-    console.log('  evento.nivel_dificuldade:', evento.nivel_dificuldade);
-    console.log('  nivelOrdem:', nivelOrdem);
+    const nivelUsuario = nivelOrdem[nivel?.toUpperCase()] || 0;
+    const nivelTrilha = nivelOrdem[evento.nivel_dificuldade?.toUpperCase()] || 0;
     
-    const nivelUsuario = nivelOrdem[nivel] || 0;
-    const nivelTrilha = nivelOrdem[evento.nivel_dificuldade] || 0;
-    
-    console.log('  nivelUsuario calculado:', nivelUsuario);
-    console.log('  nivelTrilha calculado:', nivelTrilha);
     
     // Verificação especial para EXPLORADOR com pontuação baixa
     if (nivel === 'EXPLORADOR' && pontuacaoTotal != null && pontuacaoTotal <= 7) {
-      console.log('  ⚠️ EXPLORADOR com pontuação <= 7, precisa de anamnese');
       
-      // Verifica se já tem anamnese agendada
       if (anamnese && anamnese.length > 0) {
         console.log('Já possui anamnese agendada');
         setNivelInsuficiente(true);
@@ -254,10 +241,8 @@ const InscricaoTrilhasLimitado = () => {
           'OK'
         );
       } else {
-        console.log('Não possui anamnese agendada, mostrando alerta');
         setNivelInsuficiente(true);
         
-        // Mostra alerta com opção de agendar anamnese
         Swal.fire({
           title: 'Anamnese Necessária',
           text: 'Para participar desta trilha, é necessário agendar uma conversa com um guia para avaliação do seu perfil e orientações personalizadas.',
@@ -278,7 +263,6 @@ const InscricaoTrilhasLimitado = () => {
     }
     
     const insuf = nivelUsuario < nivelTrilha;
-    console.log('  insuficiente?', insuf);
     
     setNivelInsuficiente(insuf);
     if (insuf) {
@@ -316,8 +300,8 @@ const InscricaoTrilhasLimitado = () => {
 
   // Verifica se usuário pode participar
   const podeParticipar = () => {
-    const nivelUsuario = nivelOrdem[nivel] || 0;
-    const nivelTrilha = nivelOrdem[evento.nivel_dificuldade] || 0;
+    const nivelUsuario = nivelOrdem[nivel?.toUpperCase()] || 0;
+    const nivelTrilha = nivelOrdem[evento.nivel_dificuldade?.toUpperCase()] || 0;
     return nivelUsuario >= nivelTrilha;
   };
 
@@ -562,7 +546,7 @@ const InscricaoTrilhasLimitado = () => {
           border: '1px solid #ffeeba',
           borderRadius: 8
         }}>
-          <strong>Atenção:</strong> Seu nível atual não permite participar desta trilha. Entre em contato com um guia para orientação ou realize os treinamentos necessários.
+          <strong>Atenção:</strong> Seu nível atual não permite participar desta trilha. Entre em contato com um guia para orientação ou participe de eventos para subir de nível.
         </div>
       )}
 
