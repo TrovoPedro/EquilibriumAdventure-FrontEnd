@@ -6,6 +6,28 @@ body {
 	overflow-x: hidden;
 }
 
+@media (max-width: 500px) {
+	.editar-dados-container {
+		padding: 20px;
+	}
+
+	.form-grid {
+		grid-template-columns: 1fr !important;
+		gap: 15px !important;
+	}
+}
+
+@media (max-width: 768px) {
+	.editar-dados-container {
+		padding: 20px;
+	}
+
+	.form-grid {
+		grid-template-columns: 1fr !important;
+		gap: 32px !important;
+	}
+}
+
 /* Remover o fundo global #f6f7f8 apenas nesta tela */
 html, body, #root {
     background: transparent !important;
