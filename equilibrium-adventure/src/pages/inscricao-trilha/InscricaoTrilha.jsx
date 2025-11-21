@@ -360,8 +360,9 @@ const InscricaoTrilhasLimitado = () => {
   if (!evento) return <p>Carregando evento...</p>;
 
   return (
-    <div className="inscricao-trilha-container" style={{ position: 'relative' }}>
-      <Header />
+    <div className="inscricao-trilha-page">
+      <div className="inscricao-trilha-container" style={{ position: 'relative' }}>
+        <Header />
       <CircleBackButton onClick={() => navigate(-1)} />
 
       <div className="inscricao-trilha-header" style={{ position: 'relative' }}>
@@ -583,7 +584,8 @@ const InscricaoTrilhasLimitado = () => {
           altura="450px"
         />
       </div>
-    </div >
+      </div>
+    </div>
   );
 };
 

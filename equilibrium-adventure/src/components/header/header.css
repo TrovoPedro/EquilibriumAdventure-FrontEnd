@@ -114,6 +114,9 @@
     flex-direction: row;
     padding: 0 16px;
     height: 60px;
+    /* Em mobile manter o header branco (restaurado) para contraste e consistência */
+    background-color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
   }
 
   /* Altura menor do spacer em telas pequenas (para corresponder ao header mobile) */
@@ -219,5 +222,13 @@
 
   .header-center {
     display: none !important;
+  }
+}
+
+/* Em telas muito pequenas garantir fundo branco também para o header */
+@media (max-width: 480px) {
+  .header {
+    background-color: #ffffff !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08) !important;
   }
 }

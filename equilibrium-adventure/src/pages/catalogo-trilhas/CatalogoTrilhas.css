@@ -206,7 +206,8 @@ h2,
 }
 
 .filtros-container {
-  position: relative; /* necessário para posicionar o ::before (linha verde) */
+  position: relative;
+  /* necessário para posicionar o ::before (linha verde) */
   /* esconder excessos para a linha seguir a borda arredondada */
   overflow: hidden;
   background: #fff;
@@ -237,7 +238,8 @@ h2,
 }
 
 .filtros-titulo {
-  position: relative; /* necessário para o ::after do underline */
+  position: relative;
+  /* necessário para o ::after do underline */
 }
 
 .filtros-titulo::after {
@@ -356,7 +358,7 @@ h2,
 
 /* --- DESTINOS --- */
 .destinos {
-  padding: 50px 0px; 
+  padding: 50px 0px;
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -502,9 +504,15 @@ h2,
   }
 
   .anuncios-titulo {
-    text-align: left;
-    font-size: 1.6rem;
-    margin-bottom: 20px;
+    text-align: right !important;
+    font-size: 1.6rem !important;
+    margin-bottom: 20px !important;
+  }
+
+  .destinos-titulo {
+    text-align: center !important;
+    font-size: 1.6rem !important;
+    margin-bottom: 20px !important;
   }
 }
 
@@ -531,7 +539,8 @@ h2,
   }
 
   .destinos-grid .destino-card {
-    flex: 0 0 82%; /* cada card ocupa ~82% da largura da viewport no mobile */
+    flex: 0 0 82%;
+    /* cada card ocupa ~82% da largura da viewport no mobile */
     min-width: 82%;
     scroll-snap-align: start;
     border-radius: 16px;
@@ -572,18 +581,29 @@ h2,
   }
 
   /* esconder o overflow vertical em mobile para evitar jump ao scrollar */
-  body, html {
+  body,
+  html {
     overscroll-behavior-y: none;
   }
 }
 
 /* show/hide helpers for native vs custom controls */
-.desktop-only { display: inline-block; }
-.mobile-only { display: none; }
+.desktop-only {
+  display: inline-block;
+}
+
+.mobile-only {
+  display: none;
+}
 
 @media (max-width: 600px) {
-  .desktop-only { display: none !important; }
-  .mobile-only { display: block !important; }
+  .desktop-only {
+    display: none !important;
+  }
+
+  .mobile-only {
+    display: block !important;
+  }
 
   /* Mobile custom select styles */
   .mobile-select {
@@ -603,11 +623,14 @@ h2,
     justify-content: space-between;
     font-size: 1rem;
     color: #00331f;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
     cursor: pointer;
   }
 
-  .mobile-select-label { flex: 1; text-align: left; }
+  .mobile-select-label {
+    flex: 1;
+    text-align: left;
+  }
 
   .mobile-select-caret {
     width: 12px;
@@ -619,7 +642,9 @@ h2,
     transition: transform 0.18s ease;
   }
 
-  .mobile-select-caret.open { transform: rotate(180deg); }
+  .mobile-select-caret.open {
+    transform: rotate(180deg);
+  }
 
   .mobile-select-options {
     position: absolute;
@@ -631,7 +656,7 @@ h2,
     border-radius: 10px;
     max-height: 280px;
     overflow-y: auto;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
     z-index: 40;
   }
 
@@ -648,7 +673,9 @@ h2,
     font-weight: 700;
   }
 
-  .mobile-select-option:hover { background: #f7f7f7; }
+  .mobile-select-option:hover {
+    background: #f7f7f7;
+  }
 }
 
 /* ANÚNCIO DE TRILHAS */
@@ -881,5 +908,60 @@ h2,
     text-align: left;
     font-size: 1.6rem;
     margin-bottom: 20px;
+  }
+}
+/* Regras reforçadas para mobile: centralizar e igualar tamanho dos títulos */
+@media (max-width: 900px) {
+  .anuncios-titulo,
+  .destinos-titulo {
+    text-align: center !important;
+    font-size: 1.6rem !important;
+    margin-bottom: 20px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  .anuncios-titulo,
+  .destinos-titulo {
+    text-align: center !important;
+    font-size: 1.6rem !important;
+    margin-bottom: 20px !important;
+  }
+}
+/* Ajustes finais para alinhar os cards das duas sessões no mobile */
+@media (max-width: 900px) {
+  /* garantir mesma borda interna para ambos os blocos */
+  .destinos,
+  .anuncios-trilhas {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}
+
+@media (max-width: 600px) {
+  /* mesmo padding horizontal e largura dos cards para alinhamento perfeito */
+  .destinos,
+  .anuncios-trilhas {
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+  }
+
+  .destinos-grid {
+    gap: 14px; /* manter mesma lacuna que os anúncios usam */
+  }
+
+  .destinos-grid .destino-card,
+  .anuncio-card {
+    flex: 0 0 86% !important;
+    min-width: 86% !important;
+  }
+
+  /* aproximar alturas das imagens para evitar deslocamento visual */
+  .destino-img {
+    height: 200px !important;
+  }
+
+  .anuncio-img-wrap {
+    height: 200px !important;
   }
 }
