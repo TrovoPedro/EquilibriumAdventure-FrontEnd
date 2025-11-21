@@ -1,0 +1,34 @@
+@media (max-width: 500px) {
+  .form-card {
+    padding: 1.5rem !important;
+  }
+
+  .form-card select {
+    font-size: 0.7rem !important;
+  }
+
+  .form-card h2 {
+    font-size: 1.1rem !important;
+  }
+  .form-card h2::after {
+    width: 5% !important;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .form-card {
+    padding: 2rem !important;
+  }
+
+  .form-card select {
+    font-size: 1rem !important;
+  }
+
+  .form-card h2 {
+    font-size: 1.3rem !important;
+  }
+  .form-card h2::after {
+    width: 10% !important;
+  }
+}
