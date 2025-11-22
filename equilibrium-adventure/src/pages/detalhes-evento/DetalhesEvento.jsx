@@ -85,7 +85,7 @@ const DetalhesEvento = () => {
     const comentarioCriado = await adicionarComentario({
       texto: comentarioObj.texto,
       idUsuario: usuario.id,
-      idAtivacaoEvento: id 
+      idAtivacaoEvento: id
     });
 
     setComentarios(prev => [...prev, comentarioCriado]);
@@ -111,7 +111,7 @@ const DetalhesEvento = () => {
       try {
         if (evento?.idEvento) {
           const resultado = await buscarMediaAvaliacoesPorEventoBase(evento.idEvento);
-          
+
           if (resultado.mediaAvaliacoes !== undefined) {
             setMediaAvaliacoes(resultado.mediaAvaliacoes);
             setMensagemAvaliacao('');
@@ -158,7 +158,7 @@ const DetalhesEvento = () => {
       const atualizado = await atualizarAtivacaoEvento(id, payload);
       await showSuccess('Evento atualizado com sucesso!');
 
-   
+
       if (atualizado) {
         setEvento(prev => ({
           ...prev,
@@ -172,24 +172,73 @@ const DetalhesEvento = () => {
   };
 
   const handleDelete = async () => {
-    const confirmResult = await showWarning('Tem certeza que deseja excluir este evento?', 'Confirmação', 'Sim, excluir', 'Cancelar', true);
-    if (!confirmResult || !confirmResult.isConfirmed) return;
+    // 1) Pergunta inicial se usuário realmente quer excluir
+    const confirmResult = await showWarning(
+      'Tem certeza que deseja excluir este evento?',
+      'Confirmação',
+      'Sim, excluir',
+      'Cancelar',
+      true
+    );
+
+    if (!confirmResult?.isConfirmed) return;
 
     try {
+      // 2) Tenta finalizar normalmente
       await alterarEstadoEvento(id, "FINALIZADO");
 
-      const inscritos = await listarInscritos(id);
-      if (inscritos && inscritos.length > 0) {
-        await Promise.all(inscritos.map(u => cancelarInscricao(u.idUsuario, id).catch(() => null)));
+    } catch (error) {
+      // 3) Se o back avisar sobre inscrições, pedir confirmação extra
+      let mensagem = error.response?.data?.erro;
+
+      // limpar prefixo "409 CONFLICT "
+      if (mensagem?.includes("CONFLICT")) {
+        mensagem = mensagem.replace(/^.*CONFLICT\s*/, "").replace(/"/g, "");
       }
 
-      await showSuccess('Evento excluído!');
-      navigate(-1);
-    } catch (error) {
-      console.error("Erro ao finalizar evento:", error);
-      await showError('Ocorreu um erro ao finalizar o evento.');
+      if (error.response?.status === 409) {
+        const confirmForce = await showWarning(
+          `${mensagem}. \n\nDeseja continuar mesmo assim?`,
+          'Existem inscrições!',
+          'Sim, excluir mesmo assim',
+          'Cancelar',
+          true
+        );
+
+        if (!confirmForce?.isConfirmed) return;
+
+        // 4) Executa o delete forçado
+        await alterarEstadoEvento(id, "FINALIZADO", true);
+
+      } else {
+        console.error("Erro ao finalizar evento:", error);
+        await showError("Ocorreu um erro ao finalizar o evento.");
+        return;
+      }
     }
+
+    // 5) Cancela inscrições (caso ainda existam)
+    try {
+      const inscritos = await listarInscritos(id);
+
+      if (inscritos?.length > 0) {
+        await Promise.all(
+          inscritos.map(u =>
+            cancelarInscricao(u.idUsuario, id).catch(() => null)
+          )
+        );
+      }
+    } catch (error) {
+      console.error("Erro ao cancelar inscrições:", error);
+      await showError("Erro ao cancelar inscrições.");
+      return;
+    }
+
+    // 6) Finalizou tudo
+    await showSuccess("Evento excluído!");
+    navigate(-1);
   };
+
 
   const handleAprovarUsuario = (userId) => {
     navigate(routeUrls.DADOS_CLIENTE.replace(':id', userId));

@@ -313,18 +313,22 @@ export async function ativarEvento(formDataValues) {
     }
 }   
 
-
-export const alterarEstadoEvento = async (id, estado) => {
+export const alterarEstadoEvento = async (id, estado, forcar = false) => {
   try {
-    const response = await axios.put(`http://localhost:8080/ativacoes/${id}/estado`, null, {
-      params: { estado } // envia como query param
-    });
+    const response = await axios.put(
+      `http://localhost:8080/ativacoes/${id}/estado`,
+      null,
+      {
+        params: { estado, forcar }
+      }
+    );
     return response.data;
   } catch (error) {
     console.error("Erro ao alterar estado do evento:", error);
     throw error;
   }
 };
+
 
 export async function atualizarAtivacaoEvento(id, eventoData) {
   try {
@@ -355,3 +359,16 @@ export async function atualizarAtivacaoEvento(id, eventoData) {
     throw error;
   }
 }
+
+export const excluirEventoBase = async (id) => {    
+    try {
+        const response = await axios.delete(
+            `http://localhost:8080/ativacoes/evento-base/${id}`,
+        );
+        return response.data;
+    }   
+    catch (error) {
+        console.error("Erro ao excluir evento base:", error);
+        throw error;
+    }
+};
