@@ -45,7 +45,7 @@ const EventoInfo = ({
           </div>
           
           <div className="campos-linha">
-            <div className="campo-info">
+            <div className="campo-info" style={{ flex: '1.5' }}>
               <label>Data:</label>
               {editavel ? (
                 <input
@@ -54,37 +54,10 @@ const EventoInfo = ({
                   onChange={(e) => onChange('dataEvento', e.target.value)}
                 />
               ) : (
-                <span>{evento.dataEvento}</span>
+                <span className='data-campo'>{evento.dataEvento}</span>
               )}
             </div>
-            <div className="campo-info">
-              <label>Hora Início:</label>
-              {editavel ? (
-                <input
-                  type="time"
-                  value={evento.horaInicio}
-                  onChange={(e) => onChange('horaInicio', e.target.value)}
-                />
-              ) : (
-                <span>{evento.horaInicio}</span>
-              )}
-            </div>
-          </div>
-
-          <div className="campos-linha">
-            <div className="campo-info">
-              <label>Hora Fim:</label>
-              {editavel ? (
-                <input
-                  type="time"
-                  value={evento.horaFim}
-                  onChange={(e) => onChange('horaFim', e.target.value)}
-                />
-              ) : (
-                <span>{evento.horaFim}</span>
-              )}
-            </div>
-            <div className="campo-info">
+               <div className="campo-info">
               <label>{inscritosCount !== undefined ? 'Inscritos:' : 'Limite de Inscritos:'}</label>
               {editavel ? (
                 <input
@@ -104,6 +77,35 @@ const EventoInfo = ({
                 </span>
               )}
             </div>
+            
+          </div>
+
+          <div className="campos-linha">
+            <div className="campo-info">
+              <label>Hora Início:</label>
+              {editavel ? (
+                <input
+                  type="time"
+                  value={evento.horaInicio}
+                  onChange={(e) => onChange('horaInicio', e.target.value)}
+                />
+              ) : (
+                <span>{evento.horaInicio}</span>
+              )}
+            </div>
+            <div className="campo-info">
+              <label>Hora Fim:</label>
+              {editavel ? (
+                <input
+                  type="time"
+                  value={evento.horaFim}
+                  onChange={(e) => onChange('horaFim', e.target.value)}
+                />
+              ) : (
+                <span>{evento.horaFim}</span>
+              )}
+            </div>
+         
           </div>
         </div>
       </div>
@@ -132,7 +134,7 @@ const EventoInfo = ({
           )}
         </div>
         <div className="campo-info" style={{ width: '500px' }}>
-          <label style={{ marginBottom: '0.5rem', color: '#226144' }}>DURAÇÃO (HORAS):</label>
+          <label style={{ marginBottom: '0.5rem', color: '#226144' }}>DURAÇÃO:</label>
           {editavel ? (
             <input
               type="number"
@@ -149,7 +151,7 @@ const EventoInfo = ({
           )}
         </div>
         <div className="campo-info" style={{ width: '500px' }}>
-          <label style={{ marginBottom: '0.5rem', color: '#226144' }}>PREÇO (R$):</label>
+          <label style={{ marginBottom: '0.5rem', color: '#226144' }}>PREÇO:</label>
           {editavel ? (
             <input
               type="number"

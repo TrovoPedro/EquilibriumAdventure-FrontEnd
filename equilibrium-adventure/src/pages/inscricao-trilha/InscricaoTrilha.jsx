@@ -4,7 +4,6 @@ import CircleBackButton from "../../components/circle-back-button/circle-back-bu
 import MapaTrilha from "../../components/mapa-trilha/MapaTrilha";
 import React, { useState, useEffect } from "react";
 import { showSuccess, showError, showWarning } from "../../utils/swalHelper";
-import { convertDateToBrazilian } from "../../utils/dateConversions";
 import { useAuth } from "../../context/AuthContext";
 import { useScore } from "../../context/ScoreContext";
 import { useNavigate, useParams } from "react-router-dom";
@@ -15,6 +14,10 @@ import catalogoFallback from "../../assets/img12-catalogo.jpg";
 import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
 import { verificarInscricao, criarInscricao, cancelarInscricao, listarInscritos } from "../../services/apiInscricao";
 import Swal from 'sweetalert2';
+import { formatarHora, formatarDuracao } from '../../utils/formatBrazilTime';
+import { formatarPreco } from "../../utils/formatPrice";
+import { convertDateToBrazilian } from "../../utils/dateConversions";
+import { capitalizarPrimeiraLetra } from "../../utils/capitFirstLetter";
 
 const InscricaoTrilhasLimitado = () => {
   // Compartilhar trilha
@@ -368,21 +371,7 @@ const InscricaoTrilhasLimitado = () => {
       <div className="inscricao-trilha-header" style={{ position: 'relative' }}>
         {/* Avaliação média no canto superior direito do card (mantemos visual semelhante ao detalhes-evento) */}
         {(mediaAvaliacoes > 0 || mensagemAvaliacao) && (
-          <div style={{
-            position: 'absolute',
-            top: '20px',
-            right: '20px',
-            background: 'transparent', /* removido fundo branco */
-            padding: '12px 18px',
-            borderRadius: '12px',
-            boxShadow: 'none',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '6px',
-            zIndex: 10,
-            border: 'none'
-          }}>
+          <div className="avaliacao">
             {mediaAvaliacoes > 0 ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ fontSize: '1.4rem', fontWeight: '700', color: '#226144' }}>
@@ -408,13 +397,13 @@ const InscricaoTrilhasLimitado = () => {
             responsavel: evento.responsavel,
             endereco: evento.endereco,
             caminhoArquivoEvento: evento.caminho_arquivo_evento,
-            preco: evento.preco,
-            horaInicio: evento.horaInicio,
-            horaFim: evento.horaFinal,
-            tempoEstimado: evento.tempoEstimado,
+            preco: formatarPreco(evento.preco),
+            horaInicio: formatarHora(evento.horaInicio),
+            horaFim: formatarHora(evento.horaFinal),
+            tempoEstimado: formatarDuracao(evento.tempoEstimado),
             limiteInscritos: evento.limiteInscritos,
-            dataEvento: evento.dataAtivacao,
-            categoria: evento.tipo,
+            dataEvento: convertDateToBrazilian(evento.dataAtivacao),
+            categoria: capitalizarPrimeiraLetra(evento.tipo),
             estado: evento.estado,
             imagemUrl: imagemEvento || catalogoFallback
           }}
@@ -437,6 +426,9 @@ const InscricaoTrilhasLimitado = () => {
                 <label>Nível:</label>
                 <span style={{ 
                   fontWeight: '600',
+                  padding: '10px 12px',
+                  width: 'fit-content',
+                  display: 'inline-block',
                   color: evento.nivel_dificuldade === 'Explorador' ? '#2e7d32' : 
                          evento.nivel_dificuldade === 'Aventureiro' ? '#ed6c02' : 
                          evento.nivel_dificuldade === 'Desbravador' ? '#d32f2f' : '#2c3e2c'
@@ -448,54 +440,6 @@ const InscricaoTrilhasLimitado = () => {
           </div>
         </EventoInfo>
       </div>
-
-      <form className="inscricao-trilha-dados" style={{ display: 'none' }}>
-        <div className="inscricao-trilha-form-row">
-          <div className="inscricao-trilha-form-group">
-            <label>Distância:</label>
-            <input type="text" value={`${evento.distancia_km} km`} disabled />
-          </div>
-          <div className="inscricao-trilha-form-group">
-            <label>Categoria:</label>
-            <input type="text" value={evento.tipo || "N/A"} disabled />
-          </div>
-          <div className="inscricao-trilha-form-group">
-            <label>Preço:</label>
-            <input type="text" value={`R$ ${evento.preco?.toFixed(2) || "0,00"}`} disabled />
-          </div>
-        </div>
-
-        <div className="inscricao-trilha-form-row">
-          <div className="inscricao-trilha-form-group">
-            <label>Hora de Início:</label>
-            <input type="text" value={evento.horaInicio || "N/A"} disabled />
-          </div>
-          <div className="inscricao-trilha-form-group">
-            <label>Hora de Término:</label>
-            <input type="text" value={evento.horaFinal || "N/A"} disabled />
-          </div>
-          <div className="inscricao-trilha-form-group">
-            <label>Data:</label>
-            <input type="text" value={evento.dataAtivacao ? convertDateToBrazilian(evento.dataAtivacao) : "N/A"} disabled />
-          </div>
-        </div>
-
-        <div className="inscricao-trilha-form-row endereco-row">
-          <div className="inscricao-trilha-form-group full-width">
-            <label>Endereço:</label>
-            <input
-              type="text"
-              disabled
-              className="endereco-input"
-              value={
-                evento.endereco
-                  ? `${evento.endereco.rua || ""}, ${evento.endereco.numero || ""} - ${evento.endereco.bairro || ""}, ${evento.endereco.cidade || ""} - ${evento.endereco.estado || ""}, CEP: ${evento.endereco.cep || ""}`
-                  : "Endereço não disponível"
-              }
-            />
-          </div>
-        </div>
-      </form >
 
       {!nivelInsuficiente && (
         <button
