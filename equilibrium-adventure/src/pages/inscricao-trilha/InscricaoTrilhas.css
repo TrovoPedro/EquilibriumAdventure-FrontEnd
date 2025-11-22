@@ -7,11 +7,13 @@
     opacity: 0;
     transform: translateY(-12px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
   }
 }
+
 /* Page background to match criar-evento look */
 .inscricao-trilha-page {
   width: 100%;
@@ -21,6 +23,7 @@
   padding: 80px 20px 70px 20px;
   box-sizing: border-box;
 }
+
 /* Mensagem de alerta para experiência necessária */
 .inscricao-trilha-alerta {
   background: #fdf3c3;
@@ -31,15 +34,16 @@
   padding: 20px 24px;
   margin-bottom: 18px;
   border: none;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
 }
+
 /* Estilos para a tela de inscrição de trilhas, baseada na imagem fornecida */
 .inscricao-trilha-container {
   max-width: 1100px;
   margin: 32px auto;
   background: #fff;
   border-radius: 20px;
-  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
   padding: 40px 48px 48px 48px;
   font-family: 'Segoe UI', Arial, sans-serif;
   margin-top: 20px;
@@ -67,7 +71,7 @@
   height: 380px;
   object-fit: cover;
   border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
 }
 
 .inscricao-trilha-info {
@@ -81,11 +85,12 @@
   gap: 18px;
   min-height: 380px;
   height: 380px;
-  box-shadow: 0 6px 24px rgba(45,70,54,0.10);
+  box-shadow: 0 6px 24px rgba(45, 70, 54, 0.10);
   align-items: flex-start;
   justify-content: center;
   border: 1px solid #e3e9e6;
 }
+
 /* Títulos e textos internos do card */
 .inscricao-trilha-info b {
   color: #226144;
@@ -95,6 +100,7 @@
   letter-spacing: 0.3px;
   display: inline-block;
 }
+
 .inscricao-trilha-info span {
   color: #222;
   font-size: 20px;
@@ -102,6 +108,7 @@
   margin-bottom: 0px;
   font-family: 'Segoe UI', Arial, sans-serif;
 }
+
 .inscricao-trilha-info .descricao {
   color: #333;
   font-size: 19px;
@@ -123,14 +130,16 @@
   margin: 0 0 36px 0;
   padding: 36px 40px 24px 40px;
   font-size: 18px;
-  box-shadow: 0 6px 24px rgba(45,70,54,0.10);
+  box-shadow: 0 6px 24px rgba(45, 70, 54, 0.10);
   border: 1px solid #e3e9e6;
 }
+
 .inscricao-trilha-form-row {
   display: flex;
   gap: 36px;
   margin-bottom: 12px;
 }
+
 .inscricao-trilha-form-group {
   display: flex;
   flex-direction: column;
@@ -138,6 +147,7 @@
   min-width: 180px;
   max-width: 240px;
 }
+
 .inscricao-trilha-form-group label {
   font-weight: 700;
   color: #2d4636;
@@ -146,6 +156,7 @@
   letter-spacing: 0.2px;
   white-space: nowrap;
 }
+
 .inscricao-trilha-form-group input {
   background: #f8fafc;
   border: 1.5px solid #d1dbe3;
@@ -156,9 +167,10 @@
   font-weight: 500;
   outline: none;
   margin-bottom: 2px;
-  box-shadow: 0 1px 4px rgba(45,70,54,0.04);
+  box-shadow: 0 1px 4px rgba(45, 70, 54, 0.04);
   transition: border 0.2s;
 }
+
 .inscricao-trilha-mapa {
   background: #ffffff;
   border-radius: 20px;
@@ -187,6 +199,7 @@
   opacity: 0;
   transition: opacity 0.3s ease;
 }
+
 .inscricao-trilha-mapa:hover::before {
   opacity: 1;
 }
@@ -214,6 +227,7 @@
   border-radius: 2px;
   transition: width 0.3s ease;
 }
+
 .inscricao-trilha-mapa:hover h3::after {
   width: 80px;
 }
@@ -236,27 +250,33 @@
   font-weight: 700;
   cursor: pointer;
   transition: background 0.2s;
-  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
   text-align: center;
   letter-spacing: 0.5px;
 }
+
 .inscricao-trilha-btn.disabled {
   background-color: #cccccc;
   cursor: not-allowed;
   opacity: 0.7;
 }
+
 .inscricao-trilha-btn:active {
   background: #223026;
 }
 
 /* Novo layout: botões menores e lado a lado */
-.inscricao-trilha-container > .inscricao-trilha-btn {
+.inscricao-trilha-container>.inscricao-trilha-btn {
   display: inline-block !important;
   width: calc(50% - 12px) !important;
-  margin: 8px 6px 24px 6px !important; /* aumentar margem inferior para separar dos comentários */
-  padding: 10px 0 !important; /* menor altura */
-  font-size: 1rem !important; /* texto menor */
-  font-weight: 600 !important; /* manter legibilidade, pode ajustar */
+  margin: 8px 6px 24px 6px !important;
+  /* aumentar margem inferior para separar dos comentários */
+  padding: 10px 0 !important;
+  /* menor altura */
+  font-size: 1rem !important;
+  /* texto menor */
+  font-weight: 600 !important;
+  /* manter legibilidade, pode ajustar */
   text-align: center !important;
   vertical-align: middle !important;
   box-sizing: border-box !important;
@@ -264,14 +284,14 @@
 }
 
 /* Estilo do botão compartilhar: manter borda e texto verde */
-.inscricao-trilha-container > .inscricao-trilha-btn.btn-compartilhar {
+.inscricao-trilha-container>.inscricao-trilha-btn.btn-compartilhar {
   background: #ffffff !important;
   color: #226144 !important;
   border: 2px solid #226144 !important;
 }
 
 /* Botão principal de inscrição: garantir cor e remover negrito se desejado */
-.inscricao-trilha-container > .inscricao-trilha-btn.btn-inscrever {
+.inscricao-trilha-container>.inscricao-trilha-btn.btn-inscrever {
   background: #226144 !important;
   color: #ffffff !important;
   font-weight: 700 !important;
@@ -282,13 +302,14 @@
   border-radius: 14px;
   margin: 0 0 48px 0;
   padding: 32px 32px 16px 32px;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
 }
 
 .inscricao-trilha-comentario {
   margin-bottom: 16px;
   font-size: 18px;
 }
+
 .inscricao-trilha-comentario b {
   color: #2d4636;
 }
@@ -298,6 +319,7 @@
   gap: 16px;
   margin-top: 18px;
 }
+
 .inscricao-trilha-form input {
   flex: 1;
   border: 1px solid #bdbdbd;
@@ -305,6 +327,7 @@
   padding: 14px 18px;
   font-size: 18px;
 }
+
 .inscricao-trilha-form button {
   background: #2d4636;
   color: #fff;
@@ -316,17 +339,18 @@
   cursor: pointer;
   width: 160px;
   transition: background 0.2s;
-  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
   letter-spacing: 0.5px;
   outline: none;
 }
+
 .inscricao-trilha-form button:active {
   background: #1b2c1e;
 }
 
 .endereco-row {
   display: flex;
-  flex-wrap: wrap;  
+  flex-wrap: wrap;
 }
 
 .full-width {
@@ -348,6 +372,7 @@
   cursor: not-allowed;
   opacity: 0.8;
 }
+
 /* Mantém o mesmo estilo dos outros inputs */
 .endereco-unico {
   width: 100%;
@@ -356,7 +381,8 @@
 .endereco-input {
   width: 100%;
   min-width: 790px;
-  max-width: 800px; /* 👈 aumenta a largura apenas deste input */
+  max-width: 800px;
+  /* 👈 aumenta a largura apenas deste input */
   padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -384,11 +410,13 @@
 
 /* Remover negrito especificamente do botão de inscrição principal */
 .inscricao-trilha-btn.btn-inscrever {
-  font-weight: 700; /* bold */
+  font-weight: 700;
+  /* bold */
 }
 
 .btn-cancelar {
-  background-color: #9c1d2a; /* vermelho */
+  background-color: #9c1d2a;
+  /* vermelho */
 }
 
 .btn-cancelar:hover {
@@ -417,6 +445,23 @@
   font-size: 1.2rem;
 }
 
+.avaliacao {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: transparent;
+  /* removido fundo branco */
+  padding: 12px 18px;
+  border-radius: 12px;
+  box-shadow: none;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  z-index: 10;
+  border: none;
+}
+
 /* removido bloco duplicado de .inscricao-trilha-mapa e regras relacionadas */
 
 @media (max-width: 900px) {
@@ -424,35 +469,218 @@
     max-width: 98vw;
     padding: 8px 2vw 24px 2vw;
   }
+
   .inscricao-trilha-header {
     flex-direction: column;
     align-items: center;
     gap: 18px;
   }
+
   .inscricao-trilha-header img {
     width: 100%;
     max-width: 350px;
     height: 180px;
   }
+
   .inscricao-trilha-info {
     width: 100%;
     min-height: unset;
     padding: 18px 12px;
     font-size: 16px;
   }
+
   .inscricao-trilha-dados {
     flex-direction: column;
     gap: 10px;
     padding: 18px 12px 10px 12px;
     font-size: 15px;
   }
-  .inscricao-trilha-comentarios, .inscricao-trilha-mapa {
+
+  .inscricao-trilha-comentarios,
+  .inscricao-trilha-mapa {
     padding: 18px 12px;
   }
+
   /* Em telas pequenas, empilhar os botões novamente */
-  .inscricao-trilha-container > .inscricao-trilha-btn {
+  .inscricao-trilha-container>.inscricao-trilha-btn {
     display: block !important;
     width: 100% !important;
-    margin: 8px 0 16px 0 !important; /* margem inferior maior no mobile */
+    margin: 8px 0 16px 0 !important;
+    /* margem inferior maior no mobile */
+  }
+}
+
+/* Responsividade Mobile – até 500px */
+@media (max-width: 500px) {
+
+  /* Container principal */
+  .inscricao-trilha-container {
+    padding: 19px 12px;
+    border-radius: 12px;
+    margin-bottom: 16px;
+    background: #fff;
+  }
+
+  /* 🔥 Caixa de avaliações — mais para cima e sem sobrepor imagem */
+  .avaliacao {
+    position: absolute !important;
+    top: -40px !important;
+    /* SUBI MAIS */
+    right: 12px !important;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 6px 12px !important;
+    font-size: 13px !important;
+    z-index: 30;
+    backdrop-filter: blur(6px);
+  }
+
+  /* 🔥 Botão de voltar mais para cima */
+  .circle-back-btn {
+    position: absolute;
+    top: 1px;
+    /* SUBI MAIS */
+    left: 8px;
+    z-index: 40;
+    background: transparent !important;
+    border: none;
+  }
+
+  /* 🔥 IMAGEM — remove fundo branco ao redor */
+  .evento-imagem {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    border-radius: 12px;
+    margin: 0;
+    padding-bottom: 12px !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    /* remove sombra caso tenha */
+  }
+
+  .evento-imagem img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    border-radius: 12px !important;
+    display: block !important;
+}
+
+  /* Remove fundo do container da imagem, caso exista */
+  .evento-header img,
+  .evento-header .imagem-wrapper {
+    background: transparent !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    box-shadow: none !important;
+  }
+
+  /* Header */
+  .evento-header {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    /* MENOS ESPAÇO PARA SUBIR TUDO */
+    margin-bottom: 18px;
+    background: transparent !important;
+  }
+
+  /* Campos */
+  .campo-info-titulo label,
+  .campo-info label {
+    font-size: 0.85rem;
+  }
+
+  .campo-info-titulo input,
+  .campo-info input {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+
+  /* 🔥 CORREÇÃO DO INPUT QUEBRANDO (NÍVEL) */
+  .campos-linha {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 10px !important;
+  }
+
+  .campo-info {
+    width: 100% !important;
+    min-width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Descrição */
+  .evento-descricao textarea,
+  .evento-descricao p {
+    padding: 10px 12px;
+    font-size: 0.9rem;
+    border-radius: 8px;
+  }
+
+  /* Botões */
+  .evento-acoes {
+    margin-top: 22px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .evento-acoes button {
+    width: 100% !important;
+    padding: 12px 0 !important;
+  }
+
+  /* 🔥 COMENTÁRIOS — ajustar tamanho em 500px */
+  .comentarios-container {
+    max-height: 320px !important;
+    overflow-y: auto;
+    padding: 14px 12px;
+    border-radius: 10px;
+    margin-top: 18px;
+  }
+
+  .comentario-item {
+    font-size: 13px !important;
+    line-height: 1.35 !important;
+    margin-bottom: 10px;
+  }
+
+  .inscricao-trilha-form-group input {
+    background: #f8fafc;
+    border: 1.5px solid #d1dbe3;
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 16px;
+    color: #222;
+    font-weight: 500;
+    outline: none;
+    margin-bottom: 2px;
+    box-shadow: 0 1px 4px rgba(45, 70, 54, 0.04);
+    transition: border 0.2s;
+  }
+
+
+  .inscricao-trilha-form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 180px;
+    max-width: 240px;
+  }
+
+  .inscricao-trilha-form-group label {
+    font-weight: 700;
+    color: #2d4636;
+    margin-bottom: 6px;
+    font-size: 18px;
+    letter-spacing: 0.2px;
+    white-space: nowrap;
   }
 }

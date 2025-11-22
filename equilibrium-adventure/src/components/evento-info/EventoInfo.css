@@ -32,12 +32,7 @@
     right: 0;
     height: 4px;
     background: linear-gradient(90deg, #336948, #226144, #0C513F);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.evento-info-container:hover::before {
-    opacity: 1;
+    opacity: 1; /* sempre visível */
 }
 
 .evento-info-top-bar {
@@ -160,7 +155,6 @@
 .campo-info {
     display: flex;
     flex-direction: column;
-    gap: 8px;
     flex: 1;
     max-width: 300px;
 }
@@ -185,6 +179,7 @@
     background: #ffffff;
     color: #2c3e2c;
     display: block;
+    width: auto-fit;
     font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     font-weight: 500;
 }
@@ -394,97 +389,109 @@
         min-width: calc(50% - 10px);
     }
 }
-
 /* Responsividade para Celular */
 @media (max-width: 500px) {
+
+    /* --- CONTAINER PRINCIPAL --- */
     .evento-info-container {
-        padding: 16px 12px;
-        min-width: unset;
+        padding: 6px 12px;
+        padding-right: 10px;
         border-radius: 12px;
-        margin-bottom: 16px;
+        margin: 0 0 16px 0;
+        width: 100%;
+        box-sizing: border-box;
     }
 
+    /* --- TOP BAR --- */
     .evento-info-top-bar {
-        height: auto;
+        display: flex;
+        align-items: center;
         margin-bottom: 12px;
-        padding-left: 4px;
+        padding: 0 12px;
     }
 
     .evento-info-top-bar .evento-card-title {
-        font-size: 1rem;
-        margin: 0 0 0 8px;
+        font-size: 1.1rem;
+        margin: 0;
     }
 
-    .evento-header {
+    .evento-info-top-bar .evento-card-title::after {
+        width: 50px;
+        height: 2.5px;
+    }
+
+    .evento-imagem img {
+        width: 100%;
+        height: 100%; /* ocupa toda a área disponível calculada pelo aspect-ratio */
+        object-fit: cover;
+        border-radius: 10px;
+        display: block;
+    }
+
+    /* --- DETALHES --- */
+    .evento-detalhes {
+        display: flex;
         flex-direction: column;
         gap: 16px;
-        margin-bottom: 20px;
     }
 
-    .evento-imagem {
-        width: 100%;
-        height: 200px;
-        border-radius: 10px;
-    }
-
-    .evento-detalhes {
-        padding: 0;
-        gap: 16px;
-    }
-
-    .campo-info-titulo {
-        margin-bottom: 8px;
-    }
+    /* Apenas o bloco do título ocupa 100%; demais campos podem dividir linha */
+    .campo-info-titulo { width: 100% !important; }
+    .campo-info { width: auto !important; }
 
     .campo-info-titulo label,
     .campo-info label {
         font-size: 0.85rem;
         margin-bottom: 4px;
+        display: block;
     }
 
-    .campo-info-titulo input,
+    .campo-info-titulo {
+        margin-bottom: 0px;
+    }
+
     .campo-info input,
-    .campo-info span {
-        padding: 10px 12px;
+    .campo-info span,
+    .campo-info-titulo input {
+        width: 100%;
+        padding: 10px;
         font-size: 0.9rem;
         border-radius: 8px;
+        box-sizing: border-box;
     }
 
+    /* --- GRID MELHORADO --- */
     .campos-linha {
-        flex-direction: row;
-        gap: 10px;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        width: 100%;
     }
 
     .campo-info {
-        max-width: calc(50% - 5px);
-        min-width: calc(50% - 5px);
-        flex: 1;
+        flex: 0 0 auto;
+        max-width: 100%;
     }
 
-    /* Grid de categoria/duração/preço em linha dupla */
-    .campos-linha[style*="grid-template-columns"] {
-        display: flex !important;
-        flex-direction: row !important;
-        flex-wrap: wrap !important;
-        gap: 10px !important;
-        margin-top: 16px !important;
+    /* Ensure paired fields sit side by side (except title) */
+    .campos-linha .campo-info {
+        width: 100%;
+    }
+    /* Força duas colunas apenas para linhas dentro de .evento-detalhes (exceto grids especiais) */
+    .evento-detalhes > .campos-linha .campo-info { width: 100%; }
+    .evento-detalhes > .campos-linha { grid-auto-flow: row; }
+    /* placeholder removed: empty selector cleaned */
+
+    /* Keep title block full width */
+    .campo-info-titulo { width: 100% !important; }
+
+    /* Campo que precisa ocupar a linha inteira */
+    .campo-info.full {
+        flex: 1 1 100%;
+        max-width: 100%;
     }
 
-    .campos-linha[style*="grid-template-columns"] .campo-info {
-        width: calc(50% - 5px) !important;
-        max-width: calc(50% - 5px) !important;
-        min-width: calc(50% - 5px) !important;
-        flex: 1 !important;
-    }
-
-    /* Categoria ocupa linha inteira */
-    .campos-linha[style*="grid-template-columns"] .campo-info:first-child {
-        width: 100% !important;
-        max-width: 100% !important;
-        min-width: 100% !important;
-    }
-
+    /* --- DESCRIÇÃO --- */
     .evento-descricao {
         margin-top: 16px;
     }
@@ -494,20 +501,112 @@
         margin-bottom: 4px;
     }
 
-    .evento-descricao p,
-    .evento-descricao textarea {
-        padding: 10px 12px;
+    .evento-descricao textarea,
+    .evento-descricao p {
+        padding: 12px;
         font-size: 0.9rem;
         border-radius: 8px;
     }
 
+      /* reduz espaço do título até os primeiros campos */
+    .evento-info-top-bar {
+        margin-bottom: 8px !important;
+    }
+
+    /* reduz espaçamento interno entre cada bloco de informações */
+    .evento-detalhes {
+        gap: 10px !important;
+    }
+
+    /* reduz espaço entre categoria / duração / preço */
+    .campos-linha {
+        gap: 6px !important;
+        margin-top: 10px !important;
+    }
+
+    /* reduz espaço acima da descrição */
+    .evento-descricao {
+        margin-top: 10px !important;
+    }
+
+    /* reduz espaço acima das ações (botões) */
     .evento-acoes {
-        margin-top: 20px;
-        flex-direction: column;
-        gap: 10px;
+        margin-top: 14px !important;
+        gap: 8px !important;
     }
 
     .evento-acoes button {
         width: 100%;
     }
+
+    /* --- HEADER: itens lado a lado, título abaixo --- */
+.evento-header {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding-left: 5px;
+    position: relative;
+}
+
+/* Linha de cima: voltar + avaliações + ícones */
+.evento-header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* deixa os itens distribuídos */
+    width: 100%;
+    padding: 0 4px;
+    gap: 10px;
+}
+
+/* Título ocupa linha inteira */
+.evento-header-title {
+    width: 100%;
+    font-size: 1.25rem;
+    font-weight: 700;
+    text-align: left;
+    margin-top: 2px;
+}
+
+    /* --- BLOCO INFERIOR (Endereço + Nível) mais compacto --- */
+    .evento-info-container div[style*="grid-template-columns"]:not(.campos-linha) {
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important; /* endereço | nível */
+        gap: 8px !important; /* menos espaço entre eles */
+        width: 100% !important;
+    }
+
+    /* Endereço ocupa a coluna da esquerda apenas (override do inline 1/3) */
+    .evento-info-container div[style*="grid-template-columns"]:not(.campos-linha) .evento-descricao {
+        grid-column: 1 / 2 !important;
+        margin-top: 0 !important;
+    }
+
+    /* Nível ocupa a coluna direita (override do inline 3/4) */
+    .evento-info-container div[style*="grid-template-columns"]:not(.campos-linha) .campo-info {
+        grid-column: 2 / 3 !important;
+        align-self: start !important;
+    }
+
+    /* Reduz paddings para compactar visualmente os dois cards */
+    .evento-info-container div[style*="grid-template-columns"]:not(.campos-linha) .evento-descricao p {
+        padding: 10px 12px !important;
+        max-width: 275px;
+        min-width: 205px;
+        border-radius: 10px !important;
+        font-size: 0.92rem !important;
+        line-height: 1.35 !important;
+    }
+
+    .evento-info-container div[style*="grid-template-columns"]:not(.campos-linha) .campo-info span,
+    .evento-info-container div[style*="grid-template-columns"]:not(.campos-linha) .campo-info input {
+        padding: 8px 12px !important;
+        border-radius: 10px !important;
+        font-size: 0.92rem !important;
+    }
+
+    .evento-info-container div[style*="grid-template-columns"]:not(.campos-linha) label {
+        margin-bottom: 4px !important;
+        font-size: 0.8rem !important;
+    }
+
 }
