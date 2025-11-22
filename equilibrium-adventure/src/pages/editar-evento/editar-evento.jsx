@@ -4,8 +4,8 @@ import { FaCloudUploadAlt } from "react-icons/fa";
 import Header from "../../components/header/header-unified";
 import { maskCep, maskDistancia } from "../../utils/masks";
 import { scrollToTop } from "../../utils/scrollToTop";
-import { cadastrarEvento, buscarCep, editarEvento } from "../../services/chamadasAPIEvento";
-import { showSuccess, showError } from "../../utils/swalHelper";
+import { cadastrarEvento, buscarCep, editarEvento, excluirEventoBase } from "../../services/chamadasAPIEvento";
+import { showSuccess, showError, showWarning } from "../../utils/swalHelper";
 import "./editar-evento.css";
 import ButtonCancelarEvento from "../../components/button-eventos/button-cancelar-evento";
 import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
@@ -38,6 +38,11 @@ const EditarEvento = () => {
     const [previewUrl, setPreviewUrl] = useState(null);
 
     const { id } = useParams();
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        scrollToTop();
+    }, []);
 
     useEffect(() => {
         const loadEventoData = async () => {
@@ -62,9 +67,7 @@ const EditarEvento = () => {
                                 cidade: "",
                                 estado: ""
                             },
-                        
                             imagem: prev && prev.imagem ? prev.imagem : null,
-                        
                             trilha: prev && prev.trilha ? prev.trilha : null
                         }));
 
@@ -90,7 +93,6 @@ const EditarEvento = () => {
                                 console.error("Erro ao carregar dados do endereço:", error);
                             }
                         }
-                        // Se o backend retornou conteúdo ou metadados da trilha, populate o campo trilha para exibição
                         const gpxContent = eventoData.caminho_arquivo_evento || eventoData.trilha || null;
                         const nomeTrilhaFromBackend = eventoData.caminho_arquivo_evento_nome || eventoData.trilhaNome || eventoData.trilha_nome || null;
                         if (gpxContent) {
@@ -112,14 +114,13 @@ const EditarEvento = () => {
 
         let generatedUrl = null;
 
-    const loadImagemEvento = async () => {
+        const loadImagemEvento = async () => {
             if (id) {
                 try {
-                    const imgBlob = await buscarImagemEventoBlob(id); // Blob or null
+                    const imgBlob = await buscarImagemEventoBlob(id);
                     if (imgBlob) {
                         generatedUrl = URL.createObjectURL(imgBlob);
                         const imagemNome = `imagem-${eventoId || id}.jpg`;
-                        // store blob separately on state so we can convert to File
                         setFormData((prev) => ({
                             ...prev,
                             imagem: {
@@ -155,12 +156,6 @@ const EditarEvento = () => {
         };
     }, [id]);
 
-    const navigate = useNavigate();
-
-    useEffect(() => {
-        scrollToTop();
-    }, []);
-
     const handleBack = () => {
         navigate(routeUrls.CATALOGO_TRILHAS_ADM);
     };
@@ -171,7 +166,6 @@ const EditarEvento = () => {
 
         if (name === "cep") newValue = maskCep(value);
         if (name === "distancia") newValue = maskDistancia(value);
-
 
         const enderecoFields = ['cep', 'rua', 'numero', 'complemento', 'bairro', 'cidade', 'estado'];
 
@@ -184,13 +178,12 @@ const EditarEvento = () => {
                 }
             });
         } else {
-                if (name === 'imagem' && files && files[0]) {
-                    if (previewUrl) try { URL.revokeObjectURL(previewUrl); } catch (e) {}
-                    const file = files[0];
-                    setPreviewUrl(URL.createObjectURL(file));
-                    setFormData({ ...formData, imagem: file });
+            if (name === 'imagem' && files && files[0]) {
+                if (previewUrl) try { URL.revokeObjectURL(previewUrl); } catch (e) { }
+                const file = files[0];
+                setPreviewUrl(URL.createObjectURL(file));
+                setFormData({ ...formData, imagem: file });
             } else if (name === 'trilha' && files && files[0]) {
-                // Ler conteúdo do arquivo .gpx como texto e armazenar nome + conteúdo
                 const file = files[0];
                 const reader = new FileReader();
                 reader.onload = () => {
@@ -241,6 +234,40 @@ const EditarEvento = () => {
         }
     };
 
+    const handleDeleteEvento = async (e) => {
+        if (e) {
+            e.preventDefault();
+            e.stopPropagation();
+        }
+        if (!eventoId) {
+            showError("Erro: ID do evento não encontrado.");
+            return;
+        }
+        try {
+            await excluirEventoBase(eventoId);
+            showSuccess("Evento excluído com sucesso!");
+            navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+        } catch (error) {
+            let mensagem = error.response?.data?.erro;
+            if (mensagem?.includes("CONFLICT")) {
+                mensagem = mensagem.replace(/^.*CONFLICT\s*/, "").replace(/"/g, "");
+            }
+
+            if (error.response?.status === 409) {
+                showWarning(
+                    `${mensagem}.`,
+                    'Existem ativações!',
+                    'OK',
+                    'Cancelar',
+                    false
+                );
+            } else {
+                console.error("Erro ao excluir evento:", error);
+                showError("Erro ao excluir evento. Tente novamente.");
+            }
+        }
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -250,7 +277,6 @@ const EditarEvento = () => {
         }
 
         try {
-            // prepare payload
             const eventoParaEditar = {
                 nome: formData.titulo,
                 descricao: formData.descricao,
@@ -269,7 +295,6 @@ const EditarEvento = () => {
                 trilha: formData.trilha
             };
 
-            // Determine which image to send (if any).
             let imagemToSend = null;
 
             if (formData.imagem instanceof File) {
@@ -283,9 +308,6 @@ const EditarEvento = () => {
                     console.warn('Não foi possível converter blob em File para reenvio da imagem:', err);
                 }
             } else if (previewUrl && (eventoId || id)) {
-                // As a last resort, try to re-fetch the image blob from the server
-                // so we can include it in the multipart request and avoid sending
-                // an explicit null (which some backends may interpret as removal).
                 try {
                     const serverBlob = await buscarImagemEventoBlob(eventoId || id);
                     if (serverBlob) {
@@ -301,9 +323,7 @@ const EditarEvento = () => {
                 eventoParaEditar.imagem = imagemToSend;
             }
 
-            console.debug('Enviando editarEvento com imagem?', Boolean(eventoParaEditar.imagem), eventoParaEditar.imagem);
-
-            const resultado = await editarEvento(eventoParaEditar, eventoId);
+            await editarEvento(eventoParaEditar, eventoId);
 
             showSuccess("Evento editado com sucesso!");
             navigate(routeUrls.CATALOGO_TRILHAS_ADM);
@@ -338,9 +358,7 @@ const EditarEvento = () => {
 
                     <label>
                         Imagem do Evento:
-                        <div
-                            className="upload-box"
-                        >
+                        <div className="upload-box" onClick={() => document.getElementById('upload-input').click()}>
                             {previewUrl || (formData.imagem && formData.imagem.url) ? (
                                 <img
                                     src={previewUrl || (formData.imagem && formData.imagem.url)}
@@ -398,9 +416,7 @@ const EditarEvento = () => {
 
                     <label>
                         Mapa da Trilha (.gpx):
-                        <div
-                            className="upload-box"
-                        >
+                        <div className="upload-box" onClick={() => document.getElementById('upload-trilha-input').click()}>
                             {formData.trilha ? (
                                 <div className="trilha-preview">
                                     <p>{formData.trilha.name}</p>
@@ -509,10 +525,7 @@ const EditarEvento = () => {
                     </div>
 
                     <div className="botoes">
-                        <ButtonCancelarEvento onClick={(event) => {
-                            event.preventDefault();
-                            navigate(routeUrls.CATALOGO_TRILHAS_ADM);
-                        }} title={"Cancelar"}></ButtonCancelarEvento>
+                        <ButtonCancelarEvento onClick={handleDeleteEvento} title={"Excluir"} type="button"></ButtonCancelarEvento>
                         <ButtonSubmitForm title={"Salvar Alterações"} type="submit"></ButtonSubmitForm>
                     </div>
                 </form>
