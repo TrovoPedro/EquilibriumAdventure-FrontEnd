@@ -7,10 +7,12 @@ import BotpressChat from "../../components/botpress-chat/BotpressChat";
 import catalogoFallback from "../../assets/img12-catalogo.jpg"; // imagem padrão
 import { buscarEventosAtivosPorGuia, buscarImagemEvento } from "../../services/apiEvento";
 import { useGuide } from "../../context/GuideContext";
+import { useScore } from "../../context/ScoreContext";
 
 const CatalogoTrilhas = () => {
   const navigate = useNavigate();
   const { guiaSelecionado } = useGuide();
+  const { nivel } = useScore();
   const [trilhas, setTrilhas] = useState([]);
   const [loading, setLoading] = useState({ trilhas: true, anuncios: true });
   const [error, setError] = useState({ trilhas: null, anuncios: null });
@@ -153,6 +155,19 @@ const CatalogoTrilhas = () => {
     setFiltroCategoria(filtroCategoriaTemp);
   };
 
+  // Filtrar eventos recomendados por nível do aventureiro
+  const eventosRecomendados = () => {
+    if (!nivel) return filtrarEventos(trilhas);
+    
+    const eventosPorNivel = trilhas.filter(
+      (trilha) => 
+        (trilha.nivel_dificuldade || "").toLowerCase().trim() === nivel.toLowerCase().trim()
+    );
+    
+    // Se não houver eventos do nível do aventureiro, retorna todos os eventos
+    return eventosPorNivel.length > 0 ? eventosPorNivel : trilhas;
+  };
+
   return (
     <>
       <BotpressChat />
@@ -246,15 +261,17 @@ const CatalogoTrilhas = () => {
 
         {/* Seção de destinos */}
         <section className="destinos">
-          <h2 className="destinos-titulo">Destinos que você vai amar conhecer</h2>
+          <h2 className="destinos-titulo">
+            {nivel ? `Recomendado para você` : 'Destinos que você vai amar conhecer'}
+          </h2>
           {loading.trilhas ? (
             <p>Carregando trilhas...</p>
           ) : error.trilhas ? (
             <p className="erro-msg">{error.trilhas}</p>
           ) : (
             <div className="destinos-grid">
-              {filtrarEventos(trilhas).length > 0 ? (
-                filtrarEventos(trilhas)
+              {eventosRecomendados().length > 0 ? (
+                eventosRecomendados()
                   .slice(0, 5)
                   .map((trilha) => (
                     <div className="destino-card" key={trilha.id_ativacao}>
@@ -278,7 +295,9 @@ const CatalogoTrilhas = () => {
                   ))
               ) : (
                 <span className="no-events-text">
-                  Nenhum destino encontrado para sua pesquisa.
+                  {nivel 
+                    ? `Nenhum evento encontrado para o nível ${nivel}. Explore outros níveis abaixo!`
+                    : 'Nenhum destino encontrado para sua pesquisa.'}
                 </span>
               )}
             </div>
