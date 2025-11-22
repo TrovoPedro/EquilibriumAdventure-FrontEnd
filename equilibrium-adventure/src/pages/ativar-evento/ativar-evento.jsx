@@ -11,6 +11,8 @@ import { ativarEvento } from "../../services/chamadasAPIEvento";
 import dayjs from "dayjs";
 import swal from "sweetalert2";
 import { scrollToTopSmooth } from "../../utils/scrollToTop";
+import { formatarPrecoInput, parsePreco } from "../../utils/formatPrice";
+import { formatarDuracao, parseDuracao } from "../../utils/formatDuration";
 
 export default function AtivarEvento() {
   const { id } = useParams();
@@ -27,23 +29,44 @@ export default function AtivarEvento() {
   }, [id]);
 
   const [formData, setFormData] = useState({
-    horaInicio: null,
-    horaFim: null,
-    duracao: null,
-    limiteInscritos: null,
-    dataEvento: null,
+    horaInicio: '',
+    horaFim: '',
+    duracao: '',
+    limiteInscritos: '',
+    dataEvento: '',
     categoria: '',
-    preco: null,
-    evento: id ?? null
+    preco: '',
+    evento: id ?? ''
   });
 
-  const handleChange = (e) => {
+  const [precoFormatado, setPrecoFormatado] = useState('');
+  const [duracaoInput, setDuracaoInput] = useState('');
 
+  const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+
+    if (name === 'preco') {
+      const valorNumerico = parsePreco(value);
+      setFormData(prev => ({
+        ...prev,
+        [name]: valorNumerico || ''
+      }));
+      setPrecoFormatado(formatarPrecoInput(value));
+    } else if (name === 'duracao') {
+      // Permite apenas números, vírgula e ponto
+      const valorLimpo = value.replace(/[^0-9.,]/g, '');
+      setDuracaoInput(valorLimpo);
+      const valorNumerico = parseDuracao(valorLimpo);
+      setFormData(prev => ({
+        ...prev,
+        [name]: valorNumerico || ''
+      }));
+    } else {
+      setFormData(prev => ({
+        ...prev,
+        [name]: value
+      }));
+    }
   };
 
   const handleSubmit = (e) => {
@@ -141,16 +164,14 @@ export default function AtivarEvento() {
                 />
               </div>
               <div className="form-group">
-                <label htmlFor="duracao">Duração (horas):</label>
+                <label htmlFor="duracao">Duração (em horas):</label>
                 <input 
-                  type="number" 
+                  type="text" 
                   id="duracao"
                   name="duracao" 
-                  placeholder="4"
-                  value={formData.duracao}
+                  placeholder="Ex: 4 ou 1.5"
+                  value={duracaoInput}
                   onChange={handleChange}
-                  min="1"
-                  max="24"
                   required
                 />
               </div>
@@ -159,15 +180,13 @@ export default function AtivarEvento() {
               <div className="form-group form-group-small">
                 <label htmlFor="preco">Preço (R$):</label>
                 <input 
-                  type="number" 
+                  type="text" 
                   id="preco"
                   name="preco" 
                   className="input-largura-reduzida"
-                  placeholder="100.00"
-                  value={formData.preco}
+                  placeholder="100,00"
+                  value={precoFormatado}
                   onChange={handleChange}
-                  min="0"
-                  step="0.01"
                   required
                 />
               </div>
