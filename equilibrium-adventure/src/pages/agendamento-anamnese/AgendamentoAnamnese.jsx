@@ -8,6 +8,7 @@ import { listarDatasDisponiveis, agendarAnamnese } from '../../services/apiAnamn
 import { showSuccess, showError, showWarning } from '../../utils/swalHelper';
 import { useNavigate } from 'react-router-dom';
 import routeUrls from '../../routes/routeUrls';
+import './AgendamentoAnamnese.css';
 
 const AgendamentoAnamnese = () => {
   const { guia } = useGuide();
