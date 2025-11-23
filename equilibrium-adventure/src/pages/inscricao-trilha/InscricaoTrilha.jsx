@@ -45,6 +45,8 @@ const InscricaoTrilhasLimitado = () => {
   const [inscritosCount, setInscritosCount] = useState(0);
   const [mediaAvaliacoes, setMediaAvaliacoes] = useState(0);
   const [mensagemAvaliacao, setMensagemAvaliacao] = useState('');
+  const [pdfUrl, setPdfUrl] = useState(null);
+  const [pdfNome, setPdfNome] = useState('');
   const { usuario, anamnese } = useAuth()
   const { nivel, pontuacaoTotal } = useScore();
   const [nivelInsuficiente, setNivelInsuficiente] = useState(false);
@@ -89,6 +91,37 @@ const InscricaoTrilhasLimitado = () => {
 
           const imagemUrl = await buscarImagemEvento(ativacao.evento.idEvento);
           setImagemEvento(imagemUrl || null);
+
+          // Buscar dados completos do evento base para obter o PDF
+          if (ativacao.evento.idEvento) {
+            try {
+              const response = await fetch(`http://localhost:8080/administrador/buscar-evento-base-especifico/${ativacao.evento.idEvento}`);
+              
+              if (response.ok) {
+                const eventoBaseData = await response.json();
+                
+                if (eventoBaseData.pdf_base64) {
+                  try {
+                    const byteCharacters = atob(eventoBaseData.pdf_base64);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                      byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
+                    const pdfObjectUrl = URL.createObjectURL(pdfBlob);
+                    
+                    setPdfUrl(pdfObjectUrl);
+                    setPdfNome(`instrucoes-${eventoBaseData.nome || 'trilha'}.pdf`);
+                  } catch (error) {
+                    console.error('Erro ao converter PDF:', error);
+                  }
+                }
+              }
+            } catch (error) {
+              console.error('Erro ao buscar dados do evento base:', error);
+            }
+          }
 
           if (ativacao.idAtivacao) {
             const gpx = await buscarGpx(ativacao.evento.idEvento);
@@ -408,48 +441,152 @@ const InscricaoTrilhasLimitado = () => {
         </EventoInfo>
       </div>
 
-      {!nivelInsuficiente && (
-        <button
-          className={`inscricao-trilha-btn ${inscrito ? 'btn-cancelar' : 'btn-inscrever'}`}
-          style={{
-            background: inscrito ? '#a93226' : '#226144',
-            color: '#fff',
-            border: 'none',
-            borderRadius: '12px',
-            padding: '18px 0',
-            fontSize: '1.35rem',
-            fontWeight: 700,
-            cursor: 'pointer',
-            margin: '32px 0 0 0',
-            boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-            textAlign: 'center',
-            letterSpacing: '0.5px',
-            transition: 'background 0.2s'
-          }}
-          onClick={() => {
-            if (inscrito) {
-              handleCancelarInscricao();
-              return;
-            }
-
-            if (anamnese && anamnese.length > 0) {
-              showWarning("Você já possui uma anamnese agendada. Aguarde a finalização antes de se inscrever em outra trilha.");
-              return;
-            }
-
-            if (!podeParticipar()) {
-              showWarning("Seu nível atual não permite participar dessa trilha!");
-              return;
-            }
-
-            handleInscrever();
-          }}
-        >
-          {inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
-        </button>
+      {pdfUrl && (
+        <div className="card inscricao-trilha-instrucoes" style={{
+          background: 'linear-gradient(135deg, #f0f9f4 0%, #e8f5e9 100%)',
+          borderRadius: '10px',
+          padding: '10px 20px',
+          margin: '20px 0 10px 0',
+          boxShadow: '0 3px 12px rgba(34, 97, 68, 0.08)',
+          border: '1px solid #c8e6c9',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: '16px',
+          width: '100%',
+          minHeight: '56px'
+        }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1b5e20" strokeWidth="2">
+              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+              <polyline points="14 2 14 8 20 8"></polyline>
+              <line x1="16" y1="13" x2="8" y2="13"></line>
+              <line x1="16" y1="17" x2="8" y2="17"></line>
+            </svg>
+            <div>
+              <h3 style={{
+                fontSize: '0.95rem',
+                fontWeight: '700',
+                color: '#1b5e20',
+                margin: 0,
+                lineHeight: '1.1'
+              }}>
+                Instruções da Trilha
+              </h3>
+              <p style={{
+                fontSize: '0.8rem',
+                color: '#2e7d32',
+                margin: 0,
+                lineHeight: '1.1'
+              }}>
+                Baixe o documento com orientações importantes sobre a trilha
+              </p>
+            </div>
+          </div>
+          <a
+            href={pdfUrl}
+            download={pdfNome || `instrucoes-${evento?.nome || 'trilha'}.pdf`}
+            style={{
+              background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
+              color: '#fff',
+              padding: '8px 16px',
+              borderRadius: '8px',
+              textDecoration: 'none',
+              fontWeight: '600',
+              fontSize: '0.85rem',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '6px',
+              boxShadow: '0 3px 10px rgba(46, 125, 50, 0.2)',
+              transition: 'all 0.3s ease',
+              whiteSpace: 'nowrap'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = '0 6px 16px rgba(46, 125, 50, 0.35)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.transform = 'translateY(0)';
+              e.currentTarget.style.boxShadow = '0 4px 12px rgba(46, 125, 50, 0.25)';
+            }}
+            >
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+              Baixar PDF
+            </a>
+        </div>
       )}
 
-      {nivelInsuficiente && (
+      <div style={{
+        display: 'flex',
+        gap: '12px',
+        marginTop: pdfUrl ? '0' : '32px',
+        marginBottom: '24px'
+      }}>
+        {!nivelInsuficiente && (
+          <button
+            className={`inscricao-trilha-btn ${inscrito ? 'btn-cancelar' : 'btn-inscrever'}`}
+            style={{
+              background: inscrito ? '#a93226' : '#226144',
+              color: '#fff',
+              border: 'none',
+              borderRadius: '12px',
+              padding: '16px 0',
+              fontSize: '1.15rem',
+              fontWeight: 700,
+              cursor: 'pointer',
+              flex: 1,
+              boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+              textAlign: 'center',
+              letterSpacing: '0.5px',
+              transition: 'background 0.2s'
+            }}
+            onClick={() => {
+              if (inscrito) {
+                handleCancelarInscricao();
+                return;
+              }
+
+              if (anamnese && anamnese.length > 0) {
+                showWarning("Você já possui uma anamnese agendada. Aguarde a finalização antes de se inscrever em outra trilha.");
+                return;
+              }
+
+              if (!podeParticipar()) {
+                showWarning("Seu nível atual não permite participar dessa trilha!");
+                return;
+              }
+
+              handleInscrever();
+            }}
+          >
+            {inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
+          </button>
+        )}
+
+        <button
+          className="inscricao-trilha-btn btn-compartilhar"
+          style={{
+            background: '#fff',
+            color: '#226144',
+            border: '2px solid #226144',
+            borderRadius: '12px',
+            fontWeight: 'bold',
+            fontSize: '1.15rem',
+            padding: '16px 0',
+            cursor: 'pointer',
+            flex: 1,
+            boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
+            transition: 'background 0.2s'
+          }}
+          onClick={handleCompartilhar}
+        >
+          Compartilhar trilha
+        </button>
+      </div>      {nivelInsuficiente && (
         <div style={{
           marginTop: 24,
           padding: '16px',
@@ -461,26 +598,6 @@ const InscricaoTrilhasLimitado = () => {
           <strong>Atenção:</strong> Seu nível atual não permite participar desta trilha. Entre em contato com um guia para orientação ou participe de eventos para subir de nível.
         </div>
       )}
-
-      <button
-        className="inscricao-trilha-btn btn-compartilhar"
-        style={{
-          marginTop: '10px',
-          background: '#fff',
-          color: '#226144',
-          border: '2px solid #226144',
-          borderRadius: '12px',
-          fontWeight: 'bold',
-          fontSize: '1.15rem',
-          padding: '16px 0',
-          cursor: 'pointer',
-          boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
-          transition: 'background 0.2s'
-        }}
-        onClick={handleCompartilhar}
-      >
-        Compartilhar trilha
-      </button>
 
       <Comentarios comentariosIniciais={comentarios} onEnviarComentario={handleEnviarComentario} />
 

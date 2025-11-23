@@ -27,7 +27,8 @@ const CriarEvento = () => {
         cidade: "",
         estado: "",
         imagem: null,
-        trilha: null
+        trilha: null,
+        pdf: null
     });
 
     // Estados para controlar os popups
@@ -118,22 +119,22 @@ const CriarEvento = () => {
 
                     <label>
                         Imagem do Evento:
-                        <div
-                            className="upload-box"
-                        >
-                            {formData.imagem ? (
-                                <img
-                                    src={URL.createObjectURL(formData.imagem)}
-                                    alt="Pré-visualização"
-                                    className="preview-img"
-                                />
-                            ) : (
-                                <div className="upload-placeholder">
-                                    <FaCloudUploadAlt size={50} color="#0C513F" />
-                                    <p>Clique ou arraste uma imagem aqui</p>
-                                </div>
-                            )}
-                        </div>
+                        <label htmlFor="upload-input" style={{ cursor: 'pointer' }}>
+                            <div className="upload-box">
+                                {formData.imagem ? (
+                                    <img
+                                        src={URL.createObjectURL(formData.imagem)}
+                                        alt="Pré-visualização"
+                                        className="preview-img"
+                                    />
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <FaCloudUploadAlt size={50} color="#0C513F" />
+                                        <p>Clique ou arraste uma imagem aqui</p>
+                                    </div>
+                                )}
+                            </div>
+                        </label>
                         <input
                             type="file"
                             id="upload-input"
@@ -174,26 +175,52 @@ const CriarEvento = () => {
 
                     <label>
                         Mapa da Trilha (.gpx):
-                        <div
-                            className="upload-box-trilha"
-                        >
-                            {formData.trilha ? (
-                                <div className="trilha-preview">
-                                    <p>{formData.trilha.name}</p>
-                                </div>
-                            ) : (
-                                <div className="upload-placeholder">
-                                    <FaCloudUploadAlt size={30} color="#0C513F" />
-                                    <p>Clique ou arraste o arquivo .gpx aqui</p>
-                                </div>
-                            )}
-                        </div>
+                        <label htmlFor="upload-trilha-input" style={{ cursor: 'pointer' }}>
+                            <div className="upload-box-trilha">
+                                {formData.trilha ? (
+                                    <div className="trilha-preview">
+                                        <p>{formData.trilha.name}</p>
+                                    </div>
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <FaCloudUploadAlt size={30} color="#0C513F" />
+                                        <p>Clique ou arraste o arquivo .gpx aqui</p>
+                                    </div>
+                                )}
+                            </div>
+                        </label>
                         <input
                             type="file"
                             id="upload-trilha-input"
                             name="trilha"
                             onChange={handleChange}
                             accept=".gpx"
+                            style={{ display: "none" }}
+                        />
+                    </label>
+
+                    <label>
+                        Instruções da Trilha em PDF:
+                        <label htmlFor="upload-pdf-input" style={{ cursor: 'pointer' }}>
+                            <div className="upload-box-trilha">
+                                {formData.pdf ? (
+                                    <div className="trilha-preview">
+                                        <p>{formData.pdf.name}</p>
+                                    </div>
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <FaCloudUploadAlt size={30} color="#0C513F" />
+                                        <p>Clique ou arraste o arquivo PDF aqui</p>
+                                    </div>
+                                )}
+                            </div>
+                        </label>
+                        <input
+                            type="file"
+                            id="upload-pdf-input"
+                            name="pdf"
+                            onChange={handleChange}
+                            accept=".pdf"
                             style={{ display: "none" }}
                         />
                     </label>

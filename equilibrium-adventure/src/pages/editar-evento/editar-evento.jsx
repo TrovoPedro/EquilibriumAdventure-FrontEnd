@@ -31,7 +31,8 @@ const EditarEvento = () => {
             estado: ""
         },
         imagem: null,
-        trilha: null
+        trilha: null,
+        pdf: null
     });
 
     const [eventoId, setEventoId] = useState(null);
@@ -104,6 +105,30 @@ const EditarEvento = () => {
                                     content: gpxContent
                                 }
                             }));
+                        }
+
+                        // Carregar PDF se existir
+                        if (eventoData.pdf_base64) {
+                            try {
+                                // Converter base64 para Blob
+                                const byteCharacters = atob(eventoData.pdf_base64);
+                                const byteNumbers = new Array(byteCharacters.length);
+                                for (let i = 0; i < byteCharacters.length; i++) {
+                                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                                }
+                                const byteArray = new Uint8Array(byteNumbers);
+                                const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
+                                
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    pdf: {
+                                        name: `documento-${eventoData.id_evento || id}.pdf`,
+                                        blob: pdfBlob
+                                    }
+                                }));
+                            } catch (error) {
+                                console.error("Erro ao carregar PDF do evento:", error);
+                            }
                         }
                     }
                 } catch (error) {
@@ -204,6 +229,10 @@ const EditarEvento = () => {
                     });
                 };
                 reader.readAsText(file);
+            } else if (name === 'pdf' && files && files[0]) {
+                const file = files[0];
+                console.log('PDF selecionado:', file.name, file.size, 'bytes');
+                setFormData({ ...formData, pdf: file });
             } else {
                 setFormData({
                     ...formData,
@@ -292,7 +321,8 @@ const EditarEvento = () => {
                     estado: formData.endereco.estado,
                     cep: formData.endereco.cep
                 },
-                trilha: formData.trilha
+                trilha: formData.trilha,
+                pdf: formData.pdf
             };
 
             let imagemToSend = null;
@@ -438,6 +468,32 @@ const EditarEvento = () => {
                             name="trilha"
                             onChange={handleChange}
                             accept=".gpx"
+                            style={{ display: "none" }}
+                        />
+                    </label>
+
+                    <label>
+                        Instruções da Trilha em PDF:
+                        <label htmlFor="upload-pdf-input" style={{ cursor: 'pointer' }}>
+                            <div className="upload-box">
+                                {formData.pdf ? (
+                                    <div className="trilha-preview">
+                                        <p>{formData.pdf.name || (formData.pdf instanceof File ? formData.pdf.name : 'documento.pdf')}</p>
+                                    </div>
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <FaCloudUploadAlt size={30} color="#0C513F" />
+                                        <p>Clique ou arraste o arquivo PDF aqui</p>
+                                    </div>
+                                )}
+                            </div>
+                        </label>
+                        <input
+                            type="file"
+                            id="upload-pdf-input"
+                            name="pdf"
+                            onChange={handleChange}
+                            accept=".pdf"
                             style={{ display: "none" }}
                         />
                     </label>

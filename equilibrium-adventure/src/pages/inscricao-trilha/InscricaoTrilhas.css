@@ -728,4 +728,26 @@
     letter-spacing: 0.2px;
     white-space: nowrap;
   }
+
+  /* Instruções da trilha - responsivo mobile */
+  .inscricao-trilha-instrucoes {
+    flex-direction: column !important;
+    text-align: center !important;
+    padding: 20px 16px !important;
+  }
+
+  .inscricao-trilha-instrucoes h3 {
+    font-size: 1.1rem !important;
+    justify-content: center !important;
+  }
+
+  .inscricao-trilha-instrucoes p {
+    font-size: 0.9rem !important;
+  }
+
+  .inscricao-trilha-instrucoes a {
+    width: 100%;
+    justify-content: center !important;
+    padding: 12px 20px !important;
+  }
 }
