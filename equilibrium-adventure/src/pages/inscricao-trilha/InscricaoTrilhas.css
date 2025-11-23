@@ -14,6 +14,51 @@
   }
 }
 
+/* Estrelas de avaliação */
+.stars-rating {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    line-height: 1;
+}
+
+.stars-rating span {
+    font-size: 1.25rem;
+    display: inline-block;
+    line-height: 1;
+    transition: transform 150ms ease, opacity 150ms ease;
+}
+
+.stars-rating .star-full {
+    background: linear-gradient(90deg, #ffd166 0%, #ffb703 50%, #ff8f00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+
+.stars-rating .star-half {
+    background: linear-gradient(90deg, #ffd166 0%, #ffd166 50%, #e6e6e6 50%, #e6e6e6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.stars-rating .star-empty {
+    color: #e6e6e6;
+}
+
+@media (max-width: 480px) {
+    .stars-rating span {
+        font-size: 1.05rem;
+    }
+    .stars-rating {
+        gap: 6px;
+    }
+}
+
 /* Page background to match criar-evento look */
 .inscricao-trilha-page {
   width: 100%;

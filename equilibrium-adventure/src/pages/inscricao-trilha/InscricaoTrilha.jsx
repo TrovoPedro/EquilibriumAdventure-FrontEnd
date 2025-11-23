@@ -9,7 +9,7 @@ import { useScore } from "../../context/ScoreContext";
 import { useNavigate, useParams } from "react-router-dom";
 import Comentarios from '../../components/comentarios/Comentarios';
 import EventoInfo from '../../components/evento-info/EventoInfo';
-import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx, buscarMediaAvaliacoes } from "../../services/apiEvento";
+import { buscarImagemEvento, buscarEventoAtivoPorId, buscarGpx, buscarMediaAvaliacoesPorEventoBase } from "../../services/apiEvento";
 import catalogoFallback from "../../assets/img12-catalogo.jpg";
 import { listarComentariosPorAtivacao, adicionarComentario } from '../../services/apiComentario';
 import { verificarInscricao, criarInscricao, cancelarInscricao, listarInscritos } from "../../services/apiInscricao";
@@ -69,6 +69,7 @@ const InscricaoTrilhasLimitado = () => {
           const ativacao = eventoData[0];
           setEvento({
             idAtivacao: ativacao.idAtivacao,
+            idEvento: ativacao.evento?.idEvento || ativacao.evento?.id_evento || null,
             nome: ativacao.evento?.nome || "",
             descricao: ativacao.evento?.descricao || "",
             nivel_dificuldade: ativacao.evento?.nivelDificuldade || "",
@@ -90,12 +91,9 @@ const InscricaoTrilhasLimitado = () => {
           setImagemEvento(imagemUrl || null);
 
           if (ativacao.idAtivacao) {
-            console.log("Buscando GPX:", ativacao.evento.idEvento);
             const gpx = await buscarGpx(ativacao.evento.idEvento);
             setGpxData(gpx);
           }
-
-          console.log("Evento carregado:", ativacao);
         } else {
           console.error("Nenhuma ativação encontrada para este evento");
         }
@@ -141,17 +139,15 @@ const InscricaoTrilhasLimitado = () => {
   useEffect(() => {
     const carregarMediaAvaliacoes = async () => {
       try {
-        if (id) {
-          console.log('Buscando média de avaliações para ID:', id);
-          const resultado = await buscarMediaAvaliacoes(id);
-          console.log('Resultado da média:', resultado);
-          
+        if (evento?.idEvento) {
+          const resultado = await buscarMediaAvaliacoesPorEventoBase(evento.idEvento);
+
           if (resultado.mediaAvaliacoes !== undefined) {
             setMediaAvaliacoes(resultado.mediaAvaliacoes);
-            console.log('Média de avaliações definida:', resultado.mediaAvaliacoes);
+            setMensagemAvaliacao('');
           } else if (resultado.mensagem) {
+            setMediaAvaliacoes(0);
             setMensagemAvaliacao(resultado.mensagem);
-            console.log('Mensagem:', resultado.mensagem);
           }
         }
       } catch (error) {
@@ -160,51 +156,16 @@ const InscricaoTrilhasLimitado = () => {
     };
 
     carregarMediaAvaliacoes();
-  }, [id]);
+  }, [evento?.idEvento]);
 
-  // Carregar média de avaliações
-  useEffect(() => {
-    const carregarMediaAvaliacoes = async () => {
-      try {
-        if (id) {
-          const resultado = await buscarMediaAvaliacoes(id);
-          
-          if (resultado.mediaAvaliacoes !== undefined) {
-            setMediaAvaliacoes(resultado.mediaAvaliacoes);
-            console.log('Média de avaliações definida:', resultado.mediaAvaliacoes);
-          } else if (resultado.mensagem) {
-            setMensagemAvaliacao(resultado.mensagem);
-            console.log('Mensagem:', resultado.mensagem);
-          }
-        }
-      } catch (error) {
-        console.error('Erro ao carregar média de avaliações:', error);
-      }
-    };
-
-    carregarMediaAvaliacoes();
-  }, [id]);
-
-  {inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
   const handleEnviarComentario = async (comentarioObj) => {
-
-    <button
-      className="inscricao-trilha-btn btn-compartilhar"
-      style={{ marginTop: '10px', background: '#4caf50', color: '#fff' }}
-      onClick={handleCompartilhar}
-    >
-      Compartilhar trilha
-    </button>
     const comentarioCriado = await adicionarComentario({
       texto: comentarioObj.texto,
       idUsuario: usuario.id,
-      idAtivacaoEvento: id 
+      idAtivacaoEvento: id
     });
 
-    setComentarios(prev => [...prev, {
-      nome: comentarioCriado.nomeUsuario,
-      texto: comentarioCriado.texto
-    }]);
+    setComentarios(prev => [...prev, comentarioCriado]);
   };
 
 
@@ -369,9 +330,17 @@ const InscricaoTrilhasLimitado = () => {
       <CircleBackButton onClick={() => navigate(-1)} />
 
       <div className="inscricao-trilha-header" style={{ position: 'relative' }}>
-        {/* Avaliação média no canto superior direito do card (mantemos visual semelhante ao detalhes-evento) */}
         {(mediaAvaliacoes > 0 || mensagemAvaliacao) && (
-          <div className="avaliacao">
+          <div style={{
+            position: 'absolute',
+            top: '20px',
+            right: '20px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '6px',
+            zIndex: 1
+          }}>
             {mediaAvaliacoes > 0 ? (
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <span style={{ fontSize: '1.4rem', fontWeight: '700', color: '#226144' }}>
@@ -381,13 +350,11 @@ const InscricaoTrilhasLimitado = () => {
               </div>
             ) : (
               <span style={{ fontSize: '0.85rem', color: '#666', fontWeight: '500', textAlign: 'center' }}>
-                {mensagemAvaliacao.replace('tem', 'possui')}
+                {mensagemAvaliacao}
               </span>
             )}
           </div>
         )}
-
-        {/* Reusar o componente EventoInfo para aplicar o mesmo layout/estilização da tela de detalhes */}
         <EventoInfo
           evento={{
             titulo: evento.nome,
@@ -519,14 +486,32 @@ const InscricaoTrilhasLimitado = () => {
 
       <div className="card inscricao-trilha-mapa">
         <h3>Mapa da Trilha</h3>
-        <MapaTrilha
-          gpxFile={
-            gpxData
-              ? URL.createObjectURL(new Blob([gpxData], { type: "application/gpx+xml" }))
-              : "/assets/gpx-files/trilha-cachoeira-dos-grampos-fumaca.gpx"
-          }
-          altura="450px"
-        />
+        {gpxData ? (
+          <MapaTrilha
+            gpxFile={URL.createObjectURL(new Blob([gpxData], { type: "application/gpx+xml" }))}
+            altura="450px"
+          />
+        ) : (
+          <div style={{
+            height: '450px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            background: '#f8f9fa',
+            borderRadius: '12px',
+            border: '2px dashed #dee2e6'
+          }}>
+            <p style={{
+              fontSize: '1.1rem',
+              color: '#6c757d',
+              fontWeight: '500',
+              textAlign: 'center',
+              padding: '20px'
+            }}>
+              Esta trilha ainda não possui um percurso mapeado
+            </p>
+          </div>
+        )}
       </div>
       </div>
     </div>

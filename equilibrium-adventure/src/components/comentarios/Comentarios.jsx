@@ -64,19 +64,14 @@ const Comentarios = ({ comentariosIniciais = [], onEnviarComentario }) => {
 
   // helper: verifica se o comentário pertence ao usuário logado
   const isCommentOwner = (comentario) => {
-    if (!usuario) return false;
-    const userId = String(usuario.id || usuario.usuarioId || usuario.idUsuario || '');
-    const candidates = [
-      comentario.idUsuario,
-      comentario.usuario?.id,
-      comentario.usuarioId,
-      comentario.userId,
-      comentario.usuario?.usuarioId,
-      comentario.usuario?.idUsuario,
-      comentario.id
-    ];
-    return candidates.some(c => c !== undefined && c !== null && String(c) === userId) ||
-      (comentario.nomeUsuario && usuario.nome && String(comentario.nomeUsuario) === String(usuario.nome));
+    if (!usuario || !usuario.id) return false;
+    
+    const userId = String(usuario.id);
+    const commentUserId = comentario.idUsuario || comentario.usuario?.id || comentario.usuarioId || comentario.userId;
+    
+    if (!commentUserId) return false;
+    
+    return String(commentUserId) === userId;
   }
 
   const handleExcluir = async (comentarioId) => {

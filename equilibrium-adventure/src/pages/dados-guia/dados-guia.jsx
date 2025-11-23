@@ -32,6 +32,18 @@ export default function DadosGuia() {
 
     const [showSuccessPopup, setShowSuccessPopup] = useState(false);
 
+    // Reset completo do estado quando o guiaId muda
+    useEffect(() => {
+        setFormData({
+            nome: "",
+            email: "",
+            descricao: "",
+            imagem: null,
+            imagemPreview: null
+        });
+        setShowSuccessPopup(false);
+    }, [guiaId]);
+
     useEffect(() => {
         const preencher = async () => {
             try {
@@ -108,13 +120,10 @@ export default function DadosGuia() {
     useEffect(() => {
         const carregarImagem = async () => {
             if (!guiaId) {
-                console.log('guiaId não definido, não é possível carregar imagem');
                 return;
             }
-            console.log('Carregando imagem para guiaId:', guiaId);
             try {
                 const url = await buscarImagemUsuario(guiaId);
-                console.log('URL da imagem recebida:', url);
                 if (url) {
                     if (imagemUrlRef.current) {
                         try { URL.revokeObjectURL(imagemUrlRef.current); } catch (e) { /* ignore */ }
@@ -155,14 +164,6 @@ export default function DadosGuia() {
         }
 
         try {
-            console.log("Atualizando guia:", {
-                id: guiaId,
-                nome: formData.nome,
-                email: formData.email,
-                descricao: formData.descricao,
-                imagem: formData.imagem
-            });
-
             const result = await atualizarGuia(guiaId, {
                 nome: formData.nome,
                 email: formData.email,
@@ -170,7 +171,6 @@ export default function DadosGuia() {
                 imagem: formData.imagem
             });
             
-            console.log("Guia atualizado com sucesso:", result);
             setShowSuccessPopup(true);
         } catch (err) {
             console.error("Erro ao atualizar guia:", err);

@@ -358,24 +358,26 @@ const EditarEvento = () => {
 
                     <label>
                         Imagem do Evento:
-                        <div className="upload-box" onClick={() => document.getElementById('upload-input').click()}>
-                            {previewUrl || (formData.imagem && formData.imagem.url) ? (
-                                <img
-                                    src={previewUrl || (formData.imagem && formData.imagem.url)}
-                                    alt="Pré-visualização"
-                                    className="preview-img"
-                                />
-                            ) : formData.imagem && formData.imagem.name ? (
-                                <div className="trilha-preview">
-                                    <p>{formData.imagem.name}</p>
-                                </div>
-                            ) : (
-                                <div className="upload-placeholder">
-                                    <FaCloudUploadAlt size={50} color="#0C513F" />
-                                    <p>Clique ou arraste uma imagem aqui</p>
-                                </div>
-                            )}
-                        </div>
+                        <label htmlFor="upload-input" style={{ cursor: 'pointer' }}>
+                            <div className="upload-box">
+                                {previewUrl || (formData.imagem && formData.imagem.url) ? (
+                                    <img
+                                        src={previewUrl || (formData.imagem && formData.imagem.url)}
+                                        alt="Pré-visualização"
+                                        className="preview-img"
+                                    />
+                                ) : formData.imagem && formData.imagem.name ? (
+                                    <div className="trilha-preview">
+                                        <p>{formData.imagem.name}</p>
+                                    </div>
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <FaCloudUploadAlt size={50} color="#0C513F" />
+                                        <p>Clique ou arraste uma imagem aqui</p>
+                                    </div>
+                                )}
+                            </div>
+                        </label>
                         <input
                             type="file"
                             id="upload-input"
@@ -416,18 +418,20 @@ const EditarEvento = () => {
 
                     <label>
                         Mapa da Trilha (.gpx):
-                        <div className="upload-box" onClick={() => document.getElementById('upload-trilha-input').click()}>
-                            {formData.trilha ? (
-                                <div className="trilha-preview">
-                                    <p>{formData.trilha.name}</p>
-                                </div>
-                            ) : (
-                                <div className="upload-placeholder">
-                                    <FaCloudUploadAlt size={30} color="#0C513F" />
-                                    <p>Clique ou arraste o arquivo .gpx aqui</p>
-                                </div>
-                            )}
-                        </div>
+                        <label htmlFor="upload-trilha-input" style={{ cursor: 'pointer' }}>
+                            <div className="upload-box">
+                                {formData.trilha ? (
+                                    <div className="trilha-preview">
+                                        <p>{formData.trilha.name}</p>
+                                    </div>
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <FaCloudUploadAlt size={30} color="#0C513F" />
+                                        <p>Clique ou arraste o arquivo .gpx aqui</p>
+                                    </div>
+                                )}
+                            </div>
+                        </label>
                         <input
                             type="file"
                             id="upload-trilha-input"
