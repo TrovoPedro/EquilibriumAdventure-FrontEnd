@@ -48,8 +48,8 @@ export default function BannerComHeader() {
       <div className="imagem-pai">
         <img src={bannerImg} alt="Banner trilha" className="banner-img" />
         <div className="banner-text">
-          <h1>FAÇA AS MALAS</h1>
-          <h2>Vamos para algum lugar incrível</h2>
+          <h1>Faça as suas malas</h1>
+          <h2>Qual seu próximo destino? Encontre trilhas e experiências épicas.</h2>
         </div>
       </div>
     </div>
