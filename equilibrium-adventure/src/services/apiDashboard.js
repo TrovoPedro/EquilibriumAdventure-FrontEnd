@@ -64,6 +64,20 @@ export const getTopCidades = async (usuarioId) => {
   }
 };
 
+// Buscar top cidades por período
+export const getTopCidadesPeriodo = async (usuarioId, startDate = null, endDate = null) => {
+  try {
+    let url = `/top-cidades?usuarioId=${usuarioId}`;
+    if (startDate) url += `&startDate=${startDate}`;
+    if (endDate) url += `&endDate=${endDate}`;
+    
+    const response = await api.get(url);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // Buscar ranking de eventos
 export const getRankingEventos = async (usuarioId) => {
   try {
@@ -74,10 +88,38 @@ export const getRankingEventos = async (usuarioId) => {
   }
 };
 
+// Buscar ranking de eventos por período
+export const getRankingEventosPeriodo = async (usuarioId, startDate = null, endDate = null) => {
+  try {
+    let url = `/ranking-eventos?usuarioId=${usuarioId}`;
+    if (startDate) url += `&startDate=${startDate}`;
+    if (endDate) url += `&endDate=${endDate}`;
+    
+    const response = await api.get(url);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 // Buscar palavras dos comentários
 export const getPalavrasComentarios = async (usuarioId) => {
   try {
     const response = await api.get(`/palavras-comentarios?usuarioId=${usuarioId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Buscar palavras dos comentários por período
+export const getPalavrasComentariosPeriodo = async (usuarioId, startDate = null, endDate = null) => {
+  try {
+    let url = `/palavras-comentarios?usuarioId=${usuarioId}`;
+    if (startDate) url += `&startDate=${startDate}`;
+    if (endDate) url += `&endDate=${endDate}`;
+    
+    const response = await api.get(url);
     return response.data;
   } catch (error) {
     throw error;
@@ -109,6 +151,20 @@ export const getTendenciasMes = async (usuarioId) => {
 export const getTendenciasDia = async (usuarioId) => {
   try {
     const response = await api.get(`/tendencias-dia?usuarioId=${usuarioId}`);
+    return response.data && response.data.value ? response.data.value : response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Buscar tendências por período personalizado
+export const getTendenciasPeriodo = async (usuarioId, startDate = null, endDate = null) => {
+  try {
+    let url = `/tendencias-periodo?usuarioId=${usuarioId}`;
+    if (startDate) url += `&startDate=${startDate}`;
+    if (endDate) url += `&endDate=${endDate}`;
+    
+    const response = await api.get(url);
     return response.data && response.data.value ? response.data.value : response.data;
   } catch (error) {
     throw error;

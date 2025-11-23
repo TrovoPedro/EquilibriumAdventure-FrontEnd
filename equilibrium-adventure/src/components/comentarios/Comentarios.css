@@ -346,7 +346,7 @@
     top: 12px;
     right: 18px;
     display: flex;
-    flexDirection: column;
+    flex-direction: column;
     align-items: flex-end;
     gap: 6px;
     z-index: 1;

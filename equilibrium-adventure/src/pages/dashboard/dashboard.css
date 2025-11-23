@@ -424,28 +424,67 @@
 .chart-filters {
   display: flex;
   justify-content: flex-start;
-  gap: 10px;
+  align-items: center;
+  gap: 16px;
   margin-bottom: 24px; 
 }
 
-.chart-filters button {
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  color: white;
-  background-color: #065f46;
-  border: none;
-  border-radius: 5px;
+.date-filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.date-filter-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+}
+
+.date-input {
+  padding: 10px 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  font-size: 14px;
+  color: #1f2937;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: all 0.2s;
+}
+
+.date-input:hover {
+  border-color: #065f46;
+}
+
+.date-input:focus {
+  outline: none;
+  border-color: #065f46;
+  box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.1);
+}
+
+.chart-filters button {
+  padding: 8px 16px;
+  border: none;
+  background: white;
+  color: #6b7280;
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 22px;
+  height: 42px;
 }
 
 .chart-filters button:hover {
-  background-color: #064e3b; 
+  background: #f0fdf4;
+  color: #065f46;
 }
 
+.chart-filters button.active,
 .chart-filters button:active {
-  background-color: #043927; 
+  background: #065f46;
+  color: white;
 }
 
 .filter-btn {
@@ -501,11 +540,120 @@
   gap: 24px;
 }
 
+.qualitative-filters-bar {
+  background: #ffffff;
+  border-radius: 12px;
+  padding: 16px 24px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 1px solid #e5e7eb;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  margin-top: -20px;
+}
+
+.qualitative-filters-bar::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #336948, #226144, #0C513F);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.qualitative-filters-bar:hover::before {
+  opacity: 1;
+}
+
+.qualitative-filters-bar:hover {
+  box-shadow: 0 4px 12px rgba(6, 95, 70, 0.12);
+  border-color: #c1d4c1;
+}
+
+.filters-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.filter-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: #065f46;
+  white-space: nowrap;
+}
+
+.date-inputs-compact {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.date-input-compact {
+  padding: 8px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  background: white;
+  font-size: 13px;
+  color: #1f2937;
+  cursor: pointer;
+  transition: all 0.2s;
+  min-width: 140px;
+}
+
+.date-input-compact:hover {
+  border-color: #065f46;
+  background: #f8fffe;
+}
+
+.date-input-compact:focus {
+  outline: none;
+  border-color: #065f46;
+  box-shadow: 0 0 0 3px rgba(6, 95, 70, 0.1);
+}
+
+.date-separator {
+  font-size: 13px;
+  color: #6b7280;
+  font-weight: 500;
+}
+
+.filter-btn-compact {
+  padding: 8px 20px;
+  background: linear-gradient(135deg, #065f46 0%, #064e3b 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(6, 95, 70, 0.2);
+  white-space: nowrap;
+}
+
+.filter-btn-compact:hover {
+  background: linear-gradient(135deg, #064e3b 0%, #043927 100%);
+  box-shadow: 0 4px 12px rgba(6, 95, 70, 0.3);
+  transform: translateY(-1px);
+}
+
+.filter-btn-compact:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(6, 95, 70, 0.2);
+}
+
 .qualitative-top {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
-  margin-top: -20px; 
+  margin-top: 0;
 }
 
 .cities-panel,
