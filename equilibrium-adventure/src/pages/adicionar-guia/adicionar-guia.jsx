@@ -103,15 +103,30 @@ export default function AdicionarGuia() {
                 }
 
                 const response = await cadastrarGuia(formData);
-                if (response) {
+                
+                if (response.success) {
                     showSuccess("Guia cadastrado com sucesso!");
                     setTimeout(() => {
                         navigate(routeUrls.CATALOGO_TRILHAS_ADM);
                     }, 2000);
+                } else {
+                    let errorMsg = response.error;
+                    
+                    if (typeof errorMsg === 'string') {
+                        if (errorMsg.toLowerCase().includes('email') && errorMsg.toLowerCase().includes('já')) {
+                            showError("Este e-mail já está cadastrado no sistema.");
+                        } else if (errorMsg.toLowerCase().includes('cpf') && errorMsg.toLowerCase().includes('já')) {
+                            showError("Este CPF já está cadastrado no sistema.");
+                        } else {
+                            showError(errorMsg);
+                        }
+                    } else {
+                        showError("Erro ao cadastrar guia. Verifique os dados e tente novamente.");
+                    }
                 }
             } catch (error) {
                 console.error("Erro ao cadastrar guia:", error);
-                showError("Erro ao cadastrar guia. Verifique os dados e tente novamente.");
+                showError("Erro inesperado ao cadastrar guia. Tente novamente.");
             }
         };
         cadastrar();

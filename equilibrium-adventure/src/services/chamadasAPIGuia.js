@@ -25,9 +25,16 @@ export const cadastrarGuia = async (formData) => {
             headers: { "Content-Type": "multipart/form-data" }
         });
 
-        return true;
+        return { success: true, data: response.data };
     } catch (error) {
         console.error("Erro ao cadastrar guia:", error);
-        return false;
+        
+        const errorMessage = error.response?.data?.message 
+            || error.response?.data?.erro 
+            || error.response?.data 
+            || error.message 
+            || "Erro desconhecido ao cadastrar guia";
+        
+        return { success: false, error: errorMessage };
     }
 };

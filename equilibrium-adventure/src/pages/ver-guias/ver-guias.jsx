@@ -13,6 +13,7 @@ import PopUpAviso from "../../components/pop-up-aviso/pop-up-aviso";
 import PopUpOk from "../../components/pop-up-ok/pop-up-ok";
 import PopUpErro from "../../components/pop-up-erro/pop-up-erro";
 import { showWarning } from "../../utils/swalHelper";
+import { buscarEventosAtivosPorGuia } from "../../services/apiEvento";
 
 // Componente para popup de confirmação customizado
 const PopupConfirmacao = ({ guiaNome, onConfirm, onCancel }) => {
@@ -105,10 +106,43 @@ const VerGuias = () => {
         }
     };
 
-    const handleRemoverGuia = (guiaId) => {
+    const handleRemoverGuia = async (guiaId) => {
         const guia = guias.find(g => g.idUsuario === guiaId);
-        setGuiaToDelete({ id: guiaId, nome: guia?.nome || 'Guia' });
-        setShowConfirmPopup(true);
+        
+        try {
+            // Buscar eventos ativos do guia
+            const eventosAtivos = await buscarEventosAtivosPorGuia(guiaId);
+            
+            // Filtrar eventos que não estão finalizados
+            const eventosEmAndamento = eventosAtivos.filter(
+                evento => (evento.log || "").trim().toUpperCase() !== "FINALIZADO"
+            );
+            
+            if (eventosEmAndamento.length > 0) {
+                // Se o guia tem eventos ativos, mostrar aviso especial
+                showWarning(
+                    `Este guia possui ${eventosEmAndamento.length} evento(s) ativo(s) em andamento. Ao removê-lo, os eventos associados poderão ser afetados. Deseja continuar com a remoção?`,
+                    'Atenção: Guia com Eventos Ativos',
+                    'Sim, remover mesmo assim',
+                    'Cancelar',
+                    true
+                ).then((result) => {
+                    if (result.isConfirmed) {
+                        setGuiaToDelete({ id: guiaId, nome: guia?.nome || 'Guia' });
+                        setShowConfirmPopup(true);
+                    }
+                });
+            } else {
+                // Se não tem eventos ativos, prosseguir normalmente
+                setGuiaToDelete({ id: guiaId, nome: guia?.nome || 'Guia' });
+                setShowConfirmPopup(true);
+            }
+        } catch (error) {
+            console.error("Erro ao verificar eventos do guia:", error);
+            // Em caso de erro na verificação, prosseguir com o fluxo normal
+            setGuiaToDelete({ id: guiaId, nome: guia?.nome || 'Guia' });
+            setShowConfirmPopup(true);
+        }
     };
 
     const confirmarRemocaoGuia = async () => {

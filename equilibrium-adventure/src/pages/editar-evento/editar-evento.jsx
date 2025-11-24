@@ -13,6 +13,7 @@ import ButtonBack from "../../components/circle-back-button2/circle-back-button2
 import routeUrls from "../../routes/routeUrls";
 import { buscarImagemEvento, buscarImagemEventoBlob } from "../../services/apiEvento";
 import { buscarDadosEvento, buscarenderecoEvento } from "../../services/chamadasAPIEvento";
+import { useAuth } from "../../context/AuthContext";
 
 const EditarEvento = () => {
     const [formData, setFormData] = useState({
@@ -40,6 +41,7 @@ const EditarEvento = () => {
 
     const { id } = useParams();
     const navigate = useNavigate();
+    const { usuario } = useAuth();
 
     useEffect(() => {
         scrollToTop();
@@ -47,10 +49,20 @@ const EditarEvento = () => {
 
     useEffect(() => {
         const loadEventoData = async () => {
-            if (id) {
-                try {
-                    const eventoData = await buscarDadosEvento({ id });
-                    if (eventoData) {
+            if (!id || !usuario) return;
+            
+            try {
+                const eventoData = await buscarDadosEvento({ id });
+                if (eventoData) {
+                    // Verificar se o guia logado é o responsável pelo evento
+                    if (eventoData.responsavel && eventoData.responsavel !== usuario.id) {
+                        await showError(
+                            "Você não tem permissão para editar este evento.",
+                            "Acesso Negado"
+                        );
+                        navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+                        return;
+                    }
                         setEventoId(eventoData.id_evento || id)
                         setFormData((prev) => ({
                             ...prev,
@@ -130,35 +142,34 @@ const EditarEvento = () => {
                                 console.error("Erro ao carregar PDF do evento:", error);
                             }
                         }
-                    }
-                } catch (error) {
-                    console.error("Erro ao carregar dados do evento:", error);
                 }
+            } catch (error) {
+                console.error("Erro ao carregar dados do evento:", error);
             }
         };
 
         let generatedUrl = null;
 
         const loadImagemEvento = async () => {
-            if (id) {
-                try {
-                    const imgBlob = await buscarImagemEventoBlob(id);
-                    if (imgBlob) {
-                        generatedUrl = URL.createObjectURL(imgBlob);
-                        const imagemNome = `imagem-${eventoId || id}.jpg`;
-                        setFormData((prev) => ({
-                            ...prev,
-                            imagem: {
-                                name: imagemNome,
-                                url: generatedUrl,
-                                blob: imgBlob
-                            }
-                        }));
-                        setPreviewUrl(generatedUrl);
-                    }
-                } catch (error) {
-                    console.error("Erro ao carregar imagem do evento:", error);
+            if (!id || !usuario) return;
+            
+            try {
+                const imgBlob = await buscarImagemEventoBlob(id);
+                if (imgBlob) {
+                    generatedUrl = URL.createObjectURL(imgBlob);
+                    const imagemNome = `imagem-${eventoId || id}.jpg`;
+                    setFormData((prev) => ({
+                        ...prev,
+                        imagem: {
+                            name: imagemNome,
+                            url: generatedUrl,
+                            blob: imgBlob
+                        }
+                    }));
+                    setPreviewUrl(generatedUrl);
                 }
+            } catch (error) {
+                console.error("Erro ao carregar imagem do evento:", error);
             }
         };
 
@@ -179,7 +190,7 @@ const EditarEvento = () => {
                 }
             }
         };
-    }, [id]);
+    }, [id, usuario]);
 
     const handleBack = () => {
         navigate(routeUrls.CATALOGO_TRILHAS_ADM);

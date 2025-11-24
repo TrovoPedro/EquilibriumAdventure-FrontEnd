@@ -51,6 +51,7 @@ const EventoInfo = ({
                 <input
                   type="date"
                   value={evento.dataEvento}
+                  min={new Date().toISOString().split('T')[0]}
                   onChange={(e) => onChange('dataEvento', e.target.value)}
                 />
               ) : (

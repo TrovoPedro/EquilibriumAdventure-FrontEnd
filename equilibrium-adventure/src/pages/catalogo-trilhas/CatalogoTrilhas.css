@@ -8,13 +8,11 @@
 
 .error-text {
   text-align: center;
-  color: #dc3545;
+  color: #666;
   font-size: 1.1rem;
   padding: 20px;
   margin: 20px 0;
-  background: #fff;
-  border-radius: 8px;
-  border: 1px solid #ffcdd2;
+  grid-column: 1 / -1;
 }
 
 .no-events-text {
