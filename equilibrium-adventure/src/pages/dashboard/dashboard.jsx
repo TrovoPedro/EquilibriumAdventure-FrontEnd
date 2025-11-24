@@ -5,6 +5,7 @@ import ButtonBack from '../../components/circle-back-button2/circle-back-button2
 import useGoBack from '../../utils/useGoBack';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../../context/AuthContext';
+import { showError } from '../../utils/swalHelper';
 import {
   getEventosAtivosFuturos,
   getTaxaOcupacaoMedia,
@@ -287,6 +288,15 @@ const Dashboard = () => {
   const selectedMonthOccupancy = monthlyOccupancyData[selectedMonth] || 0;
 
   const handlePeriodoFilter = async () => {
+    // Validar se a data inicial é maior que a data final
+    if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+      await showError(
+        'A data inicial não pode ser maior que a data final.',
+        'Datas Inválidas'
+      );
+      return;
+    }
+
     try {
       setLoading(true);
       
@@ -329,7 +339,65 @@ const Dashboard = () => {
     }
   };
 
+  const handleLimparFiltro = async () => {
+    setStartDate('');
+    setEndDate('');
+    
+    try {
+      setLoading(true);
+      
+      let usuarioId = null;
+      if (usuario && (usuario.id || usuario.id_usuario)) {
+        usuarioId = usuario.id || usuario.id_usuario;
+      } else {
+        const stored = sessionStorage.getItem("usuario") || localStorage.getItem("usuario");
+        if (!stored) {
+          return;
+        }
+        try {
+          const userData = JSON.parse(stored);
+          usuarioId = userData.id || userData.id_usuario;
+        } catch (err) {
+          return;
+        }
+      }
+
+      try {
+        const hoje = new Date();
+        const umMesAtras = new Date();
+        umMesAtras.setDate(hoje.getDate() - 30);
+        
+        const endDateStr = hoje.toISOString().split('T')[0];
+        const startDateStr = umMesAtras.toISOString().split('T')[0];
+        
+        const tendenciasData = await getTendenciasPeriodo(usuarioId, startDateStr, endDateStr);
+        
+        if (tendenciasData && tendenciasData.length > 0) {
+          const formattedChart = preencherDiasFaltantes(tendenciasData, startDateStr, endDateStr);
+          setChartData(formattedChart);
+        } else {
+          setChartData([]);
+        }
+      } catch (error) {
+        setChartData([]);
+      }
+    } catch (error) {
+      // Silenciar erro
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleQualitativoFilter = async () => {
+    // Validar se a data inicial é maior que a data final
+    if (startDateQual && endDateQual && new Date(startDateQual) > new Date(endDateQual)) {
+      await showError(
+        'A data inicial não pode ser maior que a data final.',
+        'Datas Inválidas'
+      );
+      return;
+    }
+
     try {
       setLoading(true);
       
@@ -399,6 +467,78 @@ const Dashboard = () => {
         }
       } catch (error) {
         
+      }
+    } catch (error) {
+      
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLimparFiltroQualitativo = async () => {
+    setStartDateQual('');
+    setEndDateQual('');
+    
+    try {
+      setLoading(true);
+      
+      let usuarioId = null;
+      if (usuario && (usuario.id || usuario.id_usuario)) {
+        usuarioId = usuario.id || usuario.id_usuario;
+      } else {
+        const stored = sessionStorage.getItem("usuario") || localStorage.getItem("usuario");
+        if (!stored) {
+          return;
+        }
+        try {
+          const userData = JSON.parse(stored);
+          usuarioId = userData.id || userData.id_usuario;
+        } catch (err) {
+          return;
+        }
+      }
+
+      try {
+        const citiesDataFromAPI = await getTopCidades(usuarioId);
+        if (citiesDataFromAPI && citiesDataFromAPI.length > 0) {
+          const formattedCities = citiesDataFromAPI.map((item, index) => ({
+            name: item.cidade,
+            value: item.totalParticipantes,
+            color: ['#10b981', '#3b82f6', '#8b5cf6', '#94a3b8', '#6b7280'][index % 5],
+            state: ''
+          }));
+          setCitiesData(formattedCities);
+        }
+      } catch (error) {
+        // Silenciar erro
+      }
+
+      try {
+        const eventsRankingData = await getRankingEventos(usuarioId);
+        if (eventsRankingData && eventsRankingData.length > 0) {
+          const formattedRanking = eventsRankingData.map(item => ({
+            name: item.nome,
+            inscricoes: item.totalInscricoes,
+            avaliacao: item.notaMedia
+          }));
+          setEventsRanking(formattedRanking);
+        }
+      } catch (error) {
+        // Silenciar erro
+      }
+
+      try {
+        const wordsData = await getPalavrasComentarios(usuarioId);
+        if (wordsData && wordsData.length > 0) {
+          const formattedWords = wordsData.map(item => ({
+            text: item.palavra,
+            size: Math.min(Math.max(item.quantidade * 4, 18), 64),
+            color: item.quantidade > 5 ? '#10b981' : item.quantidade > 2 ? '#3b82f6' : '#6b7280'
+          }));
+          setWords(formattedWords);
+        }
+      } catch (error) {
+        // Silenciar erro
       }
     } catch (error) {
       
@@ -644,6 +784,12 @@ const Dashboard = () => {
                   >
                     Buscar
                   </button>
+                  <button 
+                    className="filter-btn active" 
+                    onClick={handleLimparFiltro}
+                  >
+                    Limpar
+                  </button>
                 </div>
                 {chartData.length > 0 ? (
                   <ResponsiveContainer width="100%" height={450}>
@@ -670,7 +816,7 @@ const Dashboard = () => {
           <div className="qualitativos-content">
             <div className="qualitative-filters-bar">
               <div className="filters-left">
-                <span className="filter-label">📅 Filtrar período:</span>
+                <span className="filter-label">Filtrar período:</span>
                 <div className="date-inputs-compact">
                   <input
                     type="date"
@@ -691,12 +837,20 @@ const Dashboard = () => {
                   />
                 </div>
               </div>
-              <button 
-                className="filter-btn-compact" 
-                onClick={handleQualitativoFilter}
-              >
-                🔍 Buscar
-              </button>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button 
+                  className="filter-btn-compact" 
+                  onClick={handleQualitativoFilter}
+                >
+                  Buscar
+                </button>
+                <button 
+                  className="filter-btn-compact" 
+                  onClick={handleLimparFiltroQualitativo}
+                >
+                  Limpar
+                </button>
+              </div>
             </div>
             
             <div className="qualitative-top">
