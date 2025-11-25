@@ -33,6 +33,7 @@ const isAnamneseValida = (dataString) => {
 export const AuthProvider = ({ children }) => {
   const [usuario, setUsuario] = useState(null);
   const [anamnese, setAnamnese] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   // Carrega usuário salvo no sessionStorage
   useEffect(() => {
@@ -41,6 +42,7 @@ export const AuthProvider = ({ children }) => {
       const parsedUser = JSON.parse(storedUser);
       setUsuario(parsedUser);
     }
+    setLoading(false);
   }, []);
 
   // Busca e valida anamnese
@@ -109,7 +111,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ usuario, anamnese, login, logout, recarregarAnamnese }}>
+    <AuthContext.Provider value={{ usuario, anamnese, login, logout, recarregarAnamnese, loading }}>
       {children}
     </AuthContext.Provider>
   );
