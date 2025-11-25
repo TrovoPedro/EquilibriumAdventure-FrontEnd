@@ -19,6 +19,7 @@ export default function AdicionarGuia() {
         imagem: null
     });
     const [previewUrl, setPreviewUrl] = useState(null);
+    const [isMobile, setIsMobile] = useState(false);
 
     const handleChange = (e) => {
         const { name, value, files, dataset } = e.target;
@@ -46,6 +47,16 @@ export default function AdicionarGuia() {
             [field]: value,
         });
     };
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobile(window.innerWidth <= 768);
+        };
+
+        handleResize();
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -181,12 +192,14 @@ export default function AdicionarGuia() {
                             />
 
                         </div>
-                        <div className="adicionar-guia-botoes">
-                            <button type="submit" className="adicionar-guia-btn">Registrar</button>
-                            <button type="button" className="adicionar-guia-btn" onClick={() => navigate(routeUrls.VER_GUIAS)}>
-                                Visualizar Guias
-                            </button>
-                        </div>
+                        {!isMobile && (
+                            <div className="adicionar-guia-botoes">
+                                <button type="submit" className="adicionar-guia-btn">Registrar</button>
+                                <button type="button" className="adicionar-guia-btn" onClick={() => navigate(routeUrls.VER_GUIAS)}>
+                                    Visualizar Guias
+                                </button>
+                            </div>
+                        )}
                     </div>
                     <div className="adicionar-guia-center-column">
                         <label htmlFor="nome">
@@ -245,6 +258,14 @@ export default function AdicionarGuia() {
                             ></textarea>
                         </label>
                     </div>
+                    {isMobile && (
+                        <div className="adicionar-guia-botoes mobile-buttons-at-end">
+                            <button type="submit" className="adicionar-guia-btn">Registrar</button>
+                            <button type="button" className="adicionar-guia-btn" onClick={() => navigate(routeUrls.VER_GUIAS)}>
+                                Visualizar Guias
+                            </button>
+                        </div>
+                    )}
                 </form>
                 </div>
             </div>

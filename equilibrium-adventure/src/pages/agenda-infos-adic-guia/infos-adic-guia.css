@@ -122,6 +122,8 @@
     width: 80px;
 }
 
+
+
 /* Header de informações pessoais com botão de voltar */
 .infos-adic-guia-page .info-pessoais-header {
     display: flex;
@@ -817,3 +819,196 @@
 .infos-adic-guia-page .card-escolha-inline-custom:hover h2::after {
     width: 80px;
 }
+
+/* ==========================
+   Mobile / Responsive Rules
+   These rules only apply to narrow viewports and purposely
+   override desktop properties without changing desktop styles.
+   ========================== */
+
+/* Tablet / small desktop tablets */
+@media (max-width: 900px) {
+    .infos-adic-guia-page {
+        padding: 60px 12px 70px 12px;
+    }
+
+    .infos-adic-guia-page .home-container {
+        padding: 0 40px 40px 40px;
+    }
+
+    .infos-adic-guia-page .cards-father {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 20px;
+    }
+
+    .infos-adic-guia-page .card-info-guia,
+    .infos-adic-guia-page .card-imagem {
+        width: 100%;
+        height: auto;
+    }
+
+    .infos-adic-guia-page .personal-info-card {
+        flex-direction: row;
+        gap: 20px;
+        padding: 20px;
+        align-items: center;
+    }
+
+    .infos-adic-guia-page .user-photo {
+        width: 130px;
+        height: 130px;
+    }
+
+    .infos-adic-guia-page .cards-eventos {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .infos-adic-guia-page .eventos-anamnese-ativos {
+        width: 100%;
+        height: auto;
+        padding: 20px;
+    }
+
+    .infos-adic-guia-page .anamneses-container,
+    .infos-adic-guia-page .eventos-container {
+        height: auto;
+    }
+}
+
+/* Mobile phones */
+@media (max-width: 600px) {
+    .infos-adic-guia-page {
+        padding: 60px 10px 60px 10px; /* aumentar espaçamento do topo em mobile */
+    }
+
+    .infos-adic-guia-page .home-container {
+        padding: 0 16px 24px 16px;
+    }
+
+    .infos-adic-guia-page .info-pessoais-header h2,
+    .infos-adic-guia-page .card-imagem h2,
+    .infos-adic-guia-page .eventos-anamnese-ativos h2 {
+        font-size: 20px;
+    }
+
+    /* Fazer título do card de escolher-data inline ter o mesmo tamanho dos demais títulos em mobile */
+    .card-escolha-inline-custom h2 {
+        font-size: 20px !important;
+        margin: 0 0 20px 0 !important;
+        padding-bottom: 10px !important;
+        color: #1F2937 !important;
+    }
+
+    .infos-adic-guia-page .personal-info-card {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 18px;
+        gap: 12px;
+    }
+
+    .infos-adic-guia-page .user-photo {
+        width: 100px;
+        height: 100px;
+        border-width: 3px;
+    }
+
+    .infos-adic-guia-page .user-info-content {
+        align-items: center;
+        gap: 12px;
+    }
+
+    .infos-adic-guia-page .user-info h3 {
+        font-size: 18px;
+    }
+
+    .infos-adic-guia-page .user-role {
+        font-size: 12px;
+        padding: 4px 8px;
+    }
+
+    .infos-adic-guia-page .edit-info-btn {
+        min-width: 0;
+        width: 50px;
+        margin-left: -16px;
+        padding: 12px 18px;
+        height: 48px;
+        font-size: 16px;
+        border-radius: 12px;
+    }
+
+    .infos-adic-guia-page .anamneses-cards {
+        padding: 10px 6px;
+    }
+
+    .infos-adic-guia-page .anamnese-card {
+        width: 180px;
+        min-height: 150px;
+    }
+
+    .infos-adic-guia-page .evento-ativo-card {
+        width: 220px;
+        min-width: 220px;
+        height: auto;
+    }
+
+    .infos-adic-guia-page .evento-image {
+        height: 140px;
+    }
+
+    /* Make nav arrows slightly smaller and less obtrusive */
+    .infos-adic-guia-page .anamneses-container .nav-arrow,
+    .infos-adic-guia-page .eventos-container .nav-arrow {
+        width: 36px;
+        height: 36px;
+        font-size: 18px;
+    }
+}
+
+/* Very small phones */
+@media (max-width: 420px) {
+    .infos-adic-guia-page {
+        padding-top: 56px; /* pequeno ajuste extra para telas muito pequenas */
+    }
+
+    .infos-adic-guia-page .user-photo {
+        width: 88px;
+        height: 88px;
+    }
+
+    /* Aumentar botão Editar Informações em telas muito pequenas */
+    .infos-adic-guia-page .edit-info-btn {
+        width: calc(100% + 36px);
+        margin-left: -18px;
+        padding: 11px 14px;
+        height: 50px;
+        font-size: 15px;
+        border-radius: 10px;
+    }
+
+    .infos-adic-guia-page .user-info h3 {
+        font-size: 16px;
+    }
+
+    .infos-adic-guia-page .anamnese-card {
+        width: 160px;
+    }
+
+    .infos-adic-guia-page .evento-ativo-card {
+        width: 180px;
+        min-width: 180px;
+    }
+
+    .infos-adic-guia-page .card-info-guia,
+    .infos-adic-guia-page .card-imagem,
+    .infos-adic-guia-page .eventos-anamnese-ativos {
+        padding: 18px;
+    }
+
+    .infos-adic-guia-page .info-pessoais-header {
+        gap: 10px;
+    }
+}
+

@@ -5,6 +5,7 @@ import { listarAnamnesesPorResponsavel } from "../../services/apiAnamnese";
 import defaultAvatar from "../../assets/imagem-do-usuario-grande.png";
 import EscolhaDataCard from "../escolher-data/escolher-data";
 import ButtonBack from "../../components/circle-back-button2/circle-back-button2";
+import ButtonSubmitForm from "../../components/button-padrao/button-submit-form";
 import { useNavigate } from "react-router-dom";
 import routeUrls from "../../routes/routeUrls";
 import { buscarImagemUsuario } from "../../services/apiUsuario";
@@ -173,7 +174,7 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                                         <h3>{nomeUsuario}</h3>
                                         <span className="user-role">{tipoUsuario}</span>
                                     </div>
-                                        <button className="edit-info-btn agenda-aventureiro-btn-info" onClick={handleEditInfo}>Editar Informações</button>
+                                        <ButtonSubmitForm title="Editar Informações" type="button" onClick={handleEditInfo} />
                                 </div>
                             </div>
                         </div>

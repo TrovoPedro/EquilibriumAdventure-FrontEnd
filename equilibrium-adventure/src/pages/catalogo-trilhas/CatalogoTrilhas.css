@@ -921,7 +921,8 @@ h2,
 @media (max-width: 600px) {
   .anuncios-titulo,
   .destinos-titulo {
-    text-align: center !important;
+    /* Alinhar à esquerda apenas no mobile (não altera desktop) */
+    text-align: left !important;
     font-size: 1.6rem !important;
     margin-bottom: 20px !important;
   }

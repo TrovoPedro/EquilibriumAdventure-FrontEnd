@@ -284,11 +284,39 @@
 	
 	.ativar-evento-btn {
 		font-size: 1.1rem;
-		padding: 14px 32px;
+		padding: 14px 16px; /* padding mais simétrico para alinhar visualmente com inputs */
 		width: 100%;
+		max-width: 100%;
+		display: block;
+		box-sizing: border-box;
 	}
-	
-	.form-row-end { justify-content: stretch; margin-top: 16px; }
+
+	/* Garante que o container do botão ocupe toda a largura
+	   e que o botão fique com a mesma largura dos campos */
+	.form-row-end {
+		display: flex;
+		width: 100%;
+		justify-content: center;
+		margin-top: 16px;
+	}
+
+	.form-row-end .ativar-evento-btn { width: 100%; }
+
+	/* Ajuste específico para o componente de botão reutilizável usado nesta página
+	   (classe .btn-submit-form) — aplicado apenas no mobile para igualar largura */
+	.form-row-end .btn-submit-form {
+		width: 100% !important;
+		max-width: 100% !important;
+		min-width: 0 !important;
+		padding: 12px 16px !important;
+		box-sizing: border-box !important;
+		display: flex !important;
+		align-items: center !important;
+		justify-content: center !important;
+		/* Garante altura mínima igual aos inputs e centraliza texto verticalmente */
+		min-height: 48px !important;
+		height: auto !important;
+	}
 }
 
 @media (max-width: 480px) {

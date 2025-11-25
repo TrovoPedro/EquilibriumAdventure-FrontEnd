@@ -63,6 +63,50 @@ html, body, #root {
 	position: relative; /* necessário para o pseudo-elemento de fundo */
 }
 
+/* Tornar o botão de voltar visível apenas na versão responsiva (mobile)
+   e invisível no desktop. Isso altera apenas esta página através do
+   seletor .editar-dados-container, sem tocar no CSS global do componente.
+*/
+.editar-dados-container .circle-back-btn {
+	display: flex !important; /* exibe o botão no desktop */
+	position: absolute; /* posicionamento relativo ao container no desktop */
+	top: 24px;
+	left: 24px;
+	width: 40px;
+	height: 40px;
+	z-index: 6;
+	background: rgba(255,255,255,0.95);
+	box-shadow: 0 4px 12px rgba(0,0,0,0.12);
+	border-radius: 50%;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+}
+
+@media (max-width: 768px) {
+	.editar-dados-container .circle-back-btn {
+		display: flex !important; /* mostrar também no mobile */
+		position: absolute !important; /* relativo ao container, não fixo */
+		top: 14px !important;
+		left: 12px !important;
+		width: 44px !important;
+		height: 44px !important;
+		z-index: 6 !important;
+		background: rgba(255,255,255,0.95) !important;
+		box-shadow: 0 4px 12px rgba(0,0,0,0.12) !important;
+		border-radius: 50% !important;
+		align-items: center !important;
+		justify-content: center !important;
+		padding: 0 !important;
+		pointer-events: auto !important;
+	}
+
+	.editar-dados-container .circle-back-arrow {
+		width: 18px !important;
+		height: 18px !important;
+	}
+}
+
 /* Fundo em proporção semelhante à tela de Escolher Guia */
 .editar-dados-container::before {
 	content: "";
@@ -218,6 +262,8 @@ html, body, #root {
 	border-color: #226144;
 	box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
 }
+
+/* removed mobile portal styles; button is rendered inside the container for both desktop and mobile */
 
 
 
