@@ -56,6 +56,18 @@
   text-decoration: underline;
 }
 
+/* Ocultar link AGENDA do menu centralizado e lateral em telas maiores que 500px (desktop) */
+@media (min-width: 501px) {
+  /* AVENTUREIRO: posição 3 */
+  .header-center li:nth-child(3),
+  .header-side-menu li:nth-child(3),
+  /* ADMINISTRADOR: posição 6 */
+  .header-center li:nth-child(6),
+  .header-side-menu li:nth-child(6) {
+    display: none;
+  }
+}
+
 /* Botões à direita */
 .header-right {
   display: flex;

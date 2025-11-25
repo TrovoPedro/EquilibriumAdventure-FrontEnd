@@ -28,11 +28,24 @@ const DetalhesEvento = () => {
 
   useEffect(() => {
     const carregarEvento = async () => {
+      if (!id) return;
+      
       try {
         const eventoData = await buscarEventoAtivoPorId(id);
 
         if (eventoData.length > 0) {
           const ativacao = eventoData[0];
+          
+          // Verificar se o guia logado é o responsável pelo evento
+          // Só valida se o usuário estiver logado, for GUIA e o evento tiver responsável definido
+          if (usuario && usuario.tipo_usuario === 'GUIA' && ativacao.evento?.responsavel && ativacao.evento.responsavel !== usuario.id) {
+            await showError(
+              "Você não tem permissão para visualizar os detalhes deste evento.",
+              "Acesso Negado"
+            );
+            navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+            return;
+          }
           const imagemUrl = await buscarImagemEvento(ativacao.evento.idEvento);
 
           setEvento({
@@ -66,7 +79,7 @@ const DetalhesEvento = () => {
     };
 
     carregarEvento();
-  }, [id]);
+  }, [id, usuario, navigate]);
 
 
   const carregarComentarios = async () => {
@@ -136,6 +149,41 @@ const DetalhesEvento = () => {
   };
 
   const handleSalvarEvento = async () => {
+    // Validar se a data não é anterior à data atual
+    const dataAtual = new Date();
+    const dataEvento = new Date(evento.dataEvento);
+    
+    // Comparar apenas as datas (sem hora)
+    const dataAtualSemHora = new Date(dataAtual.getFullYear(), dataAtual.getMonth(), dataAtual.getDate());
+    const dataEventoSemHora = new Date(dataEvento.getFullYear(), dataEvento.getMonth(), dataEvento.getDate());
+    
+    if (dataEventoSemHora < dataAtualSemHora) {
+      await showError(
+        'A data do evento não pode ser anterior à data atual.',
+        'Data Inválida'
+      );
+      return;
+    }
+    
+    // Se a data do evento for hoje, validar também o horário
+    if (dataEventoSemHora.getTime() === dataAtualSemHora.getTime()) {
+      const [horaInicio, minutoInicio] = evento.horaInicio.split(':').map(Number);
+      const horaAtual = dataAtual.getHours();
+      const minutoAtual = dataAtual.getMinutes();
+      
+      // Converter tudo para minutos para facilitar a comparação
+      const minutosInicio = horaInicio * 60 + minutoInicio;
+      const minutosAtuais = horaAtual * 60 + minutoAtual;
+      
+      if (minutosInicio < minutosAtuais) {
+        await showError(
+          'O horário de início não pode ser anterior ao horário atual para eventos de hoje.',
+          'Horário Inválido'
+        );
+        return;
+      }
+    }
+
     const confirmResult = await showWarning('Deseja salvar as alterações neste evento?', 'Confirmar', 'Sim', 'Cancelar', true);
     if (!confirmResult || !confirmResult.isConfirmed) return;
 

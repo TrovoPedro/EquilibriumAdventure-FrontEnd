@@ -51,6 +51,7 @@ const EventoInfo = ({
                 <input
                   type="date"
                   value={evento.dataEvento}
+                  min={new Date().toISOString().split('T')[0]}
                   onChange={(e) => onChange('dataEvento', e.target.value)}
                 />
               ) : (
@@ -110,7 +111,7 @@ const EventoInfo = ({
         </div>
       </div>
 
-      <div className="campos-linha" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', marginTop: '2.5rem', justifyContent: 'center', width: '100%' }}>
+      <div className="campos-linha" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '1.5rem', marginTop: '0', justifyContent: 'center', width: '100%' }}>
         <div className="campo-info" style={{ width: '500px' }}>
           <label style={{ marginBottom: '0.5rem', color: '#226144' }}>CATEGORIA:</label>
           {editavel ? (

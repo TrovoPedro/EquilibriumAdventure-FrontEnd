@@ -241,8 +241,29 @@ export default function EscolhaDataCard({ onClose }) {
       ? "#219150"
       : "#f0f0f0";
 
+    const getTooltipMessage = () => {
+      if (!itemDoDia) return "";
+      
+      if (itemDoDia.tipo === "ANAM") {
+        return "Anamnese agendada nessa data";
+      } else if (itemDoDia.tipo === "EVENTO") {
+        return "Evento agendado nessa data";
+      } else if (itemDoDia.tipo === "DISP") {
+        return "Data já adicionada";
+      }
+      return itemDoDia.descricao || "";
+    };
+
     return (
-      <Tooltip title={itemDoDia?.descricao || ""} arrow>
+      <Tooltip 
+        title={getTooltipMessage()} 
+        arrow
+        PopperProps={{
+          sx: {
+            zIndex: 100001,
+          }
+        }}
+      >
         <span style={{ display: "inline-block" }}>
           <PickersDay
             {...other}

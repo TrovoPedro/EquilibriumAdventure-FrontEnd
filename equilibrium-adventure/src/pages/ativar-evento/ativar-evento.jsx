@@ -13,20 +13,43 @@ import swal from "sweetalert2";
 import { scrollToTopSmooth } from "../../utils/scrollToTop";
 import { formatarPrecoInput, parsePreco } from "../../utils/formatPrice";
 import { formatarDuracao, parseDuracao } from "../../utils/formatDuration";
+import { useAuth } from "../../context/AuthContext";
+import { buscarDadosEvento } from "../../services/chamadasAPIEvento";
+import { showError } from "../../utils/swalHelper";
 
 export default function AtivarEvento() {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { usuario } = useAuth();
 
   useEffect(() => {
     scrollToTopSmooth();
   }, []);
 
   useEffect(() => {
-    if (id) {
-      setFormData(prev => ({ ...prev, evento: id }));
-    }
-  }, [id]);
+    const verificarPropriedade = async () => {
+      if (!id || !usuario) return;
+      
+      try {
+        const eventoData = await buscarDadosEvento({ id });
+        if (eventoData) {
+          if (eventoData.responsavel && eventoData.responsavel !== usuario.id) {
+            await showError(
+              "Você não tem permissão para ativar este evento.",
+              "Acesso Negado"
+            );
+            navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+            return;
+          }
+          setFormData(prev => ({ ...prev, evento: id }));
+        }
+      } catch (error) {
+        console.error("Erro ao verificar propriedade do evento:", error);
+      }
+    };
+    
+    verificarPropriedade();
+  }, [id, usuario, navigate]);
 
   const [formData, setFormData] = useState({
     horaInicio: '',

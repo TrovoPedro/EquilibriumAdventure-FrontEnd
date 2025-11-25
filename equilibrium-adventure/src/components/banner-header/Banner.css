@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Fustat:wght@200..800&display=swap');
 
 .main-header {
@@ -24,24 +25,21 @@
 }
 
 .btn {
-  border: 1px solid #fff;
-  border-radius: 6px;
-  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
   color: #fff;
-  font-weight: 700;
-  font-size: 1.2rem;
+  font-weight: 600;
+  font-size: 1rem;
   font-family: 'Raleway', sans-serif;
-  padding: 10px 20px;
+  padding: 8px 16px;
   cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
+  transition: background 180ms ease, color 180ms ease, transform 160ms ease;
 }
 
 .btn:hover {
-  background: #fff;
-  color: var(--cor-principal);
-  transform: scale(1.05);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+  transform: translateY(-1px);
 }
 
 /* Specific header button variants */
@@ -52,6 +50,7 @@
   border: 3px solid #ffffff;
   border-radius: 3px;
 }
+
 .btn-create:hover {
   /* mantém as cores originais, apenas aplica leve escala no hover */
   transform: scale(1.05);
@@ -60,10 +59,13 @@
 .menu .btn-enter {
   background: transparent !important;
   color: #ffffff !important;
-  border: 3px solid #ffffff !important; /* thicker white border */
+  border: 3px solid #ffffff !important;
+  /* thicker white border */
   transition: border-color 160ms ease, transform 120ms ease, background 160ms ease;
-  border-radius: 3px; /* menos arredondado para entrar */
+  border-radius: 3px;
+  /* menos arredondado para entrar */
 }
+
 .menu .btn-enter:hover {
   /* não altera cor/fundo no hover; apenas leve escala */
   transform: scale(1.02);
@@ -85,19 +87,21 @@
   gap: 12px;
   align-items: center;
 }
+
 .auth-group .btn {
   padding: 10px 16px;
 }
 
 
 .banner {
-    position: relative;
+  position: relative;
   width: 100%;
-  height: 820px; /* aumentada para ampliar a primeira dobra em desktop */
-    overflow: hidden;
-    display: flex;
-    align-items: end;
-    justify-content: center;
+  height: 600px;
+  /* aumentada para ampliar a primeira dobra em desktop */
+  overflow: hidden;
+  display: flex;
+  align-items: end;
+  justify-content: center;
 }
 
 /* When menu is open, allow overflow so the overlay isn't clipped by the banner bounds */
@@ -108,66 +112,83 @@
 
 @media (max-width: 900px) {
   .banner {
-    height: 420px; /* aumentada para telas menores, mantendo proporção */
+    height: 420px;
+    /* aumentada para telas menores, mantendo proporção */
   }
 }
 
 @media (max-width: 600px) {
   .banner {
-    height: 380px; /* ajuste específico para mobile mais estreito */
+    height: 400px; /* reduzir altura somente em mobile mais estreito */
+    /* ajuste específico para mobile mais estreito */
   }
 
 }
 
 .imagem-pai {
-    width: 99.5%;
-    height: 99%;
-    display: block;
-    background-color: transparent;
+  width: 99.5%;
+  height: 99%;
+  display: block;
+  background-color: transparent;
 }
 
 .banner-img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    border-radius: 16px 16px 4px 4px;
-    box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 16px 16px 4px 4px;
+  box-sizing: border-box;
 }
 
 .banner-text {
-    width: 100%;
-    height: 80%;
-    transform: translate(0, -50%);
-    color: #fff;
-    text-align: left;
-    font-family: 'Raleway', sans-serif;
-    padding-left: 180px;
-    z-index: 2;
-    font-family: "Fustat", sans-serif;
-    font-optical-sizing: auto;
-    font-style: normal;
+  width: 100%;
+  height: 80%;
+  transform: translate(0, -50%);
+  color: #fff;
+  text-align: left;
+  font-family: 'Raleway', sans-serif;
+  padding-left: 180px;
+  z-index: 2;
+  font-family: "Fustat", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
 }
 
 .banner-text h1 {
-    color: #fff;
-    font-size: 5.5rem;
-    margin: 0;
-    font-weight: 600;
+  color: #fff;
+  font-size: 4.5rem;
+  margin: 0;
+  font-weight: 400;
+  /* reduzir mais o negrito */
 }
 
 .banner-text h2 {
-    color: #fff;
-    font-size: 3rem;
-    margin: 0;
-    font-weight: 100;
+  color: #fff;
+  font-size: 2rem;
+  margin: 0;
+  font-weight: 300;
+  /* negrito leve */
+}
+
+/* Garantir que títulos do banner usem Raleway */
+.banner-text h1,
+.banner-text h2 {
+  font-family: 'Raleway', sans-serif;
+}
+
+/* Espaçamento entre o h2 e o botão 'Buscar trilhas' */
+.banner-text .hero-cta {
+  display: none; /* oculto por padrão; aparecerá somente em mobile */
+  margin-top: 1.5rem;
+  /* 24px aproximadamente */
 }
 
 .banner nav {
-    position: absolute;
-    top: 32px;
-    left: 0;
-    width: 100%;
-    z-index: 3;
+  position: absolute;
+  top: 32px;
+  left: 0;
+  width: 100%;
+  z-index: 3;
 }
 
 /* Hamburger button - hidden on desktop */
@@ -184,6 +205,7 @@
   z-index: 6;
   padding: 6px;
 }
+
 .hamburger span {
   display: block;
   width: 100%;
@@ -193,12 +215,15 @@
   border-radius: 2px;
   transition: transform 200ms ease, opacity 200ms ease;
 }
+
 .hamburger.is-active span:nth-child(1) {
   transform: translateY(8px) rotate(45deg);
 }
+
 .hamburger.is-active span:nth-child(2) {
   opacity: 0;
 }
+
 .hamburger.is-active span:nth-child(3) {
   transform: translateY(-8px) rotate(-45deg);
 }
@@ -206,31 +231,38 @@
 /* Mobile menu: hide default horizontal menu and show vertical overlay when opened */
 @media (max-width: 900px) {
   .menu {
-    display: none; /* hide desktop menu on smaller screens */
+    display: none;
+    /* hide desktop menu on smaller screens */
   }
 
   .hamburger {
     display: block;
+    top: 18px; /* aproximar um pouco do topo em mobile */
+    right: 16px; /* aproximar um pouco da borda direita */
   }
 
   /* When opened, raise the menu to start near the top and include the close X inside it */
   .nav.open .menu.open {
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 8px; /* reduzir gap entre itens do menu */
     position: absolute;
-    top: 32px; /* raised to avoid being cut by next section */
-    right: 16px;
-    left: 16px;
-    background: rgba(0,0,0,0.9);
-    padding: 56px 12px 12px 12px; /* top padding to make space for X inside the black area */
+    top: 24px; /* aproximar menu do topo */
+    /* raised to avoid being cut by next section */
+    right: 12px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.9);
+    padding: 32px 12px 12px 12px; /* reduzir espaçamento interno superior */
+    /* top padding to make space for X inside the black area */
     border-radius: 10px;
     min-width: auto;
-    max-width: calc(100% - 32px);
+    max-width: 100%;
     z-index: 10000;
-    box-shadow: 0 8px 32px rgba(0,0,0,0.6);
-    max-height: calc(100vh - 48px); /* ensure it never exceeds the viewport */
-    overflow-y: auto; /* allow internal scroll instead of being cut */
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6);
+    max-height: calc(100vh - 48px);
+    /* ensure it never exceeds the viewport */
+    overflow-y: auto;
+    /* allow internal scroll instead of being cut */
     -webkit-overflow-scrolling: touch;
   }
 
@@ -244,14 +276,15 @@
   .nav.open .hamburger {
     display: block;
     position: absolute;
-    top: 12px; /* inside the black menu */
-    right: 20px;
+    top: 8px; /* aproximar o X do topo do overlay */
+    /* inside the black menu */
+    right: 12px;
     z-index: 10001;
   }
 
   /* Slightly darken the overlay and ensure it's above following sections */
   .nav.open .menu.open {
-    background: rgba(0,0,0,0.9);
+    background: rgba(0, 0, 0, 0.9);
   }
 
   /* Keep auth buttons side-by-side inside mobile overlay */
@@ -314,7 +347,7 @@
   }
 
   .banner {
-    height: 360px;
+    height: 320px; /* reduzir altura em telas pequenas */
     align-items: center;
   }
 }
@@ -322,7 +355,8 @@
 /* Ajuste mobile adicional: centralizar a sessão do banner na tela */
 @media (max-width: 768px) {
   .banner {
-    height: 440px !important; /* aumenta um pouco a altura somente em mobile */
+    height: 420px !important; /* reduzir altura em mobile (tablet/phone) */
+    /* altura ajustada para versões mobile */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -332,7 +366,8 @@
   /* Limitar largura do bloco do banner e centralizar (não full-bleed) */
   .imagem-pai {
     width: 100%;
-    max-width: 520px; /* largura máxima do bloco centralizado */
+    max-width: 520px;
+    /* largura máxima do bloco centralizado */
     margin: 0 auto;
     box-sizing: border-box;
     position: relative;
@@ -349,18 +384,33 @@
 
   /* Restaurar posicionamento do texto para a mesma posição que estava antes (mobile) */
   .banner-text {
-    position: static; /* retirar absolute para que o texto volte ao fluxo */
+    position: static;
+    /* retirar absolute para que o texto volte ao fluxo */
     left: auto;
     top: auto;
-    transform: translate(0, -40%); /* mesmo deslocamento usado anteriormente */
+    transform: translate(0, -40%);
+    /* mesmo deslocamento usado anteriormente */
     width: 100%;
-    padding-left: 24px !important; /* mesma folga mobile anterior */
+    padding-left: 24px !important;
+    /* mesma folga mobile anterior */
     padding-right: 12px !important;
     text-align: left;
     z-index: 3;
     color: #ffffff;
   }
 
-  .banner-text h1 { font-size: 2.1rem !important; }
-  .banner-text h2 { font-size: 1.2rem !important; margin-top: 8px; }
+  .banner-text h1 {
+    font-size: 2.1rem !important;
+  }
+
+  .banner-text h2 {
+    font-size: 1.2rem !important;
+    margin-top: 8px;
+  }
+
+  /* Mostrar o botão 'Ver mais trilhas' apenas em mobile */
+  .banner-text .hero-cta {
+    display: inline-block;
+    width: auto;
+  }
 }

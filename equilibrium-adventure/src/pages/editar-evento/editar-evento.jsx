@@ -13,6 +13,7 @@ import ButtonBack from "../../components/circle-back-button2/circle-back-button2
 import routeUrls from "../../routes/routeUrls";
 import { buscarImagemEvento, buscarImagemEventoBlob } from "../../services/apiEvento";
 import { buscarDadosEvento, buscarenderecoEvento } from "../../services/chamadasAPIEvento";
+import { useAuth } from "../../context/AuthContext";
 
 const EditarEvento = () => {
     const [formData, setFormData] = useState({
@@ -31,7 +32,8 @@ const EditarEvento = () => {
             estado: ""
         },
         imagem: null,
-        trilha: null
+        trilha: null,
+        pdf: null
     });
 
     const [eventoId, setEventoId] = useState(null);
@@ -39,6 +41,7 @@ const EditarEvento = () => {
 
     const { id } = useParams();
     const navigate = useNavigate();
+    const { usuario } = useAuth();
 
     useEffect(() => {
         scrollToTop();
@@ -46,10 +49,20 @@ const EditarEvento = () => {
 
     useEffect(() => {
         const loadEventoData = async () => {
-            if (id) {
-                try {
-                    const eventoData = await buscarDadosEvento({ id });
-                    if (eventoData) {
+            if (!id || !usuario) return;
+            
+            try {
+                const eventoData = await buscarDadosEvento({ id });
+                if (eventoData) {
+                    // Verificar se o guia logado é o responsável pelo evento
+                    if (eventoData.responsavel && eventoData.responsavel !== usuario.id) {
+                        await showError(
+                            "Você não tem permissão para editar este evento.",
+                            "Acesso Negado"
+                        );
+                        navigate(routeUrls.CATALOGO_TRILHAS_ADM);
+                        return;
+                    }
                         setEventoId(eventoData.id_evento || id)
                         setFormData((prev) => ({
                             ...prev,
@@ -105,35 +118,58 @@ const EditarEvento = () => {
                                 }
                             }));
                         }
-                    }
-                } catch (error) {
-                    console.error("Erro ao carregar dados do evento:", error);
+
+                        // Carregar PDF se existir
+                        if (eventoData.pdf_base64) {
+                            try {
+                                // Converter base64 para Blob
+                                const byteCharacters = atob(eventoData.pdf_base64);
+                                const byteNumbers = new Array(byteCharacters.length);
+                                for (let i = 0; i < byteCharacters.length; i++) {
+                                    byteNumbers[i] = byteCharacters.charCodeAt(i);
+                                }
+                                const byteArray = new Uint8Array(byteNumbers);
+                                const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
+                                
+                                setFormData((prev) => ({
+                                    ...prev,
+                                    pdf: {
+                                        name: `documento-${eventoData.id_evento || id}.pdf`,
+                                        blob: pdfBlob
+                                    }
+                                }));
+                            } catch (error) {
+                                console.error("Erro ao carregar PDF do evento:", error);
+                            }
+                        }
                 }
+            } catch (error) {
+                console.error("Erro ao carregar dados do evento:", error);
             }
         };
 
         let generatedUrl = null;
 
         const loadImagemEvento = async () => {
-            if (id) {
-                try {
-                    const imgBlob = await buscarImagemEventoBlob(id);
-                    if (imgBlob) {
-                        generatedUrl = URL.createObjectURL(imgBlob);
-                        const imagemNome = `imagem-${eventoId || id}.jpg`;
-                        setFormData((prev) => ({
-                            ...prev,
-                            imagem: {
-                                name: imagemNome,
-                                url: generatedUrl,
-                                blob: imgBlob
-                            }
-                        }));
-                        setPreviewUrl(generatedUrl);
-                    }
-                } catch (error) {
-                    console.error("Erro ao carregar imagem do evento:", error);
+            if (!id || !usuario) return;
+            
+            try {
+                const imgBlob = await buscarImagemEventoBlob(id);
+                if (imgBlob) {
+                    generatedUrl = URL.createObjectURL(imgBlob);
+                    const imagemNome = `imagem-${eventoId || id}.jpg`;
+                    setFormData((prev) => ({
+                        ...prev,
+                        imagem: {
+                            name: imagemNome,
+                            url: generatedUrl,
+                            blob: imgBlob
+                        }
+                    }));
+                    setPreviewUrl(generatedUrl);
                 }
+            } catch (error) {
+                console.error("Erro ao carregar imagem do evento:", error);
             }
         };
 
@@ -154,7 +190,7 @@ const EditarEvento = () => {
                 }
             }
         };
-    }, [id]);
+    }, [id, usuario]);
 
     const handleBack = () => {
         navigate(routeUrls.CATALOGO_TRILHAS_ADM);
@@ -204,6 +240,10 @@ const EditarEvento = () => {
                     });
                 };
                 reader.readAsText(file);
+            } else if (name === 'pdf' && files && files[0]) {
+                const file = files[0];
+                console.log('PDF selecionado:', file.name, file.size, 'bytes');
+                setFormData({ ...formData, pdf: file });
             } else {
                 setFormData({
                     ...formData,
@@ -292,7 +332,8 @@ const EditarEvento = () => {
                     estado: formData.endereco.estado,
                     cep: formData.endereco.cep
                 },
-                trilha: formData.trilha
+                trilha: formData.trilha,
+                pdf: formData.pdf
             };
 
             let imagemToSend = null;
@@ -358,24 +399,26 @@ const EditarEvento = () => {
 
                     <label>
                         Imagem do Evento:
-                        <div className="upload-box" onClick={() => document.getElementById('upload-input').click()}>
-                            {previewUrl || (formData.imagem && formData.imagem.url) ? (
-                                <img
-                                    src={previewUrl || (formData.imagem && formData.imagem.url)}
-                                    alt="Pré-visualização"
-                                    className="preview-img"
-                                />
-                            ) : formData.imagem && formData.imagem.name ? (
-                                <div className="trilha-preview">
-                                    <p>{formData.imagem.name}</p>
-                                </div>
-                            ) : (
-                                <div className="upload-placeholder">
-                                    <FaCloudUploadAlt size={50} color="#0C513F" />
-                                    <p>Clique ou arraste uma imagem aqui</p>
-                                </div>
-                            )}
-                        </div>
+                        <label htmlFor="upload-input" style={{ cursor: 'pointer' }}>
+                            <div className="upload-box">
+                                {previewUrl || (formData.imagem && formData.imagem.url) ? (
+                                    <img
+                                        src={previewUrl || (formData.imagem && formData.imagem.url)}
+                                        alt="Pré-visualização"
+                                        className="preview-img"
+                                    />
+                                ) : formData.imagem && formData.imagem.name ? (
+                                    <div className="trilha-preview">
+                                        <p>{formData.imagem.name}</p>
+                                    </div>
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <FaCloudUploadAlt size={50} color="#0C513F" />
+                                        <p>Clique ou arraste uma imagem aqui</p>
+                                    </div>
+                                )}
+                            </div>
+                        </label>
                         <input
                             type="file"
                             id="upload-input"
@@ -416,24 +459,52 @@ const EditarEvento = () => {
 
                     <label>
                         Mapa da Trilha (.gpx):
-                        <div className="upload-box" onClick={() => document.getElementById('upload-trilha-input').click()}>
-                            {formData.trilha ? (
-                                <div className="trilha-preview">
-                                    <p>{formData.trilha.name}</p>
-                                </div>
-                            ) : (
-                                <div className="upload-placeholder">
-                                    <FaCloudUploadAlt size={30} color="#0C513F" />
-                                    <p>Clique ou arraste o arquivo .gpx aqui</p>
-                                </div>
-                            )}
-                        </div>
+                        <label htmlFor="upload-trilha-input" style={{ cursor: 'pointer' }}>
+                            <div className="upload-box">
+                                {formData.trilha ? (
+                                    <div className="trilha-preview">
+                                        <p>{formData.trilha.name}</p>
+                                    </div>
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <FaCloudUploadAlt size={30} color="#0C513F" />
+                                        <p>Clique ou arraste o arquivo .gpx aqui</p>
+                                    </div>
+                                )}
+                            </div>
+                        </label>
                         <input
                             type="file"
                             id="upload-trilha-input"
                             name="trilha"
                             onChange={handleChange}
                             accept=".gpx"
+                            style={{ display: "none" }}
+                        />
+                    </label>
+
+                    <label>
+                        Instruções da Trilha em PDF:
+                        <label htmlFor="upload-pdf-input" style={{ cursor: 'pointer' }}>
+                            <div className="upload-box">
+                                {formData.pdf ? (
+                                    <div className="trilha-preview">
+                                        <p>{formData.pdf.name || (formData.pdf instanceof File ? formData.pdf.name : 'documento.pdf')}</p>
+                                    </div>
+                                ) : (
+                                    <div className="upload-placeholder">
+                                        <FaCloudUploadAlt size={30} color="#0C513F" />
+                                        <p>Clique ou arraste o arquivo PDF aqui</p>
+                                    </div>
+                                )}
+                            </div>
+                        </label>
+                        <input
+                            type="file"
+                            id="upload-pdf-input"
+                            name="pdf"
+                            onChange={handleChange}
+                            accept=".pdf"
                             style={{ display: "none" }}
                         />
                     </label>

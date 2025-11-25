@@ -67,11 +67,11 @@ const CatalogoTrilhas = () => {
             if (isMounted) setEventosBase(parsed);
             console.info('Usando cache de eventos base devido a erro no fetch');
           } else {
-            if (isMounted) setError(prev => ({ ...prev, base: "Erro ao carregar os eventos base." }));
+            if (isMounted) setError(prev => ({ ...prev, base: "Não há eventos base cadastrados no momento." }));
           }
         } catch (e) {
           console.error('Erro ao ler cache de eventos base:', e);
-          if (isMounted) setError(prev => ({ ...prev, base: "Erro ao carregar os eventos base." }));
+          if (isMounted) setError(prev => ({ ...prev, base: "Não há eventos base cadastrados no momento." }));
         }
       } finally {
         if (isMounted) setLoading(prev => ({ ...prev, base: false }));
@@ -104,11 +104,11 @@ const CatalogoTrilhas = () => {
             if (isMounted) setEventosAtivos(parsedA);
             console.info('Usando cache de eventos ativos devido a erro no fetch');
           } else {
-            if (isMounted) setError(prev => ({ ...prev, ativos: "Erro ao carregar os eventos ativos." }));
+            if (isMounted) setError(prev => ({ ...prev, ativos: "Não há eventos ativos no momento." }));
           }
         } catch (e) {
           console.error('Erro ao ler cache de eventos ativos:', e);
-          if (isMounted) setError(prev => ({ ...prev, ativos: "Erro ao carregar os eventos ativos." }));
+          if (isMounted) setError(prev => ({ ...prev, ativos: "Não há eventos ativos no momento." }));
         }
       } finally {
         if (isMounted) setLoading(prev => ({ ...prev, ativos: false }));

@@ -114,6 +114,10 @@ export async function cadastrarEvento(formDataValues, navigate, usuarioId) {
             formData.append("imagem", formDataValues.imagem);
         }
 
+        if (formDataValues.pdf) {
+            formData.append("pdf", formDataValues.pdf);
+        }
+
         const response = await axios.post(
             "http://localhost:8080/guia/cadastrar",
             formData,
@@ -250,6 +254,21 @@ export const editarEvento = async (eventoData, eventoId) => {
         if (trilhaFileToAppend) {
             formData.append('trilha', trilhaFileToAppend);
         } else if (conteudoGpx) {
+        }
+
+        if (eventoData.pdf) {
+            console.log('PDF detectado:', eventoData.pdf);
+            if (typeof File !== 'undefined' && eventoData.pdf instanceof File) {
+                console.log('Enviando PDF como File:', eventoData.pdf.name);
+                formData.append("pdf", eventoData.pdf);
+            } else if (typeof eventoData.pdf === 'object' && eventoData.pdf.blob) {
+                console.log('Enviando PDF como Blob');
+                const blob = eventoData.pdf.blob;
+                const filename = eventoData.pdf.name || `documento-${eventoId || 'evento'}.pdf`;
+                formData.append('pdf', blob, filename);
+            }
+        } else {
+            console.log('Nenhum PDF detectado em eventoData');
         }
 
         const enderecoId = (eventoData.endereco && eventoData.endereco.id) || enderecoInput.id || eventoData.enderecoId || null;

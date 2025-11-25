@@ -74,8 +74,7 @@
     flex-direction: column;
     gap: 16px;
     margin-bottom: 20px;
-    /* Exibir exatamente 3 cards por vez: 3 * 110px + 2 * 16px (gaps) = 362px */
-    max-height: 362px;
+    max-height: 500px;
     overflow-y: auto;
     padding-right: 8px;
     scrollbar-width: thin;
@@ -98,11 +97,11 @@
     border: none;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
     position: relative;
-    overflow: hidden;
-    padding: 12px 18px 12px 18px;
+    overflow: visible;
+    padding: 20px 26px 20px 26px;
     padding-right: 140px;
     animation: slideIn 0.3s ease-out;
-    min-height: 64px;
+    min-height: 100px;
     display: flex;
     flex-direction: column;
 }
@@ -146,12 +145,9 @@
     margin: 0;
     font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
     font-weight: 400;
-    display: -webkit-box;
-    line-clamp: 3;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
+    word-wrap: break-word;
     white-space: normal;
+    overflow-wrap: break-word;
 }
 
 .comentario-form {
@@ -353,7 +349,7 @@
     flex-direction: column;
     align-items: flex-end;
     gap: 6px;
-    z-index: 12;
+    z-index: 1;
     /* keep a fixed narrow column for date+button to avoid layout shifts */
     width: 120px;
 }
@@ -367,16 +363,24 @@
     background: transparent;
     border: none;
     color: #c0392b;
-    font-weight: 700;
+    font-weight: 600;
     cursor: pointer;
     padding: 6px 12px;
-    font-size: 0.95rem;
+    font-size: 0.85rem;
     border-radius: 8px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    width: 92px;
+    width: auto;
     text-align: center;
+    transition: all 0.2s ease;
+    font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+.comentario-delete:hover {
+    background: rgba(192, 57, 43, 0.12);
+    color: #a93226;
+    transform: translateY(0);
 }
 
 .comentario-vazio {
@@ -398,27 +402,12 @@
     letter-spacing: 0.6px;
 }
 
-.comentario-delete {
-    background: transparent;
-    border: none;
-    color: #c0392b;
-    font-weight: 700;
-    cursor: pointer;
-    padding: 6px 8px;
-    border-radius: 6px;
-}
-
-.comentario-delete:hover {
-    background: rgba(192, 57, 43, 0.12);
-    box-shadow: none;
-}
-
 /* Specific overrides when Comentarios is rendered inside DetalhesEvento which forces wide buttons */
 .detalhes-evento-content .comentario-delete {
-    width: 92px !important;
+    width: auto !important;
     min-width: 0 !important;
     padding: 6px 12px !important;
-    font-size: 0.95rem !important;
+    font-size: 0.85rem !important;
     border-radius: 8px !important;
 }
 

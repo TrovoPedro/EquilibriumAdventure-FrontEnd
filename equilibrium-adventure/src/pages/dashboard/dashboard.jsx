@@ -5,6 +5,7 @@ import ButtonBack from '../../components/circle-back-button2/circle-back-button2
 import useGoBack from '../../utils/useGoBack';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAuth } from '../../context/AuthContext';
+import { showError } from '../../utils/swalHelper';
 import {
   getEventosAtivosFuturos,
   getTaxaOcupacaoMedia,
@@ -12,9 +13,13 @@ import {
   getTopCidades,
   getRankingEventos,
   getPalavrasComentarios,
+  getTopCidadesPeriodo,
+  getRankingEventosPeriodo,
+  getPalavrasComentariosPeriodo,
   getTendenciasAno,
   getTendenciasMes,
   getTendenciasDia,
+  getTendenciasPeriodo,
   getInscricaoLimite
 } from '../../services/apiDashboard';
 
@@ -24,6 +29,10 @@ const Dashboard = () => {
   const [selectedMonth, setSelectedMonth] = useState('Janeiro');
   const [chartView, setChartView] = useState('Mensal');
   const [loading, setLoading] = useState(true);
+  const [startDate, setStartDate] = useState('');
+  const [endDate, setEndDate] = useState('');
+  const [startDateQual, setStartDateQual] = useState('');
+  const [endDateQual, setEndDateQual] = useState('');
   
   const [eventosAtivos, setEventosAtivos] = useState(0);
   const [participationData, setParticipationData] = useState([]);
@@ -178,27 +187,27 @@ const Dashboard = () => {
         }
 
         try {
-          const tendenciasData = await getTendenciasAno(usuarioId);
+          const hoje = new Date();
+          const umMesAtras = new Date();
+          umMesAtras.setDate(hoje.getDate() - 30);
+          
+          const endDateStr = hoje.toISOString().split('T')[0];
+          const startDateStr = umMesAtras.toISOString().split('T')[0];
+          
+          const tendenciasData = await getTendenciasPeriodo(usuarioId, startDateStr, endDateStr);
           
           if (tendenciasData && tendenciasData.length > 0) {
-            
-            const formattedChart = tendenciasData
-              .sort((a, b) => a.ano - b.ano) 
-              .map(item => ({
-                month: item.ano.toString(),
-                value: item.totalInscricoes
-              }));
+            const formattedChart = preencherDiasFaltantes(tendenciasData, startDateStr, endDateStr);
             setChartData(formattedChart);
-            setChartView('Anual');
           } else {
-            // Dados vazios
+            
           }
         } catch (error) {
-          // Silenciar erro
+          
         }
         
       } catch (error) {
-        // Silenciar erro geral
+        
       } finally {
         setLoading(false);
         setDataLoaded(true);
@@ -209,20 +218,7 @@ const Dashboard = () => {
   }, [dataLoaded]);
 
   
-  useEffect(() => {
-    if (!usuario) return;
-    const usuarioId = usuario.id || usuario.id_usuario;
-    if (!usuarioId) return;
 
-    (async () => {
-      try {
-        await handleFilter('Mensal');
-
-      } catch (err) {
-   
-      }
-    })();
-  }, [usuario]);
 
   const calculateOccupancyRate = (data) => {
     if (!data || data.length === 0) return 0;
@@ -230,6 +226,31 @@ const Dashboard = () => {
       return sum + (item.value / item.max) * 100;
     }, 0);
     return Math.round(totalOccupancy / data.length);
+  };
+
+  const preencherDiasFaltantes = (dados, dataInicio, dataFim) => {
+    if (!dados || dados.length === 0) return [];
+    
+    const mapaInscricoes = {};
+    dados.forEach(item => {
+      mapaInscricoes[item.dia] = item.totalInscricoes;
+    });
+    
+    const resultado = [];
+    const inicio = new Date(dataInicio);
+    const fim = new Date(dataFim);
+    
+    for (let data = new Date(inicio); data <= fim; data.setDate(data.getDate() + 1)) {
+      const dataStr = data.toISOString().split('T')[0];
+      const [ano, mes, dia] = dataStr.split('-');
+      
+      resultado.push({
+        month: `${dia}/${mes}`,
+        value: mapaInscricoes[dataStr] || 0
+      });
+    }
+    
+    return resultado;
   };
 
   const averageOccupancyRate = occupancyData.length > 0 
@@ -266,10 +287,18 @@ const Dashboard = () => {
 
   const selectedMonthOccupancy = monthlyOccupancyData[selectedMonth] || 0;
 
-  const handleFilter = async (filterType) => {
+  const handlePeriodoFilter = async () => {
+    // Validar se a data inicial é maior que a data final
+    if (startDate && endDate && new Date(startDate) > new Date(endDate)) {
+      await showError(
+        'A data inicial não pode ser maior que a data final.',
+        'Datas Inválidas'
+      );
+      return;
+    }
+
     try {
       setLoading(true);
-      setChartView(filterType);
       
       // Consistently resolve usuarioId: prefer context -> sessionStorage -> localStorage
       let usuarioId = null;
@@ -288,71 +317,231 @@ const Dashboard = () => {
         }
       }
 
-      
+      const start = startDate || null;
+      const end = endDate || null;
 
-      let tendenciasData = [];
-      
-      if (filterType === 'Semanal') {
-        try {
-          tendenciasData = await getTendenciasDia(usuarioId);
-          
-          if (tendenciasData && tendenciasData.length > 0) {
-            
-            const formattedChart = tendenciasData
-              .sort((a, b) => new Date(a.dia) - new Date(b.dia))
-              .slice(-7)
-              .map(item => ({
-                month: new Date(item.dia).toLocaleDateString('pt-BR', { weekday: 'short' }),
-                value: item.totalInscricoes
-              }));
-            setChartData(formattedChart);
-          } else {
-            setChartData([]);
-          }
-        } catch (error) {
+      try {
+        const tendenciasData = await getTendenciasPeriodo(usuarioId, start, end);
+        
+        if (tendenciasData && tendenciasData.length > 0) {
+          const formattedChart = preencherDiasFaltantes(tendenciasData, start, end);
+          setChartData(formattedChart);
+        } else {
           setChartData([]);
         }
-      } else if (filterType === 'Mensal') {
-        try {
-          tendenciasData = await getTendenciasMes(usuarioId);
-          
-          if (tendenciasData && tendenciasData.length > 0) {
-            
-            const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
-            const formattedChart = tendenciasData
-              .sort((a, b) => a.mes - b.mes)
-              .map(item => ({
-                month: meses[item.mes - 1] || item.mes,
-                value: item.totalInscricoes
-              }));
-            setChartData(formattedChart);
-          } else {
-            setChartData([]);
-          }
-        } catch (error) {
-          setChartData([]);
-        }
-      } else if (filterType === 'Anual') {
-        try {
-          tendenciasData = await getTendenciasAno(usuarioId);
-          
-          if (tendenciasData && tendenciasData.length > 0) {
-            const formattedChart = tendenciasData
-              .sort((a, b) => a.ano - b.ano)
-              .map(item => ({
-                month: item.ano.toString(),
-                value: item.totalInscricoes
-              }));
-            setChartData(formattedChart);
-          } else {
-            setChartData([]);
-          }
-        } catch (error) {
-          setChartData([]);
-        }
+      } catch (error) {
+        setChartData([]);
       }
     } catch (error) {
       // Silenciar erro
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLimparFiltro = async () => {
+    setStartDate('');
+    setEndDate('');
+    
+    try {
+      setLoading(true);
+      
+      let usuarioId = null;
+      if (usuario && (usuario.id || usuario.id_usuario)) {
+        usuarioId = usuario.id || usuario.id_usuario;
+      } else {
+        const stored = sessionStorage.getItem("usuario") || localStorage.getItem("usuario");
+        if (!stored) {
+          return;
+        }
+        try {
+          const userData = JSON.parse(stored);
+          usuarioId = userData.id || userData.id_usuario;
+        } catch (err) {
+          return;
+        }
+      }
+
+      try {
+        const hoje = new Date();
+        const umMesAtras = new Date();
+        umMesAtras.setDate(hoje.getDate() - 30);
+        
+        const endDateStr = hoje.toISOString().split('T')[0];
+        const startDateStr = umMesAtras.toISOString().split('T')[0];
+        
+        const tendenciasData = await getTendenciasPeriodo(usuarioId, startDateStr, endDateStr);
+        
+        if (tendenciasData && tendenciasData.length > 0) {
+          const formattedChart = preencherDiasFaltantes(tendenciasData, startDateStr, endDateStr);
+          setChartData(formattedChart);
+        } else {
+          setChartData([]);
+        }
+      } catch (error) {
+        setChartData([]);
+      }
+    } catch (error) {
+      // Silenciar erro
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleQualitativoFilter = async () => {
+    // Validar se a data inicial é maior que a data final
+    if (startDateQual && endDateQual && new Date(startDateQual) > new Date(endDateQual)) {
+      await showError(
+        'A data inicial não pode ser maior que a data final.',
+        'Datas Inválidas'
+      );
+      return;
+    }
+
+    try {
+      setLoading(true);
+      
+      let usuarioId = null;
+      if (usuario && (usuario.id || usuario.id_usuario)) {
+        usuarioId = usuario.id || usuario.id_usuario;
+      } else {
+        const stored = sessionStorage.getItem("usuario") || localStorage.getItem("usuario");
+        if (!stored) {
+          return;
+        }
+        try {
+          const userData = JSON.parse(stored);
+          usuarioId = userData.id || userData.id_usuario;
+        } catch (err) {
+          return;
+        }
+      }
+
+      const start = startDateQual || null;
+      const end = endDateQual || null;
+
+      try {
+        const citiesDataFromAPI = await getTopCidadesPeriodo(usuarioId, start, end);
+        if (citiesDataFromAPI && citiesDataFromAPI.length > 0) {
+          const formattedCities = citiesDataFromAPI.map((item, index) => ({
+            name: item.cidade,
+            value: item.totalParticipantes,
+            color: ['#10b981', '#3b82f6', '#8b5cf6', '#94a3b8', '#6b7280'][index % 5],
+            state: ''
+          }));
+          setCitiesData(formattedCities);
+        } else {
+          setCitiesData([]);
+        }
+      } catch (error) {
+        
+      }
+
+      try {
+        const eventsRankingData = await getRankingEventosPeriodo(usuarioId, start, end);
+        if (eventsRankingData && eventsRankingData.length > 0) {
+          const formattedRanking = eventsRankingData.map(item => ({
+            name: item.nome,
+            inscricoes: item.totalInscricoes,
+            avaliacao: item.notaMedia
+          }));
+          setEventsRanking(formattedRanking);
+        } else {
+          setEventsRanking([]);
+        }
+      } catch (error) {
+        
+      }
+
+      try {
+        const wordsData = await getPalavrasComentariosPeriodo(usuarioId, start, end);
+        if (wordsData && wordsData.length > 0) {
+          const formattedWords = wordsData.map(item => ({
+            text: item.palavra,
+            size: Math.min(Math.max(item.quantidade * 4, 18), 64),
+            color: item.quantidade > 5 ? '#10b981' : item.quantidade > 2 ? '#3b82f6' : '#6b7280'
+          }));
+          setWords(formattedWords);
+        } else {
+          setWords([]);
+        }
+      } catch (error) {
+        
+      }
+    } catch (error) {
+      
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLimparFiltroQualitativo = async () => {
+    setStartDateQual('');
+    setEndDateQual('');
+    
+    try {
+      setLoading(true);
+      
+      let usuarioId = null;
+      if (usuario && (usuario.id || usuario.id_usuario)) {
+        usuarioId = usuario.id || usuario.id_usuario;
+      } else {
+        const stored = sessionStorage.getItem("usuario") || localStorage.getItem("usuario");
+        if (!stored) {
+          return;
+        }
+        try {
+          const userData = JSON.parse(stored);
+          usuarioId = userData.id || userData.id_usuario;
+        } catch (err) {
+          return;
+        }
+      }
+
+      try {
+        const citiesDataFromAPI = await getTopCidades(usuarioId);
+        if (citiesDataFromAPI && citiesDataFromAPI.length > 0) {
+          const formattedCities = citiesDataFromAPI.map((item, index) => ({
+            name: item.cidade,
+            value: item.totalParticipantes,
+            color: ['#10b981', '#3b82f6', '#8b5cf6', '#94a3b8', '#6b7280'][index % 5],
+            state: ''
+          }));
+          setCitiesData(formattedCities);
+        }
+      } catch (error) {
+        // Silenciar erro
+      }
+
+      try {
+        const eventsRankingData = await getRankingEventos(usuarioId);
+        if (eventsRankingData && eventsRankingData.length > 0) {
+          const formattedRanking = eventsRankingData.map(item => ({
+            name: item.nome,
+            inscricoes: item.totalInscricoes,
+            avaliacao: item.notaMedia
+          }));
+          setEventsRanking(formattedRanking);
+        }
+      } catch (error) {
+        // Silenciar erro
+      }
+
+      try {
+        const wordsData = await getPalavrasComentarios(usuarioId);
+        if (wordsData && wordsData.length > 0) {
+          const formattedWords = wordsData.map(item => ({
+            text: item.palavra,
+            size: Math.min(Math.max(item.quantidade * 4, 18), 64),
+            color: item.quantidade > 5 ? '#10b981' : item.quantidade > 2 ? '#3b82f6' : '#6b7280'
+          }));
+          setWords(formattedWords);
+        }
+      } catch (error) {
+        // Silenciar erro
+      }
+    } catch (error) {
+      
     } finally {
       setLoading(false);
     }
@@ -564,28 +753,42 @@ const Dashboard = () => {
                 <img
                   src="/src/assets/info.png"
                   alt="Mais informações"
-                  title="TExibe a tendência de crescimento no número de inscritos em eventos, com opções de visualização por semana, mês ou ano."
+                  title="Exibe a tendência de crescimento no número de inscritos em eventos por período personalizado. Selecione as datas de início e fim para visualizar os dados específicos."
                 />
               </div>
               <div className="chart-container">
                 <div className="chart-filters">
+                  <div className="date-filter-group">
+                    <label htmlFor="startDate">Data Início:</label>
+                    <input
+                      type="date"
+                      id="startDate"
+                      value={startDate}
+                      onChange={(e) => setStartDate(e.target.value)}
+                      className="date-input"
+                    />
+                  </div>
+                  <div className="date-filter-group">
+                    <label htmlFor="endDate">Data Fim:</label>
+                    <input
+                      type="date"
+                      id="endDate"
+                      value={endDate}
+                      onChange={(e) => setEndDate(e.target.value)}
+                      className="date-input"
+                    />
+                  </div>
                   <button 
-                    className={chartView === 'Semanal' ? 'filter-btn active' : 'filter-btn'} 
-                    onClick={() => handleFilter('Semanal')}
+                    className="filter-btn active" 
+                    onClick={handlePeriodoFilter}
                   >
-                    Última Semana
+                    Buscar
                   </button>
                   <button 
-                    className={chartView === 'Mensal' ? 'filter-btn active' : 'filter-btn'} 
-                    onClick={() => handleFilter('Mensal')}
+                    className="filter-btn active" 
+                    onClick={handleLimparFiltro}
                   >
-                    Últimos Meses
-                  </button>
-                  <button 
-                    className={chartView === 'Anual' ? 'filter-btn active' : 'filter-btn'} 
-                    onClick={() => handleFilter('Anual')}
-                  >
-                    Últimos Anos
+                    Limpar
                   </button>
                 </div>
                 {chartData.length > 0 ? (
@@ -593,7 +796,7 @@ const Dashboard = () => {
                     <LineChart data={chartData} margin={{ top: 20, right: 30, left: 20, bottom: 5 }}>
                       <CartesianGrid strokeDasharray="3 3" />
                       <XAxis dataKey="month" />
-                      <YAxis />
+                      <YAxis domain={[0, (dataMax) => Math.ceil(dataMax * 1.2)]} />
                       <Tooltip />
                       <Line type="monotone" dataKey="value" stroke="#10b981" strokeWidth={2} fillOpacity={0.1} fill="url(#lineGradient)" />
                     </LineChart>
@@ -611,6 +814,45 @@ const Dashboard = () => {
           </div>
         ) : (
           <div className="qualitativos-content">
+            <div className="qualitative-filters-bar">
+              <div className="filters-left">
+                <span className="filter-label">Filtrar período:</span>
+                <div className="date-inputs-compact">
+                  <input
+                    type="date"
+                    id="startDateQual"
+                    value={startDateQual}
+                    onChange={(e) => setStartDateQual(e.target.value)}
+                    className="date-input-compact"
+                    placeholder="Data início"
+                  />
+                  <span className="date-separator">até</span>
+                  <input
+                    type="date"
+                    id="endDateQual"
+                    value={endDateQual}
+                    onChange={(e) => setEndDateQual(e.target.value)}
+                    className="date-input-compact"
+                    placeholder="Data fim"
+                  />
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: '8px' }}>
+                <button 
+                  className="filter-btn-compact" 
+                  onClick={handleQualitativoFilter}
+                >
+                  Buscar
+                </button>
+                <button 
+                  className="filter-btn-compact" 
+                  onClick={handleLimparFiltroQualitativo}
+                >
+                  Limpar
+                </button>
+              </div>
+            </div>
+            
             <div className="qualitative-top">
               <div className="cities-panel">
                 <div className="card-title">

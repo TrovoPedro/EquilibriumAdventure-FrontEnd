@@ -139,6 +139,8 @@
     flex-direction: column;
     gap: 24px;
     padding: 0 20px;
+    width: 100%;
+    min-width: 0;
 }
 
 /* Estilo específico para o primeiro campo-info (título) */
@@ -368,15 +370,19 @@
     .evento-header {
         flex-direction: column;
         gap: 20px;
+        align-items: center;
     }
 
     .evento-imagem {
         width: 100%;
-        height: 280px;
+        max-width: 600px;
+        height: 320px;
     }
 
     .evento-detalhes {
         padding: 0;
+        width: 100%;
+        max-width: 600px;
     }
 
     .campos-linha {
@@ -385,10 +391,51 @@
     }
 
     .campo-info {
+        flex: 1 1 calc(50% - 10px);
         max-width: calc(50% - 10px);
         min-width: calc(50% - 10px);
     }
+
+    .campo-info-titulo {
+        width: 100%;
+    }
 }
+
+/* Responsividade para Tablet pequeno / Mobile grande */
+@media (max-width: 768px) {
+    .evento-info-container {
+        padding: 20px 16px;
+    }
+
+    .evento-header {
+        gap: 16px;
+    }
+
+    .evento-imagem {
+        height: 280px;
+    }
+
+    .evento-detalhes {
+        gap: 16px;
+    }
+
+    .campos-linha {
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .campo-info {
+        max-width: 100%;
+        min-width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .campo-info input,
+    .campo-info span {
+        width: 100%;
+    }
+}
+
 /* Responsividade para Celular */
 @media (max-width: 500px) {
 
@@ -544,6 +591,7 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    padding-bottom: 0px;
     padding-left: 5px;
     position: relative;
 }
@@ -569,29 +617,29 @@
 
     /* --- BLOCO INFERIOR (Endereço + Nível) mais compacto --- */
     .evento-info-container div[style*="grid-template-columns"]:not(.campos-linha) {
-        display: grid !important;
-        grid-template-columns: 1fr 1fr !important; /* endereço | nível */
-        gap: 8px !important; /* menos espaço entre eles */
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
         width: 100% !important;
     }
 
-    /* Endereço ocupa a coluna da esquerda apenas (override do inline 1/3) */
+    /* Endereço ocupa a linha inteira */
     .evento-info-container div[style*="grid-template-columns"]:not(.campos-linha) .evento-descricao {
-        grid-column: 1 / 2 !important;
+        width: 100% !important;
         margin-top: 0 !important;
     }
 
-    /* Nível ocupa a coluna direita (override do inline 3/4) */
+    /* Nível ocupa a linha de baixo sozinho */
     .evento-info-container div[style*="grid-template-columns"]:not(.campos-linha) .campo-info {
-        grid-column: 2 / 3 !important;
+        width: 100% !important;
         align-self: start !important;
     }
 
     /* Reduz paddings para compactar visualmente os dois cards */
     .evento-info-container div[style*="grid-template-columns"]:not(.campos-linha) .evento-descricao p {
         padding: 10px 12px !important;
-        max-width: 275px;
-        min-width: 205px;
+        max-width: 100% !important;
+        width: 100% !important;
         border-radius: 10px !important;
         font-size: 0.92rem !important;
         line-height: 1.35 !important;

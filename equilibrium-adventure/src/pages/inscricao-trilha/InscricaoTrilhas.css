@@ -14,6 +14,51 @@
   }
 }
 
+/* Estrelas de avaliação */
+.stars-rating {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    line-height: 1;
+}
+
+.stars-rating span {
+    font-size: 1.25rem;
+    display: inline-block;
+    line-height: 1;
+    transition: transform 150ms ease, opacity 150ms ease;
+}
+
+.stars-rating .star-full {
+    background: linear-gradient(90deg, #ffd166 0%, #ffb703 50%, #ff8f00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 1px 0 rgba(0,0,0,0.04);
+}
+
+.stars-rating .star-half {
+    background: linear-gradient(90deg, #ffd166 0%, #ffd166 50%, #e6e6e6 50%, #e6e6e6 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
+}
+
+.stars-rating .star-empty {
+    color: #e6e6e6;
+}
+
+@media (max-width: 480px) {
+    .stars-rating span {
+        font-size: 1.05rem;
+    }
+    .stars-rating {
+        gap: 6px;
+    }
+}
+
 /* Page background to match criar-evento look */
 .inscricao-trilha-page {
   width: 100%;
@@ -43,7 +88,7 @@
   margin: 32px auto;
   background: #fff;
   border-radius: 20px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 4px 24px rgba(0,0,0,0.10);
   padding: 40px 48px 48px 48px;
   font-family: 'Segoe UI', Arial, sans-serif;
   margin-top: 20px;
@@ -71,7 +116,7 @@
   height: 380px;
   object-fit: cover;
   border-radius: 14px;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.10);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.10);
 }
 
 .inscricao-trilha-info {
@@ -85,7 +130,7 @@
   gap: 18px;
   min-height: 380px;
   height: 380px;
-  box-shadow: 0 6px 24px rgba(45, 70, 54, 0.10);
+  box-shadow: 0 6px 24px rgba(45,70,54,0.10);
   align-items: flex-start;
   justify-content: center;
   border: 1px solid #e3e9e6;
@@ -130,7 +175,7 @@
   margin: 0 0 36px 0;
   padding: 36px 40px 24px 40px;
   font-size: 18px;
-  box-shadow: 0 6px 24px rgba(45, 70, 54, 0.10);
+  box-shadow: 0 6px 24px rgba(45,70,54,0.10);
   border: 1px solid #e3e9e6;
 }
 
@@ -167,7 +212,7 @@
   font-weight: 500;
   outline: none;
   margin-bottom: 2px;
-  box-shadow: 0 1px 4px rgba(45, 70, 54, 0.04);
+  box-shadow: 0 1px 4px rgba(45,70,54,0.04);
   transition: border 0.2s;
 }
 
@@ -250,7 +295,7 @@
   font-weight: 700;
   cursor: pointer;
   transition: background 0.2s;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 12px rgba(0,0,0,0.08);
   text-align: center;
   letter-spacing: 0.5px;
 }
@@ -266,17 +311,13 @@
 }
 
 /* Novo layout: botões menores e lado a lado */
-.inscricao-trilha-container>.inscricao-trilha-btn {
+.inscricao-trilha-container > .inscricao-trilha-btn {
   display: inline-block !important;
   width: calc(50% - 12px) !important;
-  margin: 8px 6px 24px 6px !important;
-  /* aumentar margem inferior para separar dos comentários */
-  padding: 10px 0 !important;
-  /* menor altura */
-  font-size: 1rem !important;
-  /* texto menor */
-  font-weight: 600 !important;
-  /* manter legibilidade, pode ajustar */
+  margin: 8px 6px 24px 6px !important; /* aumentar margem inferior para separar dos comentários */
+  padding: 10px 0 !important; /* menor altura */
+  font-size: 1rem !important; /* texto menor */
+  font-weight: 600 !important; /* manter legibilidade, pode ajustar */
   text-align: center !important;
   vertical-align: middle !important;
   box-sizing: border-box !important;
@@ -284,14 +325,14 @@
 }
 
 /* Estilo do botão compartilhar: manter borda e texto verde */
-.inscricao-trilha-container>.inscricao-trilha-btn.btn-compartilhar {
+.inscricao-trilha-container > .inscricao-trilha-btn.btn-compartilhar {
   background: #ffffff !important;
   color: #226144 !important;
   border: 2px solid #226144 !important;
 }
 
 /* Botão principal de inscrição: garantir cor e remover negrito se desejado */
-.inscricao-trilha-container>.inscricao-trilha-btn.btn-inscrever {
+.inscricao-trilha-container > .inscricao-trilha-btn.btn-inscrever {
   background: #226144 !important;
   color: #ffffff !important;
   font-weight: 700 !important;
@@ -302,7 +343,7 @@
   border-radius: 14px;
   margin: 0 0 48px 0;
   padding: 32px 32px 16px 32px;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
 }
 
 .inscricao-trilha-comentario {
@@ -339,7 +380,7 @@
   cursor: pointer;
   width: 160px;
   transition: background 0.2s;
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 1px 6px rgba(0,0,0,0.04);
   letter-spacing: 0.5px;
   outline: none;
 }
@@ -350,7 +391,7 @@
 
 .endereco-row {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: wrap;  
 }
 
 .full-width {
@@ -381,8 +422,7 @@
 .endereco-input {
   width: 100%;
   min-width: 790px;
-  max-width: 800px;
-  /* 👈 aumenta a largura apenas deste input */
+  max-width: 800px; /* 👈 aumenta a largura apenas deste input */
   padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid #ccc;
@@ -410,13 +450,11 @@
 
 /* Remover negrito especificamente do botão de inscrição principal */
 .inscricao-trilha-btn.btn-inscrever {
-  font-weight: 700;
-  /* bold */
+  font-weight: 700; /* bold */
 }
 
 .btn-cancelar {
-  background-color: #9c1d2a;
-  /* vermelho */
+  background-color: #9c1d2a; /* vermelho */
 }
 
 .btn-cancelar:hover {
@@ -464,6 +502,54 @@
 
 /* removido bloco duplicado de .inscricao-trilha-mapa e regras relacionadas */
 
+/* Instruções da trilha - responsivo mobile */
+.inscricao-trilha-instrucoes {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background: linear-gradient(135deg, #f7f9fa 0%, #f2f4f7 100%);
+  border-radius: 16px;
+  padding: 24px 32px;
+  margin: 24px 0;
+  border: 1px solid #e3e9e6;
+  box-shadow: 0 4px 16px rgba(45, 70, 54, 0.08);
+}
+
+.inscricao-trilha-instrucoes h3 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #226144;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.inscricao-trilha-instrucoes p {
+  font-size: 1rem;
+  color: #2d4636;
+  margin: 0;
+  flex: 1;
+}
+
+.inscricao-trilha-instrucoes a {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #226144;
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: 600;
+  transition: background 0.2s;
+}
+
+.inscricao-trilha-instrucoes a:hover {
+  background: #1b4d35;
+}
+
 @media (max-width: 900px) {
   .inscricao-trilha-container {
     max-width: 98vw;
@@ -495,18 +581,15 @@
     padding: 18px 12px 10px 12px;
     font-size: 15px;
   }
-
-  .inscricao-trilha-comentarios,
-  .inscricao-trilha-mapa {
+  .inscricao-trilha-comentarios, .inscricao-trilha-mapa {
     padding: 18px 12px;
   }
 
   /* Em telas pequenas, empilhar os botões novamente */
-  .inscricao-trilha-container>.inscricao-trilha-btn {
+  .inscricao-trilha-container > .inscricao-trilha-btn {
     display: block !important;
     width: 100% !important;
-    margin: 8px 0 16px 0 !important;
-    /* margem inferior maior no mobile */
+    margin: 8px 0 16px 0 !important; /* margem inferior maior no mobile */
   }
 }
 
@@ -524,23 +607,21 @@
   /* 🔥 Caixa de avaliações — mais para cima e sem sobrepor imagem */
   .avaliacao {
     position: absolute !important;
-    top: -40px !important;
-    /* SUBI MAIS */
+    top: -40px !important; /* SUBI MAIS */
     right: 12px !important;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(0, 0, 0, 0.1);
+    background: transparent;
+    border: none;
     border-radius: 10px;
-    padding: 6px 12px !important;
+    padding: 4px 8px !important;
     font-size: 13px !important;
     z-index: 30;
-    backdrop-filter: blur(6px);
+    backdrop-filter: none;
   }
 
   /* 🔥 Botão de voltar mais para cima */
   .circle-back-btn {
     position: absolute;
-    top: 1px;
-    /* SUBI MAIS */
+    top: 1px; /* SUBI MAIS */
     left: 8px;
     z-index: 40;
     background: transparent !important;
@@ -556,8 +637,7 @@
     margin: 0;
     padding-bottom: 12px !important;
     background: transparent !important;
-    box-shadow: none !important;
-    /* remove sombra caso tenha */
+    box-shadow: none !important; /* remove sombra caso tenha */
   }
 
   .evento-imagem img {
@@ -583,8 +663,7 @@
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: 6px;
-    /* MENOS ESPAÇO PARA SUBIR TUDO */
+    gap: 6px; /* MENOS ESPAÇO PARA SUBIR TUDO */
     margin-bottom: 18px;
     background: transparent !important;
   }
@@ -612,6 +691,7 @@
 
   .campo-info {
     width: 100% !important;
+    margin: 8px 0 16px 0 !important; /* margem inferior maior no mobile */
     min-width: 100% !important;
     max-width: 100% !important;
   }
@@ -682,5 +762,27 @@
     font-size: 18px;
     letter-spacing: 0.2px;
     white-space: nowrap;
+  }
+
+  /* Instruções da trilha - responsivo mobile */
+  .inscricao-trilha-instrucoes {
+    flex-direction: column !important;
+    text-align: center !important;
+    padding: 20px 16px !important;
+  }
+
+  .inscricao-trilha-instrucoes h3 {
+    font-size: 1.1rem !important;
+    justify-content: center !important;
+  }
+
+  .inscricao-trilha-instrucoes p {
+    font-size: 0.9rem !important;
+  }
+
+  .inscricao-trilha-instrucoes a {
+    width: 100%;
+    justify-content: center !important;
+    padding: 12px 20px !important;
   }
 }

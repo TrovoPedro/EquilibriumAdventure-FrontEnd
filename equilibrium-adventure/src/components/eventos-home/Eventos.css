@@ -34,7 +34,6 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     overflow: hidden;
 }
 
@@ -45,15 +44,6 @@
     height: 280px;
     object-fit: cover;
     border-radius: 16px;
-    transition: transform 0.3s ease;
-}
-
-.evento-card:hover {
-    transform: translateY(-8px) scale(1.03);
-}
-
-.evento-card:hover img {
-    transform: scale(1.05);
 }
 
 .evento-card h3 {
@@ -99,14 +89,8 @@
     font-size: 1.5rem;
     color: #7bbf7f;
     cursor: pointer;
-    transition: all 0.2s ease;
     padding: 8px;
     border-radius: 50%;
-}
-
-.evento-icons span:last-child:hover {
-    background: rgba(123, 191, 127, 0.15);
-    transform: scale(1.2);
 }
 
 .evento-tipos {
