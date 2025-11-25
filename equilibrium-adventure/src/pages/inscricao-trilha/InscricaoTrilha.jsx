@@ -46,7 +46,6 @@ const InscricaoTrilhasLimitado = () => {
   const [inscritosCount, setInscritosCount] = useState(0);
   const [mediaAvaliacoes, setMediaAvaliacoes] = useState(0);
   const [mensagemAvaliacao, setMensagemAvaliacao] = useState('');
-  const [pdfUrl, setPdfUrl] = useState(null);
   const [pdfNome, setPdfNome] = useState('');
   const { usuario, anamnese } = useAuth()
   const { nivel, pontuacaoTotal } = useScore();
