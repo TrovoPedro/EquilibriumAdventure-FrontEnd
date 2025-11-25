@@ -191,8 +191,8 @@ const Dashboard = () => {
           const umMesAtras = new Date();
           umMesAtras.setDate(hoje.getDate() - 30);
           
-          const endDateStr = hoje.toISOString().split('T')[0];
-          const startDateStr = umMesAtras.toISOString().split('T')[0];
+          const endDateStr = `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, '0')}-${String(hoje.getDate()).padStart(2, '0')}`;
+          const startDateStr = `${umMesAtras.getFullYear()}-${String(umMesAtras.getMonth() + 1).padStart(2, '0')}-${String(umMesAtras.getDate()).padStart(2, '0')}`;
           
           const tendenciasData = await getTendenciasPeriodo(usuarioId, startDateStr, endDateStr);
           
@@ -237,12 +237,14 @@ const Dashboard = () => {
     });
     
     const resultado = [];
-    const inicio = new Date(dataInicio);
-    const fim = new Date(dataFim);
+    const inicio = new Date(dataInicio + 'T00:00:00');
+    const fim = new Date(dataFim + 'T00:00:00');
     
     for (let data = new Date(inicio); data <= fim; data.setDate(data.getDate() + 1)) {
-      const dataStr = data.toISOString().split('T')[0];
-      const [ano, mes, dia] = dataStr.split('-');
+      const ano = data.getFullYear();
+      const mes = String(data.getMonth() + 1).padStart(2, '0');
+      const dia = String(data.getDate()).padStart(2, '0');
+      const dataStr = `${ano}-${mes}-${dia}`;
       
       resultado.push({
         month: `${dia}/${mes}`,
