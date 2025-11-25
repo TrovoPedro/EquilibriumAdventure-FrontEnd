@@ -1,4 +1,3 @@
-
 body {
 	margin: 0;
 	padding: 0;
@@ -15,6 +14,13 @@ body {
 		grid-template-columns: 1fr !important;
 		gap: 15px !important;
 	}
+
+	/* Botão ocupa largura total em telas pequenas */
+	.salvar-btn {
+		width: 100%;
+		padding: 16px 20px;
+		box-sizing: border-box;
+	}
 }
 
 @media (max-width: 768px) {
@@ -25,6 +31,15 @@ body {
 	.form-grid {
 		grid-template-columns: 1fr !important;
 		gap: 32px !important;
+	}
+
+	/* Fazer o botão ter a mesma largura do card Endereço no mobile */
+	.salvar-btn {
+		width: 90%;
+		max-width: none;
+		min-width: 0;
+		padding: 16px 20px;
+		box-sizing: border-box;
 	}
 }
 
@@ -99,13 +114,16 @@ html, body, #root {
 	font-weight: 600;
 	border: none;
 	border-radius: 12px;
-	padding: 16px 40px;
+	padding: 16px 56px;
+	min-width: 340px;
+	max-width: 560px;
+	display: block;
 	cursor: pointer;
 	box-shadow: 0 4px 12px rgba(34, 97, 68, 0.2);
 	transition: all 0.3s ease;
 	text-transform: none;
 	letter-spacing: 0.5px;
- 	margin-top: 12px; /* reduzido para subir o botão */
+ 	margin: 12px auto 0; /* topo, centraliza horizontalmente */
 }
 
 .salvar-btn:hover {

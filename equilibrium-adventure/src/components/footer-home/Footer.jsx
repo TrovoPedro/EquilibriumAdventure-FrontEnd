@@ -261,7 +261,7 @@ export default function Footer() {
         <div className="footer-bottom">
           <div className="footer-divider"></div>
           <div className="footer-copyright">
-            <p>&copy; 2024 Equilibrium Adventure.</p>
+            <p>&copy; 2025 Equilibrium Adventure.</p>
           </div>
         </div>
       </div>
