@@ -46,6 +46,8 @@ const InscricaoTrilhasLimitado = () => {
   const [inscritosCount, setInscritosCount] = useState(0);
   const [mediaAvaliacoes, setMediaAvaliacoes] = useState(0);
   const [mensagemAvaliacao, setMensagemAvaliacao] = useState('');
+  const [pdfUrl, setPdfUrl] = useState(null);
+  const [pdfNome, setPdfNome] = useState('');
   const { usuario, anamnese } = useAuth()
   const { nivel, pontuacaoTotal } = useScore();
   const [nivelInsuficiente, setNivelInsuficiente] = useState(false);
@@ -71,6 +73,7 @@ const InscricaoTrilhasLimitado = () => {
           setEvento({
             idEvento: ativacao.evento?.idEvento,
             idAtivacao: ativacao.idAtivacao,
+            idEvento: ativacao.evento?.idEvento || ativacao.evento?.id_evento || null,
             nome: ativacao.evento?.nome || "",
             descricao: ativacao.evento?.descricao || "",
             nivel_dificuldade: ativacao.evento?.nivelDificuldade || "",
@@ -91,13 +94,41 @@ const InscricaoTrilhasLimitado = () => {
           const imagemUrl = await buscarImagemEvento(ativacao.evento.idEvento);
           setImagemEvento(imagemUrl || null);
 
+          // Buscar dados completos do evento base para obter o PDF
+          if (ativacao.evento.idEvento) {
+            try {
+              const response = await fetch(`http://localhost:8080/administrador/buscar-evento-base-especifico/${ativacao.evento.idEvento}`);
+              
+              if (response.ok) {
+                const eventoBaseData = await response.json();
+                
+                if (eventoBaseData.pdf_base64) {
+                  try {
+                    const byteCharacters = atob(eventoBaseData.pdf_base64);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                      byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const pdfBlob = new Blob([byteArray], { type: 'application/pdf' });
+                    const pdfObjectUrl = URL.createObjectURL(pdfBlob);
+                    
+                    setPdfUrl(pdfObjectUrl);
+                    setPdfNome(`instrucoes-${eventoBaseData.nome || 'trilha'}.pdf`);
+                  } catch (error) {
+                    console.error('Erro ao converter PDF:', error);
+                  }
+                }
+              }
+            } catch (error) {
+              console.error('Erro ao buscar dados do evento base:', error);
+            }
+          }
+
           if (ativacao.idAtivacao) {
-            console.log("Buscando GPX:", ativacao.evento.idEvento);
             const gpx = await buscarGpx(ativacao.evento.idEvento);
             setGpxData(gpx);
           }
-
-          console.log("Evento carregado:", ativacao);
         } else {
           console.error("Nenhuma ativação encontrada para este evento");
         }
@@ -176,10 +207,7 @@ const InscricaoTrilhasLimitado = () => {
       idAtivacaoEvento: id
     });
 
-    setComentarios(prev => [...prev, {
-      nome: comentarioCriado.nomeUsuario,
-      texto: comentarioCriado.texto
-    }]);
+    setComentarios(prev => [...prev, comentarioCriado]);
   };
 
 

@@ -769,3 +769,51 @@
     gap: 12px;
     padding: 20px 16px 16px 16px;
 }
+
+/* Card de Escolher Data Inline */
+.infos-adic-guia-page .card-escolher-data-inline {
+    margin-top: 40px;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.infos-adic-guia-page .card-escolha-inline-custom {
+    position: relative;
+    overflow: hidden;
+}
+
+.infos-adic-guia-page .card-escolha-inline-custom::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #336948, #226144, #0C513F);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.infos-adic-guia-page .card-escolha-inline-custom:hover::before {
+    opacity: 1;
+}
+
+.infos-adic-guia-page .card-escolha-inline-custom h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 60px;
+    height: 3px;
+    background: linear-gradient(90deg, #336948, #226144);
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.infos-adic-guia-page .card-escolha-inline-custom:hover h2::after {
+    width: 80px;
+}

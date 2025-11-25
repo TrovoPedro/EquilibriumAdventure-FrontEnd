@@ -290,15 +290,6 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
 
                                 <button className="nav-arrow nav-right" onClick={() => scrollRight('anamneses-cards')}>›</button>
                             </div>
-
-                            <div className="filtro-button-data">
-                                <button
-                                    className="button-add-data"
-                                    onClick={() => setShowEscolherData(true)}
-                                >
-                                    Adicionar datas
-                                </button>
-                            </div>
                         </div>
 
                         <div className="eventos-anamnese-ativos">
@@ -357,12 +348,14 @@ const CriarInformacoesAdicionaisGuia = (title, onClick) => {
                             </div>
                         </div>
                     </div>
-                    {showEscolherData && (
+                    
+                    <div className="card-escolher-data-inline">
                         <EscolhaDataCard
                             onClose={() => setShowEscolherData(false)}
                             fkAventureiro={null}
+                            isInline={true}
                         />
-                    )}
+                    </div>
                 </div>
             </div>
         </>

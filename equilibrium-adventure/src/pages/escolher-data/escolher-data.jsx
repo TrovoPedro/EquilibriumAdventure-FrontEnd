@@ -32,7 +32,7 @@ dayjs.extend(updateLocale);
 dayjs.updateLocale("pt-br", { weekStart: 1 });
 dayjs.locale("pt-br");
 
-export default function EscolhaDataCard({ onClose }) {
+export default function EscolhaDataCard({ onClose, isInline = false }) {
   const { usuario } = useAuth();
   const [value, setValue] = React.useState(null);
   const [hora, setHora] = React.useState("");
@@ -210,7 +210,26 @@ export default function EscolhaDataCard({ onClose }) {
       });
 
       showSuccess("Disponibilidade adicionada!");
-      handleClose();
+      
+      // Atualizar o calendário para mostrar a nova data como indisponível (cinza)
+      const dateKey = dayjs(value).format("YYYY-MM-DD");
+      setDatasCalendario(prev => [
+        ...prev,
+        {
+          data: dateKey,
+          tipo: "DISP",
+          cor: "#C0C0C0",
+          descricao: "Disponível",
+        }
+      ]);
+      
+      // Limpar seleção
+      setValue(null);
+      setHora("");
+      
+      if (!isInline) {
+        handleClose();
+      }
     } catch (err) {
       console.error(err);
       showError(
@@ -228,7 +247,7 @@ export default function EscolhaDataCard({ onClose }) {
     const bgColor = itemDoDia
       ? itemDoDia.cor
       : selected
-      ? "#27ae60"
+      ? "#226144"
       : undefined;
 
     const hoverColor = itemDoDia
@@ -238,7 +257,7 @@ export default function EscolhaDataCard({ onClose }) {
         ? "#358a39"
         : "#b0b0b0"
       : selected
-      ? "#219150"
+      ? "#1a4d35"
       : "#f0f0f0";
 
     const getTooltipMessage = () => {
@@ -278,11 +297,11 @@ export default function EscolhaDataCard({ onClose }) {
                 backgroundColor: !!itemDoDia ? bgColor : hoverColor,
               },
               "&.Mui-selected": {
-                backgroundColor: (itemDoDia ? bgColor : "#27ae60") + " !important",
+                backgroundColor: (itemDoDia ? bgColor : "#226144") + " !important",
                 color: "#fff",
               },
               "&.Mui-selected:hover": {
-                backgroundColor: (itemDoDia ? hoverColor : "#219150") + " !important",
+                backgroundColor: (itemDoDia ? hoverColor : "#1a4d35") + " !important",
               },
             }}
           />
@@ -291,6 +310,108 @@ export default function EscolhaDataCard({ onClose }) {
     );
   }
 
+  // Renderização inline (sem modal)
+  if (isInline) {
+    return (
+      <div style={{ width: '100%' }}>
+        <Card 
+          className="card-escolha-inline-custom" 
+          style={{ 
+            position: 'relative',
+            maxWidth: '100%',
+            width: '100%',
+            margin: '0 auto',
+            background: 'linear-gradient(135deg, #ffffff 0%, #f8fffe 100%)',
+            borderRadius: '20px',
+            boxShadow: '0 8px 32px rgba(0, 0, 0, 0.08)',
+            zIndex: 1,
+            overflow: 'hidden',
+            transition: 'all 0.3s ease'
+          }}
+        >
+          <CardContent style={{ overflow: 'visible', padding: '28px 24px' }}>
+            <Typography 
+              variant="h2" 
+              style={{ 
+                fontSize: '28px',
+                color: '#1F2937',
+                fontWeight: 700,
+                margin: '0 0 30px 0',
+                position: 'relative',
+                paddingBottom: '12px'
+              }}
+            >
+              Adicionar Disponibilidade para Anamnese
+            </Typography>
+            
+            <Typography variant="h6" align="center" style={{ marginBottom: 8, color: "#226144" }}>
+              Escolha uma data:
+            </Typography>
+
+            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pt-br">
+              <DateCalendar
+                value={value}
+                onChange={(newValue) => newValue && setValue(newValue)}
+                dayOfWeekFormatter={(day) => day.format("ddd")}
+                slots={{
+                  day: (props) => <CustomPickersDay {...props} />,
+                }}
+              />
+            </LocalizationProvider>
+
+            <Typography variant="h6" align="center" style={{ marginTop: 16, marginBottom: 8, color: "#226144" }}>
+              Escolha um horário:
+            </Typography>
+
+            <Box mt={1} mb={2}>
+              <Select
+                fullWidth
+                displayEmpty
+                value={hora}
+                onChange={(e) => setHora(e.target.value)}
+                MenuProps={{
+                  disablePortal: true,
+                  container: document.body,
+                  PaperProps: { style: { minWidth: 220, zIndex: 3000 } },
+                }}
+              >
+                <MenuItem value="">
+                  <em>Escolher Horário</em>
+                </MenuItem>
+                {horariosDisponiveis.map((h) => (
+                  <MenuItem key={h} value={h}>
+                    {h}
+                  </MenuItem>
+                ))}
+              </Select>
+            </Box>
+
+            <Box display="flex" justifyContent="center" mt={2} gap={2}>
+              <Button
+                variant="contained"
+                sx={{
+                  backgroundColor: "#226144",
+                  color: "#fff",
+                  fontWeight: 300,
+                  fontSize: "0.8rem",
+                  borderRadius: "8px",
+                  padding: "12px 24px",
+                  minWidth: "140px",
+                  boxShadow: "0 2px 8px rgba(34,97,68,0.13)",
+                  "&:hover": { backgroundColor: "#1a4d35" },
+                }}
+                onClick={handleSave}
+              >
+                Salvar Data
+              </Button>
+            </Box>
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
+
+  // Renderização modal (original)
   return (
     <div
       className="overlay"
