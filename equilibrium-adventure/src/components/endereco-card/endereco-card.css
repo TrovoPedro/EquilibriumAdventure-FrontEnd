@@ -11,7 +11,29 @@
   max-width: 850px;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
   border: 1px solid rgba(255, 255, 255, 0.8);
+  border-top-color: transparent; /* evita linha branca acima do ::before */
   position: relative;
+  overflow: hidden; /* garante que o ::before respeite os cantos arredondados */
+}
+
+.form-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #336948, #226144, #0C513F);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  z-index: 3; /* garante que a linha fique sobre o conteúdo/borda */
+  pointer-events: none;
+}
+
+.form-section:hover::before {
+  opacity: 1;
 }
 
 

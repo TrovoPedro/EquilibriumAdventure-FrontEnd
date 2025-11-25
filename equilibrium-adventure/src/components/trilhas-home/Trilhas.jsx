@@ -185,6 +185,7 @@ export default function Trilhas() {
 
   return (
     <section className="trilhas">
+      <p className="trilhas-subtitle">Para explorar</p>
       <h2>Seu próximo lugar favorito o aguarda</h2>
       <div className="cards-wrapper">
         {/* calculamos largura total das cards e o deslocamento em porcentagem relativo à própria largura */}

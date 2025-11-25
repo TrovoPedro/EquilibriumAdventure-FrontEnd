@@ -19,7 +19,7 @@ body::before {
   content: '';
   position: fixed;
   inset: 0;
-  background: #ffffff;
+  background: #f6f7f8;
   z-index: -9999;
 }
 

@@ -32,7 +32,7 @@
   font-weight: 600;
   font-size: 1rem;
   font-family: 'Raleway', sans-serif;
-  padding: 8px 16px;
+  padding: 10px 18px;
   cursor: pointer;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.12);
   transition: background 180ms ease, color 180ms ease, transform 160ms ease;
@@ -43,38 +43,39 @@
 }
 
 /* Specific header button variants */
+
 .btn-create {
-  /* Mantém visual branco com texto verde, apenas adiciona a mesma borda do botão 'entrar' */
   background: #ffffff;
   color: var(--cor-principal, #2f7a5a);
-  border: 3px solid #ffffff;
-  border-radius: 3px;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 10px 18px;
+  box-shadow: 0 4px 12px rgba(47,122,90,0.06);
 }
 
 .btn-create:hover {
-  /* mantém as cores originais, apenas aplica leve escala no hover */
-  transform: scale(1.05);
+  background: #f7f9f7;
+  transform: translateY(-2px);
 }
 
 .menu .btn-enter {
-  background: transparent !important;
-  color: #ffffff !important;
-  border: 3px solid #ffffff !important;
-  /* thicker white border */
+  background: transparent;
+  color: #ffffff;
+  border: 2px solid rgba(255,255,255,0.9);
   transition: border-color 160ms ease, transform 120ms ease, background 160ms ease;
-  border-radius: 3px;
-  /* menos arredondado para entrar */
+  border-radius: 8px;
+  padding: 10px 18px;
 }
 
 .menu .btn-enter:hover {
-  /* não altera cor/fundo no hover; apenas leve escala */
-  transform: scale(1.02);
+  background: rgba(255,255,255,0.06);
+  transform: translateY(-2px);
 }
 
 /* Garantir que quando ambas as classes estiverem presentes (.btn btn-create)
    o border-radius permaneça 3px (mais específico que regra global .btn) */
 .btn.btn-create {
-  border-radius: 3px;
+  border-radius: 8px;
 }
 
 .menu .lang {
@@ -323,13 +324,15 @@
     background: #ffffff !important;
     color: var(--cor-principal, #2f7a5a) !important;
     border: 2px solid transparent !important;
+    border-radius: 8px !important;
   }
 
   /* Make 'ENTRAR' visible with white border and transparent background */
   .menu.open .btn-enter {
     background: transparent !important;
     color: #ffffff !important;
-    border: 2px solid #ffffff !important;
+    border: 2px solid rgba(255,255,255,0.95) !important;
+    border-radius: 8px !important;
   }
 
   /* banner text adjustments for smaller viewports */
@@ -412,5 +415,50 @@
   .banner-text .hero-cta {
     display: inline-block;
     width: auto;
+  }
+}
+
+/* Ajustes extras para telas muito estreitas (telefones menores que 500px)
+   - reduzir tamanho dos títulos progressivamente com clamp()
+   - aumentar translateY (subir) para que não sejam cortados
+   - ajustar line-height e padding para melhor legibilidade
+   - permitir overflow visível se o texto ficar parcialmente fora do container */
+@media (max-width: 500px) {
+  .banner {
+    height: auto; /* permite que o conteúdo determine altura */
+    align-items: flex-start; /* começar pelo topo para evitar corte */
+    padding-top: 8px;
+  }
+
+  .imagem-pai {
+    overflow: visible !important; /* evita que o texto seja cortado pelo container */
+    max-width: 100%;
+  }
+
+  .banner-text {
+    transform: translate(0, -60%) !important; /* sobe os títulos */
+    padding-left: 16px !important;
+    padding-right: 12px !important;
+    width: 100%;
+    box-sizing: border-box;
+  }
+
+  .banner-text h1 {
+    font-size: clamp(1.4rem, 8.5vw, 1.9rem) !important;
+    line-height: 1.05 !important;
+    margin: 0 0 6px 0 !important;
+    word-break: break-word;
+  }
+
+  .banner-text h2 {
+    font-size: clamp(0.95rem, 4.5vw, 1.2rem) !important;
+    line-height: 1.15 !important;
+    margin: 0 !important;
+    word-break: break-word;
+  }
+
+  /* reduzir padding geral do banner-text para caber em telas muito estreitas */
+  .banner-text .hero-cta {
+    margin-top: 10px;
   }
 }

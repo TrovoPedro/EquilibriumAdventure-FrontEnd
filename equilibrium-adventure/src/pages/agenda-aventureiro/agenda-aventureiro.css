@@ -491,14 +491,15 @@
 }
 
 .agenda-aventureiro-item:hover {
-  /* manter alteração visual leve, mas remover movimento e sombra */
-  background: linear-gradient(135deg, #f8fffe 0%, #f0f9f4 100%);
+  /* Removido efeito visual no hover conforme solicitado: manter aparência estática */
+  background: transparent !important;
   transform: none !important;
   box-shadow: none !important;
 }
 
 .agenda-aventureiro-item:hover::before {
-  opacity: 1;
+  /* Impedir a aparição da faixa/linha ao passar o mouse */
+  opacity: 0 !important;
 }
 
 .agenda-aventureiro-item-info {
