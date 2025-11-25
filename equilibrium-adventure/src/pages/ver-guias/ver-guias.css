@@ -118,14 +118,39 @@
     .h1-title { font-size: 24px; }
     .ver-guias-card { padding: 20px; }
     .ver-guias-item { flex-direction: column; align-items: flex-start; gap: 8px; }
-    .ver-guias-actions { width: 100%; justify-content: space-between; }
+    .ver-guias-actions { width: 100%; justify-content: flex-end; }
+    .button-questionario, .btn-cancelar {
+        padding: 8px;
+        font-size: 0.9rem;
+        height: fit-content;
+        width: auto;
+        min-width: 140px !important;
+    }
 }
 
-@media (max-width: 480px) {
+@media (max-width: 500px) {
     .ver-guias-page { padding: 110px 5px 40px 5px; }
     .h1-title { font-size: 20px; }
     .ver-guias-card { padding: 16px; }
+    .ver-guias-item {flex-direction: column;}
+    .ver-guias-actions { flex-direction: row; align-items: stretch; gap: 8px; justify-content: flex-end; }
+    .button-questionario, .btn-cancelar {
+        padding: 8px;
+        font-size: 0.9rem;
+        height: fit-content;
+        width: auto;
+        min-width: 140px !important;
+    }
 }
 
+@media (max-width: 360px) {
+    .button-questionario, .btn-cancelar {
+        padding: 8px;
+        font-size: 0.9rem;
+        height: fit-content;
+        width: auto;
+        min-width: 110px !important;
+    }
+}
 
 
