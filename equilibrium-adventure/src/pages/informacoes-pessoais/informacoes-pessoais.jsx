@@ -80,6 +80,8 @@ export default function InformacoesPessoais() {
 
 	const navigate = useNavigate();
 
+
+
 	// Função para determinar a tela anterior baseada no tipo de usuário
 	const handleNavigateBack = () => {
 		const usuarioLogadoString = sessionStorage.getItem("usuario");
@@ -786,6 +788,8 @@ export default function InformacoesPessoais() {
 					onConfirm={() => setShowPopupErro(false)}
 				/>
 			)}
+
+
 		</div>
 	);
 }

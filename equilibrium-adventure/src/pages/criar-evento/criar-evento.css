@@ -32,7 +32,7 @@
 /* Responsividade */
 @media (max-width: 768px) {
     .criar-evento-page {
-        padding: 110px 10px 40px 10px;
+        padding: 70px 10px 40px 10px;
     }
     
     .editar-evento-header {
@@ -48,11 +48,15 @@
         padding: 30px 20px;
         width: 90%;
     }
+    
+    .titulo-pagina {
+        margin-top: 3%;
+    }
 }
 
 @media (max-width: 480px) {
     .criar-evento-page {
-        padding: 110px 5px 40px 5px;
+        padding: 60px 5px 40px 5px;
     }
     
     .editar-evento-header {
@@ -67,6 +71,10 @@
     .criar-evento-container form {
         padding: 20px 15px;
         width: 95%;
+    }
+    
+    .titulo-pagina {
+        margin-top: 3%;
     }
 }
 
@@ -96,7 +104,7 @@
 /* Título */
 
 .titulo-pagina {
-    margin-top: 7%;
+    margin-top: 3%;
     font-size: 24px;
     color: #b8220e;
     margin-bottom: 20px;

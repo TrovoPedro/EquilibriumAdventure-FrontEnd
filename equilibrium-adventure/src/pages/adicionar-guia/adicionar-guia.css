@@ -80,7 +80,11 @@ body {
     color: #226144;
     font-size: 32px;
     font-weight: 400;
-    margin: 0;
+    margin: 0 0 20px 0;
+}
+
+.adicionar-guia-header .adicionar-guia-title {
+    margin-bottom: 0;
 }
 
 .back-arrow-circle {
@@ -323,8 +327,11 @@ body {
 }
 
 @media (max-width: 768px) {
-    .adicionar-guia-container {
+    .adicionar-guia-page {
         padding: 110px 10px 40px 10px;
+    }
+    .adicionar-guia-container {
+        padding: 0 10px 40px 10px;
     }
     
     .close-btn-adicionar-guia {
@@ -335,10 +342,17 @@ body {
     
     .adicionar-guia-header {
         gap: 12px;
+        padding-left: 10px;
+        margin-top: 8px;
     }
     
     .adicionar-guia-title {
         font-size: 24px;
+    }
+
+    /* Garantir tamanho do título igual ao de criar-evento apenas em mobile */
+    .adicionar-guia-header .adicionar-guia-title {
+        font-size: 29px;
     }
     
     .adicionar-guia-layout-wrapper {
@@ -353,6 +367,15 @@ body {
     .adicionar-guia-botoes {
         flex: none;
     }
+
+    /* coloca botões no fim do formulário quando estiver em coluna */
+    .mobile-buttons-at-end {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        margin-top: 18px;
+    }
     
     .upload-box {
         min-height: 300px;
@@ -360,8 +383,11 @@ body {
 }
 
 @media (max-width: 480px) {
-    .adicionar-guia-container {
+    .adicionar-guia-page {
         padding: 110px 5px 40px 5px;
+    }
+    .adicionar-guia-container {
+        padding: 0 5px 40px 5px;
     }
     
     .close-btn-adicionar-guia {
@@ -372,9 +398,11 @@ body {
     
     .adicionar-guia-header {
         gap: 8px;
+        padding-left: 5px;
     }
-    
-    .adicionar-guia-title {
+
+    /* Forçar tamanho do título igual ao de criar-evento em telas muito pequenas */
+    .adicionar-guia-header .adicionar-guia-title {
         font-size: 20px;
     }
     
@@ -394,5 +422,14 @@ body {
     .adicionar-guia-btn {
         font-size: 1rem;
         padding: 14px 24px;
+    }
+
+    .adicionar-guia-header {
+        padding-left: 0;
+        margin-top: 6px;
+    }
+
+    .mobile-buttons-at-end {
+        margin-bottom: 8px;
     }
 }

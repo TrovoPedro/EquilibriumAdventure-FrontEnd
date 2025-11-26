@@ -11,7 +11,7 @@
   background-color: #f8f9fa;
   min-height: 100vh;
   padding: 32px;
-  padding-top: 70px; 
+  padding-top: 110px; 
   color: #1f2937;
 }
 
@@ -37,8 +37,9 @@
   font-size: 32px;
   font-weight: 400;
   color: #065f46;
-  margin-top: 35px; 
+  margin: 0; 
   font-family: "Raleway", sans-serif; /* usar Raleway nos títulos do dashboard */
+  line-height: 1; /* garantir alinhamento vertical consistente */
 }
 
 .tab-buttons {
@@ -136,6 +137,16 @@
   position: relative;
 }
 
+/* Ensure pseudo-elements are clipped to the card rounding */
+.left-panel,
+.right-panel,
+.tendencias-section,
+.cities-panel,
+.events-panel,
+.feedback-section {
+  overflow: hidden;
+}
+
 /* Expand small decorative underline on h2 when hovering the card */
 .left-panel h2::after,
 .right-panel h2::after,
@@ -181,8 +192,28 @@
   margin-bottom: 16px;
 }
 
+/* Make stat-cards positionable so decorative stripe can follow their rounded corners */
+.stat-card {
+  position: relative;
+  overflow: hidden;
+}
+
 .stat-card.green {
   background-color: #d1fae5;
+}
+
+/* Decorative vertical green stripe on the left of stat cards that follows the card border */
+.stat-card.green::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg, #336948, #226144, #0C513F);
+  transition: background 0.2s ease;
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
 }
 
 .stat-card.blue {
@@ -904,6 +935,7 @@
 @media (max-width: 768px) {
   .dashboard {
     padding: 16px;
+    padding-top: 90px; /* Espaço extra do topo apenas na versão mobile */
   }
 
   .dashboard-header {
@@ -912,8 +944,9 @@
     gap: 16px;
   }
 
+  /* Aumentar título principal em mobile (tablet/phone) */
   .dashboard-header h1 {
-    font-size: 24px;
+    font-size: 28px;
   }
 
   .participant-bar-item {
@@ -930,5 +963,23 @@
   /* Reduce left offset on small screens */
   .title-row {
     margin-left: 8px;
+  }
+}
+
+/* Match criar-evento mobile h1 sizing on very small screens */
+@media (max-width: 480px) {
+  /* Ajuste para telas muito pequenas: manter maior que antes */
+  .dashboard-header h1 {
+    font-size: 24px;
+  }
+
+  /* Aumentar também os títulos internos (h2) nas seções do dashboard */
+  .left-panel h2,
+  .right-panel h2,
+  .tendencias-section h2,
+  .cities-panel h2,
+  .events-panel h2,
+  .feedback-section h2 {
+    font-size: 18px;
   }
 }
