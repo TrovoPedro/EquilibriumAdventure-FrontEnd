@@ -45,7 +45,7 @@ export default function AppRoutes() {
       <Route path={routeUrls.ESCOLHER_DATA} element={<ProtectedRoute allowedRoles={["AVENTUREIRO"]}><EscolhaDataCard /></ProtectedRoute>} />
       <Route path={routeUrls.AGENDA_AVENTUREIRO} element={<ProtectedRoute allowedRoles={["AVENTUREIRO"]}><AgendaAventureiro /></ProtectedRoute>} />
       <Route path={routeUrls.AGENDAMENTO_ANAMNESE} element={<ProtectedRoute allowedRoles={["AVENTUREIRO"]}><AgendamentoAnamnese /></ProtectedRoute>} />
-      <Route path={routeUrls.DETALHES_EVENTO} element={<ProtectedRoute allowedRoles={["AVENTUREIRO"]}><DetalhesEvento /></ProtectedRoute>} />
+      <Route path={routeUrls.DETALHES_EVENTO} element={<ProtectedRoute allowedRoles={["AVENTUREIRO", "GUIA", "ADMINISTRADOR"]}><DetalhesEvento /></ProtectedRoute>} />
 
       {/* Rotas protegidas - GUIA e ADMINISTRADOR */}
       <Route path={routeUrls.CRIAR_EVENTO} element={<ProtectedRoute allowedRoles={["GUIA", "ADMINISTRADOR"]}><CriarEvento /></ProtectedRoute>} />
