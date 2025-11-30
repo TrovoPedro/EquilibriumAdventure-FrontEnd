@@ -47,6 +47,7 @@ const InscricaoTrilhasLimitado = () => {
   const [mediaAvaliacoes, setMediaAvaliacoes] = useState(0);
   const [mensagemAvaliacao, setMensagemAvaliacao] = useState('');
   const [pdfNome, setPdfNome] = useState('');
+  const [loadingCancelamento, setLoadingCancelamento] = useState(false);
   const { usuario, anamnese } = useAuth()
   const { nivel, pontuacaoTotal } = useScore();
   const [nivelInsuficiente, setNivelInsuficiente] = useState(false);
@@ -292,14 +293,19 @@ const InscricaoTrilhasLimitado = () => {
 
     if (!confirmResult.isConfirmed) return;
 
+    // Mostrar loading imediatamente
+    setLoadingCancelamento(true);
+    
     try {
       await cancelarInscricao(usuario.id, evento.idAtivacao);
-      showSuccess("Inscrição cancelada com sucesso!");
       setInscrito(false);
       setInscritosCount(prev => Math.max(0, prev - 1));
+      showSuccess("Inscrição cancelada com sucesso!");
     } catch (error) {
       console.error("Erro ao cancelar inscrição:", error);
       showError(error.message || "Erro ao cancelar inscrição. Tente novamente.");
+    } finally {
+      setLoadingCancelamento(false);
     }
   };
 
@@ -535,14 +541,17 @@ const InscricaoTrilhasLimitado = () => {
               padding: '18px 0',
               fontSize: '1.35rem',
               fontWeight: 700,
-              cursor: 'pointer',
+              cursor: loadingCancelamento ? 'wait' : 'pointer',
               margin: '32px 0 0 0',
               boxShadow: '0 2px 12px rgba(0,0,0,0.08)',
               textAlign: 'center',
               letterSpacing: '0.5px',
-              transition: 'background 0.2s'
+              transition: 'background 0.2s',
+              opacity: loadingCancelamento ? 0.7 : 1
             }}
             onClick={() => {
+              if (loadingCancelamento) return;
+              
               if (inscrito) {
                 handleCancelarInscricao();
                 return;
@@ -560,8 +569,9 @@ const InscricaoTrilhasLimitado = () => {
 
               handleInscrever();
             }}
+            disabled={loadingCancelamento}
           >
-            {inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
+            {loadingCancelamento ? 'Cancelando...' : inscrito ? 'Cancelar inscrição' : 'Realizar inscrição'}
           </button>
         )}
 
