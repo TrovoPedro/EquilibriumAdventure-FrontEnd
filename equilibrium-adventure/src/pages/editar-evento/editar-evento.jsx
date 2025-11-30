@@ -283,6 +283,19 @@ const EditarEvento = () => {
             showError("Erro: ID do evento não encontrado.");
             return;
         }
+
+        const confirmResult = await showWarning(
+            'Tem certeza que deseja excluir este evento? Esta ação não poderá ser desfeita.',
+            'Confirmação',
+            'Sim, excluir',
+            'Cancelar',
+            true
+        );
+
+        if (!confirmResult || !confirmResult.isConfirmed) {
+            return;
+        }
+
         try {
             await excluirEventoBase(eventoId);
             showSuccess("Evento excluído com sucesso!");
@@ -458,7 +471,15 @@ const EditarEvento = () => {
                     </div>
 
                     <label>
-                        Mapa da Trilha (.gpx):
+                        <div className="label-with-info">
+                            <span>Mapa da Trilha (.gpx):</span>
+                            <img
+                                src="/src/assets/info.png"
+                                alt="Mais informações"
+                                className="info-icon"
+                                title="Para adicionar o percurso da trilha em formato GPX, acesse o site Wikiloc, busque pela trilha desejada e faça o download do arquivo GPX correspondente."
+                            />
+                        </div>
                         <label htmlFor="upload-trilha-input" style={{ cursor: 'pointer' }}>
                             <div className="upload-box">
                                 {formData.trilha ? (

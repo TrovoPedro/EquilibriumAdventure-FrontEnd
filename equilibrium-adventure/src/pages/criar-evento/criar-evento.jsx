@@ -174,7 +174,15 @@ const CriarEvento = () => {
                     </div>
 
                     <label>
-                        Mapa da Trilha (.gpx):
+                        <div className="label-with-info">
+                            <span>Mapa da Trilha (.gpx):</span>
+                            <img
+                                src="/src/assets/info.png"
+                                alt="Mais informações"
+                                className="info-icon"
+                                title="Para adicionar o percurso da trilha em formato GPX, acesse o site Wikiloc, busque pela trilha desejada e faça o download do arquivo GPX correspondente."
+                            />
+                        </div>
                         <label htmlFor="upload-trilha-input" style={{ cursor: 'pointer' }}>
                             <div className="upload-box-trilha">
                                 {formData.trilha ? (

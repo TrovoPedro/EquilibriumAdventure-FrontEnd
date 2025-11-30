@@ -250,3 +250,23 @@
 .trilha-preview:hover {
     background-color: #e0e0e0;
 }
+
+/* Label com ícone de informação */
+.label-with-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.label-with-info .info-icon {
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+}
+
+.label-with-info .info-icon:hover {
+    opacity: 1;
+}

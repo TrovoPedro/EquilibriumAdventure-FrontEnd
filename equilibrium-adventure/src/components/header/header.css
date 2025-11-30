@@ -58,10 +58,11 @@
 
 /* Ocultar link AGENDA do menu centralizado e lateral em telas maiores que 500px (desktop) */
 @media (min-width: 501px) {
-  /* AVENTUREIRO: posição 3 */
-  .header-center li:nth-child(3),
-  .header-side-menu li:nth-child(3),
-  /* ADMINISTRADOR: posição 6 */
+  /* AVENTUREIRO: posição 3 - AGENDA */
+  /* Comentado para permitir que AVENTUREIRO veja AGENDA no menu também */
+  /* .header-center li:nth-child(3),
+  .header-side-menu li:nth-child(3), */
+  /* ADMINISTRADOR: posição 6 - AGENDA */
   .header-center li:nth-child(6),
   .header-side-menu li:nth-child(6) {
     display: none;
