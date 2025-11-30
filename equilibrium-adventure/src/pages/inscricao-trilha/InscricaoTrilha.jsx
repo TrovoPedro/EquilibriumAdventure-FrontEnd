@@ -376,8 +376,8 @@ const InscricaoTrilhasLimitado = () => {
             <div className="avaliacao">
               {mediaAvaliacoes > 0 ? (
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                  <span style={{ fontSize: '1.4rem', fontWeight: '700', color: '#226144' }}>
                     {mediaAvaliacoes.toFixed(1)}
+                  <span style={{ fontSize: '1.4rem', fontWeight: '700', color: '#226144' }}>
                   </span>
                   {renderStars(mediaAvaliacoes)}
                 </div>

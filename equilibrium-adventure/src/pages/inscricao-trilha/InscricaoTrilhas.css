@@ -551,6 +551,31 @@
 }
 
 @media (max-width: 900px) {
+  
+  /* 🔥 Caixa de avaliações — mais para cima e sem sobrepor imagem */
+  .avaliacao {
+    position: absolute !important;
+    top: -30px !important; /* SUBI MAIS */
+    right: 12px !important;
+    background: transparent;
+    border: none;
+    border-radius: 10px;
+    padding: 4px 8px !important;
+    font-size: 13px !important;
+    z-index: 30;
+    backdrop-filter: none;
+  }
+
+  /* 🔥 Botão de voltar mais para cima */
+  .circle-back-btn {
+    position: absolute;
+    top: 1px; /* SUBI MAIS */
+    left: 8px;
+    z-index: 40;
+    background: transparent !important;
+    border: none;
+  }
+
   .inscricao-trilha-container {
     max-width: 98vw;
     padding: 8px 2vw 24px 2vw;
