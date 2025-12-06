@@ -867,30 +867,34 @@ const Dashboard = () => {
                 </div>
                 <div className="section-subtitle">Localização dos Participantes</div>
                 <div className="cities-list">
-                  {citiesData.map((city, index) => (
-                    <div key={index} className="city-item">
-                      <div className="city-rank">{index + 1}</div>
-                      <div className="city-info">
-                        <div className="city-name">
-                          <span className="location-icon">📍</span>
-                          {city.name}
-                        </div>
-                        <div className="city-state">{city.state}</div>
-                        <div className="city-bar-container">
-                          <div className="city-bar">
-                            <div
-                              className="city-fill"
-                              style={{
-                                width: `${(city.value / 60) * 100}%`,
-                                backgroundColor: city.color
-                              }}
-                            ></div>
+                  {citiesData.map((city, index) => {
+                    const maxValue = Math.max(...citiesData.map(c => c.value), 0);
+                    const barLimit = maxValue + 2;
+                    return (
+                      <div key={index} className="city-item">
+                        <div className="city-rank">{index + 1}</div>
+                        <div className="city-info">
+                          <div className="city-name">
+                            <span className="location-icon">📍</span>
+                            {city.name}
+                          </div>
+                          <div className="city-state">{city.state}</div>
+                          <div className="city-bar-container">
+                            <div className="city-bar">
+                              <div
+                                className="city-fill"
+                                style={{
+                                  width: `${(city.value / barLimit) * 100}%`,
+                                  backgroundColor: city.color
+                                }}
+                              ></div>
+                            </div>
                           </div>
                         </div>
+                        <div className="city-count">{city.value}</div>
                       </div>
-                      <div className="city-count">{city.value}</div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
                 <div className="cities-footer">
                   <span>Regiões mais ativas</span>
