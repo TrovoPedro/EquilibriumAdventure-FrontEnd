@@ -794,6 +794,9 @@
     flex-direction: column !important;
     text-align: center !important;
     padding: 20px 16px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 16px 0 !important;
   }
 
   .inscricao-trilha-instrucoes h3 {
@@ -809,5 +812,18 @@
     width: 100%;
     justify-content: center !important;
     padding: 12px 20px !important;
+  }
+
+  /* PDF viewer responsivo - remove espaços cinzas */
+  .inscricao-trilha-instrucoes > div:last-child {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: 500px !important;
+    margin: 0 !important;
+  }
+
+  .inscricao-trilha-instrucoes iframe {
+    width: 100% !important;
+    height: 100% !important;
   }
 }

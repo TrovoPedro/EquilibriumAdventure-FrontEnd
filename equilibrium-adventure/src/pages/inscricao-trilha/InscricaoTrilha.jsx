@@ -283,6 +283,8 @@ const InscricaoTrilhasLimitado = () => {
 
   // Cancelar inscrição
   const handleCancelarInscricao = async () => {
+    setLoadingCancelamento(true);
+    
     const confirmResult = await showWarning(
       "Tem certeza que deseja cancelar sua inscrição?",
       "Atenção",
@@ -291,10 +293,10 @@ const InscricaoTrilhasLimitado = () => {
       true
     );
 
-    if (!confirmResult.isConfirmed) return;
-
-    // Mostrar loading imediatamente
-    setLoadingCancelamento(true);
+    if (!confirmResult.isConfirmed) {
+      setLoadingCancelamento(false);
+      return;
+    }
     
     try {
       await cancelarInscricao(usuario.id, evento.idAtivacao);
@@ -302,7 +304,6 @@ const InscricaoTrilhasLimitado = () => {
       setInscritosCount(prev => Math.max(0, prev - 1));
       showSuccess("Inscrição cancelada com sucesso!");
     } catch (error) {
-      console.error("Erro ao cancelar inscrição:", error);
       showError(error.message || "Erro ao cancelar inscrição. Tente novamente.");
     } finally {
       setLoadingCancelamento(false);
@@ -452,84 +453,119 @@ const InscricaoTrilhasLimitado = () => {
         </div>
 
         {pdfUrl && (
-        <div className="card inscricao-trilha-instrucoes" style={{
-          background: 'linear-gradient(135deg, #f0f9f4 0%, #e8f5e9 100%)',
-          borderRadius: '10px',
-          padding: '10px 20px',
-          margin: '20px 0 10px 0',
-          boxShadow: '0 3px 12px rgba(34, 97, 68, 0.08)',
-          border: '1px solid #c8e6c9',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          gap: '16px',
-          width: '100%',
-          minHeight: '56px'
-        }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1b5e20" strokeWidth="2">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
-              <polyline points="14 2 14 8 20 8"></polyline>
-              <line x1="16" y1="13" x2="8" y2="13"></line>
-              <line x1="16" y1="17" x2="8" y2="17"></line>
-            </svg>
-            <div>
-              <h3 style={{
-                fontSize: '0.95rem',
-                fontWeight: '700',
-                color: '#1b5e20',
-                margin: 0,
-                lineHeight: '1.1'
+          <div style={{
+            width: '100%',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            margin: '30px 0',
+            padding: '0'
+          }}>
+            <div className="card inscricao-trilha-instrucoes" style={{
+              background: 'linear-gradient(135deg, #f0f9f4 0%, #e8f5e9 100%)',
+              borderRadius: '10px',
+              padding: '20px',
+              margin: '0 auto 20px auto',
+              boxShadow: '0 3px 12px rgba(34, 97, 68, 0.08)',
+              border: '1px solid #c8e6c9',
+              width: '95%',
+              maxWidth: '1400px'
+            }}>
+              <div style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                gap: '16px',
+                marginBottom: '16px'
               }}>
-                Instruções da Trilha
-              </h3>
-              <p style={{
-                fontSize: '0.8rem',
-                color: '#2e7d32',
-                margin: 0,
-                lineHeight: '1.1'
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1b5e20" strokeWidth="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                  </svg>
+                  <div>
+                    <h3 style={{
+                      fontSize: '0.95rem',
+                      fontWeight: '700',
+                      color: '#1b5e20',
+                      margin: 0,
+                      lineHeight: '1.1'
+                    }}>
+                      Instruções da Trilha
+                    </h3>
+                    <p style={{
+                      fontSize: '0.8rem',
+                      color: '#2e7d32',
+                      margin: 0,
+                      lineHeight: '1.1'
+                    }}>
+                      Visualize ou baixe o documento com orientações importantes
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href={pdfUrl}
+                  download={pdfNome || `instrucoes-${evento?.nome || 'trilha'}.pdf`}
+                  style={{
+                    background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
+                    color: '#fff',
+                    padding: '8px 16px',
+                    borderRadius: '8px',
+                    textDecoration: 'none',
+                    fontWeight: '600',
+                    fontSize: '0.85rem',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '6px',
+                    boxShadow: '0 3px 10px rgba(46, 125, 50, 0.2)',
+                    transition: 'all 0.3s ease',
+                    whiteSpace: 'nowrap'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = '0 6px 16px rgba(46, 125, 50, 0.35)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = '0 4px 12px rgba(46, 125, 50, 0.25)';
+                  }}>
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                    <polyline points="7 10 12 15 17 10"></polyline>
+                    <line x1="12" y1="15" x2="12" y2="3"></line>
+                  </svg>
+                  Baixar PDF
+                </a>
+              </div>
+              
+              {/* Visualizador de PDF inline */}
+              <div style={{
+                width: '100%',
+                height: '900px',
+                margin: '0',
+                border: '2px solid #c8e6c9',
+                borderRadius: '8px',
+                overflow: 'hidden',
+                backgroundColor: '#fff',
+                boxShadow: '0 4px 16px rgba(0,0,0,0.1)'
               }}>
-                Baixe o documento com orientações importantes sobre a trilha
-              </p>
+                <iframe
+                  src={`${pdfUrl}#toolbar=1&navpanes=0&scrollbar=1&view=FitH`}
+                  style={{
+                    width: '100%',
+                    height: '100%',
+                    border: 'none'
+                  }}
+                  title="Instruções da Trilha em PDF"
+                />
+              </div>
             </div>
           </div>
-          <a
-            href={pdfUrl}
-            download={pdfNome || `instrucoes-${evento?.nome || 'trilha'}.pdf`}
-            style={{
-              background: 'linear-gradient(135deg, #2e7d32 0%, #1b5e20 100%)',
-              color: '#fff',
-              padding: '8px 16px',
-              borderRadius: '8px',
-              textDecoration: 'none',
-              fontWeight: '600',
-              fontSize: '0.85rem',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '6px',
-              boxShadow: '0 3px 10px rgba(46, 125, 50, 0.2)',
-              transition: 'all 0.3s ease',
-              whiteSpace: 'nowrap'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.transform = 'translateY(-2px)';
-              e.currentTarget.style.boxShadow = '0 6px 16px rgba(46, 125, 50, 0.35)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.boxShadow = '0 4px 12px rgba(46, 125, 50, 0.25)';
-            }}
-            >
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
-                <polyline points="7 10 12 15 17 10"></polyline>
-                <line x1="12" y1="15" x2="12" y2="3"></line>
-              </svg>
-              Baixar PDF
-            </a>
-        </div>
-      )}
-          
+        )}
+
+        {/* Botão Inscrever-se */}
         {!nivelInsuficiente && (
           <button
             className={`inscricao-trilha-btn ${inscrito ? 'btn-cancelar' : 'btn-inscrever'}`}

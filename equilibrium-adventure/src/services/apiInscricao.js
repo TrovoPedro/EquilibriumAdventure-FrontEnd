@@ -24,9 +24,10 @@ export const criarInscricao = async (idAtivacao, usuarioId) => {
 export const cancelarInscricao = async (idAventureiro, idAtivacao) => {
   try {
     const response = await api.delete(
-      `inscricoes/cancelar-inscricao/${idAventureiro}/${idAtivacao}`
+      `inscricoes/cancelar-inscricao/${idAventureiro}/${idAtivacao}`,
+      { timeout: 5000 }
     );
-    return response.data; // Mensagem de sucesso do back
+    return response.data;
   } catch (error) {
     throw error.response?.data || "Erro ao cancelar inscrição";
   }
