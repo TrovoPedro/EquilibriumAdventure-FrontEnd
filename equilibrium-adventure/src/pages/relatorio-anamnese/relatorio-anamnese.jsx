@@ -133,23 +133,23 @@ const RelatorioAnamnese = () => {
       <Header />
       <div className="font-['Raleway',Arial,sans-serif] text-[#226144] bg-gradient-to-br from-[#f6f7f8] to-[#eef0f1] min-h-screen flex flex-col items-center justify-start pt-32 sm:pt-36 lg:pt-40 pb-24 px-4">
 
-        <div className="div-title w-full max-w-[1300px] mx-auto px-6 sm:px-10 mb-8 sm:mb-10 mt-20">
+        <div className="div-title w-full max-w-[1300px] max-[501px]:max-w-sm max-[768px]:max-w-md mx-auto px-6 sm:px-10 mb-8 sm:mb-10 mt-20">
           <div className="editar-evento-header"> 
             <ButtonBack onClick={() => navigate(-1)} />
             <h1 className="h1-title">Relatório de Anamnese</h1>
           </div>
         </div>
 
-        <div className="bg-white rounded-[20px] shadow-[0_4px_20px_rgba(34,97,68,0.10)] border border-[#e0e0e0] max-w-[1200px] w-full mx-auto min-h-[260px] sm:min-h-[480px] lg:min-h-[540px] pt-6 pb-12 px-6 sm:px-10 flex flex-col items-stretch transition-all duration-300 animate-slideUp">
+        <div className="bg-white rounded-[20px] max-[768px]:w-full max-w-[1200px] max-[501px]:w-fit shadow-[0_4px_20px_rgba(34,97,68,0.10)] border border-[#e0e0e0] max-[768px]:pt-4  max-sm:max-w-md w-full mx-auto min-h-[260px] sm:min-h-[480px] lg:min-h-[540px] pt-6 pb-12 px-6 sm:px-10 flex flex-col items-stretch transition-all duration-300 animate-slideUp">
           <form
-            className="evento-form w-full flex-1 flex flex-col items-center justify-center gap-8"
+            className="evento-form w-full max-[501px]:w-fit flex-1 max-[501px]:pl-2 max-[501px]:pr-2 flex flex-col items-center min-[800px]:pt-6 justify-center gap-8"
             onSubmit={async (e) => {
               e.preventDefault();
               const ok = await handleSalvarRelatorio();
               if (ok) navigate(routeUrls.INFOS_ADICIONAIS_GUIA);
             }}
           >
-            <div className="flex flex-col gap-3 w-full max-w-[940px] mx-auto mb-8">
+            <div className="flex flex-col w-full max-[501px]:w-sm max-[768px]:w-sm max-[501px]:pt-1 max-sm:mt-1 max-w-[940px]  max-sm:max-w-md mx-auto mb-8">
               <label htmlFor="nome">
                 Nome:
               </label>
@@ -162,7 +162,7 @@ const RelatorioAnamnese = () => {
               />
             </div>
 
-            <div className="flex flex-col gap-3 w-full max-w-[940px] mx-auto mb-8">
+            <div className="flex flex-col w-full max-[501px]:w-sm max-[768px]:w-sm max-w-[940px] mx-auto mb-8">
               <label htmlFor="relatorio">
                 Relatório Anamnese:
               </label>
@@ -174,7 +174,7 @@ const RelatorioAnamnese = () => {
               />
             </div>
 
-            <div className="flex justify-end w-full max-w-[940px] mx-auto mt-6 pb-2 gap-4">
+            <div className="flex justify-end w-full max-[501px]:flex-col max-[501px]:w-sm max-[768px]:flex-col max-[768px]:w-sm max-[768px]:justify-between  max-w-[940px] mx-auto mt-6 pb-2 gap-4">
               <ButtonSubmitForm
                 type="button"
                 title="Mais Informações"

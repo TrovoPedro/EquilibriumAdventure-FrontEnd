@@ -24,11 +24,44 @@
 }
 
 @media (max-width: 768px) {
-  .editar-evento-header { gap: 12px; }
+  .editar-evento-header { gap: 12px; padding-left: 0px; }
   .h1-title { font-size: 24px; }
+  .evento-form label {
+    margin-top: 8px;
+  }
+  .btn-submit-form {
+    padding: 8px 4px;
+    width: 100%;
+    font-size: 0.8rem;
+  }
+   .evento-form div:last-child {
+    padding-bottom: 8px;
+  }
+
 }
 
-@media (max-width: 480px) {
-  .editar-evento-header { gap: 8px; }
+@media (max-width: 500px) {
+  .editar-evento-header { gap: 8px; padding-left: 0px;}
   .h1-title { font-size: 20px; }
+  .evento-form input, .evento-form textarea, .evento-form select {
+    width: 85%;
+    /* margin: 0 0px 0px 16px; */
+  }
+  .evento-form label {
+    margin-top: 8px;
+  }
+  .btn-submit-form {
+    padding: 8px 4px;
+    width: 85%;
+    font-size: 0.7rem;
+  }
+
+  .evento-form div {
+    display: flex;
+    padding-left: 50px;
+  }
+
+  .evento-form div:last-child {
+    padding-bottom: 8px;
+  }
 }
